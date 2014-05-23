@@ -13,8 +13,8 @@ hs_err_pid*
 
 
 # eclipse specific git ignore
-*.pydevproject
-.project
+#*.pydevproject
+#.project
 .metadata
 bin/**
 tmp/**
