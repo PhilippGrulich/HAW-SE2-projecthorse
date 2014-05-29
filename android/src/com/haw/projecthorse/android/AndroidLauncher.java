@@ -12,6 +12,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new CoreGameMain(), config);
-		System.out.println("Hallo2");
+		System.out.println("Hallo3");
 	}
 }
