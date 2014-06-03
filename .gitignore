@@ -55,7 +55,7 @@ Thumbs.db
 
 build/
 *.settings/
-*.gitignore
+
 
 /*/out
 /*/*/build
