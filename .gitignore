@@ -66,3 +66,4 @@ build/
 *.swp
 
 /html/war/WEB-INF/classes/.gitignore
+local.properties
