@@ -64,3 +64,5 @@ build/
 *.ipr
 *~
 *.swp
+
+/html/war/WEB-INF/classes/.gitignore
