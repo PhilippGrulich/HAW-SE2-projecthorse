@@ -3,7 +3,7 @@ package com.haw.projecthorse.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.haw.projecthorse.CoreGameMain;
+import com.haw.projecthorse.gamemanager.CoreGameMain;
 
 public class HtmlLauncher extends GwtApplication {
 

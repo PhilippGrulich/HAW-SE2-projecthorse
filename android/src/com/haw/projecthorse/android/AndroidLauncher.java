@@ -1,10 +1,10 @@
 package com.haw.projecthorse.android;
 
-import android.os.Bundle;
+import android.os.Bundle; 
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.haw.projecthorse.CoreGameMain;
+import com.haw.projecthorse.gamemanager.CoreGameMain;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
