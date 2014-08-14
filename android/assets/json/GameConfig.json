@@ -1,0 +1,22 @@
+{
+title:"#projecthorse",	
+worldmap:"com.haw.projecthorse.level.DefaultLevel",
+cities:[{
+			name:"Hamburg",
+			levelID:"1",
+			className:"com.haw.projecthorse.level.DefaultLevel",
+			games:[
+						{
+							title:"Spiel 1",
+							levelID:"2",
+							className:"com.haw.projecthorse.level.DefaultLevel"
+						},
+						{
+							title:"Spiel 1",
+							className:"com.haw.projecthorse.level.DefaultLevel",
+							levelID:"3"
+						}
+					]
+		}]				
+	
+}

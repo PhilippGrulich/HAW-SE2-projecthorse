@@ -1,0 +1,96 @@
+package com.haw.projecthorse.gamemanager.navigationmanager;
+
+import java.io.IOException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
+import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelLoadException;
+import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfigJSON;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+
+/**
+ * Der Level Manager das Laden eines Levels zuständig.
+ * Außerdem liefert er Information anhand der LevelID
+ */
+public class LevelManager {
+
+	private GameConfigJSON config = null;
+	private String defaultClass;
+
+	public LevelManager() {
+		loadJson();
+		defaultClass = config.getWorldmapClassName();
+	}
+
+	public final GameConfigJSON getGameConfig() {
+		return config;
+	}
+	
+	public final String getDefaultClassName() {
+		return defaultClass;
+	}
+
+	private void loadJson() {
+		Json json = new Json();
+
+		String jsonText;
+		try {
+			jsonText = readGameConfigFile();
+			config = json.fromJson(GameConfigJSON.class, jsonText);
+		} catch (IOException e) {
+			System.err.println("!!!Die GameConfig.json Datei konnte nicht geladen werden!!! \n Verzeichnis prüfen");
+			e.printStackTrace();
+		}
+	}
+
+	private String readGameConfigFile() throws IOException {
+		FileHandle file = Gdx.files.internal("json/GameConfig.json");	
+		return file.readString();
+	}
+
+	public final Screen getScreenByLevelID(final String levelID) throws LevelLoadException {
+		String className = getClassByLevelID(levelID);
+
+		Screen screen;
+		try {
+			Class<?> clazz = Class.forName(className);
+			screen = (Screen) clazz.newInstance();
+			return screen;
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		throw new LevelLoadException();
+	}
+
+	
+
+	private String getClassByLevelID(final String levelID) {
+		try {
+			return config.getClassNameByLevelID(levelID);
+		} catch (LevelNotFoundException e) {
+			return defaultClass;
+		}
+	}
+
+	public CityObject getCityObject(String levelID) throws LevelNotFoundException {
+		return config.getCityByLevelID(levelID);
+		
+	}
+
+	public GameObject getGameObject(String levelID) throws LevelNotFoundException {		
+		return config.getGameByLevelID(levelID);
+	};
+
+}
