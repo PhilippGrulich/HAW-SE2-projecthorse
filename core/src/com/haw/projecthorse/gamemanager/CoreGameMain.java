@@ -8,6 +8,7 @@ public class CoreGameMain extends Game {
 	@Override
 	public final void create() {
 		NavigationManager navigationManager = new NavigationManager(this);
+		
 		GameManager gm = GameManager.getInstance();
 		gm.setNavigationManager(navigationManager);
 			
