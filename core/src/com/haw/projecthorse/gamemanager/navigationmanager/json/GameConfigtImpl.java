@@ -7,19 +7,21 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
  * @author Philipp
  *
  */
-public class GameConfigJSON {
+class GameConfigtImpl implements GameConfig {
 	private String title = "";
 	private String worldmap = "";
-	private CityObject[] cities = new CityObject[0];
-
+	private CityObjectImpl[] cities = new CityObjectImpl[0];
+	
+	@Override
 	public final String getGameTitle() {
 		return title;
 	}
-
+	
+	@Override
 	public final String getWorldmapClassName() {
 		return worldmap;
 	}
-
+	
 	public final String[] getCityNames() {
 		String[] cityNames = new String[cities.length];
 		for (int i = 0; i < cities.length; i++) {
@@ -30,7 +32,7 @@ public class GameConfigJSON {
 
 	public final String getClassNameByLevelID(final String levelID)
 			throws LevelNotFoundException {
-		for (CityObject city : cities) {
+		for (CityObjectImpl city : cities) {
 			String className = city.getClassByLevelID(levelID);
 			if (className != null) {
 				return className;
@@ -40,9 +42,9 @@ public class GameConfigJSON {
 
 	}
 
-	public final CityObject getCityByLevelID(final String levelID)
+	public final CityObjectImpl getCityByLevelID(final String levelID)
 			throws LevelNotFoundException {
-		for (CityObject city : cities) {
+		for (CityObjectImpl city : cities) {
 			if (city.getLevelID().equals(levelID)) {
 				return city;
 			}
@@ -50,10 +52,10 @@ public class GameConfigJSON {
 		throw new LevelNotFoundException();
 	}
 
-	public final GameObject getGameByLevelID(final String levelID)
+	public final GameObjecttImpl getGameByLevelID(final String levelID)
 			throws LevelNotFoundException {
-		for (CityObject city : cities) {
-			GameObject game = city.getGameByLevelID(levelID);
+		for (CityObjectImpl city : cities) {
+			GameObjecttImpl game = city.getGameByLevelID(levelID);
 			if (game != null) {
 				return game;
 			}

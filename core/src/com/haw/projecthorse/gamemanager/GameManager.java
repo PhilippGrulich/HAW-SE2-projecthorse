@@ -1,8 +1,8 @@
 package com.haw.projecthorse.gamemanager;
 
-import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManager;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 
 /**
@@ -10,80 +10,41 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
  * zuständig.
  * Die Konfiguration wird aus der GameConfig.json geladen.
  */
-public final class GameManager {
-	private NavigationManager naviationManager;
-
-	private static GameManager instance;
-
-	private GameManager() {
-
-	}
-
-	/**
-	 * Liefert eine Instanz des Gamemanagers zurück.	 * 
-	 * @return {@link GameManager}
-	 */
-	public static GameManager getInstance() {
-		if (GameManager.instance == null) {
-			GameManager.instance = new GameManager();
-		}
-		return GameManager.instance;
-	}
-
-	/**
-	 * Navigiert zu einer Stadt oder einem Spiel welches anhand der LevelID
-	 * (String) identifiziert wird.
-	 * 
-	 * @param String leveLID
-	 */
-	public void navigateToLevel(final String levelID) {
-		naviationManager.navigateToLevel(levelID);
-	}
-
+public interface GameManager {
+	
 	/**
 	 * Navigiert zur Weltkarte
 	 */
-	public void navigateToWorldMap() {
-		naviationManager.navigateToWorldMap();
-	}
+	void navigateToWorldMap();
+	
+	/** 
+	 * Liefert das GameConfig Object zurück. Über dieses Object können Informationen über das Spiel abgefragt werden.
+	 */
+	GameConfig getGameConfig();
 	
 	/** 
 	 * Liefert das CityObject zurück falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
-	 * @return {@link CityObject}
+	 * @return {@link CityObjectImpl}
 	 * @throws LevelNotFoundException
 	 */
-	public CityObject getCityObject(final String levelID) throws LevelNotFoundException{
-		return naviationManager.getCityObject(levelID);
-	}
-	
+	CityObject getCityObject(String levelID) throws LevelNotFoundException;
+
 	/** 
 	 * Liefert das GameObject zurück falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
-	 * @return {@link GameObject}
+	 * @return {@link GameObjecttImpl}
 	 * @throws LevelNotFoundException
 	 */
-	public GameObject getGameObject(final String levelID) throws LevelNotFoundException{
-		return naviationManager.getGameObject(levelID);
-	}
-
+	GameObject getGameObject(final String levelID) throws LevelNotFoundException;
+	
 	/**
 	 * Liefert eine Referenz auf das Spielstand Modul.	 * 
 	 * @return Spielstand
 	 */
-	public Object getScoreManager() {
-		// TODO Spielstand muss zurück gegeben werden.
-		return null;
-	}
+	Object getScoreManager();
 
-	void setNavigationManager(final NavigationManager newNaviationManager) {
-		this.naviationManager = newNaviationManager;
-	}
 	
-	void setScoreManager() {
-		// TODO
-	}
-
 }
