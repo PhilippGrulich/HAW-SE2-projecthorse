@@ -1,4 +1,4 @@
-package com.haw.projecthorse.gamemanager.navigationmanager;
+package com.haw.projecthorse.gamemanager.navigationmanager.json;
 
 import java.io.IOException;
 
@@ -8,9 +8,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelLoadException;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
-import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
-import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfigJSON;
-import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 
 /**
  * Der Level Manager das Laden eines Levels zuständig.
@@ -18,7 +15,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
  */
 public class LevelManager {
 
-	private GameConfigJSON config = null;
+	private GameConfigtImpl config = null;
 	private String defaultClass;
 
 	public LevelManager() {
@@ -26,7 +23,7 @@ public class LevelManager {
 		defaultClass = config.getWorldmapClassName();
 	}
 
-	public final GameConfigJSON getGameConfig() {
+	public final GameConfig getGameConfig() {
 		return config;
 	}
 	
@@ -40,7 +37,7 @@ public class LevelManager {
 		String jsonText;
 		try {
 			jsonText = readGameConfigFile();
-			config = json.fromJson(GameConfigJSON.class, jsonText);
+			config = json.fromJson(GameConfigtImpl.class, jsonText);
 		} catch (IOException e) {
 			System.err.println("!!!Die GameConfig.json Datei konnte nicht geladen werden!!! \n Verzeichnis prüfen");
 			e.printStackTrace();
@@ -84,12 +81,11 @@ public class LevelManager {
 		}
 	}
 
-	public CityObject getCityObject(String levelID) throws LevelNotFoundException {
+	public final CityObject getCityObject(final String levelID) throws LevelNotFoundException {
 		return config.getCityByLevelID(levelID);
-		
 	}
 
-	public GameObject getGameObject(String levelID) throws LevelNotFoundException {		
+	public final GameObject getGameObject(final String levelID) throws LevelNotFoundException {		
 		return config.getGameByLevelID(levelID);
 	};
 
