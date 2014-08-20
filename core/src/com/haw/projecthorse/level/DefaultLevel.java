@@ -13,7 +13,7 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
 
 
-public class DefaultLevel implements Screen{
+public class DefaultLevel implements HorseScreen{
 	
 	@Override
 	public void render(float delta) {
