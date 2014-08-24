@@ -12,6 +12,16 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
  */
 public interface GameManager {
 	
+
+	/**
+	 * Navigiert zu einer Stadt oder einem Spiel welches anhand der LevelID
+	 * (String) identifiziert wird.
+	 * 
+	 * @param String
+	 *            leveLID
+	 */
+	void navigateToLevel(String levelID);
+	
 	/**
 	 * Navigiert zur Weltkarte
 	 */
@@ -45,6 +55,7 @@ public interface GameManager {
 	 * @return Spielstand
 	 */
 	Object getScoreManager();
+
 
 	
 }
