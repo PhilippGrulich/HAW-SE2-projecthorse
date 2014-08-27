@@ -4,6 +4,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+import com.haw.projecthorse.gamemanager.settings.Settings;
 
 /**
  * Der GameManager ist ein Singelton und für die Kommunikation zwischen den einzelnen Modulen 
@@ -55,6 +56,12 @@ public interface GameManager {
 	 * @return Spielstand
 	 */
 	Object getScoreManager();
+
+	/**
+	 * Liefert eine Referenz auf das Settings Modul.	 * 
+	 * @return {@link Settings}
+	 */
+	Settings getSettings();
 
 
 	

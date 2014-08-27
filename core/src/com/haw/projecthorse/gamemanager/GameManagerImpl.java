@@ -6,9 +6,11 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+import com.haw.projecthorse.gamemanager.settings.Settings;
+import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
 
 final class GameManagerImpl implements GameManager {
-	private NavigationManager naviationManager;
+	private NavigationManager navigationManager;
 
 	/**
 	 * Navigiert zu einer Stadt oder einem Spiel welches anhand der LevelID
@@ -19,7 +21,7 @@ final class GameManagerImpl implements GameManager {
 	 */
 	@Override
 	public void navigateToLevel(final String levelID) {
-		naviationManager.navigateToLevel(levelID);
+		navigationManager.navigateToLevel(levelID);
 	}
 
 	/**
@@ -27,12 +29,12 @@ final class GameManagerImpl implements GameManager {
 	 */
 	@Override
 	public void navigateToWorldMap() {
-		naviationManager.navigateToWorldMap();
+		navigationManager.navigateToWorldMap();
 	}
 
 	@Override
 	public GameConfig getGameConfig() {
-		return naviationManager.getGameConfig();
+		return navigationManager.getGameConfig();
 	}
 
 	/**
@@ -46,7 +48,7 @@ final class GameManagerImpl implements GameManager {
 	@Override
 	public CityObject getCityObject(final String levelID)
 			throws LevelNotFoundException {
-		return naviationManager.getCityObject(levelID);
+		return navigationManager.getCityObject(levelID);
 	}
 
 	/**
@@ -60,7 +62,7 @@ final class GameManagerImpl implements GameManager {
 	@Override
 	public GameObject getGameObject(final String levelID)
 			throws LevelNotFoundException {
-		return naviationManager.getGameObject(levelID);
+		return navigationManager.getGameObject(levelID);
 	}
 
 	/**
@@ -76,11 +78,16 @@ final class GameManagerImpl implements GameManager {
 
 	public void setNavigationManager(
 			final NavigationManagerImpl newNaviationManager) {
-		this.naviationManager = newNaviationManager;
+		this.navigationManager = newNaviationManager;
 	}
 
 	public void setScoreManager() {
 		// TODO
+	}
+
+	@Override
+	public Settings getSettings() {
+		return SettingsImpl.getInstance();
 	}
 
 }
