@@ -10,11 +10,15 @@ public interface NavigationManager {
 	void navigateToLevel(String levelID);
 
 	void navigateToWorldMap();
+	
+	void navigateToMainMenu();
 
 	CityObject getCityObject(String levelID) throws LevelNotFoundException;
 
 	GameObject getGameObject(String levelID) throws LevelNotFoundException;
 
 	GameConfig getGameConfig();
+
+
 
 }

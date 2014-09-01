@@ -31,6 +31,12 @@ final class GameManagerImpl implements GameManager {
 	public void navigateToWorldMap() {
 		navigationManager.navigateToWorldMap();
 	}
+	
+	@Override
+	public void navigateToMainMenu() {
+		navigationManager.navigateToMainMenu();
+		
+	}
 
 	@Override
 	public GameConfig getGameConfig() {
@@ -89,5 +95,7 @@ final class GameManagerImpl implements GameManager {
 	public Settings getSettings() {
 		return SettingsImpl.getInstance();
 	}
+
+
 
 }

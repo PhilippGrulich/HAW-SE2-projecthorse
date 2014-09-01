@@ -28,6 +28,11 @@ public interface GameManager {
 	 */
 	void navigateToWorldMap();
 	
+	/**
+	 * Navigiert zum MainMenu
+	 */
+	void navigateToMainMenu();
+	
 	/** 
 	 * Liefert das GameConfig Object zurück. Über dieses Object können Informationen über das Spiel abgefragt werden.
 	 */

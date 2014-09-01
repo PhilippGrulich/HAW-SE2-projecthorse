@@ -127,6 +127,7 @@ public class MainMenu implements HorseScreen {
 	private void loadSavegame(int id){
 		//TODO add loading method
 		System.out.println("Loading Game " + id +" - loadSavegame not yet implemented");
+		
 	}
 
 	private void loadCredits(){
@@ -139,6 +140,7 @@ public class MainMenu implements HorseScreen {
 			public void changed(ChangeEvent event, Actor actor) {
 				GameManagerFactory.getInstance().navigateToWorldMap();
 				System.out.println("buttonSpiel1 pressed");
+				
 				loadSavegame(1);
 			}
 			
@@ -148,7 +150,7 @@ public class MainMenu implements HorseScreen {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("buttonSpiel2 pressed");
 				loadSavegame(2);
-				GameManagerFactory.getInstance().navigateToWorldMap();
+				GameManagerFactory.getInstance().navigateToLevel("4");
 			}
 			
 			

@@ -21,7 +21,7 @@ public class NavigationManagerImpl implements NavigationManager {
 		this.game = newGame;
 		levelManager = new LevelManager();
 
-		navigateToWorldMap();
+		navigateToMainMenu();
 		// game.setScreen(new DefaultLevel());
 
 	}
@@ -42,7 +42,7 @@ public class NavigationManagerImpl implements NavigationManager {
 	
 	@Override
 	public final void navigateToWorldMap() {
-		navigateToLevel(levelManager.getDefaultClassName());
+		navigateToLevel("worldmap");
 	}
 	
 	@Override
@@ -59,6 +59,11 @@ public class NavigationManagerImpl implements NavigationManager {
 	@Override
 	public final GameConfig getGameConfig() {
 		return levelManager.getGameConfig();
+	}
+	@Override
+	public void navigateToMainMenu() {
+		navigateToLevel("mainMenu");
+		
 	}
 
 }

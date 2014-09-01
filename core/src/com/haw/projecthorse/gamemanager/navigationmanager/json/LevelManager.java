@@ -16,21 +16,18 @@ import com.haw.projecthorse.level.HorseScreen;
 public class LevelManager {
 
 	private GameConfigtImpl config = null;
-	private String defaultClass;
+	
 
 	public LevelManager() {
 		loadJson();
-		defaultClass = config.getWorldmapClassName();
+		
 	}
 
 	public final GameConfig getGameConfig() {
 		return config;
 	}
 	
-	public final String getDefaultClassName() {
-		return defaultClass;
-	}
-
+	
 	private void loadJson() {
 		Json json = new Json();
 
@@ -77,7 +74,7 @@ public class LevelManager {
 		try {
 			return config.getClassNameByLevelID(levelID);
 		} catch (LevelNotFoundException e) {
-			return defaultClass;
+			return config.getDefaultClassName();
 		}
 	}
 
@@ -87,6 +84,7 @@ public class LevelManager {
 
 	public final GameObject getGameObject(final String levelID) throws LevelNotFoundException {		
 		return config.getGameByLevelID(levelID);
-	};
+	}
+	
 
 }

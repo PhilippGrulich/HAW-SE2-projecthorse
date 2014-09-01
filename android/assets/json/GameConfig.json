@@ -1,40 +1,32 @@
 {
-title:"#projecthorse",	
-worldmap:"com.haw.projecthorse.level.DefaultLevel",
-cities:[{
-			name:"MainMenu",
-			levelID:"1",
-			className:"com.haw.projecthorse.level.mainmenu.MainMenu",
-			games:[
-						{
-							title:"Spiel 1",
-							levelID:"2",
-							className:"com.haw.projecthorse.level.mainmenu.MainMenu"
-						},
-						{
-							title:"Spiel 1",
-							className:"com.haw.projecthorse.level.mainmenu.MainMenu",
-							levelID:"3"
-						}
-					]
-		},	
-			
-		{
-			name:"Hamburg",
-			levelID:"4",
-			className:"com.haw.projecthorse.level.DefaultLevel",
-			games:[
-						{
-							title:"Spiel 1",
-							levelID:"5",
-							className:"com.haw.projecthorse.level.DefaultLevel"
-						},
-						{
-							title:"Spiel 1",
-							className:"com.haw.projecthorse.level.DefaultLevel",
-							levelID:"6"
-						}
-					]
-		}]			
-	
+   title:"#projecthorse",
+   menus:[
+      {
+         levelID:"mainMenu",
+         className:"com.haw.projecthorse.level.mainmenu.MainMenu"
+      },
+      {
+         levelID:"worldmap",
+         className:"com.haw.projecthorse.level.DefaultLevel"
+      }
+   ],
+   cities:[
+      {
+         name:"Hamburg",
+         levelID:"4",
+         className:"com.haw.projecthorse.level.DefaultLevel",
+         games:[
+            {
+               title:"Spiel 1",
+               levelID:"5",
+               className:"com.haw.projecthorse.level.DefaultLevel"
+            },
+            {
+               title:"Spiel 1",
+               className:"com.haw.projecthorse.level.DefaultLevel",
+               levelID:"6"
+            }
+         ]
+      }
+   ]
 }
