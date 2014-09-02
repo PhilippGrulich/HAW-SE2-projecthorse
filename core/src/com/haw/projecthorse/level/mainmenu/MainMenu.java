@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
 import com.haw.projecthorse.level.HorseScreen;
+import com.haw.projecthorse.level.Level;
 
 /**
  * @author Lars
@@ -30,7 +31,7 @@ import com.haw.projecthorse.level.HorseScreen;
  * 
  */
 
-public class MainMenu implements HorseScreen {
+public class MainMenu extends Level {
 
 	private Table table;// = new Table();
 
@@ -53,22 +54,23 @@ public class MainMenu implements HorseScreen {
 	private TextButton buttonSpiel2;
 	private TextButton buttonSpiel3;
 
-	private Viewport viewport;
-	private OrthographicCamera cam;
+//	private Viewport viewport;
+//	private OrthographicCamera cam;
 
-	private Batch batch;
+//	private Batch batch;
 
-	private int height = SettingsImpl.getInstance().getScreenHeight();
-	private int width = SettingsImpl.getInstance().getScreenWidth();
-	
+//	private int height = SettingsImpl.getInstance().getScreenHeight();
+//	private int width = SettingsImpl.getInstance().getScreenWidth();
+//	
 	public MainMenu() {
 		
 
 		
 		
-		initCameraAndViewport();
-		initBatch();
-		initStage(viewport, batch);
+//		initCameraAndViewport();
+//		initBatch();
+		
+		initStage(this.getViewport(), this.getSpriteBatch());
 		initTable(); // Table = Gridlayout
 		initButtons(); // To be called after initTable (adds itself to table)
 		setupEventListeners();
@@ -77,17 +79,17 @@ public class MainMenu implements HorseScreen {
 
 	}
 
-	private void initCameraAndViewport() {
-		cam = new OrthographicCamera(width, height);
-		cam.setToOrtho(false); // Set to Y-Up - Coord system
-		viewport = new FitViewport(width, height, cam);
-
-	}
-
-	private void initBatch() {
-		batch = new SpriteBatch();
-		batch.setProjectionMatrix(cam.combined);
-	}
+//	private void initCameraAndViewport() {
+//		cam = new OrthographicCamera(width, height);
+//		cam.setToOrtho(false); // Set to Y-Up - Coord system
+//		viewport = new FitViewport(width, height, cam);
+//
+//	}
+//
+//	private void initBatch() {
+//		batch = new SpriteBatch();
+//		batch.setProjectionMatrix(cam.combined);
+//	}
 
 	private void initButtons() {
 		// Setup Style:
@@ -196,6 +198,7 @@ public class MainMenu implements HorseScreen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		
 	}
 
 	@Override
@@ -207,6 +210,7 @@ public class MainMenu implements HorseScreen {
 
 	@Override
 	public void dispose() {
+		super.dispose(); //Wichtig damit auch die ressourcen der Abstrakten Klasse wieder freigegeben werden
 		stage.dispose();
 
 	}
