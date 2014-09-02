@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
 import com.haw.projecthorse.level.HorseScreen;
 
 /**
@@ -57,7 +58,14 @@ public class MainMenu implements HorseScreen {
 
 	private Batch batch;
 
+	private int height = SettingsImpl.getInstance().getScreenHeight();
+	private int width = SettingsImpl.getInstance().getScreenWidth();
+	
 	public MainMenu() {
+		
+
+		
+		
 		initCameraAndViewport();
 		initBatch();
 		initStage(viewport, batch);
@@ -70,9 +78,9 @@ public class MainMenu implements HorseScreen {
 	}
 
 	private void initCameraAndViewport() {
-		cam = new OrthographicCamera(640, 480);
+		cam = new OrthographicCamera(width, height);
 		cam.setToOrtho(false); // Set to Y-Up - Coord system
-		viewport = new FitViewport(640, 480, cam);
+		viewport = new FitViewport(width, height, cam);
 
 	}
 
