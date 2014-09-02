@@ -2,13 +2,11 @@ package com.haw.projecthorse.level.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,19 +15,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.level.HorseScreen;
+import com.haw.projecthorse.level.Level;
 
 /**
- * @author Lars
- * MainMenu. Shown when game starts
- * Using a libgdx.stage and tables within to create an ui-layout
+ * @author Lars MainMenu. Shown when game starts Using a libgdx.stage and tables
+ *         within to create an ui-layout
  * 
  */
 
-public class MainMenu implements HorseScreen {
+public class MainMenu extends Level {
 
 	private Table table;// = new Table();
 
@@ -52,33 +48,15 @@ public class MainMenu implements HorseScreen {
 	private TextButton buttonSpiel2;
 	private TextButton buttonSpiel3;
 
-	private Viewport viewport;
-	private OrthographicCamera cam;
-
-	private Batch batch;
-
 	public MainMenu() {
-		initCameraAndViewport();
-		initBatch();
-		initStage(viewport, batch);
+
+		initStage(this.getViewport(), this.getSpriteBatch());
 		initTable(); // Table = Gridlayout
 		initButtons(); // To be called after initTable (adds itself to table)
 		setupEventListeners();
 
 		stage.addActor(table);
 
-	}
-
-	private void initCameraAndViewport() {
-		cam = new OrthographicCamera(640, 480);
-		cam.setToOrtho(false); // Set to Y-Up - Coord system
-		viewport = new FitViewport(640, 480, cam);
-
-	}
-
-	private void initBatch() {
-		batch = new SpriteBatch();
-		batch.setProjectionMatrix(cam.combined);
 	}
 
 	private void initButtons() {
@@ -95,8 +73,8 @@ public class MainMenu implements HorseScreen {
 		pixel.setColor(Color.CYAN);
 		pixel.fill();
 		downTexture = new Texture(pixel, Format.RGBA8888, true);
-		pixel.dispose(); //No longer needed
-		
+		pixel.dispose(); // No longer needed
+
 		upRegion = new TextureRegion(upTexture, 128, 64);
 		downRegion = new TextureRegion(downTexture, 128, 64);
 
@@ -111,66 +89,57 @@ public class MainMenu implements HorseScreen {
 		buttonSpiel3 = new TextButton("Spielstand 3", buttonStyle);
 		buttonCredits = new TextButton("Credits", buttonStyle);
 
-//		actor.addListener(new ChangeListener() {
-//		    public void changed (ChangeEvent event, Actor actor) {
-//		        System.out.println("Changed!");
-//		    }
-//		});
-		
 		table.add(buttonSpiel1);
 		table.add(buttonSpiel2);
 		table.add(buttonSpiel3);
 		table.add(buttonCredits);
 
 	}
-	
-	private void loadSavegame(int id){
-		//TODO add loading method
-		System.out.println("Loading Game " + id +" - loadSavegame not yet implemented");
-		
+
+	private void loadSavegame(int id) {
+		// TODO add loading method
+		System.out.println("Loading Game " + id
+				+ " - loadSavegame not yet implemented");
+
 	}
 
-	private void loadCredits(){
-		//TODO: Implement Creditscreen
+	private void loadCredits() {
+		// TODO: Implement Creditscreen
 		System.out.println("CreditScreen not yet implemented - Todo");
 	}
-	
-	private void setupEventListeners(){
-		buttonSpiel1.addListener(new ChangeListener(){
+
+	private void setupEventListeners() {
+		buttonSpiel1.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				GameManagerFactory.getInstance().navigateToWorldMap();
 				System.out.println("buttonSpiel1 pressed");
-				
+
 				loadSavegame(1);
 			}
-			
-			
+
 		});
-		buttonSpiel2.addListener(new ChangeListener(){
+		buttonSpiel2.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("buttonSpiel2 pressed");
 				loadSavegame(2);
 				GameManagerFactory.getInstance().navigateToLevel("4");
 			}
-			
-			
+
 		});
-		buttonSpiel3.addListener(new ChangeListener(){
+		buttonSpiel3.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("buttonSpiel3 pressed");
 				loadSavegame(3);
 				GameManagerFactory.getInstance().navigateToWorldMap();
 			}
-			
-			
+
 		});
-		buttonCredits.addListener(new ChangeListener(){
+		buttonCredits.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("buttonCredits pressed");
 				loadCredits();
 			}
-			
-			
+
 		});
 	}
 
@@ -188,6 +157,7 @@ public class MainMenu implements HorseScreen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+
 	}
 
 	@Override
@@ -199,6 +169,8 @@ public class MainMenu implements HorseScreen {
 
 	@Override
 	public void dispose() {
+		super.dispose(); // Wichtig damit auch die ressourcen der Abstrakten
+							// Klasse wieder freigegeben werden
 		stage.dispose();
 
 	}
