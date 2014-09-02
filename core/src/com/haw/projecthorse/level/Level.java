@@ -1,11 +1,10 @@
 package com.haw.projecthorse.level;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -21,8 +20,11 @@ public abstract class Level implements HorseScreen {
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
-	protected final int height = SettingsImpl.getInstance().getScreenHeight();
-	protected final int width = SettingsImpl.getInstance().getScreenWidth();
+
+	protected final int height = GameManagerFactory.getInstance().getSettings()
+			.getScreenHeight();
+	protected final int width = GameManagerFactory.getInstance().getSettings()
+			.getScreenWidth();
 
 	public Level() {
 		cam = new OrthographicCamera(width, height);
@@ -30,6 +32,7 @@ public abstract class Level implements HorseScreen {
 		viewport = new FitViewport(width, height, cam);
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
+
 	}
 
 	@Override
