@@ -11,7 +11,18 @@ import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
 
 final class GameManagerImpl implements GameManager {
 	private NavigationManager navigationManager;
+	private static GameManagerImpl instance;
 
+	private GameManagerImpl(){
+	}
+	
+	public static GameManagerImpl getInstance(){
+		if (instance == null){
+			instance = new GameManagerImpl();
+		}
+		return instance;
+	}
+	
 	/**
 	 * Navigiert zu einer Stadt oder einem Spiel welches anhand der LevelID
 	 * (String) identifiziert wird.

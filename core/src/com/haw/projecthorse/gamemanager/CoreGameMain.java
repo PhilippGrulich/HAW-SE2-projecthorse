@@ -10,18 +10,11 @@ public class CoreGameMain extends Game {
 	public final void create() {
 
 		
-		GameManagerImpl gameManager = new GameManagerImpl();
+		GameManagerImpl gameManager = GameManagerImpl.getInstance();
 		NavigationManagerImpl navigationManager = new NavigationManagerImpl(this);		
 		
 		gameManager.setNavigationManager(navigationManager);		
-		GameManagerFactory.setInstance(gameManager);
-		
-
 			
 	}
 	
-	
-	
-	
-
 }
