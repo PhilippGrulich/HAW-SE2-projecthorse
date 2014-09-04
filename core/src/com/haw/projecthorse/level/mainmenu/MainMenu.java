@@ -63,7 +63,8 @@ public class MainMenu extends Level {
 		// Setup Style:
 
 		// 1. Load & Set gfx
-		Pixmap pixel = new Pixmap(128, 64, Format.RGBA8888); // Create a pixmap
+		Pixmap pixel = new Pixmap(128, 64, Format.RGBA8888); // Create a
+																// temp-pixmap
 																// to use as a
 																// background
 																// texture
@@ -155,46 +156,43 @@ public class MainMenu extends Level {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-
-	}
-
-	@Override
-	public void render(float delta) {
+	public void doRender(float delta) {
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 		Table.drawDebug(stage); // show debug lines
 	}
 
 	@Override
-	public void dispose() {
-		super.dispose(); // Wichtig damit auch die ressourcen der Abstrakten
-							// Klasse wieder freigegeben werden
+	public void doDispose() {
 		stage.dispose();
-
 	}
 
 	@Override
-	public void show() {
+	public void doShow() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void hide() {
+	public void doHide() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void pause() {
+	public void doPause() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void resume() {
+	public void doResume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void doResize(int width, int height) {
 		// TODO Auto-generated method stub
 
 	}
