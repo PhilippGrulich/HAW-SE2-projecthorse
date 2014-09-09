@@ -9,7 +9,11 @@ public class SettingsImpl implements Settings {
 	private Preferences prefs;
 	
 	// Singleton Umsetzung
-	private static final SettingsImpl settingsInstance = new SettingsImpl(); 
+	private static final SettingsImpl settingsInstance = new SettingsImpl();
+	private static final int heigth = 1280; //Not included in Prefs to avoid changes (final)
+	private static final int width = 720; //Not included in Prefs to avoid changes (final)
+	
+	
 	private SettingsImpl(){
 		prefs = Gdx.app.getPreferences("SettingsPrefs");
 	};
@@ -39,13 +43,15 @@ public class SettingsImpl implements Settings {
 
 	@Override
 	public int getScreenWidth() {
-		return Gdx.graphics.getWidth();
+		return width;
+		//return Gdx.graphics.getWidth(); //Current resolution . game should have fixed size
 
 	}
 
 	@Override
 	public int getScreenHeight() {
-		return Gdx.graphics.getHeight();
+		return heigth;
+		//return Gdx.graphics.getHeight();
 	}
 
 }

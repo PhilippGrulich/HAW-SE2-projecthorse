@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -16,7 +17,7 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
  * 
  */
 
-public abstract class Level implements HorseScreen {
+public abstract class Level implements Screen {
 
 	private Viewport viewport;
 	private OrthographicCamera cam;
