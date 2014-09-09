@@ -1,13 +1,13 @@
 package com.haw.projecthorse.gamemanager.navigationmanager;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelLoadException;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.LevelManager;
-import com.haw.projecthorse.level.HorseScreen;
 
 /**
  * Navigation Manager. Über den NavigationManager wird von einem Level zum
@@ -31,7 +31,7 @@ public class NavigationManagerImpl implements NavigationManager {
 			if (game.getScreen() != null) {
 				game.getScreen().dispose();
 			}
-			HorseScreen screen = levelManager.getScreenByLevelID(levelID);
+			Screen screen = levelManager.getScreenByLevelID(levelID);
 			game.setScreen(screen);
 
 		} catch (LevelLoadException e) {
