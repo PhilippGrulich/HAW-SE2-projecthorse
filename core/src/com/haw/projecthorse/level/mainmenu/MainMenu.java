@@ -2,6 +2,7 @@ package com.haw.projecthorse.level.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -39,6 +41,9 @@ public class MainMenu extends Level {
 	private TextureRegion downRegion; // Aussehen des buttons wenn nicht
 										// gedrückt;
 
+	private Texture backgroundTexture;
+	private Image background;
+
 	private BitmapFont buttonFont = new BitmapFont(); // Standard 15pt Arial
 														// Font. (inside
 														// libgdx.jar file)
@@ -52,10 +57,25 @@ public class MainMenu extends Level {
 
 		initStage(this.getViewport(), this.getSpriteBatch());
 		initTable(); // Table = Gridlayout
+
+		addBackground();
 		initButtons(); // To be called after initTable (adds itself to table)
 		setupEventListeners();
 
 		stage.addActor(table);
+
+	}
+
+	private void addBackground() {
+		Pixmap pixel = new Pixmap(this.width, this.height, Format.RGBA8888); // Create
+																				// a
+		pixel.setColor(Color.LIGHT_GRAY);
+		pixel.fill();
+		backgroundTexture = new Texture(pixel, Format.RGBA8888, true);
+		pixel.dispose(); // No longer needed
+		background = new Image(backgroundTexture);
+		background.toBack();
+		stage.addActor(background);
 
 	}
 
@@ -89,6 +109,11 @@ public class MainMenu extends Level {
 		buttonSpiel2 = new TextButton("Spielstand 2", buttonStyle);
 		buttonSpiel3 = new TextButton("Spielstand 3", buttonStyle);
 		buttonCredits = new TextButton("Credits", buttonStyle);
+
+		buttonSpiel1.toFront();
+		buttonSpiel2.toFront();
+		buttonSpiel3.toFront();
+		buttonCredits.toFront();
 
 		table.add(buttonSpiel1);
 		table.add(buttonSpiel2);
@@ -157,14 +182,19 @@ public class MainMenu extends Level {
 
 	@Override
 	public void doRender(float delta) {
+		Gdx.gl.glClearColor(1, 1, 1, 1); // Hintergrund malen - einfarbig,
+											// langweilig
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 		Table.drawDebug(stage); // show debug lines
+
 	}
 
 	@Override
 	public void doDispose() {
 		stage.dispose();
+		backgroundTexture.dispose();
 	}
 
 	@Override
