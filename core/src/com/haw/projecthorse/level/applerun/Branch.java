@@ -1,0 +1,17 @@
+package com.haw.projecthorse.level.applerun;
+
+import com.badlogic.gdx.graphics.Texture;
+
+public class Branch extends Entity {
+
+	public Branch() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected Texture loadTexture() {
+		// TODO Auto-generated method stub
+		return null; //-> Standard image aus Entity wird genutzt
+	}
+
+}
