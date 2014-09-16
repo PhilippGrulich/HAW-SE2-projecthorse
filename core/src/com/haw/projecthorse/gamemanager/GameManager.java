@@ -67,6 +67,12 @@ public interface GameManager {
 	 * @return {@link Settings}
 	 */
 	Settings getSettings();
+	
+	/**
+	 * Liefert die aktuelle LevelID zurück
+	 * @return
+	 */
+	String getCurrentLevelID();
 
 
 	

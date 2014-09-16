@@ -107,6 +107,11 @@ final class GameManagerImpl implements GameManager {
 		return SettingsImpl.getInstance();
 	}
 
+	@Override
+	public String getCurrentLevelID() {
+		return navigationManager.getCurrentLevelID();
+	}
+
 
 
 }

@@ -8,6 +8,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.LevelManager;
+import com.haw.projecthorse.level.Level;
 
 /**
  * Navigation Manager. Über den NavigationManager wird von einem Level zum
@@ -64,6 +65,11 @@ public class NavigationManagerImpl implements NavigationManager {
 	public void navigateToMainMenu() {
 		navigateToLevel("mainMenu");
 		
+	}
+	@Override
+	public String getCurrentLevelID() {
+		Level level = (Level)game.getScreen();
+		return level.getLevelID();
 	}
 
 }
