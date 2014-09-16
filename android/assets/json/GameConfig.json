@@ -15,6 +15,11 @@
          name:"Hamburg",
          levelID:"4",
          className:"com.haw.projecthorse.level.DefaultLevel",
+         parameter:{
+         			farbe:"blau",
+         			"positionX" :100,
+         			"positionY":"1"
+         		},
          games:[
             {
                title:"Spiel 1",
