@@ -19,6 +19,7 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
 public abstract class Level implements Screen {
 
+	private String levelID = null;
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
@@ -37,9 +38,26 @@ public abstract class Level implements Screen {
 
 	}
 
+	
+	public final void setLevelID(String newID){
+		if(levelID != null){
+			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
+		}
+		
+		levelID = newID;
+		
+	}
+	
+	public final String getLevelID(){
+		return levelID;
+	}
+	
+	
 	protected abstract void doRender(float delta); // Called by render() - to be
 													// used in subclasses
 
+	
+	
 	@Override
 	public final void render(float delta) {
 		doRender(delta);
