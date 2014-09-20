@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.Level;
 
 /**
@@ -29,7 +29,7 @@ import com.haw.projecthorse.level.Level;
 
 public class MainMenu extends Level {
 
-	private Table table;// = new Table();
+	private VerticalGroup table;// = new Table();
 
 	private Stage stage;
 
@@ -83,12 +83,12 @@ public class MainMenu extends Level {
 		// Setup Style:
 
 		// 1. Load & Set gfx
-		Pixmap pixel = new Pixmap(128, 64, Format.RGBA8888); // Create a
+		Pixmap pixel = new Pixmap(350, 128, Format.RGBA8888); // Create a
 																// temp-pixmap
-																// to use as a
+								// to use as a
 																// background
 																// texture
-		pixel.setColor(Color.BLUE);
+		pixel.setColor(Color.GRAY);
 		pixel.fill();
 		upTexture = new Texture(pixel, Format.RGBA8888, true);
 		pixel.setColor(Color.CYAN);
@@ -96,38 +96,33 @@ public class MainMenu extends Level {
 		downTexture = new Texture(pixel, Format.RGBA8888, true);
 		pixel.dispose(); // No longer needed
 
-		upRegion = new TextureRegion(upTexture, 128, 64);
-		downRegion = new TextureRegion(downTexture, 128, 64);
+		upRegion = new TextureRegion(upTexture, 350, 128);
+		downRegion = new TextureRegion(downTexture, 350, 128);
 
 		buttonStyle = new TextButtonStyle();
 		buttonStyle.up = new TextureRegionDrawable(upRegion);
 		buttonStyle.down = new TextureRegionDrawable(downRegion);
-
+		
+		buttonFont.setScale(3);
 		buttonStyle.font = buttonFont;
-
+	
 		buttonSpiel1 = new TextButton("Spielstand 1", buttonStyle);
+		buttonSpiel1.setRound(true);
 		buttonSpiel2 = new TextButton("Spielstand 2", buttonStyle);
 		buttonSpiel3 = new TextButton("Spielstand 3", buttonStyle);
 		buttonCredits = new TextButton("Credits", buttonStyle);
-
+	
 		buttonSpiel1.toFront();
 		buttonSpiel2.toFront();
 		buttonSpiel3.toFront();
 		buttonCredits.toFront();
 
-		table.add(buttonSpiel1);
-		table.add(buttonSpiel2);
-		table.add(buttonSpiel3);
-		table.add(buttonCredits);
-
-	}
-
-	private void loadSavegame(int id) {
-		// TODO add loading method
-		System.out.println("Loading Game " + id
-				+ " - loadSavegame not yet implemented");
-
-	}
+		table.addActor(buttonSpiel1);
+		table.addActor(buttonSpiel2);
+		table.addActor(buttonSpiel3);
+		table.addActor(buttonCredits);
+	
+	}	
 
 	private void loadCredits() {
 		// TODO: Implement Creditscreen
@@ -135,31 +130,9 @@ public class MainMenu extends Level {
 	}
 
 	private void setupEventListeners() {
-		buttonSpiel1.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				GameManagerFactory.getInstance().navigateToWorldMap();
-				System.out.println("buttonSpiel1 pressed");
-
-				loadSavegame(1);
-			}
-
-		});
-		buttonSpiel2.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("buttonSpiel2 pressed");
-				loadSavegame(2);
-				GameManagerFactory.getInstance().navigateToLevel("4");
-			}
-
-		});
-		buttonSpiel3.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("buttonSpiel3 pressed");
-				loadSavegame(3);
-				GameManagerFactory.getInstance().navigateToWorldMap();
-			}
-
-		});
+		buttonSpiel1.addListener(new SavegameButtonListener(1));
+		buttonSpiel2.addListener(new SavegameButtonListener(2));
+		buttonSpiel3.addListener(new SavegameButtonListener(3));
 		buttonCredits.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("buttonCredits pressed");
@@ -175,8 +148,12 @@ public class MainMenu extends Level {
 	}
 
 	private void initTable() {
-		table = new Table();
-		table.debug(); // Show debug lines
+		table = new VerticalGroup();
+		
+		table.setPosition(0, -300);
+	
+	
+		//table.debug(); // Show debug lines
 		table.setFillParent(true);
 	}
 
