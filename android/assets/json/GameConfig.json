@@ -14,7 +14,7 @@
       {
          name:"Hamburg",
          levelID:"4",
-         className:"com.haw.projecthorse.level.DefaultLevel",
+         className:"com.haw.projecthorse.level.city.city",
          parameter:{
          			farbe:"blau",
          			"positionX" :100,
