@@ -24,7 +24,10 @@
             {
                title:"Spiel 1",
                levelID:"5",
-               className:"com.haw.projecthorse.level.DefaultLevel"
+               className:"com.haw.projecthorse.level.DefaultLevel",
+                parameter:{
+         			teaser_image:"blau"
+         		}
             },
             {
                title:"Spiel 1",
