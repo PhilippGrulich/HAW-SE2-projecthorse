@@ -34,7 +34,7 @@ public class Packer {
 		String[] content = dir.list();
 		Settings settings = new Settings();
 	    settings.maxWidth = 2560;
-	    settings.maxHeight = 1440;
+	    settings.maxHeight = 2000;
 	    settings.pot = false;
 		
 		for(int i = 0; i < content.length; i++){
