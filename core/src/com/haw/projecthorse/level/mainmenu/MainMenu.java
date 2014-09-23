@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
@@ -60,7 +61,7 @@ public class MainMenu extends Level {
 	private TextButton buttonSpiel3;
 	private boolean playerMoveRight=true;
 
-	private PlayerImpl player;
+	private Player player;
 
 	public MainMenu() {
 
@@ -127,7 +128,7 @@ public class MainMenu extends Level {
 		buttonSpiel1 = new TextButton("Spielstand 1", buttonStyle);
 		buttonSpiel1.setRound(true);
 		buttonSpiel2 = new TextButton("Spielstand 2", buttonStyle);
-		buttonSpiel3 = new TextButton("Spielstand 3", buttonStyle);
+		buttonSpiel3 = new TextButton(/*"Spielstand 3"*/"Swipe Test", buttonStyle);
 		buttonCredits = new TextButton("Credits", buttonStyle);
 	
 		buttonSpiel1.toFront();
@@ -150,7 +151,13 @@ public class MainMenu extends Level {
 	private void setupEventListeners() {
 		buttonSpiel1.addListener(new SavegameButtonListener(1));
 		buttonSpiel2.addListener(new SavegameButtonListener(2));
-		buttonSpiel3.addListener(new SavegameButtonListener(3));
+		//buttonSpiel3.addListener(new SavegameButtonListener(3));
+		buttonSpiel3.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				GameManagerFactory.getInstance().navigateToLevel("movementTest");
+			}
+		});
 		buttonCredits.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("buttonCredits pressed");
