@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,7 +21,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.Player;
+import com.haw.projecthorse.player.PlayerImpl;
 
 /**
  * @author Lars MainMenu. Shown when game starts Using a libgdx.stage and tables
@@ -41,7 +47,7 @@ public class MainMenu extends Level {
 	private TextureRegion downRegion; // Aussehen des buttons wenn nicht
 										// gedrückt;
 
-	private Texture backgroundTexture;
+	private AtlasRegion backgroundTexture;
 	private Image background;
 
 	private BitmapFont buttonFont = new BitmapFont(); // Standard 15pt Arial
@@ -52,6 +58,9 @@ public class MainMenu extends Level {
 	private TextButton buttonSpiel1;
 	private TextButton buttonSpiel2;
 	private TextButton buttonSpiel3;
+	private boolean playerMoveRight=true;
+
+	private PlayerImpl player;
 
 	public MainMenu() {
 
@@ -64,15 +73,24 @@ public class MainMenu extends Level {
 
 		stage.addActor(table);
 
+		 player = new PlayerImpl();
+		player.setPosition(100, 200);
+		player.scaleBy(0.5F);
+	
+		player.setAnimation(Direction.RIGHT, 0.3f);
+		stage.addActor(player);
 	}
 
 	private void addBackground() {
-		Pixmap pixel = new Pixmap(this.width, this.height, Format.RGBA8888); // Create
-																				// a
-		pixel.setColor(Color.LIGHT_GRAY);
-		pixel.fill();
-		backgroundTexture = new Texture(pixel, Format.RGBA8888, true);
-		pixel.dispose(); // No longer needed
+//		Pixmap pixel = new Pixmap(this.width, this.height, Format.RGBA8888); // Create
+//																				// a
+//		pixel.setColor(Color.LIGHT_GRAY);
+//		pixel.fill();
+//		backgroundTexture = new Texture(pixel, Format.RGBA8888, true);
+//		pixel.dispose(); // No longer needed
+	
+		TextureAtlas atlas = AssetManager.load("menu", true, true, true);
+		backgroundTexture = atlas.findRegion("Background");
 		background = new Image(backgroundTexture);
 		background.toBack();
 		stage.addActor(background);
@@ -159,6 +177,21 @@ public class MainMenu extends Level {
 
 	@Override
 	public void doRender(float delta) {
+		if(playerMoveRight){
+			if(player.getX()> Gdx.graphics.getWidth()){
+			
+				playerMoveRight = false;
+			}				
+			else
+				player.setPosition(player.getX()+5, player.getY());
+		}else{
+			if(player.getX()<0-player.getWidth()){
+				playerMoveRight = true;
+				}
+			else
+				player.setPosition(player.getX()-5, player.getY());
+		}
+		
 		Gdx.gl.glClearColor(1, 1, 1, 1); // Hintergrund malen - einfarbig,
 											// langweilig
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -171,7 +204,7 @@ public class MainMenu extends Level {
 	@Override
 	public void doDispose() {
 		stage.dispose();
-		backgroundTexture.dispose();
+		backgroundTexture.getTexture().dispose();;
 	}
 
 	@Override
