@@ -186,13 +186,14 @@ public class MainMenu extends Level {
 	public void doRender(float delta) {
 		if(playerMoveRight){
 			if(player.getX()> Gdx.graphics.getWidth()){
-			
+				player.setAnimation(Direction.LEFT, 0.3f);
 				playerMoveRight = false;
 			}				
 			else
 				player.setPosition(player.getX()+5, player.getY());
 		}else{
-			if(player.getX()<0-player.getWidth()){
+			if(player.getX()<-100-player.getWidth()){
+				player.setAnimation(Direction.RIGHT, 0.3f);
 				playerMoveRight = true;
 				}
 			else
