@@ -7,23 +7,23 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.DefaultLevel"
+         className:"com.haw.projecthorse.level.worldmap.WorldMap"
       }
    ],
    cities:[
       {
          name:"Hamburg",
          levelID:"4",
-         className:"com.haw.projecthorse.level.DefaultLevel",
+         className:"com.haw.projecthorse.level.worldmap.WorldMap",
          games:[
             {
                title:"Spiel 1",
                levelID:"5",
-               className:"com.haw.projecthorse.level.DefaultLevel"
+               className:"com.haw.projecthorse.level.worldmap.WorldMap"
             },
             {
                title:"Spiel 1",
-               className:"com.haw.projecthorse.level.DefaultLevel",
+               className:"com.haw.projecthorse.level.worldmap.WorldMap",
                levelID:"6"
             }
          ]

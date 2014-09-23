@@ -30,6 +30,7 @@ public class AssetManager {
 		//assetManager.load("badlogic.jpg", Texture.class);
 		assetManager.load("pictures/selfmade/logo.png", Texture.class);
 		assetManager.load("pictures/cc-0/worldmap.png", Texture.class);
+		assetManager.load("pictures/cc-0/germanymap.png", Texture.class);
 	}
 	
 
