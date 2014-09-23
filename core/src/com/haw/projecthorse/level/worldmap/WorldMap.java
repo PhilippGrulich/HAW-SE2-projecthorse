@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,10 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.gamemanager.navigationmanager.json.*;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.Level;
 
@@ -66,7 +61,7 @@ public class WorldMap extends Level {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void doRender(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		AssetManager.showTexture("pictures/cc-0/germanymap.png", 0, 0);
@@ -77,12 +72,12 @@ public class WorldMap extends Level {
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void doResize(int width, int height) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void show() {
+	public void doShow() {
 		// TODO Auto-generated method stub
 		AssetManager.load();
 		AssetManager.playSound("sounds/flap.wav");
@@ -91,25 +86,25 @@ public class WorldMap extends Level {
 	}
 
 	@Override
-	public void hide() {
+	public void doHide() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void pause() {
+	public void doPause() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void resume() {
+	public void doResume() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void dispose() {
+	public void doDispose() {
 		stage.dispose();
 		skin.dispose();
 	}
