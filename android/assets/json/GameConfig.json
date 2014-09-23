@@ -7,7 +7,7 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.DefaultLevel"
+         className:"com.haw.projecthorse.level.worldmap.WorldMap"
       }
    ],
    cities:[

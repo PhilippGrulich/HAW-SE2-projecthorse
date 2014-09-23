@@ -72,6 +72,7 @@ public final class AssetManager {
 		return assets;
 	}
 	
+
 	/**
 	 * Setzen des root-Verzeichnisses. Wird für den Zugriff auf Assets benötigt.
 	 * Weiterhin werden die Sound, Music und Texture Pfade gesetzt
