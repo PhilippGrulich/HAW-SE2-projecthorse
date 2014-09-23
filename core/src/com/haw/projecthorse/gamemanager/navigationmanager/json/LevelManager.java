@@ -3,11 +3,12 @@ package com.haw.projecthorse.gamemanager.navigationmanager.json;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelLoadException;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
-import com.haw.projecthorse.level.HorseScreen;
+import com.haw.projecthorse.level.Level;
 
 /**
  * Der Level Manager das Laden eines Levels zuständig.
@@ -46,14 +47,14 @@ public class LevelManager {
 		return file.readString();
 	}
 
-	public final HorseScreen getScreenByLevelID(final String levelID) throws LevelLoadException {
+	public final Screen getScreenByLevelID(final String levelID) throws LevelLoadException {
 		String className = getClassByLevelID(levelID);
-
-		HorseScreen screen;
+		
 		try {
 			Class<?> clazz = Class.forName(className);
-			screen = (HorseScreen) clazz.newInstance();
-			return screen;
+			Level level = (Level) clazz.newInstance();
+			level.setLevelID(levelID);
+			return level;
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

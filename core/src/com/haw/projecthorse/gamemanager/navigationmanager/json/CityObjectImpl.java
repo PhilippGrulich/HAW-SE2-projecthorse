@@ -1,9 +1,12 @@
 package com.haw.projecthorse.gamemanager.navigationmanager.json;
 
+import java.util.HashMap;
+
 class CityObjectImpl implements CityObject {
 	private String name = "";
 	private String className = "";
 	private String levelID = "";
+	private HashMap<String, String> parameter = new HashMap<String, String>();
 	private GameObjecttImpl[] games = new GameObjecttImpl[0];
 
 	@Override
@@ -53,6 +56,11 @@ class CityObjectImpl implements CityObject {
 
 	public final String getClassName() {
 		return className;
+	}
+
+	@Override
+	public final HashMap<String, String> getParameter() {			
+		return parameter;			
 	}
 
 }
