@@ -292,7 +292,7 @@ public final class AssetManager {
 		List<String> stringList;
 		String licenseDir = assetDir + FILESEPARATOR + "pictures";
 		String[][] seperatedEntries;
-		final int licenseLineSize = 5;
+		final int maxLicenseLineSize = 5;
 		String[] listLine;
 		Map<String, String[][]> stringMap = new
 				HashMap<String, String[][]>();
@@ -318,10 +318,10 @@ public final class AssetManager {
 			//aufsplitten der Zeilen, anhand des Semikolons
 			//und abspeichern in ein 2D-Array. Anschließendes
 			//einfuegen in die HashMap
-			seperatedEntries = new String[stringList.size()][licenseLineSize];
+			seperatedEntries = new String[stringList.size()][maxLicenseLineSize];
 			for(int i = 0; i < stringList.size(); i++){
 				listLine = stringList.get(i).split(";");
-				for (int j = 0; j < licenseLineSize; j++) {
+				for (int j = 0; j < listLine.length; j++) {
 					seperatedEntries[i][j] = listLine[j].trim();
 				}
 			}
