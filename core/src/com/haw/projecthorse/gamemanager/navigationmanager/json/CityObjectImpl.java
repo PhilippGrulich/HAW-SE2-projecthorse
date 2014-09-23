@@ -21,7 +21,6 @@ class CityObjectImpl implements CityObject {
 
 	@Override
 	public final GameObject[] getGames() {
-
 		return games;
 
 	}

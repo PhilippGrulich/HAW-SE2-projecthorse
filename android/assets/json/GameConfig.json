@@ -13,7 +13,7 @@
    cities:[
       {
          name:"Hamburg",
-         levelID:"4",
+         levelID:"Hamburg",
          className:"com.haw.projecthorse.level.city.city",
          parameter:{
          			farbe:"blau",

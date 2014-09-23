@@ -76,7 +76,7 @@ public class WorldMap extends Level {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//AssetManager.showTexture("pictures/cc-0/germanymap.png", 0, 0);
 		batch.begin();
-		batch.draw(this.germanyatlas.findRegion("germanymap"), 0, 0,  Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(this.germanyatlas.findRegion("germanymap"), 0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());
 		batch.end();
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
