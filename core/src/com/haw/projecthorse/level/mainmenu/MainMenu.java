@@ -102,7 +102,7 @@ public class MainMenu extends Level {
 		// backgroundTexture = new Texture(pixel, Format.RGBA8888, true);
 		// pixel.dispose(); // No longer needed
 
-		TextureAtlas atlas = AssetManager.load("menu", true, true, true);
+		TextureAtlas atlas = AssetManager.load("menu", false, false, true);
 		backgroundTexture = atlas.findRegion("Background");
 		background = new Image(backgroundTexture);
 		background.toBack();

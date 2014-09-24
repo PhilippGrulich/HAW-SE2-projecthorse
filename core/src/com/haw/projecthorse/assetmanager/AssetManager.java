@@ -21,8 +21,10 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
+import com.haw.projecthorse.assetmanager.exceptions.*;
 public final class AssetManager {
 	
 	private static AssetManager ownAssetManager;
@@ -41,7 +43,9 @@ public final class AssetManager {
 	private static boolean isApplicationTypeChoosen = false;
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
-
+	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
+	private static Texture errorPic;
+	
 	private AssetManager(){};
 	
 	public static AssetManager getInstance(){
@@ -77,9 +81,14 @@ public final class AssetManager {
 		}
 		assetManager.finishLoading();
 		
+	
+			
 		if(assets == null){
-			System.out.println("Atlas couldn't load!");
+			System.out.println("Bilder konnten nicht geladen werden," + 
+					"da kein TextureAtlas erstellt wurde. TexturePacker.main() nicht ausgeführt?");
+			
 		}
+		
 		return assets;
 	}
 	
@@ -104,6 +113,7 @@ public final class AssetManager {
 		directory_sounds = assetDir + FILESEPARATOR + FOLDERNAME_SOUNDS;
 		directory_music = assetDir + FILESEPARATOR + FOLDERNAME_MUSIC;
 		directory_pictures = assetDir + FILESEPARATOR + FOLDERNAME_PICTURES;
+		errorPic = new Texture(new FileHandle(new File(assetDir + FILESEPARATOR + FOLDERNAME_PICTURES + FILESEPARATOR + "errorPic.png")));
 	}
 	
 	private static boolean isApplicationChoosen(){
@@ -124,12 +134,19 @@ public final class AssetManager {
 		File dir = new File(path);
 		ArrayList<String> content = new ArrayList<String>(Arrays.asList(dir.list()));
 		
-		if(content.contains(levelID)){
+		try{
+			if(content.contains(levelID)){
 				loadAssets(levelID, path + FILESEPARATOR + levelID, type);
 			
 		}else {
-			System.out.println("In AssetManager: Asset not found");
+			throw new LevelDirectoryNotFoundException("Ordner mit LevelID " + levelID + " in " + path + " nicht gefunden");
+		
 		}
+		}catch(LevelDirectoryNotFoundException e){
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	/**
@@ -170,6 +187,7 @@ public final class AssetManager {
 			String relativeFilePath = path.substring(startIdx, path.length()).replace("\\", "/") + "/" + filename;
 			assetManager.load(relativeFilePath, TextureAtlas.class);
 			assets = new TextureAtlas(Gdx.files.internal(relativeFilePath));
+			administratedAtlases.put(levelID, new TextureAtlas(Gdx.files.internal(relativeFilePath)));
 		}
 	}
 	
@@ -210,6 +228,7 @@ public final class AssetManager {
 	 */
 	public static void disposeAtlas(String levelID, String atlas){
 		assetManager.unload(atlas);
+		administratedAtlases.remove(levelID);
 		assets = null;
 	}
 	
@@ -267,6 +286,22 @@ public final class AssetManager {
 	public static void changeMusicVolume(String levelID, String name, float volume){
 		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name, Music.class).setVolume(volume);
 		musicVolume = volume;
+	}
+	
+	public static Texture getTexture(String levelID, String filename){
+		Texture result;
+		
+		try{
+			if(administratedAtlases.get(levelID).findRegion(filename) != null){
+				result = administratedAtlases.get(levelID).findRegion(filename).getTexture();
+				return result;
+			}else{
+				throw new TextureNotFoundException("Bild " + filename + " nicht gefunden.");
+			}
+		}catch(TextureNotFoundException e){
+			e.printStackTrace();
+		}
+		return errorPic;
 	}
 	
 	/**
