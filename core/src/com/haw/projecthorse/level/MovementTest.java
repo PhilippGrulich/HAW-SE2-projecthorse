@@ -3,6 +3,7 @@ package com.haw.projecthorse.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
@@ -54,7 +55,17 @@ public class MovementTest extends Level {
 				if (direction == dir) {
 					changeAnimationSpeed(0.1f);
 				} else {
-					setAnimation(dir, 0.3f);
+					/* 
+					 * Alter Code: setAnimation(dir, 0.3f);
+					 * Ist zwar in diesem Fall kürzer und funktioniert auch,
+					 * aber das Arbeiten mit den Actions ist mehr im Sinne des
+					 * LibGdX Actor Konzepts.
+					 */
+				
+					if (getAnimationSpeed() == 0) {
+						changeAnimationSpeed(0.3f);
+					}
+					addAction(new ChangeDirectionAction(dir));
 				}
 			}
 			
