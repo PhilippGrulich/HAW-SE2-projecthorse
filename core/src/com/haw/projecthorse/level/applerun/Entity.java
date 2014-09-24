@@ -1,59 +1,52 @@
 package com.haw.projecthorse.level.applerun;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 
 /**
- * @author Lars 
- * Entity: A base game object that does something. Like a falling apple etc. 
- * (Image is an Actor)
+ * @author Lars Entity: A base game object that does something. Like a falling
+ *         apple etc. (Image is an Actor)
+ * 
+ *         Override "static Texture loadTexture()" to load init gfx
  */
 
 public abstract class Entity extends Image {
 
-	protected Texture thisTexture = null;
-
-	public Entity() {
-		thisTexture = loadTexture(); //Load a texture, set by extending class 
-		if(thisTexture == null){ //No Texture supplied
-			loadDefaultTexture();	
-		}
-		this.setDrawable(new TextureRegionDrawable(new TextureRegion(thisTexture))); //Convert the texture to use as a drawable Image
+	public Entity(Texture texture) {
+		super(texture);
 		
-	}
-
-	private void loadDefaultTexture() {
-		Pixmap pixel = new Pixmap(64, 64, Format.RGBA8888);
-		pixel.setColor(Color.PINK);
-		pixel.fill();
-		thisTexture = new Texture(pixel, Format.RGBA8888, true);
-		pixel.dispose(); // No longer needed
 		
-	}
+		float fallingtime = (((float) Math.random()) * 3f) + 5f;   
+		
+		Action move = Actions.moveBy(0.0f, -1280.0f, fallingtime);
+		this.addAction(move);
+		
 	
-	//Bounding box for collision detection
-	private void updateBounds(){
-		this.setBounds(getImageX(), getImageY(), getImageWidth(), getImageHeight());
-		
+		float pos_x = (((float) Math.random()) * 636f) + 10;
+
+		float pos_y = (((float) Math.random()) * 200f) + 1000;
+		this.setPosition(pos_x, pos_y);
+
 	}
 
-	//This method should return a Texture and will be set as the image.
-	protected abstract Texture loadTexture();
-	
+	// Bounding box for collision detection
+	private void updateBounds() {
+		this.setBounds(getImageX(), getImageY(), getImageWidth(),
+				getImageHeight());
+	}
+
 	@Override
-	public void act(float delta){
-		
+	public void act(float delta) {
+
 		super.act(delta);
-		updateBounds(); //Update bounding box for collision detection
-	
+
+		// updateBounds(); //Update bounding box for collision detection
+
 	}
 
-	//protected abstract void handleCollision(Actor actor); //Handle if you have hit something
-	
+	// protected abstract void handleCollision(Actor actor); //Handle if you
+	// have hit something
+
 }

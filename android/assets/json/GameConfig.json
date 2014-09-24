@@ -12,6 +12,10 @@
       {
       	levelID:"movementTest",
       	className:"com.haw.projecthorse.level.MovementTest"
+      },
+      {
+      	levelID:"appleRun",
+      	className:"com.haw.projecthorse.level.applerun.AppleRun"
       }
    ],
    cities:[

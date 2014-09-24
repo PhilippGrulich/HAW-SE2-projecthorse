@@ -158,6 +158,8 @@ public class MainMenu extends Level {
 
 	private void loadCredits() {
 		// TODO: Implement Creditscreen
+		
+		GameManagerFactory.getInstance().navigateToLevel("appleRun");
 		System.out.println("CreditScreen not yet implemented - Todo");
 	}
 
