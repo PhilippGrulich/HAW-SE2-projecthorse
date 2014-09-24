@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class AssetManager {
@@ -30,6 +31,7 @@ public class AssetManager {
 		//assetManager.load("badlogic.jpg", Texture.class);
 		assetManager.load("pictures/selfmade/logo.png", Texture.class);
 		assetManager.load("pictures/cc-0/worldmap.png", Texture.class);
+		assetManager.load("pictures/cc-0/hamburg.png", Texture.class);
 	}
 	
 
@@ -37,7 +39,6 @@ public class AssetManager {
 		assetManager.load("sounds/flap.wav", Sound.class);
 	}
 	
-
 	private static void loadMusic(){
 		assetManager.load("music/life.mp3", Music.class);
 	}
