@@ -1,77 +1,122 @@
 package com.haw.projecthorse.player;
 
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.haw.projecthorse.swipehandler.SwipeListener;
 
-public interface Player {
-	
+/**
+ * Player ist eine spezielle Implemetierung der LibGDX Klasse Actor. Um sie
+ * sinnvoll nutzen zu können, sollte die Scene2D Stage Klasse als Parent
+ * verwendet werden.
+ * 
+ * Siehe
+ * http://www.gamefromscratch.com/post/2013/12/09/LibGDX-Tutorial-9-Scene2D
+ * -Part-2-Actions.aspx https://github.com/libgdx/libgdx/wiki/Scene2d
+ * 
+ * @author Olli, Viktor
+ *
+ */
+
+public abstract class Player extends Actor implements SwipeListener {
 	/**
-	 * Methode zum Rendern des Spielers (Pferd)
-	 * @param timeDeltaSum Aufsummierte Zeit seit Rendering Beginn 
+	 * Setzt und startet eine endlose Bewegungsanimation für den Spieler
+	 * 
+	 * @param direction
+	 *            Richtung der Bewegung
+	 * @param speed
+	 *            Geschwindigkeit zwischen 0 und 1
 	 */
-	public void draw(float timeDeltaSum);
-	
+	public abstract void setAnimation(Direction direction, float speed);
+
 	/**
-	 * Methode zum setzen der X Koordinate
-	 * @param x
+	 * Verändert die Geschwindigkeit der Bewegungsanimation um ein angegegbenes
+	 * Delta, die Richtung wird hierbei berücksichtigt
+	 * 
+	 * @param delta
+	 *            zwischen -1 und 1, negative Werte bremsen, positive Werte
+	 *            beschleunigen
 	 */
-	public void setX(float x);
-	
+	public abstract void changeAnimationSpeed(float delta);
+
 	/**
-	 * Methode zum setzen der Y Koordinate
-	 * @param y
+	 * @return Geschwindigkeit der aktuellen Bewegungsanimation
 	 */
-	public void setY(float y);
-	
-	/**
-	 * Gibt die X Koordinate des Spielers zurück
-	 */
-	public float getX();
-	
-	/**
-	 * Gibt die Y Koordinate des Spielers zurück
-	 */
-	public float getY();
-	
-	/**
-	 * Bewegt den Spieler in eine Richtung, steuert Animation und
-	 * ggf. auch die Koordinaten (es sei denn der Spieler ist unbeweglich)
-	 * @param direction Richtung der Bewegung
-	 * @param speed Geschwindigkeit zwischen 0 und 1
-	 */
-	public void setMovement(Direction direction, float speed);
-	
-	/**
-	 * Verändert die Geschwindigkeit um ein angegegbenes Delta, die
-	 * Richtung wird hierbei berücksichtigt
-	 * @param delta zwischen -1 und 1, negative Werte bremsen, positive Werte beschleunigen
-	 */
-	public void changeSpeed(float delta);
-	
-	/**
-	 * @return Geschwindigkeit der aktuellen Bewegung
-	 */
-	public float getSpeed();
-	
+	public abstract float getAnimationSpeed();
+
 	/**
 	 * 
 	 * @return True bei Bewegung, ansonsten False
 	 */
-	public boolean isMoving();
-	
-	/**
-	 * Liefert ein Polygon, das als Bounding Box verwendet werden kann
-	 * @return 
-	 */
-	public Polygon getBoundingPolygon();
-	
-	/**
-	 * Liefert eine rechteckige Bounding Box, kann sehr ungenau sein!
-	 * Für genauere Berechnungen sollte getBoundingPolygon() genutzt werden
-	 * @return
-	 */
-	public BoundingBox getBoundingBox();
-	
-	
+	public abstract boolean isMoving();
 
+	/**
+	 * Handler für eine Swipe-Bewegung nach oben auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeUp() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach unten auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeDown() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach links auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeLeft() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach rechts auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeRight() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach links-oben auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeUpLeft() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach rechts-oben auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeUpRight() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach links-unten auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeDownLeft() {}
+
+	/**
+	 * Handler für eine Swipe-Bewegung nach rechts-unten auf dem Bildschirm.
+	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
+	 * reagieren will.
+	 * 
+	 */
+	@Override
+	public void swipeDownRight() {}
 }
