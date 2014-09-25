@@ -7,7 +7,7 @@ package com.haw.projecthorse.gamemanager.settings;
 
 
 public interface Settings {
-				
+					
 	/**
 	 * Gibt Auskunft über den aktuellen Ton Status.
 	 * @return boolean Ton an (true) oder aus (false).
@@ -21,15 +21,27 @@ public interface Settings {
 	public void setSoundState(boolean state);
 	
 	/**
-	 * Gibt die Breite des Spielbildschirms bzw. des Fensters zurück.
+	 * Gibt die reale Breite des Spielbildschirms bzw. des Fensters zurück.
 	 * @return int Breite in Pixeln.
 	 */
 	public int getScreenWidth();
 	
 	/**
-	 * Gibt die Höhe des Spielbildschirms bzw. des Fensters zurück.
+	 * Gibt die reale Höhe des Spielbildschirms bzw. des Fensters zurück.
 	 * @return int Höhe in Pixeln.
 	 */
 	public int getScreenHeight();
+	
+	/**
+	 * Gibt die virtuelle Breite des Spielbildschirms bzw. des Fensters zurück.
+	 * @return int Breite in Pixeln.
+	 */
+	public int getVirtualScreenWidth();
+	
+	/**
+	 * Gibt die virtuelle Höhe des Spielbildschirms bzw. des Fensters zurück.
+	 * @return int Höhe in Pixeln.
+	 */
+	public int getVirtualScreenHeight();
 	
 }

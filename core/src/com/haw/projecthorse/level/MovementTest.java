@@ -7,6 +7,7 @@ import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.swipehandler.ControlMode;
 import com.haw.projecthorse.swipehandler.StageGestureDetector;
 
 /**
@@ -18,6 +19,7 @@ import com.haw.projecthorse.swipehandler.StageGestureDetector;
  */
 public class MovementTest extends Level {
 	private Stage stage;
+	private final ControlMode mode = ControlMode.FOUR_AXIS;
 
 	@Override
 	protected void doRender(float delta) {
@@ -62,9 +64,7 @@ public class MovementTest extends Level {
 					 * LibGdX Actor Konzepts.
 					 */
 				
-					if (getAnimationSpeed() == 0) {
-						changeAnimationSpeed(0.3f);
-					}
+					setAnimationSpeed(0.3f);
 					addAction(new ChangeDirectionAction(dir));
 				}
 			}
@@ -121,7 +121,7 @@ public class MovementTest extends Level {
 		 *  er leitet die Standard-Events (z.B. keyDown oder mouseMoved) an die angegebene
 		 *  Stage weiter. Der übergebene SwipeListener - hier der Player - reagiert auf die Swipe-Events.
 		 */
-		Gdx.input.setInputProcessor(new StageGestureDetector(stage, player));
+		Gdx.input.setInputProcessor(new StageGestureDetector(stage, player, mode));
 	}
 
 	@Override

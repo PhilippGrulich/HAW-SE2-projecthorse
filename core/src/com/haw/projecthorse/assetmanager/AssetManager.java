@@ -21,21 +21,20 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-=======
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
->>>>>>> 07633cd1701421e7e2ebff2539bd52c59571f37e
 
-=======
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
+
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.haw.projecthorse.assetmanager.exceptions.*;
->>>>>>> 6d17d03de5f88b00c3955cdd50fb6feb85407cd9
+
 public final class AssetManager {
 	
 	private static AssetManager ownAssetManager;
@@ -127,26 +126,24 @@ public final class AssetManager {
 		errorPic = new Texture(new FileHandle(new File(assetDir + FILESEPARATOR + FOLDERNAME_PICTURES + FILESEPARATOR + "errorPic.png")));
 	}
 	
-<<<<<<< HEAD
+
 	private static void loadTextures(){
 		//assetManager.load("badlogic.jpg", Texture.class);
 		assetManager.load("pictures/selfmade/logo.png", Texture.class);
 		assetManager.load("pictures/cc-0/worldmap.png", Texture.class);
-		assetManager.load("pictures/cc-0/hamburg.png", Texture.class);
-=======
+		assetManager.load("pictures/cc-0/hamburg.png", Texture.class);}
+
 	private static boolean isApplicationChoosen(){
 		return isApplicationTypeChoosen;
->>>>>>> 07633cd1701421e7e2ebff2539bd52c59571f37e
 	}
 	
 	private static void setApplicationType(){
 		isApplicationTypeChoosen = true;
 	}
 	
-<<<<<<< HEAD
 	private static void loadMusic(){
-		assetManager.load("music/life.mp3", Music.class);
-=======
+		assetManager.load("music/life.mp3", Music.class);}
+
 	/**
 	 * Sucht im Ordner FOLDERNAME_type den Ordner mit der levelID. 
 	 * @param levelID
@@ -168,12 +165,8 @@ public final class AssetManager {
 		}catch(LevelDirectoryNotFoundException e){
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
->>>>>>> 07633cd1701421e7e2ebff2539bd52c59571f37e
-=======
+
 		
-		
->>>>>>> 6d17d03de5f88b00c3955cdd50fb6feb85407cd9
 	}
 	
 	/**

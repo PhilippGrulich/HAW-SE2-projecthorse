@@ -20,8 +20,8 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 public class Packer {
 	
 	public static final String filesep = System.getProperty("file.separator");
-	public static final String root = System.getProperty("user.dir") + filesep + "bin" + filesep + "pictures";
-	
+	public static final String root = System.getProperty("user.dir") + filesep + ".." + filesep + "android" + filesep + "assets" + filesep + "pictures";
+			
 	public static void main (String[] arg) {
 		packImages();
 	}

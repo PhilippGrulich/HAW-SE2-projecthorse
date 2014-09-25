@@ -1,7 +1,5 @@
 package com.haw.projecthorse.level.mainmenu;
 
-import javax.swing.text.StyledEditorKit.ForegroundAction;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -68,7 +66,7 @@ public class MainMenu extends Level {
 	private Player player;
 
 	public MainMenu() {
-		float moveToDuration = Gdx.graphics.getWidth() / 5 / 30;
+		float moveToDuration = width / 5 / 30;
 
 		initStage(this.getViewport(), this.getSpriteBatch());
 		initTable(); // Table = Gridlayout
@@ -80,14 +78,14 @@ public class MainMenu extends Level {
 		stage.addActor(table);
 
 		player = new PlayerImpl();
-		player.setPosition(0, 180);
+		player.setPosition(0, 0.14f * height);
 		player.scaleBy(0.5F);
 
 		player.setAnimation(Direction.RIGHT, 0.4f);
 		stage.addActor(player);
 
 		player.addAction(Actions.forever(Actions.sequence(Actions.moveTo(
-				Gdx.graphics.getWidth() + 50, player.getY(), moveToDuration),
+				width + 50, player.getY(), moveToDuration),
 				new ChangeDirectionAction(Direction.LEFT), Actions.moveTo(-100
 						- player.getWidth(), player.getY(), moveToDuration),
 				new ChangeDirectionAction(Direction.RIGHT))));
@@ -211,7 +209,7 @@ public class MainMenu extends Level {
 		Gdx.gl.glClearColor(1, 1, 1, 1); // Hintergrund malen - einfarbig,
 											// langweilig
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(Gdx.graphics.getDeltaTime());
+		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage); // show debug lines
 

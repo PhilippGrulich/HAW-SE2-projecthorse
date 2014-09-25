@@ -1,0 +1,13 @@
+
+hamburg.png
+size: 795,1282
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Sankt-Michaelis-Kirche_Hamburg
+  rotate: false
+  xy: 2, 2
+  size: 793, 1280
+  orig: 793, 1280
+  offset: 0, 0
+  index: -1

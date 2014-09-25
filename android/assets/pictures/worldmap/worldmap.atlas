@@ -1,0 +1,47 @@
+
+worldmap.png
+size: 2099,1922
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+germanymap
+  rotate: false
+  xy: 2, 2
+  size: 1375, 1920
+  orig: 1375, 1920
+  offset: 0, 0
+  index: -1
+germanymap_scaled
+  rotate: false
+  xy: 1379, 917
+  size: 720, 1005
+  orig: 720, 1005
+  offset: 0, 0
+  index: -1
+hamburgwappen
+  rotate: false
+  xy: 1379, 489
+  size: 640, 426
+  orig: 640, 426
+  offset: 0, 0
+  index: -1
+
+worldmap2.png
+size: 1286,1452
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+karte
+  rotate: false
+  xy: 2, 728
+  size: 1284, 724
+  orig: 1284, 724
+  offset: 0, 0
+  index: -1
+logo
+  rotate: false
+  xy: 2, 2
+  size: 1284, 724
+  orig: 1284, 724
+  offset: 0, 0
+  index: -1

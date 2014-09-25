@@ -3,13 +3,10 @@ package com.haw.projecthorse.level.city;
 import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-<<<<<<< HEAD
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-=======
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
->>>>>>> 07633cd1701421e7e2ebff2539bd52c59571f37e
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
@@ -33,14 +30,14 @@ public class city extends Level {
 		batcher.begin();
 		font.draw(batcher, "HAMBURG", 300, 320);
 		batcher.end();
-=======
+
 		
 		this.batcher.begin();
 		batcher.draw(this.assetAtlas.findRegion("karte"),
 				0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		this.batcher.end();
 		
->>>>>>> 07633cd1701421e7e2ebff2539bd52c59571f37e
+
 		try {
 		CityObject city =	GameManagerFactory.getInstance().getCityObject(getLevelID());
 		
