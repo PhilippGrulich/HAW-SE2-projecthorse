@@ -34,7 +34,10 @@ public class city extends Level {
 	private TextureAtlas atlant;
 	private SpriteBatch batcher = new SpriteBatch();
 	private CityObject cityObject;
+	
 	private int lastButtonY= GameManagerFactory.getInstance().getSettings().getScreenHeight();
+	private BitmapFont font;
+	private AtlasRegion region;
 	@Override
 	protected void doShow() { 
 		// TODO Auto-generated method stub
@@ -49,7 +52,10 @@ public class city extends Level {
 			e1.printStackTrace();
 		}
 
-		
+		 region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
+		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		font.setScale(.45f,.45f);
+		font.setColor(Color.MAGENTA);
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -91,7 +97,7 @@ public class city extends Level {
 		
 		
 		imgTextButton.setPosition(200, lastButtonY);
-		
+		lastButtonY=lastButtonY-200;
 		stage.addActor(imgTextButton);
 	};
 	@Override
@@ -99,14 +105,11 @@ public class city extends Level {
 	
 		// TODO Auto-generated method stub
 	
-		AtlasRegion region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
-		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(.45f,.45f);
-		font.setColor(Color.MAGENTA);
+		
 		batcher.begin();
 		batcher.draw(region,
 				0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());	
-		font.draw(batcher, "HAMBURG", Gdx.graphics.getWidth()/1.8f, Gdx.graphics.getHeight()/1.03f);
+		font.draw(batcher, cityObject.getCityName(), Gdx.graphics.getWidth()/1.8f, Gdx.graphics.getHeight()/1.03f);
 		batcher.end();	
 		
 		stage.draw();
