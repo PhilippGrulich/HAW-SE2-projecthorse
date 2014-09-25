@@ -35,7 +35,7 @@ public abstract class Level implements Screen {
 	public Level() {
 		cam = new OrthographicCamera(width, height);
 		cam.setToOrtho(false); // Set to Y-Up - Coord system
-		viewport = new StretchViewport(width, height, cam);
+		viewport = new FitViewport(width, height, cam);
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
