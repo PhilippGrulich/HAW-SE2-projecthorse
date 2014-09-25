@@ -34,7 +34,7 @@ public class city extends Level {
 	private TextureAtlas atlant;
 	private SpriteBatch batcher = new SpriteBatch();
 	private CityObject cityObject;
-	private int lastButtonY= GameManagerFactory.getInstance().getSettings().getScreenHeight()-300;
+	private int lastButtonY= GameManagerFactory.getInstance().getSettings().getScreenHeight();
 	@Override
 	protected void doShow() { 
 		// TODO Auto-generated method stub
@@ -89,7 +89,7 @@ public class city extends Level {
 			}
 		});
 		
-		lastButtonY=lastButtonY-300;
+		
 		imgTextButton.setPosition(200, lastButtonY);
 		
 		stage.addActor(imgTextButton);
@@ -98,22 +98,16 @@ public class city extends Level {
 	protected void doRender(float delta) {
 	
 		// TODO Auto-generated method stub
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	
 		AtlasRegion region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
-		batcher.begin();
-		batcher.draw(region,
-				0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());	
-		batcher.end();
 		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
 		font.setScale(.45f,.45f);
 		font.setColor(Color.MAGENTA);
-		this.batcher.begin();
-		this.batcher.draw(new Texture(Gdx.files.internal("pictures/hamburg/hamburg.png")),
-				0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		font.draw(this.batcher, "HAMBURG", Gdx.graphics.getWidth()/1.8f, Gdx.graphics.getHeight()/1.03f);
-		this.batcher.end();
-
+		batcher.begin();
+		batcher.draw(region,
+				0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());	
+		font.draw(batcher, "HAMBURG", Gdx.graphics.getWidth()/1.8f, Gdx.graphics.getHeight()/1.03f);
+		batcher.end();	
 		
 		stage.draw();
 //		SpriteBatch batch1 = new SpriteBatch();
