@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.city;
 import com.badlogic.gdx.Gdx; 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,19 +24,15 @@ public class city extends Level {
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		SpriteBatch batcher = new SpriteBatch();
 		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(.75f,.75f);
+		font.setScale(.45f,.45f);
 		font.setColor(Color.MAGENTA);
-		batcher.begin();
-		font.draw(batcher, "HAMBURG", 300, 320);
-		batcher.end();
-
-		
 		this.batcher.begin();
-		batcher.draw(this.assetAtlas.findRegion("karte"),
+		this.batcher.draw(new Texture(Gdx.files.internal("pictures/hamburg/hamburg.png")),
 				0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		font.draw(this.batcher, "HAMBURG", Gdx.graphics.getWidth()/1.8f, Gdx.graphics.getHeight()/1.03f);
 		this.batcher.end();
+
 		
 
 		try {
