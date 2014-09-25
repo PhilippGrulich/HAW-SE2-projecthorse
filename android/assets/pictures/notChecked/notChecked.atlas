@@ -1,0 +1,13 @@
+
+notChecked.png
+size: 462,702
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+black_sprites
+  rotate: false
+  xy: 2, 2
+  size: 460, 700
+  orig: 460, 700
+  offset: 0, 0
+  index: -1

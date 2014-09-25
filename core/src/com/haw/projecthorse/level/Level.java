@@ -13,6 +13,8 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
  *         müssen stattdessen jeweils doDispose() usw. implementieren
+ *         
+ *         Alle Implementierungen MÜSSEN im Konstruktor super() aufrufen!
  * 
  * 
  */
