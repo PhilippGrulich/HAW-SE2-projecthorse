@@ -25,9 +25,9 @@ public abstract class Level implements Screen {
 	private SpriteBatch spriteBatch;
 
 	protected final int height = GameManagerFactory.getInstance().getSettings()
-			.getScreenHeight();
+			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
-			.getScreenWidth();
+			.getVirtualScreenWidth();
 
 	public Level() {
 		cam = new OrthographicCamera(width, height);
