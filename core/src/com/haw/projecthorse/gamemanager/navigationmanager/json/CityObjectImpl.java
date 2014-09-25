@@ -20,13 +20,8 @@ class CityObjectImpl implements CityObject {
 	}
 
 	@Override
-	public final String[] getGameLevelIDs() {
-
-		String[] gameTitles = new String[games.length];
-		for (int i = 0; i < games.length; i++) {
-			gameTitles[i] = games[i].getGameTitle();
-		}
-		return gameTitles;
+	public final GameObject[] getGames() {
+		return games;
 
 	}
 

@@ -1,13 +1,20 @@
 
 hamburg.png
-size: 795,1282
+size: 795,1412
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Sankt-Michaelis-Kirche_Hamburg
   rotate: false
-  xy: 2, 2
+  xy: 2, 132
   size: 793, 1280
   orig: 793, 1280
+  offset: 0, 0
+  index: -1
+raw_game_teaser_icon
+  rotate: false
+  xy: 2, 2
+  size: 350, 128
+  orig: 350, 128
   offset: 0, 0
   index: -1

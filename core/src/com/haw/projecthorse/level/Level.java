@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
@@ -34,7 +35,8 @@ public abstract class Level implements Screen {
 	public Level() {
 		cam = new OrthographicCamera(width, height);
 		cam.setToOrtho(false); // Set to Y-Up - Coord system
-		viewport = new FitViewport(width, height, cam);
+		viewport = new StretchViewport(width, height, cam);
+		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
 

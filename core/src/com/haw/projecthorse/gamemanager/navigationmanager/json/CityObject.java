@@ -21,9 +21,9 @@ public interface CityObject {
 
 	/**
 	 * 
-	 * @return String Array mit alles LevelIDs der Spiele dieser Stadt
+	 * @return GameObject Array mit alles GameObject der Spiele dieser Stadt
 	 */
-	String[] getGameLevelIDs();
+	GameObject[] getGames();
 	
 	/**
 	 * @return  Liefert eine {@link HashMap} aus den in der GameConfig.json definierten Parametern. 

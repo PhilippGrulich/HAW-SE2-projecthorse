@@ -30,14 +30,22 @@
          		},
          games:[
             {
-               title:"Spiel 1",
-               levelID:"5",
-               className:"com.haw.projecthorse.level.DefaultLevel"
+               title:"Apple Run",
+               levelID:"AppleRun",
+               className:"com.haw.projecthorse.level.applerun.AppleRun",
+                parameter:{
+         			teaser_image:"blau"
+         		}
             },
             {
-               title:"Spiel 1",
+               title:"DefaultLevel",
                className:"com.haw.projecthorse.level.DefaultLevel",
-               levelID:"6"
+               levelID:"DefaultLevel"
+            },
+             {
+               title:"MovementTest",
+               className:"com.haw.projecthorse.level.MovementTest",
+               levelID:"MovementTest"
             }
          ]
       }

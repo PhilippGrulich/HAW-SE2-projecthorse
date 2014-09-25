@@ -22,7 +22,7 @@ public class SavegameButtonListener extends ChangeListener {
 	public void changed(ChangeEvent event, Actor actor) {
 		System.out.println("Savegame Button für Spiel :"+saveGameID+" wurde gedrückt");		
 		loadSavegame();		
-		GameManagerFactory.getInstance().navigateToLevel("worldmap");
+		GameManagerFactory.getInstance().navigateToWorldMap();
 	
 		
 	}
