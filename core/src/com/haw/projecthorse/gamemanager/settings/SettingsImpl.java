@@ -5,14 +5,16 @@ import com.badlogic.gdx.Preferences;
 
 public class SettingsImpl implements Settings {
 	
+	// Konstanten für virtuelle Bildschirmgröße 
+	private static final int VIRTUALHIGHT = 1280; 
+	private static final int VIRTUALWIDTH = 720; 
+
+	
 	// Objekt zum Laden und Speichern von Einstellungen
 	private Preferences prefs;
 	
 	// Singleton Umsetzung
 	private static final SettingsImpl settingsInstance = new SettingsImpl();
-	private static final int heigth = 1280; //Not included in Prefs to avoid changes (final)
-	private static final int width = 720; //Not included in Prefs to avoid changes (final)
-	
 	
 	private SettingsImpl(){
 		prefs = Gdx.app.getPreferences("SettingsPrefs");
@@ -43,15 +45,23 @@ public class SettingsImpl implements Settings {
 
 	@Override
 	public int getScreenWidth() {
-		return width;
-		//return Gdx.graphics.getWidth(); //Current resolution . game should have fixed size
+		return Gdx.graphics.getWidth();
 
 	}
 
 	@Override
 	public int getScreenHeight() {
-		return heigth;
-		//return Gdx.graphics.getHeight();
+		return Gdx.graphics.getHeight();
+	}
+
+	@Override
+	public int getVirtualScreenWidth() {
+		return VIRTUALWIDTH;
+	}
+
+	@Override
+	public int getVirtualScreenHeight() {
+		return VIRTUALHIGHT;
 	}
 
 }

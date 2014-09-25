@@ -6,16 +6,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class StageGestureDetector extends GestureDetector {
 	private static class DirectionGestureListener extends GestureAdapter {
 		SwipeListener swipeListener;
+		ControlMode mode;
 
-		public DirectionGestureListener(SwipeListener swipeListener) {
+		public DirectionGestureListener(SwipeListener swipeListener,
+				ControlMode controlMode) {
 			super();
 			this.swipeListener = swipeListener;
+			mode = controlMode;
 		}
 
 		@Override
 		public boolean fling(float velocityX, float velocityY, int button) {
 			float ratio = Math.abs(velocityX / velocityY);
-			if (0.6 < ratio && ratio < 1.7) {
+			if ((mode == ControlMode.FOUR_AXIS) && (0.6 < ratio && ratio < 1.7)) {
 				// Bewegung in eine Ecke
 				if (velocityX > 0) {
 					if (velocityY > 0) {
@@ -32,7 +35,8 @@ public class StageGestureDetector extends GestureDetector {
 				}
 			} else {
 				// relativ gerade Bewegung (hoch, runter, links, rechts)
-				if (Math.abs(velocityX) > Math.abs(velocityY)) {
+				if ((mode == ControlMode.HORIZONTAL) ||
+					((mode != ControlMode.VERTICAL) && (Math.abs(velocityX) > Math.abs(velocityY)))) {
 					if (velocityX > 0) {
 						swipeListener.swipeRight();
 					} else {
@@ -53,7 +57,12 @@ public class StageGestureDetector extends GestureDetector {
 	private Stage stage;
 
 	public StageGestureDetector(Stage stage, SwipeListener listener) {
-		super(new DirectionGestureListener(listener));
+		this(stage, listener, ControlMode.FOUR_AXIS);
+	}
+
+	public StageGestureDetector(Stage stage, SwipeListener listener,
+			ControlMode controlMode) {
+		super(new DirectionGestureListener(listener, controlMode));
 
 		this.stage = stage;
 	}

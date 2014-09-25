@@ -87,7 +87,7 @@ public class MainMenu extends Level {
 		stage.addActor(player);
 
 		player.addAction(Actions.forever(Actions.sequence(Actions.moveTo(
-				Gdx.graphics.getWidth() + 50, player.getY(), moveToDuration),
+				width + 50, player.getY(), moveToDuration),
 				new ChangeDirectionAction(Direction.LEFT), Actions.moveTo(-100
 						- player.getWidth(), player.getY(), moveToDuration),
 				new ChangeDirectionAction(Direction.RIGHT))));

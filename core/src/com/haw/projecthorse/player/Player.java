@@ -41,6 +41,13 @@ public abstract class Player extends Actor implements SwipeListener {
 	 * @return Geschwindigkeit der aktuellen Bewegungsanimation
 	 */
 	public abstract float getAnimationSpeed();
+	
+	/**
+	 * Setzt die Geschwindigkeit der aktuellen Bewegungsanimation
+	 * 
+	 * @param speed Geschwindigkeit zwischen 0 und 1
+	 */
+	public abstract void setAnimationSpeed(float speed);
 
 	/**
 	 * 
