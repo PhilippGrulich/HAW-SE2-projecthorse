@@ -8,6 +8,14 @@
       {
          levelID:"worldmap",
          className:"com.haw.projecthorse.level.worldmap.WorldMap"
+      },
+      {
+      	levelID:"movementTest",
+      	className:"com.haw.projecthorse.level.MovementTest"
+      },
+      {
+      	levelID:"appleRun",
+      	className:"com.haw.projecthorse.level.applerun.AppleRun"
       }
    ],
    cities:[
