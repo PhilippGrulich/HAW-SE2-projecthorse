@@ -76,7 +76,7 @@ public final class AssetManager {
 		}
 		if(loadPictures){	
 			String[] licenseType = {"cc-0_license", "cc-by_license","selfmade_license"};
-			checkFiles(readLicensesAndSplitEntries(licenseType));
+			//checkFiles(readLicensesAndSplitEntries(licenseType));
 			findAssetFolder(levelID, directory_pictures, Assets.PICTURES);
 		}
 		assetManager.finishLoading();
@@ -99,21 +99,25 @@ public final class AssetManager {
 	 */
 	private static void setApplicationRoot(){
 		if (Gdx.app.getType() == ApplicationType.Android) {
-			assetDir = System.getProperty("user.dir") + FILESEPARATOR + "assets";
+		
+			assetDir = "" ;
 			setApplicationType();
 			} 
 		else if (Gdx.app.getType() == ApplicationType.Desktop) {
-			assetDir = System.getProperty("user.dir") + FILESEPARATOR + "bin";
+		
+			assetDir = System.getProperty("user.dir") + FILESEPARATOR+"bin"+FILESEPARATOR ;
 			setApplicationType();
 			}
 		else{
 			System.out.println("In AssetManager: No android or desktop device");
 		}
 		
-		directory_sounds = assetDir + FILESEPARATOR + FOLDERNAME_SOUNDS;
-		directory_music = assetDir + FILESEPARATOR + FOLDERNAME_MUSIC;
-		directory_pictures = assetDir + FILESEPARATOR + FOLDERNAME_PICTURES;
-		errorPic = new Texture(new FileHandle(new File(assetDir + FILESEPARATOR + FOLDERNAME_PICTURES + FILESEPARATOR + "errorPic.png")));
+		directory_sounds = assetDir+FOLDERNAME_SOUNDS+ FILESEPARATOR;
+		directory_music = assetDir+FOLDERNAME_MUSIC+ FILESEPARATOR;
+		directory_pictures = assetDir+FOLDERNAME_PICTURES + FILESEPARATOR;
+		
+		//errorPic = new Texture(Gdx.files.internal(FOLDERNAME_PICTURES + FILESEPARATOR + "errorPic.png"));
+		System.out.println("test");
 	}
 	
 	private static boolean isApplicationChoosen(){
@@ -131,13 +135,17 @@ public final class AssetManager {
 	 * @param type Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
 	 */
 	private static void findAssetFolder(String levelID, String path, Assets type){
-		File dir = new File(path);
-		ArrayList<String> content = new ArrayList<String>(Arrays.asList(dir.list()));
-		
+	
+		FileHandle[] files = Gdx.files.internal(path).list();
+		ArrayList<String> content = new ArrayList<String>();
+
+		for(FileHandle file: files) {
+			content.add(file.name());
+		}
+
 		try{
 			if(content.contains(levelID)){
-				loadAssets(levelID, path + FILESEPARATOR + levelID, type);
-			
+				loadAssets(levelID, path + FILESEPARATOR + levelID, type);			
 		}else {
 			throw new LevelDirectoryNotFoundException("Ordner mit LevelID " + levelID + " in " + path + " nicht gefunden");
 		
@@ -158,19 +166,21 @@ public final class AssetManager {
 	 * @param type Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
 	 */
 	private static void loadAssets(String levelID, String path, Assets type){
-		File dir = new File(path);
-		String[] content = dir.list();
-		for(int i = 0; i< content.length; i++){
-			if(new File(content[i]).isDirectory()){
-				loadAssets(levelID, path + FILESEPARATOR + content[i], type);
+		
+		FileHandle[] files = Gdx.files.internal(path).list();
+	
+		for(FileHandle file: files) {
+			if(file.isDirectory()){
+				loadAssets(levelID, path + FILESEPARATOR +file.name(), type);
 			}else{
 				if(type == Assets.SOUNDS || type == Assets.MUSIC){
-					loadAudio(path, content[i], type);
+					loadAudio(path, file.name(), type);
 				}else if(type == Assets.PICTURES){
-					loadTextureAtlas(levelID, path, content[i]);
+					loadTextureAtlas(levelID, path, file.name());
 				}
 			}
-		}
+		}		
+		
 		
 	}
 	
