@@ -61,7 +61,6 @@ public class MainMenu extends Level {
 	private TextButton buttonSpiel1;
 	private TextButton buttonSpiel2;
 	private TextButton buttonSpiel3;
-	private boolean playerMoveRight = true;
 
 	private Player player;
 
