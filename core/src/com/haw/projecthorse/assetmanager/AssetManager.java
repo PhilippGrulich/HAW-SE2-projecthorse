@@ -298,6 +298,13 @@ public final class AssetManager {
 		musicVolume = volume;
 	}
 	
+	/**
+	 * Greift auf den TextrueAtlas der levelID zu und liefert die Texture
+	 * "filename".
+	 * @param levelID ID des Levels
+	 * @param filename Dateiname
+	 * @return result Ist die Texture, sonst ein rotes Kreuz zur Fehleranzeige
+	 */
 	public static Texture getTexture(String levelID, String filename){
 		Texture result;
 		
