@@ -22,7 +22,7 @@
       {
          name:"Hamburg",
          levelID:"hamburg",
-         className:"com.haw.projecthorse.level.city.city",
+         className:"com.haw.projecthorse.level.city.City",
          parameter:{
          			farbe:"blau",
          			"positionX" :100,
