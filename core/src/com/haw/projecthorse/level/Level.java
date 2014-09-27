@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
@@ -13,6 +14,8 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
  *         müssen stattdessen jeweils doDispose() usw. implementieren
+ *         
+ *         Alle Implementierungen MÜSSEN im Konstruktor super() aufrufen!
  * 
  * 
  */
@@ -33,6 +36,7 @@ public abstract class Level implements Screen {
 		cam = new OrthographicCamera(width, height);
 		cam.setToOrtho(false); // Set to Y-Up - Coord system
 		viewport = new FitViewport(width, height, cam);
+		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
 

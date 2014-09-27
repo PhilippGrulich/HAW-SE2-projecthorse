@@ -1,0 +1,13 @@
+
+menu.png
+size: 722,1282
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Background
+  rotate: false
+  xy: 2, 2
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
