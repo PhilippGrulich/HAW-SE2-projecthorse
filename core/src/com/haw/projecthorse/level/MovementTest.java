@@ -2,13 +2,14 @@ package com.haw.projecthorse.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.haw.projecthorse.player.ChangeDirectionAction;
-import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.swipehandler.ControlMode;
 import com.haw.projecthorse.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.swipehandler.SwipeListener;
 
 /**
  * Klasse zum Simulieren und Testen von Wisch-Bewegungen (Swipe-Gesten)
@@ -46,73 +47,28 @@ public class MovementTest extends Level {
 	protected void doShow() {
 		stage = new Stage(getViewport());
 
-		/*
-		 * Beim Erstellen eines Players, kann die PlayerImpl erweitert werden.
-		 * So können für die einzelnen Bewegungsrichtungen angepasste Methoden
-		 * geschrieben werden. Alle "swipe"-Handler Methoden haben eine leere
-		 * default Implementation.
-		 */
-		Player player = new PlayerImpl() {
-			private void swipe(Direction dir) {
-				if (direction == dir) {
-					changeAnimationSpeed(0.1f);
-				} else {
-					/* 
-					 * Alter Code: setAnimation(dir, 0.3f);
-					 * Ist zwar in diesem Fall kürzer und funktioniert auch,
-					 * aber das Arbeiten mit den Actions ist mehr im Sinne des
-					 * LibGdX Actor Konzepts.
-					 */
+		Player player = new PlayerImpl();
+		
+		player.addListener(new SwipeListener() {
+			
+			@Override
+			public void swiped(SwipeEvent event, Actor actor) {
+				if (!(actor instanceof Player))
+					return;
 				
-					setAnimationSpeed(0.3f);
-					addAction(new ChangeDirectionAction(dir));
+				Player player = (Player) actor;
+				if (player.getDirection() == event.getDirection()) {
+					player.changeAnimationSpeed(0.1f);
+				} else {
+					player.setAnimationSpeed(0.3f);
+					player.addAction(new ChangeDirectionAction(event.getDirection()));
 				}
 			}
-			
-			@Override
-			public void swipeDown() {
-				swipe(Direction.DOWN);
-			}
-			
-			@Override
-			public void swipeDownLeft() {
-				swipe(Direction.DOWNLEFT);
-			}
-			
-			@Override
-			public void swipeDownRight() {
-				swipe(Direction.DOWNRIGHT);
-			}
-			
-			@Override
-			public void swipeLeft() {
-				swipe(Direction.LEFT);
-			}
-			
-			@Override
-			public void swipeRight() {
-				swipe(Direction.RIGHT);
-			}
-			
-			@Override
-			public void swipeUp() {
-				swipe(Direction.UP);
-			}
-			
-			@Override
-			public void swipeUpLeft() {
-				swipe(Direction.UPLEFT);
-			}
-			
-			@Override
-			public void swipeUpRight() {
-				swipe(Direction.UPRIGHT);
-			}
-			
-		};
+		});
 
 		player.scaleBy(3.0f);
 		player.setPosition(200, 200);
+		player.setAnimationSpeed(0.3f);
 		stage.addActor(player);
 		stage.setKeyboardFocus(player);
 
@@ -121,7 +77,7 @@ public class MovementTest extends Level {
 		 *  er leitet die Standard-Events (z.B. keyDown oder mouseMoved) an die angegebene
 		 *  Stage weiter. Der übergebene SwipeListener - hier der Player - reagiert auf die Swipe-Events.
 		 */
-		Gdx.input.setInputProcessor(new StageGestureDetector(stage, player, mode));
+		Gdx.input.setInputProcessor(new StageGestureDetector(stage, true, mode));
 	}
 
 	@Override

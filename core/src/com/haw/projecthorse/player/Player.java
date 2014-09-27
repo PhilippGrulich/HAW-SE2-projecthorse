@@ -1,7 +1,6 @@
 package com.haw.projecthorse.player;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.haw.projecthorse.swipehandler.SwipeListener;
 
 /**
  * Player ist eine spezielle Implemetierung der LibGDX Klasse Actor. Um sie
@@ -16,7 +15,7 @@ import com.haw.projecthorse.swipehandler.SwipeListener;
  *
  */
 
-public abstract class Player extends Actor implements SwipeListener {
+public abstract class Player extends Actor {
 	/**
 	 * Setzt und startet eine endlose Bewegungsanimation für den Spieler
 	 * 
@@ -54,76 +53,9 @@ public abstract class Player extends Actor implements SwipeListener {
 	 * @return True bei Bewegung, ansonsten False
 	 */
 	public abstract boolean isMoving();
-
+	
 	/**
-	 * Handler für eine Swipe-Bewegung nach oben auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
+	 * @return Die aktuelle Richtung des Spielers
 	 */
-	@Override
-	public void swipeUp() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach unten auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeDown() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach links auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeLeft() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach rechts auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeRight() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach links-oben auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeUpLeft() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach rechts-oben auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeUpRight() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach links-unten auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeDownLeft() {}
-
-	/**
-	 * Handler für eine Swipe-Bewegung nach rechts-unten auf dem Bildschirm.
-	 * Kann bzw. sollte überschrieben werden, wenn man auf dieses Event
-	 * reagieren will.
-	 * 
-	 */
-	@Override
-	public void swipeDownRight() {}
+	public abstract Direction getDirection();
 }

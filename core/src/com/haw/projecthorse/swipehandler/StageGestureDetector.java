@@ -1,36 +1,51 @@
 package com.haw.projecthorse.swipehandler;
 
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.haw.projecthorse.player.Direction;
 
 public class StageGestureDetector extends GestureDetector {
 	private static class DirectionGestureListener extends GestureAdapter {
-		SwipeListener swipeListener;
+		Stage stage;
 		ControlMode mode;
+		boolean fullScreen;
+		float posX, posY;
 
-		public DirectionGestureListener(SwipeListener swipeListener,
+		public DirectionGestureListener(Stage stage, boolean fullScreen,
 				ControlMode controlMode) {
 			super();
-			this.swipeListener = swipeListener;
+			this.stage = stage;
 			mode = controlMode;
+			this.fullScreen = fullScreen;
+		}
+		
+		@Override
+		public boolean touchDown(float x, float y, int pointer, int button) {
+			posX = x;
+			posY = y;
+			return false;
 		}
 
 		@Override
 		public boolean fling(float velocityX, float velocityY, int button) {
 			float ratio = Math.abs(velocityX / velocityY);
+			Direction dir = null;
+			
 			if ((mode == ControlMode.FOUR_AXIS) && (0.6 < ratio && ratio < 1.7)) {
 				// Bewegung in eine Ecke
 				if (velocityX > 0) {
 					if (velocityY > 0) {
-						swipeListener.swipeDownRight();
+						dir = Direction.DOWNRIGHT;
 					} else {
-						swipeListener.swipeUpRight();
+						dir = Direction.UPRIGHT;
 					}
 				} else {
 					if (velocityY > 0) {
-						swipeListener.swipeDownLeft();
+						dir = Direction.DOWNLEFT;
 					} else {
-						swipeListener.swipeUpLeft();
+						dir = Direction.UPLEFT;
 					}
 				}
 			} else {
@@ -38,31 +53,62 @@ public class StageGestureDetector extends GestureDetector {
 				if ((mode == ControlMode.HORIZONTAL) ||
 					((mode != ControlMode.VERTICAL) && (Math.abs(velocityX) > Math.abs(velocityY)))) {
 					if (velocityX > 0) {
-						swipeListener.swipeRight();
+						dir = Direction.RIGHT;
 					} else {
-						swipeListener.swipeLeft();
+						dir = Direction.LEFT;
 					}
 				} else {
 					if (velocityY > 0) {
-						swipeListener.swipeDown();
+						dir = Direction.DOWN;
 					} else {
-						swipeListener.swipeUp();
+						dir = Direction.UP;
 					}
 				}
 			}
+			
+			if (fullScreen) {
+				fireSwipeEvent(stage.getRoot(), dir);
+			} else {
+				Actor actor = stage.hit(posX, posY, false);
+				if (actor != null) {
+					fireSwipeEvent(actor, dir);
+				}
+			}
+			
 			return super.fling(velocityX, velocityY, button);
+		}
+		
+		private void fireSwipeEvent(Actor target, Direction dir) {
+			if (target == null)
+				return;
+			
+			if (target instanceof Group) {
+				Group group = (Group) target;
+				Actor[] children = group.getChildren().items;
+				for (Actor child : children) {
+					fireSwipeEvent(child, dir);
+				}
+			}
+			
+			target.fire(new SwipeListener.SwipeEvent(dir));
 		}
 	}
 
 	private Stage stage;
 
-	public StageGestureDetector(Stage stage, SwipeListener listener) {
-		this(stage, listener, ControlMode.FOUR_AXIS);
+	public StageGestureDetector(Stage stage, boolean fullScreen) {
+		this(stage, fullScreen, ControlMode.FOUR_AXIS);
 	}
 
-	public StageGestureDetector(Stage stage, SwipeListener listener,
+	/**
+	 * 
+	 * @param stage
+	 * @param fullScreen
+	 * @param controlMode
+	 */
+	public StageGestureDetector(Stage stage, boolean fullScreen,
 			ControlMode controlMode) {
-		super(new DirectionGestureListener(listener, controlMode));
+		super(new DirectionGestureListener(stage, fullScreen, controlMode));
 
 		this.stage = stage;
 	}

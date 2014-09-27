@@ -85,7 +85,6 @@ public class PlayerImpl extends Player {
 				.findRegion("black_sprites");
 		spriteStartX = sprite.getRegionX();
 		spriteStartY = sprite.getRegionY();
-		System.out.println(spriteStartX + " -- " + spriteStartY);
 		sprite.setRegion(spriteStartX, spriteStartY, DEFAULT_WIDTH,
 				DEFAULT_HEIGHT);
 
@@ -132,6 +131,11 @@ public class PlayerImpl extends Player {
 	@Override
 	public boolean isMoving() {
 		return speed != 0;
+	}
+
+	@Override
+	public Direction getDirection() {
+		return direction;
 	}
 
 }
