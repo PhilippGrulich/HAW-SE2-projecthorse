@@ -1,7 +1,5 @@
 package com.haw.projecthorse.level.mainmenu;
 
-import javax.swing.text.StyledEditorKit.ForegroundAction;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -63,12 +61,11 @@ public class MainMenu extends Level {
 	private TextButton buttonSpiel1;
 	private TextButton buttonSpiel2;
 	private TextButton buttonSpiel3;
-	private boolean playerMoveRight = true;
 
 	private Player player;
 
 	public MainMenu() {
-		float moveToDuration = Gdx.graphics.getWidth() / 5 / 30;
+		float moveToDuration = width / 5 / 30;
 
 		initStage(this.getViewport(), this.getSpriteBatch());
 		initTable(); // Table = Gridlayout
@@ -80,7 +77,7 @@ public class MainMenu extends Level {
 		stage.addActor(table);
 
 		player = new PlayerImpl();
-		player.setPosition(0, 180);
+		player.setPosition(0, 0.14f * height);
 		player.scaleBy(0.5F);
 
 		player.setAnimation(Direction.RIGHT, 0.4f);
@@ -211,7 +208,7 @@ public class MainMenu extends Level {
 		Gdx.gl.glClearColor(1, 1, 1, 1); // Hintergrund malen - einfarbig,
 											// langweilig
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(Gdx.graphics.getDeltaTime());
+		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage); // show debug lines
 
