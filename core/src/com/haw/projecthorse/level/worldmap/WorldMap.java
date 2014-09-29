@@ -41,7 +41,7 @@ public class WorldMap extends Level {
        // hhFlagge = new ImageButton();
 		skin = new Skin();
 		//skin.addRegions(texture);
-		pixmap = new Pixmap(80, 80, Format.RGBA8888);
+		pixmap = new Pixmap(1, 1, Format.RGBA8888);
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
 		skin.add("white", new Texture(pixmap));
@@ -52,13 +52,12 @@ public class WorldMap extends Level {
 		buttonStyle.up = skin.newDrawable("white", Color.PINK);
 		skin.add("default", new BitmapFont());
 		buttonStyle.font = skin.getFont("default");
-		buttonStyle.font.scale(2f);
 		stadtButton = new TextButton("HH", buttonStyle);// erzeugen
 		stadtButton.setX(0.432f * width);
 		stadtButton.setY(0.7f * height );
 		stadtButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				GameManagerFactory.getInstance().navigateToLevel("hamburg");
+				GameManagerFactory.getInstance().navigateToLevel("Hamburg");
 			}
 		});
 		background = new Image(germanytexture);
