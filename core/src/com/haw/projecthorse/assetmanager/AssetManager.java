@@ -142,7 +142,7 @@ public final class AssetManager {
 		for(FileHandle file: files) {
 			content.add(file.name());
 		}
-
+		
 		try{
 			if(content.contains(levelID)){
 				loadAssets(levelID, path + FILESEPARATOR + levelID, type);			
@@ -285,6 +285,10 @@ public final class AssetManager {
 	 */
 	public static void turnMusicOff(String levelID, String name){
 		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name, Music.class).stop();
+	}
+	
+	public static String getFileseparator(){
+		return FILESEPARATOR;
 	}
 	
 	/**

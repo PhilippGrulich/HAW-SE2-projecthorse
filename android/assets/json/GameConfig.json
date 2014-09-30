@@ -16,7 +16,12 @@
       {
       	levelID:"appleRun",
       	className:"com.haw.projecthorse.level.applerun.AppleRun"
+      },
+      {
+      	levelID:"Parcours",
+      	className:"com.haw.projecthorse.level.parcours.Parcours"
       }
+
    ],
    cities:[
       {
@@ -38,9 +43,9 @@
          		}
             },
             {
-               title:"DefaultLevel",
-               className:"com.haw.projecthorse.level.DefaultLevel",
-               levelID:"DefaultLevel"
+               title:"Parcours",
+               className:"com.haw.projecthorse.level.parcours.Parcours",
+               levelID:"Parcours"
             },
              {
                title:"MovementTest",
