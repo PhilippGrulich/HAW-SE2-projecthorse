@@ -42,7 +42,7 @@ class GameConfigtImpl implements GameConfig {
 				return className;
 			}
 		}
-		throw new LevelNotFoundException();
+		throw new LevelNotFoundException(levelID);
 
 	}
 
@@ -52,7 +52,7 @@ class GameConfigtImpl implements GameConfig {
 				return city;
 			}
 		}
-		throw new LevelNotFoundException();
+		throw new LevelNotFoundException(levelID);
 	}
 
 	public final GameObjecttImpl getGameByLevelID(final String levelID) throws LevelNotFoundException {
@@ -62,7 +62,7 @@ class GameConfigtImpl implements GameConfig {
 				return game;
 			}
 		}
-		throw new LevelNotFoundException();
+		throw new LevelNotFoundException(levelID);
 
 	}
 

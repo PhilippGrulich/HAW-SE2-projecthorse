@@ -8,20 +8,7 @@
       {
          levelID:"worldmap",
          className:"com.haw.projecthorse.level.worldmap.WorldMap"
-      },
-      {
-      	levelID:"movementTest",
-      	className:"com.haw.projecthorse.level.test.MovementTest"
-      },
-      {
-      	levelID:"appleRun",
-      	className:"com.haw.projecthorse.level.applerun.AppleRun"
-      },
-      {
-      	levelID:"Parcours",
-      	className:"com.haw.projecthorse.level.parcours.Parcours"
       }
-
    ],
    cities:[
       {
@@ -48,8 +35,8 @@
                levelID:"Parcours"
             },
              {
-               title:"MovementTest",
-               className:"com.haw.projecthorse.level.MovementTest",
+               title:"Movement Test",
+               className:"com.haw.projecthorse.level.test.MovementTest",
                levelID:"MovementTest"
             }
          ]

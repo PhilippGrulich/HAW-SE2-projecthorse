@@ -57,16 +57,18 @@ public class LevelManager {
 			return level;
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new LevelLoadException(e);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+			throw new LevelLoadException(e);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			throw new LevelLoadException(new LevelNotFoundException(className));
 		}
 
-		throw new LevelLoadException();
+		
 	}
 
 	

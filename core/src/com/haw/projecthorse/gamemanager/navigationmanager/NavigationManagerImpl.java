@@ -31,13 +31,14 @@ public class NavigationManagerImpl implements NavigationManager {
 		try {
 			if (game.getScreen() != null) {
 				game.getScreen().dispose();
+				game.setScreen(null);
 			}
 			Screen screen = levelManager.getScreenByLevelID(levelID);
 			game.setScreen(screen);
 
 		} catch (LevelLoadException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			navigateToLevel("worldmap");
 		}
 	}
 	
