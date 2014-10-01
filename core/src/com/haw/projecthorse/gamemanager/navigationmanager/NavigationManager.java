@@ -21,6 +21,8 @@ public interface NavigationManager {
 
 	String getCurrentLevelID();
 
+	void navigateBack();
+
 
 
 }

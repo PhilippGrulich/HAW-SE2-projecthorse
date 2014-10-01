@@ -112,6 +112,12 @@ final class GameManagerImpl implements GameManager {
 		return navigationManager.getCurrentLevelID();
 	}
 
+	@Override
+	public void navigateBack() {
+		navigationManager.navigateBack();
+		
+	}
+
 
 
 }

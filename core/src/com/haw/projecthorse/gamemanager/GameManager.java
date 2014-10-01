@@ -13,7 +13,14 @@ import com.haw.projecthorse.gamemanager.settings.Settings;
  */
 public interface GameManager {
 	
-
+	/**
+	 * Navigiert zur letzten LevelID
+	 * 
+	 * @param String
+	 *            leveLID
+	 */
+	void navigateBack();
+	
 	/**
 	 * Navigiert zu einer Stadt oder einem Spiel welches anhand der LevelID
 	 * (String) identifiziert wird.
