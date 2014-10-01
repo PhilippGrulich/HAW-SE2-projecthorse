@@ -32,6 +32,24 @@ public class PlayerColor {
 	/**
 	 * Konstruktor für eine Spielerfarbe
 	 * 
+	 * @param blackBase
+	 *            Wahr, wenn das schwarze Spritesheet als Grundlage benutzt
+	 *            werden soll
+	 * @param red
+	 *            Rotanteil der Farbe (Wert zwischen 0 und 1)
+	 * @param green
+	 *            Grünanteil der Farbe (Wert zwischen 0 und 1)
+	 * @param blue
+	 *            Blauanteil der Farbe (Wert zwischen 0 und 1)
+	 */
+	public PlayerColor(boolean blackBase, float red, float green, float blue) {
+		black  = blackBase;
+		color = new Color(red, green, blue, 1);
+	}
+	
+	/**
+	 * Konstruktor für eine Spielerfarbe
+	 * 
 	 * @param red
 	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param green
@@ -46,7 +64,7 @@ public class PlayerColor {
 	/**
 	 * Konstruktor für eine Spielerfarbe
 	 * 
-	 * @param blackGround
+	 * @param blackBase
 	 *            Wahr, wenn das schwarze Spritesheet als Grundlage benutzt
 	 *            werden soll
 	 * @param red
@@ -56,19 +74,19 @@ public class PlayerColor {
 	 * @param blue
 	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
 	 */
-	public PlayerColor(boolean blackGround, int red, int green, int blue) {
-		float r = Math.max(Math.min(red, 255), 0) / 255f;
-		float g = Math.max(Math.min(green, 255), 0) / 255f;
-		float b = Math.max(Math.min(blue, 255), 0) / 255f;
+	public PlayerColor(boolean blackBase, int red, int green, int blue) {
+		float r = red / 255f;
+		float g = green / 255f;
+		float b = blue / 255f;
 		
-		black = blackGround;
+		black = blackBase;
 		color = new Color(r, g, b, 1);
 	}
 
 	/**
 	 * @return Wahr, wenn das schwarze Spritesheet als Grundlage benutzt wird
 	 */
-	public boolean hasBlackGround() {
+	public boolean hasBlackBase() {
 		return black;
 	}
 	

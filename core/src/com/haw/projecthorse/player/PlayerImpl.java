@@ -85,7 +85,7 @@ public class PlayerImpl extends Player {
 	}
 	
 	public PlayerImpl(PlayerColor color) {
-		if (color.hasBlackGround()) {
+		if (color.hasBlackBase()) {
 			black = true;
 			sprite = AssetManager.load("notChecked", false, false, true).findRegion("white_sprites");
 			positions[2] = sprite.getRegionX();
@@ -130,7 +130,7 @@ public class PlayerImpl extends Player {
 	public void setPlayerColor(PlayerColor color) {
 		this.color = color.getColor();
 		
-		if (black != color.hasBlackGround()) {
+		if (black != color.hasBlackBase()) {
 			toogleColor();
 		}
 	}

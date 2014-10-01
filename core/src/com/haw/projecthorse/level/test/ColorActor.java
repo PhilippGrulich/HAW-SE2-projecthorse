@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level;
+package com.haw.projecthorse.level.test;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

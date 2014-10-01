@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level;
+package com.haw.projecthorse.level.test;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerColor;
@@ -28,12 +29,13 @@ public class MovementTest extends Level {
 	private Stage stage;
 	private final ControlMode mode = ControlMode.FOUR_AXIS;
 	public static Color color = Color.WHITE;
-	private Player player1, player2;
+	private Player player1;
 	private BitmapFont textFont;
+	private boolean black = false;
 
 	@Override
 	protected void doRender(float delta) {
-		player1.setColor(color);
+		player1.setPlayerColor(new PlayerColor(black, color.r, color.g, color.b));
 //		player2.setColor(color);
 		
 		Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
@@ -99,7 +101,6 @@ public class MovementTest extends Level {
 				
 				ColorActor ca = (ColorActor) a;
 				Color c = ca.getColorForPosition((int) x, (int) y);
-				//System.out.println(c.r + " - " + c.g + " - " + c.b);
 				MovementTest.color = c;
 				
 				return true;
@@ -126,7 +127,6 @@ public class MovementTest extends Level {
 		
 		
 		player1 = new PlayerImpl(PlayerColor.WHITE);
-//		player2 = new PlayerImpl(color, true);
 		
 		player1.addListener(listener);
 		player1.addListener(new InputListener() {
@@ -140,21 +140,16 @@ public class MovementTest extends Level {
 				
 				PlayerImpl p = (PlayerImpl) a;
 				p.toogleColor();
+				black = !black;
 				return true;
 			}
 		});
-//		player2.addListener(listener);
 
 		player1.scaleBy(3.0f);
-//		player2.scaleBy(3.0f);
 		player1.setPosition(100, 50);
-//		player2.setPosition(100, 600);
 		player1.setAnimationSpeed(0.3f);
-//		player2.setAnimationSpeed(0.3f);
 		stage.addActor(player1);
-//		stage.addActor(player2);
 		stage.addActor(colorsActor);
-		//stage.setKeyboardFocus(player);
 
 		/*
 		 *  Wichtig: Eine Instanz vom StageGestureDetector muss als InputProcessor gesetzt werden,
