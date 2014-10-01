@@ -12,10 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * -Part-2-Actions.aspx https://github.com/libgdx/libgdx/wiki/Scene2d
  * 
  * @author Olli, Viktor
- *
+ * 
  */
 
 public abstract class Player extends Actor {
+
+	/**
+	 * Verändert die Färbung des Spielers
+	 * @param color
+	 *            Die neue Farbe
+	 */
+	public abstract void setPlayerColor(PlayerColor color);
+
 	/**
 	 * Setzt und startet eine endlose Bewegungsanimation für den Spieler
 	 * 
@@ -40,11 +48,12 @@ public abstract class Player extends Actor {
 	 * @return Geschwindigkeit der aktuellen Bewegungsanimation
 	 */
 	public abstract float getAnimationSpeed();
-	
+
 	/**
 	 * Setzt die Geschwindigkeit der aktuellen Bewegungsanimation
 	 * 
-	 * @param speed Geschwindigkeit zwischen 0 und 1
+	 * @param speed
+	 *            Geschwindigkeit zwischen 0 und 1
 	 */
 	public abstract void setAnimationSpeed(float speed);
 
@@ -53,7 +62,7 @@ public abstract class Player extends Actor {
 	 * @return True bei Bewegung, ansonsten False
 	 */
 	public abstract boolean isMoving();
-	
+
 	/**
 	 * @return Die aktuelle Richtung des Spielers
 	 */
