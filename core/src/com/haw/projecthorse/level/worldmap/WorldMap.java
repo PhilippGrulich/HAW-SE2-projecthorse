@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 
 public class WorldMap extends Level {
@@ -34,7 +35,7 @@ public class WorldMap extends Level {
 	public WorldMap() {
 		super(); 
 		stage = new Stage(getViewport());
-		Gdx.input.setInputProcessor(stage);
+		InputManager.addInputProcessor(stage);
 		germanyatlas = AssetManager.load("worldmap", false, false, true);
 		germanytexture = germanyatlas.findRegion("germanymap_scaled");
 		//texture.getTexture();

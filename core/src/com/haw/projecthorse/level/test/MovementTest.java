@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Player;
@@ -156,7 +157,8 @@ public class MovementTest extends Level {
 		 *  er leitet die Standard-Events (z.B. keyDown oder mouseMoved) an die angegebene
 		 *  Stage weiter. Der übergebene SwipeListener - hier der Player - reagiert auf die Swipe-Events.
 		 */
-		Gdx.input.setInputProcessor(new StageGestureDetector(stage, true, mode));
+		InputManager.addInputProcessor(new StageGestureDetector(stage, true, mode));
+		
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package com.haw.projecthorse.level.city;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,7 +19,9 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.swipehandler.StageGestureDetector;
 
 public class City extends Level {
 
@@ -41,6 +42,9 @@ public class City extends Level {
 		atlant = AssetManager.load("hamburg", false, false, true);
 		
 		stage = new Stage(this.getViewport(), this.getSpriteBatch());
+		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		font.setScale(.45f, .45f);
+		font.setColor(Color.MAGENTA);
 		try {
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
 			addGameButtons();
@@ -50,14 +54,12 @@ public class City extends Level {
 		}
 
 		region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
-		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(.45f, .45f);
-		font.setColor(Color.MAGENTA);
+		
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		Gdx.input.setInputProcessor(stage);
+		InputManager.addInputProcessor(stage);
+		
 
 	}
 
@@ -67,7 +69,9 @@ public class City extends Level {
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
-		imageButtonStyle.font = new BitmapFont();
+	
+		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));;
+		imageButtonStyle.font.scale(-0.5f);
 		imageButtonStyle.fontColor = Color.BLACK;
 
 		GameObject[] games = cityObject.getGames();
@@ -80,7 +84,7 @@ public class City extends Level {
 	private void addGameButton(final GameObject gameObject) {
 
 		ImageTextButton imgTextButton = new ImageTextButton(gameObject.getGameTitle(), imageButtonStyle);
-
+		
 		imgTextButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("Spiel " + gameObject.getGameTitle() + " soll gestartet werden");
@@ -88,7 +92,8 @@ public class City extends Level {
 
 			}
 		});
-
+		imgTextButton.setWidth(400);
+		imgTextButton.setHeight(150);;
 		imgTextButton.setPosition(200, lastButtonY);
 		lastButtonY = lastButtonY - 200;
 		stage.addActor(imgTextButton);
