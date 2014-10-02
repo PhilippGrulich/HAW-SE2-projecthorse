@@ -25,6 +25,9 @@ import com.haw.projecthorse.player.PlayerImpl;
  *         CollisionDetection ausgeführt und meldet sich beim getroffenen +
  *         Melden sich die Entitys beim Pferd bei Collision oder merkt das Pferd
  *         wenn es getroffen wurde?! + Event system?
+ *         
+ *         
+ *         Stage und Input listener auslagern in die Level.abstract?
  * 
  * 
  */
@@ -37,7 +40,7 @@ public class AppleRun extends Level {
 													// nächsten entity spawn
 	private final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
 													// spawns
-	private float spawndelay = -1; // Instant spawn first object
+	private float spawndelay = -1; //Delay until next spawn allowed - (Initiate with -1 for first spawn = instant)
 
 	private int branch_spawn_chance = 30; // 10%:: Prozent Chance, das statt
 											// einem Apfel ein Ast spawnt
@@ -46,14 +49,11 @@ public class AppleRun extends Level {
 												// hier laufend die anzahl
 												// mitgeschrieben.
 
-	// private float total_playtime = 0; //Gesamt spieldauer.
-	// private int score = 0; // Punktzahl
-
 	private Group backgroundGraphics; // Stuff not interacting with player.
 	private Group fallingEntities; // Falling entities
-	// private Image horse; // The horse, running around
 
 	private Player horse;
+	final float MOVEMENT_PER_SECOND = this.width / 1.25f;//Movement in px per second
 
 	// Add everything to this stage
 	private Stage stage = new Stage(this.getViewport(), this.getSpriteBatch());
@@ -75,35 +75,20 @@ public class AppleRun extends Level {
 	}
 
 	private void initHorse() {
-		// horse = new Image(); // TODO irgendwas sinnvolles laden
-
 		horse = new PlayerImpl();
 		horse.setPosition(0, 110);
 		horse.scaleBy(0.5F);
-
 		horse.setAnimation(Direction.RIGHT, 0.4f);
 		stage.addActor(horse);
-
-		//horse.setBounds(0, 0, 720, 1280);
 		
 		stage.addListener(new InputListener() {
 			
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				System.out.println(" " + x);
 				moveHorseTo(x);
 				return true;
 			}
 		});
-
-//		
-//		 float moveToDuration = 2;
-//		 horse.addAction(Actions.forever(Actions.sequence(Actions.moveTo(
-//		 Gdx.graphics.getWidth() + 50, horse.getY(), moveToDuration), new
-//		 ChangeDirectionAction(Direction.LEFT), Actions.moveTo(-100 -
-//		 horse.getWidth(), horse.getY(), moveToDuration), new
-//		 ChangeDirectionAction(Direction.RIGHT))));
-//		 
 
 	}
 
@@ -112,7 +97,8 @@ public class AppleRun extends Level {
 		horse.clearActions(); //Alte bewegungen etc. entfernen
 		
 		if(x < 0){x = 0;} //Nicht links rauslaufen
-		int breite = GameManagerFactory.getInstance().getSettings().getScreenWidth();
+		int breite = this.width; //GameManagerFactory.getInstance().getSettings().getScreenWidth();
+		
 		if(x > breite-horse.getWidth()){x = breite-horse.getWidth();} // Nicht rechts rauslaufen
 		
 		//Bewegungsrichtung ermitteln
@@ -123,22 +109,17 @@ public class AppleRun extends Level {
 		}else{
 			directionAction = new ChangeDirectionAction(Direction.LEFT);
 		}
-		
-		
+				
 		float moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
 		horse.addAction(directionAction);
-		horse.addAction(move);
-		// actor.addListener(
-		
+		horse.addAction(move);		
 	}
 	
-	//Calculate running speeed
+
 	private float convertDistanceToTime(float distance){
 		if(distance < 0){distance = distance*-1;} //Absolute
-		
-		
-		return 1.0f;
+		return 1.0f / MOVEMENT_PER_SECOND * distance; //Calculate running speeed
 	}
 
 	// Spawning new Apples / Falling stuff
@@ -172,9 +153,7 @@ public class AppleRun extends Level {
 	}
 
 	private void collisionDetection() {
-
-		// Todo evtl. inside Entity-Objecten
-
+		// TODO evtl. inside Entity-Objecten
 		// nicht über .hit (Nur für Mouse/Touch events)
 	}
 
@@ -186,30 +165,13 @@ public class AppleRun extends Level {
 		stage.draw();
 
 		spawnEntities(delta);
-		fallingEntities.act(delta); // Update falling apples
-		backgroundGraphics.act(delta);
-		horse.act(delta);
+//		fallingEntities.act(delta); // Update falling apples
+//		backgroundGraphics.act(delta);
+//		horse.act(delta);
+//		
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
-
 	}
 
-	//
-	// private Image initTexture(){
-	// Pixmap pixel = new Pixmap(64, 64, Format.RGBA8888);
-	// pixel.setColor(Color.RED);
-	// pixel.fill();
-	// Texture appleTexture = new Texture(pixel, Format.RGBA8888, true);
-	// pixel.dispose(); // No longer needed
-	//
-	// //Image apple = new Image();
-	// //apple.setDrawable(new TextureRegionDrawable(new
-	// TextureRegion(appleTexture)));
-	// Image apple = new Image(appleTexture);
-	// // Image apple = new Image(Entity.loadTexture());
-	// //apple.setDrawable(new TextureRegionDrawable(new
-	// TextureRegion(appleTexture)));
-	// return apple;
-	// }
 
 	@Override
 	protected void doDispose() {

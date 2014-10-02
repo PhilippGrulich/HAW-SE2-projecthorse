@@ -9,6 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 /**
  * @author Lars Entity: A base game object that does something. Like a falling
  *         apple etc. (Image is an Actor)
+ *         
+ *         
+ *         &&Actor.collide
+ *         Group.collide(actor/group)
+ *         actor.collision(source)
  * 
  *         Override "static Texture loadTexture()" to load init gfx
  */
@@ -33,13 +38,13 @@ public abstract class Entity extends Image {
 	}
 	
 	private SequenceAction generateActionSequenz(){
-		Action grow = Actions.scaleTo(1.1f, 1.1f, 0.5f);
-		Action shrink = Actions.scaleTo(0.9f, 0.9f, 0.5f);
-		Action normalize = Actions.scaleTo(1, 1, 0.5f);
+		Action grow = Actions.scaleTo(1.1f, 1.1f, 0.25f);
+		Action shrink = Actions.scaleTo(0.9f, 0.9f, 0.25f);
+		Action normalize = Actions.scaleTo(1, 1, 0.25f);
 		
 		//Action shrink = Actions.scaleTo(1f, 1f, 0.25f);
 		
-		float fallingtime = (((float) Math.random()) * 3f) + 5f;   
+		float fallingtime = (((float) Math.random()) * 1.5f) + 2.5f;   
 		Action move = Actions.moveBy(0.0f, -1280.0f, fallingtime);
 		
 		return Actions.sequence(grow, shrink, normalize, move);
