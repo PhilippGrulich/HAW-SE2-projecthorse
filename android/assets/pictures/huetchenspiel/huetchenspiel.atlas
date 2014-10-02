@@ -1,0 +1,13 @@
+
+huetchenspiel.png
+size: 152,102
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hut
+  rotate: false
+  xy: 2, 2
+  size: 150, 100
+  orig: 150, 100
+  offset: 0, 0
+  index: -1

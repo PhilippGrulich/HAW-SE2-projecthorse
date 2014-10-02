@@ -1,1 +1,2 @@
-logo.png; selfmade; Francis und Fabian; Studis an der HAW
+worldmap;logo.png; selfmade; Francis und Fabian; Studis an der HAW
+huetchenspiel;hut.png;selfmade;fabian

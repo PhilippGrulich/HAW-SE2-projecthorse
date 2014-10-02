@@ -18,13 +18,6 @@ germanymap_scaled
   orig: 720, 1005
   offset: 0, 0
   index: -1
-hamburgwappen
-  rotate: false
-  xy: 1379, 489
-  size: 640, 426
-  orig: 640, 426
-  offset: 0, 0
-  index: -1
 
 worldmap2.png
 size: 1286,1452
