@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
@@ -91,14 +92,7 @@ public class MainMenu extends Level {
 	}
 
 	private void addBackground() {
-		// Pixmap pixel = new Pixmap(this.width, this.height, Format.RGBA8888);
-		// // Create
-		// // a
-		// pixel.setColor(Color.LIGHT_GRAY);
-		// pixel.fill();
-		// backgroundTexture = new Texture(pixel, Format.RGBA8888, true);
-		// pixel.dispose(); // No longer needed
-
+	
 		TextureAtlas atlas = AssetManager.load("menu", false, false, true);
 		backgroundTexture = atlas.findRegion("Background");
 		background = new Image(backgroundTexture);
@@ -182,7 +176,7 @@ public class MainMenu extends Level {
 
 	private void initStage(Viewport viewport, Batch batch) {
 		stage = new Stage(viewport, batch);
-		Gdx.input.setInputProcessor(stage); // Now Stage is processing inputs
+		InputManager.addInputProcessor(stage); // Now Stage is processing inputs
 	}
 
 	private void initTable() {
@@ -196,15 +190,7 @@ public class MainMenu extends Level {
 
 	@Override
 	public void doRender(float delta) {
-		/*
-		 * if(playerMoveRight){ if(player.getX()> Gdx.graphics.getWidth()){
-		 * player.setAnimation(Direction.LEFT, 0.3f); playerMoveRight = false; }
-		 * else player.setPosition(player.getX()+5, player.getY()); }else{
-		 * if(player.getX()<-100-player.getWidth()){
-		 * player.setAnimation(Direction.RIGHT, 0.3f); playerMoveRight = true; }
-		 * else player.setPosition(player.getX()-5, player.getY()); }
-		 */
-
+	
 		Gdx.gl.glClearColor(1, 1, 1, 1); // Hintergrund malen - einfarbig,
 											// langweilig
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

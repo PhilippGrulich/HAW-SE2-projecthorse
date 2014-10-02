@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
@@ -65,8 +66,8 @@ public class AppleRun extends Level {
 		stage.addActor(backgroundGraphics);
 		stage.addActor(horse);
 		stage.addActor(fallingEntities);
+		InputManager.addInputProcessor(this.stage);
 		
-		Gdx.input.setInputProcessor(this.stage);
 	}
 
 	private void initBackground() {
