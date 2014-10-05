@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
@@ -154,8 +155,8 @@ public class Parcours extends Level {
 		initObstacles();
 		
 		stage.addActor(player);
-	
-		Gdx.input.setInputProcessor(this.stage);
+		InputManager.addInputProcessor(stage);
+	//	Gdx.input.setInputProcessor(this.stage);
 		 
 	}
 	
