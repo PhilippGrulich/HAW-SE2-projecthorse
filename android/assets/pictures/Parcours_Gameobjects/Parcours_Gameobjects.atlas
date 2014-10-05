@@ -1,0 +1,26 @@
+
+Parcours_Gameobjects.png
+size: 286,458
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Parcours
+  rotate: false
+  xy: 2, 2
+  size: 284, 456
+  orig: 284, 456
+  offset: 0, 0
+  index: -1
+
+Parcours_Gameobjects2.png
+size: 282,454
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Level_1/HuerdeClean
+  rotate: false
+  xy: 2, 2
+  size: 280, 452
+  orig: 280, 452
+  offset: 0, 0
+  index: -1
