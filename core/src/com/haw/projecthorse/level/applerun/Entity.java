@@ -1,70 +1,88 @@
 package com.haw.projecthorse.level.applerun;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.haw.projecthorse.player.Player;
 
 /**
- * @author Lars Entity: A base game object that does something. Like a falling
- *         apple etc. (Image is an Actor)
- *         
- *         
- *         &&Actor.collide
- *         Group.collide(actor/group)
- *         actor.collision(source)
+ * @author Lars Entity: A base game object that does something. Like a falling apple etc. (Image is an Actor)
+ * 
+ * 
+ *         &&Actor.collide Group.collide(actor/group) actor.collision(source)
  * 
  *         Override "static Texture loadTexture()" to load init gfx
  */
 
 public abstract class Entity extends Image {
 
+	private Rectangle hitbox = new Rectangle(); 
+	
 	public Entity(Texture texture) {
 		super(texture);
-		
-		
-		
+
 		this.addAction(generateActionSequenz());
-		
-	
+
 		float pos_x = (((float) Math.random()) * 636f) + 10;
 
 		float pos_y = (((float) Math.random()) * 200f) + 1000;
 		this.setPosition(pos_x, pos_y);
-		//updateBounds();
-		
+		// updateBounds();
 
 	}
-	
-	private SequenceAction generateActionSequenz(){
+
+	private SequenceAction generateActionSequenz() {
 		Action grow = Actions.scaleTo(1.1f, 1.1f, 0.25f);
 		Action shrink = Actions.scaleTo(0.9f, 0.9f, 0.25f);
 		Action normalize = Actions.scaleTo(1, 1, 0.25f);
-		
-		//Action shrink = Actions.scaleTo(1f, 1f, 0.25f);
-		
-		float fallingtime = (((float) Math.random()) * 1.5f) + 2.5f;   
+
+		// Action shrink = Actions.scaleTo(1f, 1f, 0.25f);
+
+		float fallingtime = (((float) Math.random()) * 1.5f) + 2.5f;
 		Action move = Actions.moveBy(0.0f, -1280.0f, fallingtime);
-		
+
 		return Actions.sequence(grow, shrink, normalize, move);
-		
+
 	}
-	
-	
 
 	// Bounding box for collision detection
 	private void updateBounds() {
-		this.setBounds(getX(), getY(), getImageWidth(),
-				getImageHeight());
+		this.setBounds(getX(), getY(), getImageWidth(), getImageHeight());
 	}
 
+	public Rectangle getHitbox() {
+		// TODO check if coords are absolute. Wenn coords relativ könnten evtl. Gegenstände collidieren die sich gar nicht überschneiden
+		// weil die Gegenstände beide relativ an pos 10,10 liegen
+		//Evtl. hitbox nur updaten wenn sich was bewegt hat? Schneller?
+		hitbox.x = this.getX();;
+		hitbox.y = this.getY();
+		hitbox.width = this.getWidth();
+		hitbox.height = this.getHeight();
+		
+		return hitbox;
+		
+	}
+
+	public void fireIsHit(Actor otherActor){
+		//This is hit by "byActor";
+		//If other is pferd -> deal with it / else bla
+		System.out.println("actor collided");
+		if(otherActor instanceof PlayerAppleRun){
+			((PlayerAppleRun) otherActor).fireHitByEntity(this);
+			System.out.println("Collided with player object");
+		}
+	}
+	
 	@Override
 	public void act(float delta) {
 
 		super.act(delta);
 
-		//updateBounds(); //Update bounding box for collision detection
+		// updateBounds(); //Update bounding box for collision detection
 
 	}
 
