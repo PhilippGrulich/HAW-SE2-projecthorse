@@ -24,11 +24,15 @@ public class GameObject extends Actor {
 	private Image image;
 	private ShapeRenderer renderer;
 	private SpriteBatch b;
+	private int gameWidth;
+	private int gameHeight;
 	
-	public GameObject(Texture t){
+	public GameObject(Texture t, int gameWidth, int gameHeight){
 		this.t = t;
 		width = t.getWidth();
 		height = t.getHeight();
+		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
 	}
 	
 	public GameObject(TextureRegionDrawable tr){
@@ -53,6 +57,13 @@ public class GameObject extends Actor {
 		return t;
 	}
 	
+	public int getGameWidth(){
+		return gameWidth;
+	}
+	
+	public int getGameHeight(){
+		return gameHeight;
+	}
 	
 	
 	  @Override
