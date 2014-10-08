@@ -1,7 +1,10 @@
 package com.haw.projecthorse.level.applerun;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.haw.projecthorse.level.Level;
 
 /**
@@ -13,12 +16,13 @@ import com.haw.projecthorse.level.Level;
 public class AppleRun extends Level {
 	private Gamestate gamestate;
 
+
 	// Add everything to this stage
 	// private Stage stage = new Stage(this.getViewport(), this.getSpriteBatch());
 
 	public AppleRun() {
 		gamestate = new Gamestate(this.getViewport(), this.getSpriteBatch(), width, height);
-
+		
 	}
 
 	@Override
@@ -26,6 +30,8 @@ public class AppleRun extends Level {
 		Gdx.gl.glClearColor(0.4f, 0.4f, 0.65f, 1); // Hintergrund malen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gamestate.update(delta);
+		
+		
 		// stage.act(Gdx.graphics.getDeltaTime());
 		// stage.draw();
 

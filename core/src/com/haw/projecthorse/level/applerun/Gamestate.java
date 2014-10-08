@@ -1,9 +1,13 @@
 package com.haw.projecthorse.level.applerun;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -17,6 +21,8 @@ import com.haw.projecthorse.player.Direction;
 //TODO seperate this class into Gamestate & Gamelogic
 
 public class Gamestate {
+
+	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
 
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 
@@ -48,7 +54,7 @@ public class Gamestate {
 		this.width = width;
 		this.height = heigth;
 		MOVEMENT_PER_SECOND = this.width / 1.25f;
-		
+
 		initBackground();
 		initHorse();
 
@@ -59,7 +65,7 @@ public class Gamestate {
 		stage.addActor(fallingEntities);
 
 		InputManager.addInputProcessor(stage);
-		
+
 	}
 
 	private void initHorse() {
@@ -67,7 +73,7 @@ public class Gamestate {
 		horse.setPosition(0, 110);
 		horse.scaleBy(0.5F);
 		horse.setAnimation(Direction.RIGHT, 0.4f);
-		//stage.addActor(horse); //Done inside constructor
+		// stage.addActor(horse); //Done inside constructor
 
 		stage.addListener(new InputListener() {
 			@Override
@@ -82,7 +88,7 @@ public class Gamestate {
 	private void moveHorseTo(float x) {
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des Pferdes bewegen
 		horse.clearActions(); // Alte bewegungen etc. entfernen
-		
+
 		if (x < 0) {
 			x = 0;
 		} // Nicht links rauslaufen
@@ -91,7 +97,7 @@ public class Gamestate {
 		if (x > breite - horse.getWidth()) {
 			x = breite - horse.getWidth();
 		} // Nicht rechts rauslaufen
-		// Bewegungsrichtung ermitteln
+			// Bewegungsrichtung ermitteln
 		ChangeDirectionAction directionAction = null;
 		float distance = horse.getX() - x; // Positiv = move rechts
 		if (distance > 0) { // Move right
@@ -99,7 +105,7 @@ public class Gamestate {
 		} else {
 			directionAction = new ChangeDirectionAction(Direction.LEFT);
 		}
-		
+
 		float moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
 		horse.addAction(directionAction);
@@ -142,12 +148,10 @@ public class Gamestate {
 		}
 	}
 
-	
-	
-	public void removeFallingEntity(Entity entity){
+	public void removeFallingEntity(Entity entity) {
 		fallingEntities.removeActor(entity);
 	}
-	
+
 	private void collisionDetection() {
 		collisionHandler.collide(horse, fallingEntities);
 	}
@@ -162,7 +166,24 @@ public class Gamestate {
 		stage.draw();
 		horse.act(delta);
 		spawnEntities(delta);
+		drawCollisionRectangles(delta);
+
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
+
+	}
+
+	private void drawCollisionRectangles(float delta) {
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.CYAN);
+		shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+		for (Actor actor : fallingEntities.getChildren()) {
+			Entity entity = (Entity) actor;
+
+			shapeRenderer.rect(entity.getHitbox().x, entity.getHitbox().y, entity.getHitbox().width, entity.getHitbox().height);
+		}
+		shapeRenderer.rect(horse.getHitbox().x, horse.getHitbox().y, horse.getHitbox().width, horse.getHitbox().height);
+
+		shapeRenderer.end();
 
 	}
 

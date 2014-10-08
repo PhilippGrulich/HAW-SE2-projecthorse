@@ -27,7 +27,7 @@ public class PlayerAppleRun extends PlayerImpl implements Collidable {
 
 	@Override
 	public Rectangle getHitbox() {
-		hitbox = new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		hitbox = new Rectangle(this.getX(), this.getY(), this.getWidth()*this.getScaleX(), this.getHeight()*this.getScaleY());
 		return hitbox;
 	}
 

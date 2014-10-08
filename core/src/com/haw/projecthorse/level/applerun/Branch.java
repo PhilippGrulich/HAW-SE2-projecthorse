@@ -1,10 +1,10 @@
 package com.haw.projecthorse.level.applerun;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Branch extends Entity {
 
-	public Branch(Texture texture) {
+	public Branch(TextureRegion texture) {
 		super(texture);
 		// TODO Auto-generated constructor stub
 	}
