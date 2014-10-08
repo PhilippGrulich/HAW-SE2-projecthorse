@@ -1,36 +1,44 @@
 package com.haw.projecthorse.level.applerun;
 
-import com.haw.projecthorse.player.PlayerColor;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.haw.projecthorse.player.PlayerImpl;
 
-public class PlayerAppleRun extends PlayerImpl {
+public class PlayerAppleRun extends PlayerImpl implements Collidable {
+	private Rectangle hitbox;
+	private final Gamestate gamestate;
 
-	private final Gamestate gamestate; 
-//	public PlayerAppleRun() {
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public PlayerAppleRun(PlayerColor color) {
-//		super(color);
-//		// TODO Auto-generated constructor stub
-//	}
-//	
-	public PlayerAppleRun(Gamestate gamestate){
+	public PlayerAppleRun(Gamestate gamestate) {
 		this.gamestate = gamestate;
 	}
-	
-	public void fireHitByEntity(Entity entity){
+
+	public void fireHitByEntity(Entity entity) {
 		System.out.println("HIT");
-		//If hit by apple
-		//Add score
-		
-		//If hit by branch - -score
-		
-//???   //gamestate.addScore();
-		
-		
+		// If hit by apple
+		// Add score
+
+		// If hit by branch - -score
+
+		// ??? //gamestate.addScore();
+
 		gamestate.removeFallingEntity(entity);
-		
+
+	}
+
+	@Override
+	public Rectangle getHitbox() {
+		hitbox = new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		return hitbox;
+	}
+
+	@Override
+	public void fireIsHit(Collidable otherObject) {
+		if (otherObject instanceof Entity) {
+			gamestate.removeFallingEntity((Entity) otherObject);
+		} else {
+			Gdx.app.log("PlayerAppleRun", "Collision hit by non-Entity class. Doing nothing");
+		}
+
 	}
 
 }

@@ -13,8 +13,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
-import com.haw.projecthorse.player.Player;
-import com.haw.projecthorse.player.PlayerImpl;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
@@ -40,7 +38,7 @@ public class Gamestate {
 	private EntityGroup fallingEntities; // Falling entities
 	private Stage stage;// = new Stage(this.getViewport(), this.getSpriteBatch());
 	private Group backgroundGraphics; // Stuff not interacting with player.
-	private Player horse;
+	private PlayerAppleRun horse;
 
 	private int width;
 	private int height;
@@ -82,7 +80,6 @@ public class Gamestate {
 	}
 
 	private void moveHorseTo(float x) {
-		System.out.println(x);
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des Pferdes bewegen
 		horse.clearActions(); // Alte bewegungen etc. entfernen
 		
