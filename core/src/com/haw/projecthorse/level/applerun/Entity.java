@@ -90,6 +90,8 @@ public abstract class Entity extends Image implements Collidable {
 	public void act(float delta) {
 
 		super.act(delta);
+		
+		
 
 		// updateBounds(); //Update bounding box for collision detection
 

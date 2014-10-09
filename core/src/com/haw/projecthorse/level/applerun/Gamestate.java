@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.applerun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,7 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
@@ -26,7 +29,7 @@ public class Gamestate {
 
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 
-	private final int MAX_FALLING_ENTITIES = 70;
+	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
 													// nächsten entity spawn
@@ -149,7 +152,9 @@ public class Gamestate {
 	}
 
 	public void removeFallingEntity(Entity entity) {
+		//TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
 		fallingEntities.removeActor(entity);
+		current_falling_entities--;
 	}
 
 	private void collisionDetection() {
@@ -170,6 +175,21 @@ public class Gamestate {
 
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
 
+		removeDroppedDownEntities();
+	}
+	
+	private void removeDroppedDownEntities(){
+		
+		//TODO remove with actor as ground object.
+		//Splatter on ground contact?
+		for(Actor actor:fallingEntities.getChildren()){
+			if(actor.getY() < (1 - actor.getHeight()*actor.getScaleY())){
+				actor.remove();
+				this.removeFallingEntity((Entity)actor);
+			}
+		}
+		
+		
 	}
 
 	private void drawCollisionRectangles(float delta) {
@@ -189,7 +209,14 @@ public class Gamestate {
 
 	private void initBackground() {
 		backgroundGraphics = new Group();
-		// TODO background hinzufügen
+		
+		TextureRegion tree = AssetManager.load("appleRun", false, false, true).findRegion("tree");
+		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
+		Image treeImage = new Image(tree);
+		treeImage.setY(144);
+		backgroundGraphics.addActor(treeImage);
+		backgroundGraphics.addActor(new Image(ground));
+		
 	}
 
 }

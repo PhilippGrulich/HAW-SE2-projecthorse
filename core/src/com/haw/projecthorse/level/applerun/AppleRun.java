@@ -27,7 +27,7 @@ public class AppleRun extends Level {
 
 	@Override
 	protected void doRender(float delta) {
-		Gdx.gl.glClearColor(0.4f, 0.4f, 0.65f, 1); // Hintergrund malen
+		Gdx.gl.glClearColor(0.8f, 0.9f, 0.99f, 1); // Hintergrund malen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gamestate.update(delta);
 		
