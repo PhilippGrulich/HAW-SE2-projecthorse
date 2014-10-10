@@ -37,11 +37,8 @@ public class Gamestate {
 													// spawns
 	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate with -1 for first spawn = instant)
 
-	private int branch_spawn_chance = 30; // 10%:: Prozent Chance, das statt
-											// einem Apfel ein Ast spawnt
-	private int current_falling_entities = 0; // Um unnötige abfragen wahrend
-												// doRender zu vermeiden wird
-												// hier laufend die anzahl
+	private int branch_spawn_chance = 20; // 20%:: Prozent Chance, das statt einem Apfel ein Ast spawnt
+	private int current_falling_entities = 0; // Um unnötige abfragen wahrend doRender zu vermeiden wird hier laufend die anzahl
 												// mitgeschrieben.
 
 	private EntityGroup fallingEntities; // Falling entities
@@ -152,7 +149,7 @@ public class Gamestate {
 	}
 
 	public void removeFallingEntity(Entity entity) {
-		//TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
+		// TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
 		fallingEntities.removeActor(entity);
 		current_falling_entities--;
 	}
@@ -177,19 +174,18 @@ public class Gamestate {
 
 		removeDroppedDownEntities();
 	}
-	
-	private void removeDroppedDownEntities(){
-		
-		//TODO remove with actor as ground object.
-		//Splatter on ground contact?
-		for(Actor actor:fallingEntities.getChildren()){
-			if(actor.getY() < (1 - actor.getHeight()*actor.getScaleY())){
+
+	private void removeDroppedDownEntities() {
+
+		// TODO remove with actor as ground object.
+		// Splatter on ground contact?
+		for (Actor actor : fallingEntities.getChildren()) {
+			if (actor.getY() < (1 - actor.getHeight() * actor.getScaleY())) {
 				actor.remove();
-				this.removeFallingEntity((Entity)actor);
+				this.removeFallingEntity((Entity) actor);
 			}
 		}
-		
-		
+
 	}
 
 	private void drawCollisionRectangles(float delta) {
@@ -209,14 +205,14 @@ public class Gamestate {
 
 	private void initBackground() {
 		backgroundGraphics = new Group();
-		
+
 		TextureRegion tree = AssetManager.load("appleRun", false, false, true).findRegion("tree");
 		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);
 		backgroundGraphics.addActor(treeImage);
 		backgroundGraphics.addActor(new Image(ground));
-		
+
 	}
 
 }

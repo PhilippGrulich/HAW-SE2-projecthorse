@@ -28,13 +28,14 @@ public final class GameObjectFactory {
 			return;
 		}
 
-		spritemap = AssetManager.load("appleRun", false, false, true);// .findRegion("white_sprites");
+		spritemap = AssetManager.load("appleRun", false, false, true);
 		apple1 = spritemap.findRegion("apple1");
 		apple2 = spritemap.findRegion("apple2");
 		apple3 = spritemap.findRegion("apple3");
 		apple4 = spritemap.findRegion("apple4");
 		branch1 = spritemap.findRegion("branch1");
 		branch2 = spritemap.findRegion("branch2");
+		isInitialized = true;
 	}
 
 	private GameObjectFactory() {
@@ -72,7 +73,7 @@ public final class GameObjectFactory {
 
 	private static TextureRegion generateBranchTexture() {
 		// TODO load a real apple texture
-		int rand = MathUtils.random(1, 4);
+		int rand = MathUtils.random(1, 2);
 
 		switch (rand) {
 		case 1:
