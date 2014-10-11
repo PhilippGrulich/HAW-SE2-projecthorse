@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.level.util.overlay.button.pause.PauseButton;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -26,7 +27,7 @@ public abstract class Level implements Screen {
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
-
+	private PauseButton pauseButton = new PauseButton();
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
@@ -39,7 +40,7 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-
+	
 	}
 
 	
@@ -65,6 +66,7 @@ public abstract class Level implements Screen {
 	@Override
 	public final void render(float delta) {
 		doRender(delta);
+		
 	}
 
 	protected abstract void doDispose();
