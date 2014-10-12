@@ -16,7 +16,6 @@ public class KartenManager {
 
 	private ArrayList<Karte> karten  = new ArrayList<Karte>();
 	private TextureAtlas atlant;
-	private boolean changed = false;
 	private Texture newlyOpened;
 	private ArrayList<Karte> lastChanged;
 	
@@ -46,7 +45,7 @@ public class KartenManager {
 	}
 	
 	
-	public void checkChanged(){
+	public boolean checkChanged(){
 		for (Karte karte1 : karten) {
 			if (karte1.getState() == State.TEMPORARILY_OPENED) {
 				for (Karte karte2 : karten) {
@@ -56,14 +55,18 @@ public class KartenManager {
 							karte1.setState(State.OPEN);
 							karte2.setState(State.OPEN);
 							newlyOpened = karte1.getPicture();
-							return;
+							return true;
 						}
-						karte1.setState(State.CLOSED);
-						karte2.setState(State.CLOSED);
+						else { 
+							karte1.setState(State.CLOSED);
+							karte2.setState(State.CLOSED);
+							return false;
+						}
 					}
 				}
 			}
+			return false;
 		}
-
+		return false;
 	}
 }
