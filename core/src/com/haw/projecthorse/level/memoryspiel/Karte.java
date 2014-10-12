@@ -10,7 +10,7 @@ public class Karte {
 	private Texture picture;
 
 	public enum State {
-		OPEN, CLOSED;
+		OPEN, CLOSED, TEMPORARILY_OPENED;
 	}
 
 	public Karte(){
@@ -23,7 +23,7 @@ public class Karte {
 
 	public void onClick() {
 		if (this.state == (State.CLOSED)) {
-			setState(State.OPEN);
+			setState(State.TEMPORARILY_OPENED);
 		}
 	}
 

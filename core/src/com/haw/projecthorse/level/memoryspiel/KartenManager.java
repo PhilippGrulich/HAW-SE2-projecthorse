@@ -10,16 +10,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.level.memoryspiel.Karte.State;
 
 public class KartenManager {
 
-	private Texture[] pictures;
-	private ArrayList<Karte> karten;
+	private ArrayList<Karte> karten  = new ArrayList<Karte>();
 	private TextureAtlas atlant;
+	private boolean changed = false;
+	private Texture newlyOpened;
+	private ArrayList<Karte> lastChanged;
 	
 	
 	public KartenManager(){
-		karten = new ArrayList();	
 		atlant = AssetManager.load("hamburg", false, false, true);
 	}
 	
@@ -36,10 +38,32 @@ public class KartenManager {
 	
 		
 		Collections.shuffle(karten);
-			
+		lastChanged = karten;	
 	}
 	
-	public ArrayList getKarten(){
+	public ArrayList<Karte> getKarten(){
 		return karten;
+	}
+	
+	
+	public void checkChanged(){
+		for (Karte karte1 : karten) {
+			if (karte1.getState() == State.TEMPORARILY_OPENED) {
+				for (Karte karte2 : karten) {
+					if (!(karte1.equals(karte2))
+							&& karte2.getState() == State.TEMPORARILY_OPENED) {
+						if (karte1.getPicture().equals(karte2.getPicture())) {
+							karte1.setState(State.OPEN);
+							karte2.setState(State.OPEN);
+							newlyOpened = karte1.getPicture();
+							return;
+						}
+						karte1.setState(State.CLOSED);
+						karte2.setState(State.CLOSED);
+					}
+				}
+			}
+		}
+
 	}
 }
