@@ -6,12 +6,16 @@
          className:"com.haw.projecthorse.level.mainmenu.MainMenu"
       },
       {
+         levelID:"playerMenu",
+         className:"com.haw.projecthorse.level.playermenu.PlayerMenu"
+      },
+      {
          levelID:"worldmap",
          className:"com.haw.projecthorse.level.worldmap.WorldMap"
       },
       {
       	levelID:"movementTest",
-      	className:"com.haw.projecthorse.level.MovementTest"
+      	className:"com.haw.projecthorse.level.test.MovementTest"
       },
       {
       	levelID:"appleRun",
