@@ -3,7 +3,7 @@ package com.haw.projecthorse.level.mainmenu;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.score.ScoreManagerFactory;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class SavegameButtonListener extends ChangeListener {
 	
@@ -15,7 +15,7 @@ public class SavegameButtonListener extends ChangeListener {
 	}
 	
 	private void loadSavegame(){
-		ScoreManagerFactory.getInstance().loadScore(saveGameID);
+		SaveGameManager.loadSavedGame(saveGameID);
 	}
 
 	@Override

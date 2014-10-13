@@ -131,7 +131,7 @@ public class MainMenu extends Level {
 		buttonSpiel1 = new TextButton("Spielstand 1", buttonStyle);
 		buttonSpiel1.setRound(true);
 		buttonSpiel2 = new TextButton("Spielstand 2", buttonStyle);
-		buttonSpiel3 = new TextButton(/* "Spielstand 3" */"Swipe Test",
+		buttonSpiel3 = new TextButton(/* "Spielstand 3" */"Player Menu",
 				buttonStyle);
 		buttonCredits = new TextButton("Credits", buttonStyle);
 
@@ -150,7 +150,7 @@ public class MainMenu extends Level {
 	private void loadCredits() {
 		// TODO: Implement Creditscreen
 		
-		GameManagerFactory.getInstance().navigateToLevel("appleRun");
+		
 		System.out.println("CreditScreen not yet implemented - Todo");
 	}
 
@@ -162,7 +162,7 @@ public class MainMenu extends Level {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				GameManagerFactory.getInstance()
-						.navigateToLevel("movementTest");
+						.navigateToLevel("playerMenu");
 			}
 		});
 		buttonCredits.addListener(new ChangeListener() {
