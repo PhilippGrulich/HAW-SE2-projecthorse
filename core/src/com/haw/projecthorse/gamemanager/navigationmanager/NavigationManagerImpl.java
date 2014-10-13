@@ -74,8 +74,8 @@ public class NavigationManagerImpl implements NavigationManager {
 
 	@Override
 	public void navigateToMainMenu() {
-//		navigateToLevel("mainMenu");
-		navigateToLevel("playerMenu");
+		navigateToLevel("mainMenu");
+
 	}
 
 	@Override
