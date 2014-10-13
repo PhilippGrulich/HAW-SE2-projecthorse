@@ -1,7 +1,5 @@
 package com.haw.projecthorse.level.city;
 
-import sun.org.mozilla.javascript.internal.ast.WithStatement;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,7 +25,6 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
-import com.haw.projecthorse.swipehandler.StageGestureDetector;
 
 public class City extends Level {
 
@@ -48,9 +47,7 @@ public class City extends Level {
 	
 		stage = new Stage(this.getViewport(), batcher);
 		addBackground();
-		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(.45f, .45f);
-		font.setColor(Color.MAGENTA);
+		
 		try {
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
 			addGameButtons();
@@ -113,13 +110,23 @@ public class City extends Level {
 		stage.addActor(imgTextButton);
 	};
 
+	private void createTitle(String title){
+		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		font.setScale(.45f, .45f);
+		font.setColor(Color.MAGENTA);
+		LabelStyle ls = new LabelStyle(font,font.getColor());
+		Label l = new Label("Hamburg",ls);
+		l.setX(width/2);
+		l.setY(height*0.9F);
+		stage.addActor(l);
+	}
 	@Override
 	protected void doRender(float delta) {
 		stage.draw();
 		batcher.begin();
 	
 		//batcher.draw(region, 0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());
-		font.draw(batcher, cityObject.getCityName(), Gdx.graphics.getWidth() / 1.8f, Gdx.graphics.getHeight() / 1.03f);
+		//font.draw(batcher, cityObject.getCityName(), Gdx.graphics.getWidth() / 1.8f, Gdx.graphics.getHeight() / 1.03f);
 		batcher.end();
 		
 
@@ -128,7 +135,7 @@ public class City extends Level {
 	@Override
 	protected void doDispose() {
 		atlant.dispose();
-		font.dispose();
+		stage.dispose();
 
 	}
 
