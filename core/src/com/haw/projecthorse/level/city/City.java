@@ -1,18 +1,23 @@
 package com.haw.projecthorse.level.city;
 
+
+
 import sun.org.mozilla.javascript.internal.ast.WithStatement;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -33,6 +38,7 @@ public class City extends Level {
 	private TextureAtlas atlant;
 	private SpriteBatch batcher = this.getSpriteBatch();
 	private CityObject cityObject;
+	Skin skin = new Skin();
 
 	private int lastButtonY = GameManagerFactory.getInstance().getSettings().getScreenHeight();
 	private BitmapFont font;
@@ -49,7 +55,7 @@ public class City extends Level {
 		stage = new Stage(this.getViewport(), batcher);
 		addBackground();
 		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(.45f, .45f);
+		font.setScale(1f, 1f);
 		font.setColor(Color.MAGENTA);
 		try {
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
@@ -74,16 +80,18 @@ public class City extends Level {
 	}
 
 	private void addGameButtons() throws LevelNotFoundException {
-		Drawable drawable = new TextureRegionDrawable(atlant.findRegion("raw_game_teaser_icon"));
+		
+		Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("pictures/hamburg/Button0.png"))));
+		
 
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
 
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
 		;
 		imageButtonStyle.font.scale(-0.5f);
-		imageButtonStyle.fontColor = Color.BLACK;
+		imageButtonStyle.fontColor = Color.WHITE;
 
 		GameObject[] games = cityObject.getGames();
 		for (GameObject game : games) {
@@ -104,10 +112,10 @@ public class City extends Level {
 			}
 		});
 		verticalGroup.addActor(imgTextButton);
-		imgTextButton.setWidth(this.width*0.8F);
+		imgTextButton.setWidth(this.width*0.5F);
 		imgTextButton.setHeight(this.height * 0.1F);
 		
-		imgTextButton.setPosition(this.width * 0.1F, lastButtonY);
+		imgTextButton.setPosition(this.width * 0.25F, lastButtonY);
 		lastButtonY = (int) (lastButtonY - this.height * 0.2F);
 		imgTextButton.toFront();
 		stage.addActor(imgTextButton);
@@ -118,8 +126,7 @@ public class City extends Level {
 		stage.draw();
 		batcher.begin();
 	
-		//batcher.draw(region, 0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());
-		font.draw(batcher, cityObject.getCityName(), Gdx.graphics.getWidth() / 1.8f, Gdx.graphics.getHeight() / 1.03f);
+		font.draw(batcher, cityObject.getCityName(), this.width / 1.6f, this.height / 1.03f);
 		batcher.end();
 		
 
