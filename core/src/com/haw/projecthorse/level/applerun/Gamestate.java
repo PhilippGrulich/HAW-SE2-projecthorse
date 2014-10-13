@@ -1,28 +1,35 @@
 package com.haw.projecthorse.level.applerun;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
-import com.haw.projecthorse.player.Player;
-import com.haw.projecthorse.player.PlayerImpl;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
 public class Gamestate {
 
+	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
+
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 
-	private final int MAX_FALLING_ENTITIES = 70;
+	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
 													// nächsten entity spawn
@@ -30,17 +37,14 @@ public class Gamestate {
 													// spawns
 	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate with -1 for first spawn = instant)
 
-	private int branch_spawn_chance = 30; // 10%:: Prozent Chance, das statt
-											// einem Apfel ein Ast spawnt
-	private int current_falling_entities = 0; // Um unnötige abfragen wahrend
-												// doRender zu vermeiden wird
-												// hier laufend die anzahl
+	private int branch_spawn_chance = 20; // 20%:: Prozent Chance, das statt einem Apfel ein Ast spawnt
+	private int current_falling_entities = 0; // Um unnötige abfragen wahrend doRender zu vermeiden wird hier laufend die anzahl
 												// mitgeschrieben.
 
 	private EntityGroup fallingEntities; // Falling entities
 	private Stage stage;// = new Stage(this.getViewport(), this.getSpriteBatch());
 	private Group backgroundGraphics; // Stuff not interacting with player.
-	private Player horse;
+	private PlayerAppleRun horse;
 
 	private int width;
 	private int height;
@@ -50,7 +54,7 @@ public class Gamestate {
 		this.width = width;
 		this.height = heigth;
 		MOVEMENT_PER_SECOND = this.width / 1.25f;
-		
+
 		initBackground();
 		initHorse();
 
@@ -61,7 +65,7 @@ public class Gamestate {
 		stage.addActor(fallingEntities);
 
 		InputManager.addInputProcessor(stage);
-		
+
 	}
 
 	private void initHorse() {
@@ -69,7 +73,7 @@ public class Gamestate {
 		horse.setPosition(0, 110);
 		horse.scaleBy(0.5F);
 		horse.setAnimation(Direction.RIGHT, 0.4f);
-		//stage.addActor(horse); //Done inside constructor
+		// stage.addActor(horse); //Done inside constructor
 
 		stage.addListener(new InputListener() {
 			@Override
@@ -82,10 +86,9 @@ public class Gamestate {
 	}
 
 	private void moveHorseTo(float x) {
-		System.out.println(x);
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des Pferdes bewegen
 		horse.clearActions(); // Alte bewegungen etc. entfernen
-		
+
 		if (x < 0) {
 			x = 0;
 		} // Nicht links rauslaufen
@@ -94,7 +97,7 @@ public class Gamestate {
 		if (x > breite - horse.getWidth()) {
 			x = breite - horse.getWidth();
 		} // Nicht rechts rauslaufen
-		// Bewegungsrichtung ermitteln
+			// Bewegungsrichtung ermitteln
 		ChangeDirectionAction directionAction = null;
 		float distance = horse.getX() - x; // Positiv = move rechts
 		if (distance > 0) { // Move right
@@ -102,7 +105,7 @@ public class Gamestate {
 		} else {
 			directionAction = new ChangeDirectionAction(Direction.LEFT);
 		}
-		
+
 		float moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
 		horse.addAction(directionAction);
@@ -145,12 +148,12 @@ public class Gamestate {
 		}
 	}
 
-	
-	
-	public void removeFallingEntity(Entity entity){
+	public void removeFallingEntity(Entity entity) {
+		// TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
 		fallingEntities.removeActor(entity);
+		current_falling_entities--;
 	}
-	
+
 	private void collisionDetection() {
 		collisionHandler.collide(horse, fallingEntities);
 	}
@@ -165,13 +168,51 @@ public class Gamestate {
 		stage.draw();
 		horse.act(delta);
 		spawnEntities(delta);
+		drawCollisionRectangles(delta);
+
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
+
+		removeDroppedDownEntities();
+	}
+
+	private void removeDroppedDownEntities() {
+
+		// TODO remove with actor as ground object.
+		// Splatter on ground contact?
+		for (Actor actor : fallingEntities.getChildren()) {
+			if (actor.getY() < (1 - actor.getHeight() * actor.getScaleY())) {
+				actor.remove();
+				this.removeFallingEntity((Entity) actor);
+			}
+		}
+
+	}
+
+	private void drawCollisionRectangles(float delta) {
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.CYAN);
+		shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+		for (Actor actor : fallingEntities.getChildren()) {
+			Entity entity = (Entity) actor;
+
+			shapeRenderer.rect(entity.getHitbox().x, entity.getHitbox().y, entity.getHitbox().width, entity.getHitbox().height);
+		}
+		shapeRenderer.rect(horse.getHitbox().x, horse.getHitbox().y, horse.getHitbox().width, horse.getHitbox().height);
+
+		shapeRenderer.end();
 
 	}
 
 	private void initBackground() {
 		backgroundGraphics = new Group();
-		// TODO background hinzufügen
+
+		TextureRegion tree = AssetManager.load("appleRun", false, false, true).findRegion("tree");
+		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
+		Image treeImage = new Image(tree);
+		treeImage.setY(144);
+		backgroundGraphics.addActor(treeImage);
+		backgroundGraphics.addActor(new Image(ground));
+
 	}
 
 }

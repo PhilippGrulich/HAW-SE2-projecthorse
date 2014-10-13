@@ -1,6 +1,7 @@
 package com.haw.projecthorse.player;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.haw.projecthorse.player.color.PlayerColor;
 
 /**
  * Player ist eine spezielle Implemetierung der LibGDX Klasse Actor. Um sie

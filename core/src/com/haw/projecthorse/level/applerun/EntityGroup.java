@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class EntityGroup extends Group {
+public class EntityGroup extends Group{
 
 	public EntityGroup() {
 		// TODO Auto-generated constructor stub
@@ -20,8 +20,9 @@ public class EntityGroup extends Group {
 			super.addActor(actor);
 		}
 		else{
-			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
+//			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
 			//throw new Exception("Only Entities allowed");
+			throw new IllegalArgumentException("Only Entities allowed");
 		}
 		
 	}
@@ -38,8 +39,9 @@ public class EntityGroup extends Group {
 			super.addActorAt(index, actor);
 		}
 		else{
-			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
-			//throw new Exception("Only Entities allowed");
+//			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
+
+			throw new IllegalArgumentException("Only Entities allowed");
 		}
 		
 	}
@@ -66,8 +68,8 @@ public class EntityGroup extends Group {
 			super.addActorAfter(actorAfter, actor);
 		}
 		else{
-			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
-			//throw new Exception("Only Entities allowed");
+//			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
+			throw new IllegalArgumentException("Only Entities allowed");
 		}
 		
 	}

@@ -1,0 +1,15 @@
+{
+ID: 1,
+horse: {
+	class: com.haw.projecthorse.savegame.json.HorseImpl,
+	color: {
+		color: {
+			a: 1,
+			b: 0.17254902,
+			g: 0.6392157,
+			r: 1
+		}
+	},
+	name: "Brauner Blitz"
+}
+}

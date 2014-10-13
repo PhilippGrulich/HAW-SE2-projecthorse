@@ -1,13 +1,10 @@
 package com.haw.projecthorse.level.applerun;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Apple extends Entity {
 
-	public Apple(Texture texture) {
+	public Apple(TextureRegion texture) {
 		super(texture);
 		
 	}	
