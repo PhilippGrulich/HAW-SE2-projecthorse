@@ -43,27 +43,30 @@ public class City extends Level {
 	protected void doShow() {
 		// TODO Auto-generated method stub
 
-		atlant = AssetManager.load("hamburg", false, false, true);
+		atlant = AssetManager.load("city", false, false, true);
 	
 		stage = new Stage(this.getViewport(), batcher);
-		addBackground();
+		
 		
 		try {
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
+			addBackground(cityObject.getParameter().get("backgroundPath"));
+			createTitle(cityObject.getCityName());
 			addGameButtons();
+			
+			
 		} catch (LevelNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+			
 		
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		InputManager.addInputProcessor(stage);
 
 	}
 
-	private void addBackground() {
-		region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
+	private void addBackground(String path) {
+		region = atlant.findRegion(path);
 
 		Image background = new Image(region);
 		background.toBack();
@@ -120,16 +123,10 @@ public class City extends Level {
 		l.setY(height*0.9F);
 		stage.addActor(l);
 	}
+	
 	@Override
 	protected void doRender(float delta) {
 		stage.draw();
-		batcher.begin();
-	
-		//batcher.draw(region, 0, 0, GameManagerFactory.getInstance().getSettings().getScreenWidth(), GameManagerFactory.getInstance().getSettings().getScreenHeight());
-		//font.draw(batcher, cityObject.getCityName(), Gdx.graphics.getWidth() / 1.8f, Gdx.graphics.getHeight() / 1.03f);
-		batcher.end();
-		
-
 	}
 
 	@Override
