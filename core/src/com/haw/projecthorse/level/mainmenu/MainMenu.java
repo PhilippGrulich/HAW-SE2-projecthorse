@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.level.EndlessBackground;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
@@ -65,6 +66,8 @@ public class MainMenu extends Level {
 
 	private Player player;
 
+	private TextureAtlas atlas;
+
 	public MainMenu() {
 		float moveToDuration = width / 5 / 30;
 
@@ -92,12 +95,32 @@ public class MainMenu extends Level {
 	}
 
 	private void addBackground() {
-	
-		TextureAtlas atlas = AssetManager.load("menu", false, false, true);
-		backgroundTexture = atlas.findRegion("Background");
-		background = new Image(backgroundTexture);
+//	
+		 atlas = AssetManager.load("menu", false, false, true);
+
+		EndlessBackground background = new EndlessBackground(width, atlas.findRegion("sky"), 30);
 		background.toBack();
 		stage.addActor(background);
+
+		background = new EndlessBackground(width,
+				atlas.findRegion("second_grass"), 0);
+		background.toBack();
+		stage.addActor(background);
+
+		background = new EndlessBackground(width,
+				atlas.findRegion("first_grass"), 0);
+		background.toBack();
+		stage.addActor(background);
+		
+
+		background = new EndlessBackground(width, atlas.findRegion("ground"), 0);
+		background.toBack();
+		
+		stage.addActor(background);
+		
+//		background = new Image(backgroundTexture);
+//		background.toBack();
+	
 
 	}
 
@@ -203,8 +226,9 @@ public class MainMenu extends Level {
 	@Override
 	public void doDispose() {
 		stage.dispose();
-		backgroundTexture.getTexture().dispose();
-		;
+		
+		atlas.dispose();
+		
 	}
 
 	@Override
