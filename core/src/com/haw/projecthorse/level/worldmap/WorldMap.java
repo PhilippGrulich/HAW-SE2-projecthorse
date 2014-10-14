@@ -6,9 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -23,8 +27,9 @@ public class WorldMap extends Level {
 
 	private Stage stage;
 	final Image worldmapimage;
-	boolean bool = false;
 	final TextureAtlas worldmapatlas;
+	private ImageButton imagebutton1;
+	private ImageButton imagebutton2;
 
 	public WorldMap() {
 		super();
@@ -34,12 +39,10 @@ public class WorldMap extends Level {
 		stage = new Stage(getViewport());
 		InputManager.addInputProcessor(stage);
 
-		worldmapimage = addBackground();
+		worldmapimage = addBackground("erde-und-sterne");
 
-		final ImageButton imagebutton1 = createImageButton("berlinwappen",
-				width / 2f, 0f);
-		ImageButton imagebutton2 = createImageButton("hamburgwappen",
-				width / 2f, height / 2f);
+		imagebutton1 = createImageButton("berlinflagge", 0.5f * width, 0.13f * height);
+		imagebutton2 = createImageButton("hamburgflagge", 0.1f * width ,0.13f * height);
 
 		addListener(imagebutton1);
 		addListener(imagebutton2);
@@ -49,27 +52,28 @@ public class WorldMap extends Level {
 
 	}
 
-	private Image addBackground() {
+	private Image addBackground(String str) {
 
-		AtlasRegion wolrldmapatlasregion = worldmapatlas
-				.findRegion("erde-und-sterne");
-		Image worldmapimage = new Image(wolrldmapatlasregion);
-		worldmapimage.toBack();
-		worldmapimage.setY((height - worldmapimage.getHeight()) / 2);
-		stage.addActor(worldmapimage);
-		return worldmapimage;
+		AtlasRegion atlasregion = worldmapatlas.findRegion(str);
+		Image image = new Image(atlasregion);
+		image.toBack();
+		image.setY((height - image.getHeight()) / 2);
+		stage.addActor(image);
+		return image;
 
 	}
 
 	private ImageButton createImageButton(String imagename, float x, float y) {
 		Drawable drawable = new TextureRegionDrawable(new TextureRegion(
-				new Texture(Gdx.files.internal("pictures/wappen/" + imagename
+				new Texture(Gdx.files.internal("pictures/flaggen/" + imagename
 						+ ".png"))));
 		ImageButton buttonFlagge = new ImageButton(drawable);
-		buttonFlagge.setHeight(200);
-		buttonFlagge.setWidth(300);
+	
+		buttonFlagge.setHeight(180);
+		buttonFlagge.setWidth(280);
 		buttonFlagge.setX(x);
 		buttonFlagge.setY(y);
+		buttonFlagge.setName(imagename);
 		return buttonFlagge;
 	}
 
@@ -79,24 +83,65 @@ public class WorldMap extends Level {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 
-				imagebutton.setVisible(false);
-				worldmapimage.setOriginX(0.643f * width);
-				worldmapimage.setOriginY(0.65f * height);
+				imagebutton1.remove();
+				imagebutton2.remove();
 
-				System.out.println("hier navigiere");
-				GameManagerFactory.getInstance().navigateToLevel("Hamburg");//.navigateToMainMenu();
-
+				String imagename = imagebutton.getName();
+				switch (imagename) {
+				case "hamburgflagge":
+					navigateToGermany("hamburgflagge");
+					break;
+				case "berlinflagge":
+					navigateToGermany("berlinflagge");
+					break;
+				}
 			}
 
 		});
 
 	}
 
-	
+	public void navigateToGermany(String imagename) {
+
+		worldmapimage.setOrigin(0.643f * width, 0.65f * height);
+		ScaleByAction scale1 = Actions.scaleBy(8f, 8f, 2f);
+		final DelayAction delay = Actions.delay(1.5f);
+		final Image germanyimage = addBackground("germanymap_scaled");
+		switch (imagename) {
+		case "hamburgflagge":
+			germanyimage.setOrigin(0.463f * width, 0.65f * height);
+			break;
+		case "berlinflagge":
+			germanyimage.setOrigin(0.859f * width, 0.541f * height);
+			break;
+		}
+		final ScaleByAction scale2 = Actions.scaleBy(7f, 7f, 2f);
+
+		germanyimage.setColor(1, 1, 1, 0);
+
+		SequenceAction sequence1 = Actions.sequence(scale1, delay,
+				Actions.run(new Runnable() {
+					public void run() {
+						worldmapimage.addAction(Actions.alpha(0));
+						germanyimage.addAction(Actions.sequence(
+								Actions.fadeIn(3), delay));
+						Action sequence2 = Actions.sequence(delay, scale2,
+								delay, Actions.run(new Runnable() {
+									public void run() {
+										GameManagerFactory.getInstance()
+												.navigateToLevel("Hamburg");// .navigateToMainMenu();
+									}
+								}));
+						germanyimage.addAction(sequence2);
+					}
+				}));
+
+		worldmapimage.addAction(sequence1);
+	}
 
 	@Override
 	public void doRender(float delta) {
-		Gdx.gl.glClearColor(0, 1, 0, 0);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(delta);// akktualisiere
 		stage.draw();
