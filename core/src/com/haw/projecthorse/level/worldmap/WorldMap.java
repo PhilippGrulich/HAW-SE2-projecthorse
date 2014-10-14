@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -47,21 +45,23 @@ public class WorldMap extends Level {
 
 		worldmapimage = addBackground("erde-und-sterne");
 
-		imagebutton1 = createImageButton("berlinflagge", 0.5f * width, 0.13f * height);
-		imagebutton2 = createImageButton("hamburgflagge", 0.1f * width ,0.13f * height);
+		imagebutton1 = createImageButton("berlinflagge", 0.5f * width,
+				0.13f * height);
+		imagebutton2 = createImageButton("hamburgflagge", 0.1f * width,
+				0.13f * height);
 
-	
-		
-	 List<ImageButton> l=new ArrayList<ImageButton>();
-	 l.add(imagebutton1);
-	 l.add(imagebutton2);
-	 for(int i=0;i<l.size();i++){
-		 addListener(l.get(i));
-		 stage.addActor(l.get(i));
-		 
-	 }
-	//	stage.addActor(imagebutton1);
-		//stage.addActor(imagebutton2);
+		// GameManagerFactory.getInstance().
+
+		List<ImageButton> l = new ArrayList<ImageButton>();
+		l.add(imagebutton1);
+		l.add(imagebutton2);
+		for (int i = 0; i < l.size(); i++) {
+			addListener(l.get(i));
+			stage.addActor(l.get(i));
+
+		}
+		// stage.addActor(imagebutton1);
+		// stage.addActor(imagebutton2);
 
 	}
 
@@ -77,13 +77,14 @@ public class WorldMap extends Level {
 	}
 
 	private ImageButton createImageButton(String imagename, float x, float y) {
-	
-		Drawable drawable = new TextureRegionDrawable(wappenatlas.findRegion(imagename));
-//				new TextureRegion(
-//				new Texture(Gdx.files.internal("pictures/wappen/" + imagename
-//						+ ".png"))));
+
+		Drawable drawable = new TextureRegionDrawable(
+				wappenatlas.findRegion(imagename));
+		// new TextureRegion(
+		// new Texture(Gdx.files.internal("pictures/wappen/" + imagename
+		// + ".png"))));
 		ImageButton buttonFlagge = new ImageButton(drawable);
-	
+
 		buttonFlagge.setHeight(180);
 		buttonFlagge.setWidth(280);
 		buttonFlagge.setX(x);
@@ -102,13 +103,12 @@ public class WorldMap extends Level {
 				imagebutton2.remove();
 
 				String imagename = imagebutton.getName();
-				switch (imagename) {
-				case "hamburgflagge":
+				if (imagename == "hamburgflagge") {
 					navigateToGermany("hamburgflagge");
-					break;
-				case "berlinflagge":
+				} else if (imagename == "berlinflagge") {
 					navigateToGermany("berlinflagge");
-					break;
+				} else {
+
 				}
 			}
 
@@ -122,14 +122,14 @@ public class WorldMap extends Level {
 		ScaleByAction scale1 = Actions.scaleBy(8f, 8f, 2f);
 		final DelayAction delay = Actions.delay(1.5f);
 		final Image germanyimage = addBackground("germanymap_scaled");
-		switch (imagename) {
-		case "hamburgflagge":
+		if (imagename == "hamburgflagge") {
 			germanyimage.setOrigin(0.463f * width, 0.65f * height);
-			break;
-		case "berlinflagge":
+		} else if (imagename == "berlinflagge") {
 			germanyimage.setOrigin(0.859f * width, 0.541f * height);
-			break;
+		} else {
+
 		}
+
 		final ScaleByAction scale2 = Actions.scaleBy(7f, 7f, 2f);
 
 		germanyimage.setColor(1, 1, 1, 0);
