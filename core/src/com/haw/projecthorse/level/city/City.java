@@ -2,8 +2,6 @@ package com.haw.projecthorse.level.city;
 
 
 
-import sun.org.mozilla.javascript.internal.ast.WithStatement;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,9 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -30,7 +30,6 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
-import com.haw.projecthorse.swipehandler.StageGestureDetector;
 
 public class City extends Level {
 
@@ -48,31 +47,35 @@ public class City extends Level {
 
 	@Override
 	protected void doShow() {
-		// TODO Auto-generated method stub
 
-		atlant = AssetManager.load("hamburg", false, false, true);
-	
-		stage = new Stage(this.getViewport(), batcher);
-		addBackground();
-		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(1f, 1f);
-		font.setColor(Color.MAGENTA);
-		try {
-			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
-			addGameButtons();
-		} catch (LevelNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		atlant = AssetManager.load("city", false, false, true);	
+		stage = new Stage(this.getViewport(), batcher);		
 		
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		try {			
+			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
+			addBackground(cityObject.getParameter().get("backgroundPath"));
+			addGameButtons();
+			createCityLabel(cityObject.getCityName());
+		} catch (LevelNotFoundException e1) {
+			Gdx.app.log("CITY", "Für " +getLevelID() + " konnten keine City Informationen geladen werden");
+		}		
+		
 		InputManager.addInputProcessor(stage);
 
 	}
 
-	private void addBackground() {
-		region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
+	private void createCityLabel(String cityName){
+		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		font.setScale(1f, 1f);
+		font.setColor(Color.MAGENTA);
+		LabelStyle labelStyle = new LabelStyle(font,Color.MAGENTA);
+		Label cityLabel = new Label(cityName, labelStyle);
+		cityLabel.setPosition(this.width / 1.6f, this.height * 0.9f);
+		
+		stage.addActor(cityLabel);
+	}
+	private void addBackground(String backgroundImage) {
+		region = atlant.findRegion(backgroundImage);
 
 		Image background = new Image(region);
 		background.toBack();
@@ -81,7 +84,7 @@ public class City extends Level {
 
 	private void addGameButtons() throws LevelNotFoundException {
 		
-		Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("pictures/hamburg/Button0.png"))));
+		Drawable drawable = new TextureRegionDrawable(atlant.findRegion("Button0"));
 		
 
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
@@ -124,19 +127,15 @@ public class City extends Level {
 	@Override
 	protected void doRender(float delta) {
 		stage.draw();
-		batcher.begin();
-	
-		font.draw(batcher, cityObject.getCityName(), this.width / 1.6f, this.height / 1.03f);
-		batcher.end();
 		
-
+	
+		
 	}
 
 	@Override
 	protected void doDispose() {
+		stage.dispose();
 		atlant.dispose();
-		font.dispose();
-
 	}
 
 	@Override

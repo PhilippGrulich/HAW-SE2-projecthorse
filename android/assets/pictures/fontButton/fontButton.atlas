@@ -1,0 +1,13 @@
+
+fontButton.png
+size: 365,514
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+font
+  rotate: false
+  xy: 2, 2
+  size: 363, 512
+  orig: 363, 512
+  offset: 0, 0
+  index: -1
