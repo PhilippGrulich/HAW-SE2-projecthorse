@@ -4,13 +4,10 @@ package com.haw.projecthorse.level.city;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -39,8 +36,7 @@ public class City extends Level {
 	private CityObject cityObject;
 	Skin skin = new Skin();
 
-	private int lastButtonY = GameManagerFactory.getInstance().getSettings().getScreenHeight();
-	private BitmapFont font;
+	private int lastButtonY = (int)(this.height - this.height * 0.35F);
 	private AtlasRegion region;
 	private ImageTextButtonStyle imageButtonStyle;
 	private VerticalGroup verticalGroup = new VerticalGroup();

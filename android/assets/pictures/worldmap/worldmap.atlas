@@ -4,6 +4,13 @@ size: 2099,1922
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+erde-und-sterne
+  rotate: false
+  xy: 1379, 642
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
 germanymap
   rotate: false
   xy: 2, 2
@@ -11,19 +18,19 @@ germanymap
   orig: 1375, 1920
   offset: 0, 0
   index: -1
+
+worldmap2.png
+size: 2008,1452
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 germanymap_scaled
   rotate: false
-  xy: 1379, 917
+  xy: 1288, 447
   size: 720, 1005
   orig: 720, 1005
   offset: 0, 0
   index: -1
-
-worldmap2.png
-size: 1286,1452
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 karte
   rotate: false
   xy: 2, 728
