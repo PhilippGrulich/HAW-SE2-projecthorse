@@ -32,13 +32,12 @@ import com.haw.projecthorse.swipehandler.SwipeListener;
 
 public class PlayerMenu extends Level {
 	private Stage stage;
-	private Actor background;
-	private Image next, prev;
-	private Player player1, player2, active;
+	private Player active, player1, player2;
+	private Label label;
 	private int index = 0;
 	private float playerPositionX, playerPositionY = 120, invisiblePositionX;
-	private Label label;
 	private String playerName;
+	private TextureAtlas atlas, buttonAtlas;
 
 	private static List<PlayerColor> colors = ColorManager.getColorManager()
 			.getPossibleColors();
@@ -99,6 +98,105 @@ public class PlayerMenu extends Level {
 		active = inActive;
 	}
 
+	private void createBackground() {
+		stage.addActor(new EndlessBackground(width, atlas.findRegion("sky"), 30));
+		stage.addActor(new EndlessBackground(width, atlas
+				.findRegion("second_grass"), 11));
+		stage.addActor(new EndlessBackground(width, atlas
+				.findRegion("first_grass"), 8));
+		stage.addActor(new EndlessBackground(width, atlas.findRegion("ground"),
+				4));
+	}
+
+	private void createButtons() {
+		Image next, prev;
+
+		prev = new Image(buttonAtlas.findRegion("button_prev"));
+		prev.setPosition(10, 300);
+		prev.setScale(2);
+		prev.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				decIndex();
+				return false;
+			}
+		});
+		stage.addActor(prev);
+
+		next = new Image(buttonAtlas.findRegion("button_next"));
+		next.setPosition(width - 70, 300);
+		next.setScale(2);
+		next.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				incIndex();
+				return false;
+			}
+		});
+		stage.addActor(next);
+	}
+
+	private void createPlayers() {
+		player1 = new PlayerImpl(colors.get(index));
+		player1.setScale(3);
+
+		playerPositionX = (width - 3 * player1.getWidth()) / 2;
+		invisiblePositionX = player1.getWidth() * -5;
+
+		player1.setPosition(playerPositionX, playerPositionY);
+		player1.setAnimationSpeed(0.3f);
+		player1.addListener(new SwipeListener() {
+			@Override
+			public void swiped(SwipeEvent event, Actor actor) {
+				if (event.getDirection() == Direction.RIGHT) {
+					incIndex();
+				} else {
+					decIndex();
+				}
+
+			}
+		});
+		active = player1;
+		stage.addActor(player1);
+
+		player2 = new PlayerImpl();
+		player2.setScale(3);
+		player2.setPosition(invisiblePositionX, playerPositionY);
+		stage.addActor(player2);
+	}
+
+	private void createLabel() {
+		BitmapFont textFont = new BitmapFont();
+		textFont.setScale(3);
+
+		label = new Label("", new LabelStyle(textFont, Color.BLACK));
+
+		updateNameLabel();
+
+		label.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				Gdx.input.getTextInput(new TextInputListener() {
+					@Override
+					public void input(String text) {
+						playerName = text;
+						updateNameLabel();
+					}
+
+					@Override
+					public void canceled() {
+						// nichts zu tun
+					}
+				}, "Neuer Name deines Pferdes", playerName);
+				return true;
+			}
+		});
+		stage.addActor(label);
+	}
+
 	@Override
 	protected void doRender(float delta) {
 		stage.act(delta);
@@ -107,8 +205,8 @@ public class PlayerMenu extends Level {
 
 	@Override
 	protected void doDispose() {
-		// TODO Auto-generated method stub
-
+		atlas.dispose();
+		buttonAtlas.dispose();
 	}
 
 	@Override
@@ -137,106 +235,13 @@ public class PlayerMenu extends Level {
 		InputManager.addInputProcessor(new StageGestureDetector(stage, true,
 				ControlMode.HORIZONTAL));
 
-		// background = new Image(AssetManager.load("menu", false, false, true)
-		// .findRegion("Background"));
-		TextureAtlas atlas = AssetManager.load("menu", false, false, true);
+		atlas = AssetManager.load("menu", false, false, true);
+		buttonAtlas = AssetManager.load("selfmade", false, false, true);
 
-		background = new EndlessBackground(width, atlas.findRegion("sky"), 30);
-		background.toBack();
-		stage.addActor(background);
-
-		background = new EndlessBackground(width,
-				atlas.findRegion("second_grass"), 11);
-		background.toBack();
-		stage.addActor(background);
-
-		background = new EndlessBackground(width,
-				atlas.findRegion("first_grass"), 8);
-		background.toBack();
-		stage.addActor(background);
-
-		background = new EndlessBackground(width, atlas.findRegion("ground"), 4);
-		background.toBack();
-		stage.addActor(background);
-
-		atlas = AssetManager.load("selfmade", false, false, true);
-		prev = new Image(atlas.findRegion("button_prev"));
-		prev.setPosition(10, 300);
-		prev.setScale(2);
-		prev.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				decIndex();
-				return false;
-			}
-		});
-		 stage.addActor(prev);
-
-		next = new Image(atlas.findRegion("button_next"));
-		next.setPosition(width - 70, 300);
-		next.setScale(2);
-		next.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				incIndex();
-				return false;
-			}
-		});
-		 stage.addActor(next);
-
-		player1 = new PlayerImpl(colors.get(index));
-		player1.setScale(3);
-
-		playerPositionX = (width - 3 * player1.getWidth()) / 2;
-		invisiblePositionX = player1.getWidth() * -5;
-
-		player1.setPosition(playerPositionX, playerPositionY);
-		player1.setAnimationSpeed(0.3f);
-		player1.addListener(new SwipeListener() {
-			@Override
-			public void swiped(SwipeEvent event, Actor actor) {
-				if (event.getDirection() == Direction.RIGHT) {
-					incIndex();
-				} else {
-					decIndex();
-				}
-
-			}
-		});
-		active = player1;
-		stage.addActor(player1);
-
-		player2 = new PlayerImpl();
-		player2.setScale(3);
-		player2.setPosition(invisiblePositionX, playerPositionY);
-		stage.addActor(player2);
-
-		BitmapFont textFont = new BitmapFont();
-		textFont.setScale(3);
-		label = new Label("", new LabelStyle(textFont, Color.BLACK));
-		updateNameLabel();
-		label.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				Gdx.input.getTextInput(new TextInputListener() {
-					@Override
-					public void input(String text) {
-						playerName = text;
-						updateNameLabel();
-					}
-
-					@Override
-					public void canceled() {
-						// nichts zu tun
-					}
-				}, "Neuer Name deines Pferdes", playerName);
-				return true;
-			}
-		});
-		stage.addActor(label);
+		createBackground();
+		createButtons();
+		createPlayers();
+		createLabel();
 	}
 
 	@Override
