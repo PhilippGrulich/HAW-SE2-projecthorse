@@ -25,6 +25,8 @@ public class EndlessBackground extends Actor {
 		img = backgroundImage;
 		this.stageWidth = stageWidth;
 		this.duration = duration;
+		
+		toBack();
 	}
 
 	@Override
