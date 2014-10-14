@@ -39,7 +39,7 @@
             },
              {
                title:"MovementTest",
-               className:"com.haw.projecthorse.level.MovementTest",
+               className:"com.haw.projecthorse.level.test.MovementTest",
                levelID:"MovementTest"
             }
          ]

@@ -1,5 +1,8 @@
 package com.haw.projecthorse.level.worldmap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,11 +33,14 @@ public class WorldMap extends Level {
 	final TextureAtlas worldmapatlas;
 	private ImageButton imagebutton1;
 	private ImageButton imagebutton2;
+	private TextureAtlas wappenatlas;
 
 	public WorldMap() {
 		super();
 
 		worldmapatlas = AssetManager.load("worldmap", false, false, true);
+
+		wappenatlas = AssetManager.load("flaggen", false, false, true);
 
 		stage = new Stage(getViewport());
 		InputManager.addInputProcessor(stage);
@@ -44,11 +50,18 @@ public class WorldMap extends Level {
 		imagebutton1 = createImageButton("berlinflagge", 0.5f * width, 0.13f * height);
 		imagebutton2 = createImageButton("hamburgflagge", 0.1f * width ,0.13f * height);
 
-		addListener(imagebutton1);
-		addListener(imagebutton2);
-
-		stage.addActor(imagebutton1);
-		stage.addActor(imagebutton2);
+	
+		
+	 List<ImageButton> l=new ArrayList<ImageButton>();
+	 l.add(imagebutton1);
+	 l.add(imagebutton2);
+	 for(int i=0;i<l.size();i++){
+		 addListener(l.get(i));
+		 stage.addActor(l.get(i));
+		 
+	 }
+	//	stage.addActor(imagebutton1);
+		//stage.addActor(imagebutton2);
 
 	}
 
@@ -64,9 +77,11 @@ public class WorldMap extends Level {
 	}
 
 	private ImageButton createImageButton(String imagename, float x, float y) {
-		Drawable drawable = new TextureRegionDrawable(new TextureRegion(
-				new Texture(Gdx.files.internal("pictures/flaggen/" + imagename
-						+ ".png"))));
+	
+		Drawable drawable = new TextureRegionDrawable(wappenatlas.findRegion(imagename));
+//				new TextureRegion(
+//				new Texture(Gdx.files.internal("pictures/wappen/" + imagename
+//						+ ".png"))));
 		ImageButton buttonFlagge = new ImageButton(drawable);
 	
 		buttonFlagge.setHeight(180);
@@ -182,6 +197,8 @@ public class WorldMap extends Level {
 	@Override
 	public void doDispose() {
 		stage.dispose();
+		worldmapatlas.dispose();
+		wappenatlas.dispose();
 	}
 
 }

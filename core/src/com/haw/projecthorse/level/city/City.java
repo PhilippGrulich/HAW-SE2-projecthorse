@@ -1,8 +1,9 @@
 package com.haw.projecthorse.level.city;
 
+
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -32,41 +34,44 @@ public class City extends Level {
 	private TextureAtlas atlant;
 	private SpriteBatch batcher = this.getSpriteBatch();
 	private CityObject cityObject;
+	Skin skin = new Skin();
 
-	private int lastButtonY = GameManagerFactory.getInstance().getSettings().getScreenHeight();
-	private BitmapFont font;
+	private int lastButtonY = (int)(this.height - this.height * 0.35F);
 	private AtlasRegion region;
 	private ImageTextButtonStyle imageButtonStyle;
 	private VerticalGroup verticalGroup = new VerticalGroup();
 
 	@Override
 	protected void doShow() {
-		// TODO Auto-generated method stub
 
-		atlant = AssetManager.load("city", false, false, true);
-	
-		stage = new Stage(this.getViewport(), batcher);
+		atlant = AssetManager.load("city", false, false, true);	
+		stage = new Stage(this.getViewport(), batcher);		
 		
-		
-		try {
+		try {			
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
 			addBackground(cityObject.getParameter().get("backgroundPath"));
-			createTitle(cityObject.getCityName());
 			addGameButtons();
-			
-			
+			createCityLabel(cityObject.getCityName());
 		} catch (LevelNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-			
+			Gdx.app.log("CITY", "Für " +getLevelID() + " konnten keine City Informationen geladen werden");
+		}		
 		
 		InputManager.addInputProcessor(stage);
 
 	}
 
-	private void addBackground(String path) {
-		region = atlant.findRegion(path);
+	private void createCityLabel(String cityName){
+		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		font.setScale(1f, 1f);
+		font.setColor(Color.MAGENTA);
+		LabelStyle labelStyle = new LabelStyle(font,Color.MAGENTA);
+		Label cityLabel = new Label(cityName, labelStyle);
+		cityLabel.setPosition(this.width / 1.6f, this.height * 0.9f);
+		
+		stage.addActor(cityLabel);
+	}
+	private void addBackground(String backgroundImage) {
+		region = atlant.findRegion(backgroundImage);
 
 		Image background = new Image(region);
 		background.toBack();
@@ -74,16 +79,18 @@ public class City extends Level {
 	}
 
 	private void addGameButtons() throws LevelNotFoundException {
-		Drawable drawable = new TextureRegionDrawable(atlant.findRegion("raw_game_teaser_icon"));
+		
+		Drawable drawable = new TextureRegionDrawable(atlant.findRegion("Button0"));
+		
 
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
 
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
 		;
 		imageButtonStyle.font.scale(-0.5f);
-		imageButtonStyle.fontColor = Color.BLACK;
+		imageButtonStyle.fontColor = Color.WHITE;
 
 		GameObject[] games = cityObject.getGames();
 		for (GameObject game : games) {
@@ -104,36 +111,27 @@ public class City extends Level {
 			}
 		});
 		verticalGroup.addActor(imgTextButton);
-		imgTextButton.setWidth(this.width*0.8F);
+		imgTextButton.setWidth(this.width*0.5F);
 		imgTextButton.setHeight(this.height * 0.1F);
 		
-		imgTextButton.setPosition(this.width * 0.1F, lastButtonY);
+		imgTextButton.setPosition(this.width * 0.25F, lastButtonY);
 		lastButtonY = (int) (lastButtonY - this.height * 0.2F);
 		imgTextButton.toFront();
 		stage.addActor(imgTextButton);
 	};
 
-	private void createTitle(String title){
-		font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
-		font.setScale(.45f, .45f);
-		font.setColor(Color.MAGENTA);
-		LabelStyle ls = new LabelStyle(font,font.getColor());
-		Label l = new Label("Hamburg",ls);
-		l.setX(width/2);
-		l.setY(height*0.9F);
-		stage.addActor(l);
-	}
-	
 	@Override
 	protected void doRender(float delta) {
 		stage.draw();
+		
+	
+		
 	}
 
 	@Override
 	protected void doDispose() {
-		atlant.dispose();
 		stage.dispose();
-
+		atlant.dispose();
 	}
 
 	@Override
