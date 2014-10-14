@@ -4,5 +4,6 @@ public interface GameConfig {
 
 	String getGameTitle();
 
+	 String[] getCityNames();
 
 }
