@@ -74,14 +74,14 @@ public class City extends Level {
 	private void addBackground() {
 		region = atlant.findRegion("Sankt-Michaelis-Kirche_Hamburg");
 
-		Image background = new Image(region);
+		Image background = new Image(new Texture(Gdx.files.internal("pictures/city/Sankt-Michaelis-Kirche_Hamburg.jpg")));
 		background.toBack();
 		stage.addActor(background);
 	}
 
 	private void addGameButtons() throws LevelNotFoundException {
 		
-		Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("pictures/hamburg/Button0.png"))));
+		Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("pictures/city/Button0.png"))));
 		
 
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();

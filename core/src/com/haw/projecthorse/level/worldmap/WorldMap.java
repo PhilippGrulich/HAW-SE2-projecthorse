@@ -53,7 +53,7 @@ public class WorldMap extends Level {
 
 		AtlasRegion wolrldmapatlasregion = worldmapatlas
 				.findRegion("erde-und-sterne");
-		Image worldmapimage = new Image(wolrldmapatlasregion);
+		Image worldmapimage = new Image(new Texture(Gdx.files.internal("pictures/worldmap/erde-und-sterne.png")));
 		worldmapimage.toBack();
 		worldmapimage.setY((height - worldmapimage.getHeight()) / 2);
 		stage.addActor(worldmapimage);
