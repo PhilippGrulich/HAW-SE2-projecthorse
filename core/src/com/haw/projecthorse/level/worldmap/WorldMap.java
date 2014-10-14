@@ -25,11 +25,14 @@ public class WorldMap extends Level {
 	final Image worldmapimage;
 	boolean bool = false;
 	final TextureAtlas worldmapatlas;
+	private TextureAtlas wappenatlas;
 
 	public WorldMap() {
 		super();
 
 		worldmapatlas = AssetManager.load("worldmap", false, false, true);
+
+		wappenatlas = AssetManager.load("wappen", false, false, true);
 
 		stage = new Stage(getViewport());
 		InputManager.addInputProcessor(stage);
@@ -62,9 +65,11 @@ public class WorldMap extends Level {
 	}
 
 	private ImageButton createImageButton(String imagename, float x, float y) {
-		Drawable drawable = new TextureRegionDrawable(new TextureRegion(
-				new Texture(Gdx.files.internal("pictures/wappen/" + imagename
-						+ ".png"))));
+		
+		Drawable drawable = new TextureRegionDrawable(wappenatlas.findRegion(imagename));
+//				new TextureRegion(
+//				new Texture(Gdx.files.internal("pictures/wappen/" + imagename
+//						+ ".png"))));
 		ImageButton buttonFlagge = new ImageButton(drawable);
 		buttonFlagge.setHeight(200);
 		buttonFlagge.setWidth(300);
@@ -137,6 +142,7 @@ public class WorldMap extends Level {
 	@Override
 	public void doDispose() {
 		stage.dispose();
+		worldmapatlas.dispose();
 	}
 
 }
