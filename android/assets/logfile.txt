@@ -1,5 +1,5 @@
-Logfile for license check of pictures
-***
+Logfile for license check of assets
+***PICTURES***
 worldmap.png FILE OK!
 cc-0 ENTRY OK!
 sankt-michaelis-kirche_hamburg.jpg NOT EXISTS!
@@ -8,10 +8,11 @@ germanymap.png FILE OK!
 cc-0 ENTRY OK!
 background.png NOT EXISTS!
 cc-0 ENTRY OK!
-***
-***
 logo.png FILE OK!
 selfmade ENTRY OK!
 hut.png FILE OK!
 selfmade ENTRY OK!
-***
+***SOUNDS**
+flap.wav FILE OK!
+***MUSIC***
+life.mp3 FILE OK!
