@@ -87,8 +87,6 @@ public class EntityGroup extends Group{
 			}
 				
 		}
-		
-		
 		return entityList;
 	}
 	

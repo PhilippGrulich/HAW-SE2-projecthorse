@@ -10,7 +10,7 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 public final class GameObjectFactory {
 
 	private final static int PRE_GENERATED_OBJECTS = 7; //Generated objects per class at initialilze 
-	
+	private static int rand; //Temp var
 	private static TextureAtlas spritemap;
 	private static TextureRegion apple1;
 	private static TextureRegion apple2;
@@ -66,7 +66,7 @@ public final class GameObjectFactory {
 
 	private static TextureRegion generateAppleTexture() {
 		// TODO load a real apple texture
-		int rand = MathUtils.random(1, 4);
+		rand = MathUtils.random(1, 4);
 
 		switch (rand) {
 		case 1:

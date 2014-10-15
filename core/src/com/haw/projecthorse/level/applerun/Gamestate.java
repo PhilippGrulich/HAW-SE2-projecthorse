@@ -28,9 +28,13 @@ public class Gamestate {
 	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
 
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
-
+	int roll; //Temp var
+	int breite; //Temp var
+	float scaleX; //Temp var 
+	float distance;//Temp var 
+	float moveToDuration;//Temp var 
 	
-	private final float TOTAL_GAME_TIME_SECONDS = 120; //Total run time of the game. 
+	private final float TOTAL_GAME_TIME_SECONDS = 90; //Total run time of the game. 
 	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; //Time to play left
 	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5; //
 	
@@ -72,7 +76,6 @@ public class Gamestate {
 		stage.addActor(fallingEntities);
 
 		InputManager.addInputProcessor(stage);
-
 	}
 
 	private void initHorse() {
@@ -81,7 +84,6 @@ public class Gamestate {
 		horse.scaleBy(0.5F);
 		horse.setAnimation(Direction.RIGHT, 0.4f);
 		// stage.addActor(horse); //Done inside constructor
-
 		stage.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -94,9 +96,7 @@ public class Gamestate {
 			public void touchDragged(InputEvent event, float x, float y, int pointer){
 				moveHorseTo(x);
 			}
-
 		});
-
 	}
 
 	private void moveHorseTo(float x) {
@@ -106,21 +106,21 @@ public class Gamestate {
 		if (x < 0) {
 			x = 0;
 		} // Nicht links rauslaufen
-		int breite = this.width; // GameManagerFactory.getInstance().getSettings().getScreenWidth();
+		breite = this.width; // GameManagerFactory.getInstance().getSettings().getScreenWidth();
 
 		if (x > breite - horse.getWidth()) {
 			x = breite - horse.getWidth();
 		} // Nicht rechts rauslaufen
 			// Bewegungsrichtung ermitteln
 		ChangeDirectionAction directionAction = null;
-		float distance = horse.getX() - x; // Positiv = move rechts
+		distance = horse.getX() - x; // Positiv = move rechts
 		if (distance > 0) { // Move right
 			directionAction = new ChangeDirectionAction(Direction.RIGHT);
 		} else {
 			directionAction = new ChangeDirectionAction(Direction.LEFT);
 		}
 
-		float moveToDuration = convertDistanceToTime(distance);
+		moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
 		horse.addAction(directionAction);
 		horse.addAction(move);
@@ -144,7 +144,7 @@ public class Gamestate {
 
 			// if liste < x member, spawn new
 			if (current_falling_entities < MAX_FALLING_ENTITIES) {
-				int roll = MathUtils.random(100);
+				roll = MathUtils.random(100);
 				if (roll <= branch_spawn_chance) {
 					// Spawn a branch
 					// Increment current_falling_entities
@@ -156,9 +156,7 @@ public class Gamestate {
 					// increment current_falling_entities
 					current_falling_entities++;
 					fallingEntities.addActor(GameObjectFactory.getApple());
-
 				}
-
 			}
 		}
 	}
@@ -167,7 +165,6 @@ public class Gamestate {
 		// TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
 		fallingEntities.removeActor(entity);
 		GameObjectFactory.giveBackEntity(entity);
-		
 		current_falling_entities--;
 	}
 
@@ -185,41 +182,30 @@ public class Gamestate {
 		stage.draw();
 		horse.act(delta);
 		spawnEntities(delta);
-		drawCollisionRectangles(delta);
-
+		//drawCollisionRectangles(delta);
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
-
 		removeDroppedDownEntities();
 		updateTimer(delta);
 		
 	}
 
 	private void removeDroppedDownEntities() {
-
 		// TODO remove with actor as ground object.
 		// Splatter on ground contact?
 		for (Actor actor : fallingEntities.getChildren()) {
 			if (actor.getY() < (1 - (actor.getHeight() * actor.getScaleY()))) {
-//				actor.remove();
 				this.removeFallingEntity((Entity) actor);
 			}
 		}
-		
-
 	}
 
 	private void updateTimer(float delta){
 		timeLeftSeconds -= delta;
-		
 		if(timeLeftSeconds < 0){
 			//TODO end this game
 		}
-		
-		
-		
 		//updateTimeBar Scale
-		float scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; //Time left as ratio. (Between 0.0 and 1.0)
-		
+		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; //Time left as ratio. (Between 0.0 and 1.0)
 		timeBar.setScaleX(scaleX);
 	}
 	
@@ -229,13 +215,10 @@ public class Gamestate {
 		shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
 		for (Actor actor : fallingEntities.getChildren()) {
 			Entity entity = (Entity) actor;
-
 			shapeRenderer.rect(entity.getHitbox().x, entity.getHitbox().y, entity.getHitbox().width, entity.getHitbox().height);
 		}
 		shapeRenderer.rect(horse.getHitbox().x, horse.getHitbox().y, horse.getHitbox().width, horse.getHitbox().height);
-
 		shapeRenderer.end();
-
 	}
 
 	private void initBackground() {
@@ -245,18 +228,14 @@ public class Gamestate {
 		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);
-		
 		timeBar = new TimeBar();
 		timeBar.setX(32);
 		timeBar.setY(32);
-		
 		
 		backgroundGraphics.addActor(treeImage);
 		backgroundGraphics.addActor(new Image(ground));
 
 		backgroundGraphics.addActor(timeBar);
-		
-
 	}
 
 	public void dispose(){

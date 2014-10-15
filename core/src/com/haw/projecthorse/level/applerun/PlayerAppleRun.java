@@ -7,8 +7,10 @@ import com.haw.projecthorse.player.PlayerImpl;
 public class PlayerAppleRun extends PlayerImpl implements Collidable {
 	private Rectangle hitbox;
 	private final Gamestate gamestate;
-	private final float HITBOX_HEIGTH_REDUCTION = 92; //Hardcoded: To reduce height of the player class
+	private final float HITBOX_HEIGTH_REDUCTION = 128; //Hardcoded: To reduce height of the player class
 	private final float HITBOX_WIDTH_REDUCTION = 48;
+	private final float HITBOX_LEFT_ADDITION = HITBOX_WIDTH_REDUCTION/3.0f; //Additional px from left
+	private final float HITBOX_RIGHT_SUB = HITBOX_WIDTH_REDUCTION/3.0f*2.0f;
 	
 	public PlayerAppleRun(Gamestate gamestate) {
 		this.gamestate = gamestate;
@@ -33,7 +35,7 @@ public class PlayerAppleRun extends PlayerImpl implements Collidable {
 
 	@Override
 	public Rectangle getHitbox() {
-		hitbox = new Rectangle(this.getX()+HITBOX_WIDTH_REDUCTION/3.0f, this.getY(), (this.getWidth()*this.getScaleX())-HITBOX_WIDTH_REDUCTION/3.0f*2.0f, (this.getHeight()*this.getScaleY())-HITBOX_HEIGTH_REDUCTION);
+		hitbox = new Rectangle(this.getX()+ HITBOX_LEFT_ADDITION, this.getY(), (this.getWidth()*this.getScaleX())-HITBOX_RIGHT_SUB, (this.getHeight()*this.getScaleY())-HITBOX_HEIGTH_REDUCTION);
 		return hitbox;
 	}
 

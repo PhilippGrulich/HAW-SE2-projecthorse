@@ -14,7 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public abstract class Entity extends Image implements Collidable {
 
 	private Rectangle hitbox = new Rectangle();
-
+	float pos_x;
+	float pos_y;
+	float fallingtime;
+	
 	public Entity(TextureRegion texture) {
 		super(texture);
 		initializeAsNewEntity();
@@ -26,7 +29,7 @@ public abstract class Entity extends Image implements Collidable {
 		Action shrink = Actions.scaleTo(0.4f, 0.4f, 0.25f);
 		Action normalize = Actions.scaleTo(0.5f, 0.5f, 0.25f);
 
-		float fallingtime = (((float) Math.random()) * 1.5f) + 2.5f;
+		fallingtime = (((float) Math.random()) * 1.5f) + 2.5f;
 		Action move = Actions.moveBy(0.0f, -1360.0f, fallingtime); //Hard coded 1360 - should just fall threw the bottom. Hardcoded to save time here
 
 		return Actions.sequence(minimize, grow, shrink, normalize, move);
@@ -36,8 +39,8 @@ public abstract class Entity extends Image implements Collidable {
 	public void initializeAsNewEntity(){
 		this.clearActions();
 		this.addAction(generateActionSequenz());
-		float pos_x = (((float) Math.random()) * 636f) + 10;
-		float pos_y = (((float) Math.random()) * 200f) + 1000;
+		pos_x = (((float) Math.random()) * 636f) + 10;
+		pos_y = (((float) Math.random()) * 200f) + 1000;
 		this.setPosition(pos_x, pos_y);
 	}
 	// Bounding box for collision detection
