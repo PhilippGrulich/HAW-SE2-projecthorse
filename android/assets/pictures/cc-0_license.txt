@@ -2,3 +2,11 @@ worldmap;worldmap.png; CC-0; San Jose; http://commons.wikimedia.org/wiki/File:Bl
 city;Sankt-Michaelis-Kirche_Hamburg.jpg;CC-0;Thomas Wolf; www.foto-tw.de
 worldmap;germanymap.png; CC-0; unbekannter Autor; http://pixabay.com/de/karte-deutschland-staaten-304071/
 menu;Background.png; CC-0;Sam; http://opengameart.org/content/country-field
+appleRun;ground.png; CC-0; Kenney; http://www.kenney.nl
+appleRun;apple1.png; CC-0; Lars;
+appleRun;apple2.png; CC-0; Lars; 
+appleRun;apple3.png; CC-0; Lars; 
+appleRun;apple4.png; CC-0; Lars; 
+appleRun;branch1.png; CC-0; Lars; 
+appleRun;branch2.png; CC-0; Lars; 
+appleRun;tree.png; CC-0; Lars;
