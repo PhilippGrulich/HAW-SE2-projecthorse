@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.applerun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -26,7 +27,8 @@ import com.haw.projecthorse.player.Direction;
 public class Gamestate {
 
 	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
-
+	TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
+	
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 	int roll; //Temp var
 	int breite; //Temp var
@@ -224,8 +226,9 @@ public class Gamestate {
 	private void initBackground() {
 		backgroundGraphics = new Group();
 
-		TextureRegion tree = AssetManager.load("appleRun", false, false, true).findRegion("tree");
-		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
+		TextureRegion tree = atlas.findRegion("tree");
+		TextureRegion ground = atlas.findRegion("ground");
+		
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);
 		timeBar = new TimeBar();
@@ -240,6 +243,7 @@ public class Gamestate {
 
 	public void dispose(){
 		GameObjectFactory.dispose();
+		atlas.dispose();
 	}
 	
 	public void playerHitByBranch() {
