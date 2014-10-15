@@ -29,6 +29,11 @@ public class Gamestate {
 
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 
+	
+	private final float TOTAL_GAME_TIME_SECONDS = 120; //Total run time of the game. 
+	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; //Time to play left
+	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5; //
+	
 	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
@@ -46,6 +51,8 @@ public class Gamestate {
 	private Group backgroundGraphics; // Stuff not interacting with player.
 	private PlayerAppleRun horse;
 
+	private TimeBar timeBar; //Init in background
+	
 	private int width;
 	private int height;
 
@@ -81,6 +88,13 @@ public class Gamestate {
 				moveHorseTo(x);
 				return true;
 			}
+			
+			//Fires if the mouse is dragged - following a touchDown event
+			@Override
+			public void touchDragged(InputEvent event, float x, float y, int pointer){
+				moveHorseTo(x);
+			}
+
 		});
 
 	}
@@ -136,6 +150,7 @@ public class Gamestate {
 					// Increment current_falling_entities
 					current_falling_entities++;
 					fallingEntities.addActor(GameObjectFactory.getBranch());
+					
 				} else {
 					// Spawn an apple
 					// increment current_falling_entities
@@ -151,6 +166,8 @@ public class Gamestate {
 	public void removeFallingEntity(Entity entity) {
 		// TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
 		fallingEntities.removeActor(entity);
+		GameObjectFactory.giveBackEntity(entity);
+		
 		current_falling_entities--;
 	}
 
@@ -173,6 +190,8 @@ public class Gamestate {
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
 
 		removeDroppedDownEntities();
+		updateTimer(delta);
+		
 	}
 
 	private void removeDroppedDownEntities() {
@@ -180,14 +199,30 @@ public class Gamestate {
 		// TODO remove with actor as ground object.
 		// Splatter on ground contact?
 		for (Actor actor : fallingEntities.getChildren()) {
-			if (actor.getY() < (1 - actor.getHeight() * actor.getScaleY())) {
-				actor.remove();
+			if (actor.getY() < (1 - (actor.getHeight() * actor.getScaleY()))) {
+//				actor.remove();
 				this.removeFallingEntity((Entity) actor);
 			}
 		}
+		
 
 	}
 
+	private void updateTimer(float delta){
+		timeLeftSeconds -= delta;
+		
+		if(timeLeftSeconds < 0){
+			//TODO end this game
+		}
+		
+		
+		
+		//updateTimeBar Scale
+		float scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; //Time left as ratio. (Between 0.0 and 1.0)
+		
+		timeBar.setScaleX(scaleX);
+	}
+	
 	private void drawCollisionRectangles(float delta) {
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.CYAN);
@@ -210,9 +245,26 @@ public class Gamestate {
 		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);
+		
+		timeBar = new TimeBar();
+		timeBar.setX(32);
+		timeBar.setY(32);
+		
+		
 		backgroundGraphics.addActor(treeImage);
 		backgroundGraphics.addActor(new Image(ground));
 
+		backgroundGraphics.addActor(timeBar);
+		
+
+	}
+
+	public void dispose(){
+		GameObjectFactory.dispose();
+	}
+	
+	public void playerHitByBranch() {
+		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
 
 }

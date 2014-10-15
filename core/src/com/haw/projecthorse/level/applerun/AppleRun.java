@@ -43,8 +43,8 @@ public class AppleRun extends Level {
 
 	@Override
 	protected void doDispose() {
-		// TODO Auto-generated method stub
 
+		gamestate.dispose();
 	}
 
 	@Override
