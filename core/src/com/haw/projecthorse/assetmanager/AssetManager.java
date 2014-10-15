@@ -76,7 +76,7 @@ public final class AssetManager {
 		}
 		if(loadPictures){	
 			String[] licenseType = {"cc-0_license", "cc-by_license","selfmade_license"};
-			//checkFiles(readLicensesAndSplitEntries(licenseType));
+			checkFiles(readLicensesAndSplitEntries(licenseType));
 			findAssetFolder(levelID, directory_pictures, Assets.PICTURES);
 		}
 		assetManager.finishLoading();
@@ -85,7 +85,7 @@ public final class AssetManager {
 			
 		if(assets == null){
 			System.out.println("Bilder konnten nicht geladen werden," + 
-					"da kein TextureAtlas erstellt wurde. TexturePacker.main() nicht ausgeführt?");
+					"da kein TextureAtlas erstellt wurde. TexturePacker.main() nicht ausgefï¿½hrt?");
 			
 		}
 		
@@ -346,7 +346,8 @@ public final class AssetManager {
 	 */
 	private static Map<String, String[][]> readLicensesAndSplitEntries(final String[] licenseTypes) {
 		List<String> stringList;
-		String licenseDir = assetDir + FILESEPARATOR + "pictures";
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR + ".." 
+				+ FILESEPARATOR + "android" + FILESEPARATOR + "assets" + FILESEPARATOR + "pictures";
 		String[][] seperatedEntries;
 		final int maxLicenseLineSize = 5;
 		String[] listLine;
@@ -362,7 +363,7 @@ public final class AssetManager {
 						FileReader(licenseDir + FILESEPARATOR + item + ".txt"));
 				String fileLine = null;
 				while((fileLine = bufRead.readLine()) != null) {
-					stringList.add(fileLine);
+					stringList.add(fileLine.toLowerCase());
 				}
 				bufRead.close();
 			} catch (FileNotFoundException e) {
@@ -397,25 +398,24 @@ public final class AssetManager {
 	 * im txt-File repraesentiert
 	 */
 	private static void checkFiles(final Map<String, String[][]> stringMap) {
-		String licenseDir = assetDir + FILESEPARATOR + "pictures";
-
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR + ".." 
+				+ FILESEPARATOR + "android" + FILESEPARATOR + "assets" + FILESEPARATOR + "pictures";
+		
 		try {
-			FileWriter fWriter = new FileWriter(assetDir + FILESEPARATOR + "pictures"
-				+ FILESEPARATOR + "logfile.txt");
-			
+			FileWriter fWriter = new FileWriter(licenseDir + FILESEPARATOR + "logfile.txt");
 			BufferedWriter bWriter = new BufferedWriter(fWriter);
 			bWriter.write("Logfile for license check of pictures");
 			bWriter.newLine();
 			bWriter.write("***");
 			bWriter.newLine();
 			
-			for(String[][] item : stringMap.values()){				
+			for(String[][] item : stringMap.values()){			
 				for(int i = 0; i < item.length; i++){
 					File checkFile = new File(licenseDir + FILESEPARATOR 
 							+ item[i][0] + FILESEPARATOR + item[i][1]);
 					
 					//Pruefen, ob Datei im jeweiligen Ordner
-					//vorhanden ist
+					//vorhanden ist										
 					if(checkFile.exists()){
 						bWriter.write(item[i][1] + " FILE OK!");
 					}

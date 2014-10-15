@@ -1,4 +1,4 @@
-worldmap.png; CC-0; San Jose; http://commons.wikimedia.org/wiki/File:Blank_political_map_Europe_in_2006_WF.svg
-Sankt-Michaelis-Kirche_Hamburg.jpg;CC-0;Thomas Wolf; www.foto-tw.de
-germanymap.png; CC0; unbekannter Autor; http://pixabay.com/de/karte-deutschland-staaten-304071/
-background .png; CC0;Sam; http://opengameart.org/content/country-field
+worldmap;worldmap.png; CC-0; San Jose; http://commons.wikimedia.org/wiki/File:Blank_political_map_Europe_in_2006_WF.svg
+city;Sankt-Michaelis-Kirche_Hamburg.jpg;CC-0;Thomas Wolf; www.foto-tw.de
+worldmap;germanymap.png; CC-0; unbekannter Autor; http://pixabay.com/de/karte-deutschland-staaten-304071/
+menu;Background.png; CC-0;Sam; http://opengameart.org/content/country-field

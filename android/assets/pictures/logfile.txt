@@ -1,0 +1,17 @@
+Logfile for license check of pictures
+***
+worldmap.png FILE OK!
+cc-0 ENTRY OK!
+sankt-michaelis-kirche_hamburg.jpg NOT EXISTS!
+cc-0 ENTRY OK!
+germanymap.png FILE OK!
+cc-0 ENTRY OK!
+background.png NOT EXISTS!
+cc-0 ENTRY OK!
+***
+***
+logo.png FILE OK!
+selfmade ENTRY OK!
+hut.png FILE OK!
+selfmade ENTRY OK!
+***
