@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.player.color.PlayerColor;
 
 public class PlayerImpl extends Player {
 	private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;

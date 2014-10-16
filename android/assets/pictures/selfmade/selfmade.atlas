@@ -1,9 +1,23 @@
 
 selfmade.png
-size: 413,514
+size: 445,514
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+button_next
+  rotate: false
+  xy: 415, 484
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+button_prev
+  rotate: false
+  xy: 415, 452
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
 font
   rotate: false
   xy: 2, 2

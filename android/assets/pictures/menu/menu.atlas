@@ -1,12 +1,46 @@
 
 menu.png
-size: 722,1282
+size: 2166,1282
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Background
   rotate: false
   xy: 2, 2
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
+first_grass
+  rotate: false
+  xy: 724, 2
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
+ground
+  rotate: false
+  xy: 1446, 2
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
+
+menu2.png
+size: 1444,1282
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+second_grass
+  rotate: false
+  xy: 2, 2
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
+sky
+  rotate: false
+  xy: 724, 2
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0

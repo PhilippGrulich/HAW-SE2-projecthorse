@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.applerun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -26,9 +27,19 @@ import com.haw.projecthorse.player.Direction;
 public class Gamestate {
 
 	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
-
+	TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
+	
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
-
+	int roll; //Temp var
+	int breite; //Temp var
+	float scaleX; //Temp var 
+	float distance;//Temp var 
+	float moveToDuration;//Temp var 
+	
+	private final float TOTAL_GAME_TIME_SECONDS = 90; //Total run time of the game. 
+	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; //Time to play left
+	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5; //
+	
 	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
@@ -37,11 +48,8 @@ public class Gamestate {
 													// spawns
 	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate with -1 for first spawn = instant)
 
-	private int branch_spawn_chance = 30; // 10%:: Prozent Chance, das statt
-											// einem Apfel ein Ast spawnt
-	private int current_falling_entities = 0; // Um unnötige abfragen wahrend
-												// doRender zu vermeiden wird
-												// hier laufend die anzahl
+	private int branch_spawn_chance = 20; // 20%:: Prozent Chance, das statt einem Apfel ein Ast spawnt
+	private int current_falling_entities = 0; // Um unnötige abfragen wahrend doRender zu vermeiden wird hier laufend die anzahl
 												// mitgeschrieben.
 
 	private EntityGroup fallingEntities; // Falling entities
@@ -49,6 +57,8 @@ public class Gamestate {
 	private Group backgroundGraphics; // Stuff not interacting with player.
 	private PlayerAppleRun horse;
 
+	private TimeBar timeBar; //Init in background
+	
 	private int width;
 	private int height;
 
@@ -68,7 +78,6 @@ public class Gamestate {
 		stage.addActor(fallingEntities);
 
 		InputManager.addInputProcessor(stage);
-
 	}
 
 	private void initHorse() {
@@ -77,15 +86,19 @@ public class Gamestate {
 		horse.scaleBy(0.5F);
 		horse.setAnimation(Direction.RIGHT, 0.4f);
 		// stage.addActor(horse); //Done inside constructor
-
 		stage.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				moveHorseTo(x);
 				return true;
 			}
+			
+			//Fires if the mouse is dragged - following a touchDown event
+			@Override
+			public void touchDragged(InputEvent event, float x, float y, int pointer){
+				moveHorseTo(x);
+			}
 		});
-
 	}
 
 	private void moveHorseTo(float x) {
@@ -95,21 +108,21 @@ public class Gamestate {
 		if (x < 0) {
 			x = 0;
 		} // Nicht links rauslaufen
-		int breite = this.width; // GameManagerFactory.getInstance().getSettings().getScreenWidth();
+		breite = this.width; // GameManagerFactory.getInstance().getSettings().getScreenWidth();
 
 		if (x > breite - horse.getWidth()) {
 			x = breite - horse.getWidth();
 		} // Nicht rechts rauslaufen
 			// Bewegungsrichtung ermitteln
 		ChangeDirectionAction directionAction = null;
-		float distance = horse.getX() - x; // Positiv = move rechts
+		distance = horse.getX() - x; // Positiv = move rechts
 		if (distance > 0) { // Move right
 			directionAction = new ChangeDirectionAction(Direction.RIGHT);
 		} else {
 			directionAction = new ChangeDirectionAction(Direction.LEFT);
 		}
 
-		float moveToDuration = convertDistanceToTime(distance);
+		moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
 		horse.addAction(directionAction);
 		horse.addAction(move);
@@ -133,27 +146,27 @@ public class Gamestate {
 
 			// if liste < x member, spawn new
 			if (current_falling_entities < MAX_FALLING_ENTITIES) {
-				int roll = MathUtils.random(100);
+				roll = MathUtils.random(100);
 				if (roll <= branch_spawn_chance) {
 					// Spawn a branch
 					// Increment current_falling_entities
 					current_falling_entities++;
 					fallingEntities.addActor(GameObjectFactory.getBranch());
+					
 				} else {
 					// Spawn an apple
 					// increment current_falling_entities
 					current_falling_entities++;
 					fallingEntities.addActor(GameObjectFactory.getApple());
-
 				}
-
 			}
 		}
 	}
 
 	public void removeFallingEntity(Entity entity) {
-		//TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
+		// TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
 		fallingEntities.removeActor(entity);
+		GameObjectFactory.giveBackEntity(entity);
 		current_falling_entities--;
 	}
 
@@ -171,52 +184,70 @@ public class Gamestate {
 		stage.draw();
 		horse.act(delta);
 		spawnEntities(delta);
-		drawCollisionRectangles(delta);
-
+		//drawCollisionRectangles(delta);
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
-
 		removeDroppedDownEntities();
-	}
-	
-	private void removeDroppedDownEntities(){
+		updateTimer(delta);
 		
-		//TODO remove with actor as ground object.
-		//Splatter on ground contact?
-		for(Actor actor:fallingEntities.getChildren()){
-			if(actor.getY() < (1 - actor.getHeight()*actor.getScaleY())){
-				actor.remove();
-				this.removeFallingEntity((Entity)actor);
+	}
+
+	private void removeDroppedDownEntities() {
+		// TODO remove with actor as ground object.
+		// Splatter on ground contact?
+		for (Actor actor : fallingEntities.getChildren()) {
+			if (actor.getY() < (1 - (actor.getHeight() * actor.getScaleY()))) {
+				this.removeFallingEntity((Entity) actor);
 			}
 		}
-		
-		
 	}
 
+	private void updateTimer(float delta){
+		timeLeftSeconds -= delta;
+		if(timeLeftSeconds < 0){
+			//TODO end this game
+		}
+		//updateTimeBar Scale
+		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; //Time left as ratio. (Between 0.0 and 1.0)
+		timeBar.setScaleX(scaleX);
+	}
+	
 	private void drawCollisionRectangles(float delta) {
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.CYAN);
 		shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
 		for (Actor actor : fallingEntities.getChildren()) {
 			Entity entity = (Entity) actor;
-
 			shapeRenderer.rect(entity.getHitbox().x, entity.getHitbox().y, entity.getHitbox().width, entity.getHitbox().height);
 		}
 		shapeRenderer.rect(horse.getHitbox().x, horse.getHitbox().y, horse.getHitbox().width, horse.getHitbox().height);
-
 		shapeRenderer.end();
-
 	}
 
 	private void initBackground() {
 		backgroundGraphics = new Group();
+
+		TextureRegion tree = atlas.findRegion("tree");
+		TextureRegion ground = atlas.findRegion("ground");
 		
-		TextureRegion tree = AssetManager.load("appleRun", false, false, true).findRegion("tree");
-		TextureRegion ground = AssetManager.load("appleRun", false, false, true).findRegion("ground");
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);
+		timeBar = new TimeBar();
+		timeBar.setX(32);
+		timeBar.setY(32);
+		
 		backgroundGraphics.addActor(treeImage);
 		backgroundGraphics.addActor(new Image(ground));
-		
+
+		backgroundGraphics.addActor(timeBar);
+	}
+
+	public void dispose(){
+		GameObjectFactory.dispose();
+		atlas.dispose();
+	}
+	
+	public void playerHitByBranch() {
+		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
 
 }

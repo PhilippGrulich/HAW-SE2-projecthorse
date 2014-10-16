@@ -16,13 +16,8 @@ import com.haw.projecthorse.level.Level;
 public class AppleRun extends Level {
 	private Gamestate gamestate;
 
-
-	// Add everything to this stage
-	// private Stage stage = new Stage(this.getViewport(), this.getSpriteBatch());
-
 	public AppleRun() {
 		gamestate = new Gamestate(this.getViewport(), this.getSpriteBatch(), width, height);
-		
 	}
 
 	@Override
@@ -30,21 +25,11 @@ public class AppleRun extends Level {
 		Gdx.gl.glClearColor(0.8f, 0.9f, 0.99f, 1); // Hintergrund malen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gamestate.update(delta);
-		
-		
-		// stage.act(Gdx.graphics.getDeltaTime());
-		// stage.draw();
-
-		// fallingEntities.act(delta); // Update falling apples
-		// backgroundGraphics.act(delta);
-		// horse.act(delta);
-		//
 	}
 
 	@Override
 	protected void doDispose() {
-		// TODO Auto-generated method stub
-
+		gamestate.dispose();
 	}
 
 	@Override

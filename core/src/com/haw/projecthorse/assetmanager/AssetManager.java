@@ -12,7 +12,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +75,7 @@ public final class AssetManager {
 		}
 		if(loadPictures){	
 			String[] licenseType = {"cc-0_license", "cc-by_license","selfmade_license"};
-			//checkFiles(readLicensesAndSplitEntries(licenseType));
+			checkFiles(readLicensesAndSplitEntries(licenseType));
 			findAssetFolder(levelID, directory_pictures, Assets.PICTURES);
 		}
 		assetManager.finishLoading();
@@ -85,7 +84,7 @@ public final class AssetManager {
 			
 		if(assets == null){
 			System.out.println("Bilder konnten nicht geladen werden," + 
-					"da kein TextureAtlas erstellt wurde. TexturePacker.main() nicht ausgef�hrt?");
+					"da kein TextureAtlas erstellt wurde. TexturePacker.main() nicht ausgef�hrt?");
 			
 		}
 		
@@ -345,46 +344,100 @@ public final class AssetManager {
 	 * repraesentiert
 	 */
 	private static Map<String, String[][]> readLicensesAndSplitEntries(final String[] licenseTypes) {
-		List<String> stringList;
-		String licenseDir = assetDir + FILESEPARATOR + "pictures";
-		String[][] seperatedEntries;
-		final int maxLicenseLineSize = 5;
-		String[] listLine;
+		List<String> stringList = new ArrayList<String>();
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR + ".." 
+				+ FILESEPARATOR + "android" + FILESEPARATOR + "assets";
 		Map<String, String[][]> stringMap = new
 				HashMap<String, String[][]>();
+
+		//**************************************************
+		//Pictures Lizenzen
+		//**************************************************
 		
 		//Zeilen aus den Lizenztextdateien lesen und
 		//einer Liste hinzufuegen
 		for (String item : licenseTypes) {
-			stringList = new ArrayList<String>();
 			try {
-				BufferedReader bufRead = new BufferedReader(new
-						FileReader(licenseDir + FILESEPARATOR + item + ".txt"));
-				String fileLine = null;
-				while((fileLine = bufRead.readLine()) != null) {
-					stringList.add(fileLine);
+				BufferedReader bufReadPic = new BufferedReader(new
+						FileReader(licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES
+								+ FILESEPARATOR + item + ".txt"));
+				String fileLinePic = null;
+				while((fileLinePic = bufReadPic.readLine()) != null) {
+					stringList.add(fileLinePic.toLowerCase());
 				}
-				bufRead.close();
+				bufReadPic.close();
 			} catch (FileNotFoundException e) {
 				System.out.println("License-file not found");
 			} catch (IOException e) {
 				System.out.println("License-file couldn't read");
 			}
-			
-			//aufsplitten der Zeilen, anhand des Semikolons
-			//und abspeichern in ein 2D-Array. Anschließendes
-			//einfuegen in die HashMap
-			seperatedEntries = new String[stringList.size()][maxLicenseLineSize];
-			for(int i = 0; i < stringList.size(); i++){
-				listLine = stringList.get(i).split(";");
-				for (int j = 0; j < listLine.length; j++) {
-					seperatedEntries[i][j] = listLine[j].trim();
-				}
-			}
-			stringMap.put(item, seperatedEntries);
 		}
+		stringMap.put(FOLDERNAME_PICTURES, createSeperatedEntries(stringList));
+		stringList.clear();
+		
+		//**************************************************
+		//Sound Lizenzen
+		//**************************************************
+
+		stringList = readLicense(licenseDir + FILESEPARATOR
+				+ FOLDERNAME_SOUNDS + FILESEPARATOR + FOLDERNAME_SOUNDS + ".txt");
+		stringMap.put(FOLDERNAME_SOUNDS, createSeperatedEntries(stringList));
+		stringList.clear();
+	
+		//**************************************************
+		//Music LizenzenfolderName
+		//**************************************************
+
+		stringList = readLicense(licenseDir + FILESEPARATOR
+				+ FOLDERNAME_MUSIC + FILESEPARATOR + FOLDERNAME_MUSIC + ".txt");
+		stringMap.put(FOLDERNAME_MUSIC, createSeperatedEntries(stringList));
 		
 		return stringMap;
+	}
+	
+	/**
+	 * Hilfsfunktion die die einzelnen Zeilen aus den Lizenzdateien liest
+	 * @param licenseDir Pfad zur Lizenzdatei
+	 * @return Liste der gelesenen Zeilen aus der Lizenzdatei
+	 */
+	private static List<String> readLicense(String licenseDir){
+		List<String> stringList = new ArrayList<String>();
+
+		try{
+			BufferedReader bufRead = new BufferedReader(new
+					FileReader(licenseDir));
+			String fileLine = null;
+			while((fileLine = bufRead.readLine()) != null) {
+				stringList.add(fileLine.toLowerCase());
+			}
+			bufRead.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("License-file not found");
+		} catch (IOException e) {
+			System.out.println("License-file couldn't read");
+		}
+		return stringList;
+	}
+	
+	/**
+	 * Hilfsfunktion um die mit Semikolon getrennten Eintraege zu seperieren
+	 * @param stringList Liste der gelesenen Zeilen aus der Lizenzdatei
+	 * @return 2D-Array mit seperierten Eintraegen
+	 */
+	private static String[][] createSeperatedEntries(List<String> stringList){
+		final int maxLicenseLineSize = 5;
+		String[] listLine;
+		//aufsplitten der Zeilen, anhand des Semikolons
+		//und abspeichern in ein 2D-Array. Anschließendes
+		//einfuegen in die HashMap
+		String[][] seperatedEntries = new String[stringList.size()][maxLicenseLineSize];
+		for(int i = 0; i < stringList.size(); i++){
+			listLine = stringList.get(i).split(";");
+			for (int j = 0; j < listLine.length; j++) {
+				seperatedEntries[i][j] = listLine[j].trim();
+			}
+		}
+		return seperatedEntries;
 	}
 	
 	/**
@@ -397,51 +450,100 @@ public final class AssetManager {
 	 * im txt-File repraesentiert
 	 */
 	private static void checkFiles(final Map<String, String[][]> stringMap) {
-		String licenseDir = assetDir + FILESEPARATOR + "pictures";
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR + ".." 
+				+ FILESEPARATOR + "android" + FILESEPARATOR + "assets";
 
+		String[][] pictures = stringMap.get(FOLDERNAME_PICTURES);
+		String[][] sounds = stringMap.get(FOLDERNAME_SOUNDS);
+		String[][] music = stringMap.get(FOLDERNAME_MUSIC);			
+
+		File checkFile = null;
+		
 		try {
-			FileWriter fWriter = new FileWriter(assetDir + FILESEPARATOR + "pictures"
-				+ FILESEPARATOR + "logfile.txt");
-			
+			FileWriter fWriter = new FileWriter(licenseDir + FILESEPARATOR + "logfile.txt");
 			BufferedWriter bWriter = new BufferedWriter(fWriter);
-			bWriter.write("Logfile for license check of pictures");
+			bWriter.write("Logfile for license check of assets");
 			bWriter.newLine();
-			bWriter.write("***");
+			bWriter.write("***PICTURES***");
 			bWriter.newLine();
 			
-			for(String[][] item : stringMap.values()){				
-				for(int i = 0; i < item.length; i++){
-					File checkFile = new File(licenseDir + FILESEPARATOR 
-							+ item[i][0] + FILESEPARATOR + item[i][1]);
-					
-					//Pruefen, ob Datei im jeweiligen Ordner
-					//vorhanden ist
-					if(checkFile.exists()){
-						bWriter.write(item[i][1] + " FILE OK!");
-					}
-					else{
-						bWriter.write(item[i][1] + " NOT EXISTS!");
-					}
-					bWriter.newLine();
-					
-					//Lizensierung pruefen
-					if(item[i][2].toLowerCase().matches("cc-0|cc-by|selfmade")){
-						bWriter.write(item[i][2] + " ENTRY OK!");
-					}
-					else{
-						bWriter.write(item[i][2] + " NOT VALID!");
-					}
-					bWriter.newLine();
-				}
+			//**************************************************
+			//Pictures Eintraege
+			//**************************************************
+			for(int i = 0; i < pictures.length; i++){
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES
+						+ FILESEPARATOR + pictures[i][0] + FILESEPARATOR + pictures[i][1]);		
+				writeFile(FOLDERNAME_PICTURES, pictures, checkFile, bWriter, i);					
+			}
 
-				bWriter.write("***");
-				bWriter.newLine();					
-			}			
+			bWriter.write("***SOUNDS**");
+			bWriter.newLine();	
+
+			//**************************************************
+			//Sounds Eintraege
+			//**************************************************
+			for(int i = 0; i < sounds.length; i++){
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_SOUNDS
+						+ FILESEPARATOR + sounds[i][0] + FILESEPARATOR + sounds[i][1]);		
+				writeFile(FOLDERNAME_SOUNDS, sounds, checkFile, bWriter, i);					
+			}
+
+			bWriter.write("***MUSIC***");
+			bWriter.newLine();	
+
+			//**************************************************
+			//Music Eintraege
+			//**************************************************
+			for(int i = 0; i < music.length; i++){
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_MUSIC
+						+ FILESEPARATOR + music[i][0] + FILESEPARATOR + music[i][1]);		
+				writeFile(FOLDERNAME_MUSIC, music, checkFile, bWriter, i);					
+			}
+			
 			bWriter.close();
 			fWriter.close();
 
 		} catch (IOException e) {
 			System.out.println("Couldn't generate a logfile!");
+		}
+	}
+
+
+	/**
+	 * Hilfsfunktion um in die log-Datei zu schreiben
+	 * @param type jeweiliger Assettyp
+	 * @param stringFile erstelltes 2D-Array mit seperierten Eintraegen
+	 * @param checkFile Pfad zu den jeweiligen Asset-Ordnern
+	 * @param bWriter BufferedWriter
+	 * @param i Laufvariable
+	 */
+	private static void writeFile(String type, String[][] stringFile, File checkFile,
+			BufferedWriter bWriter, int i){
+
+		try{
+			//Pruefen, ob Datei im jeweiligen Ordner
+			//vorhanden ist		
+			if(checkFile.exists()){
+				bWriter.write(stringFile[i][1] + " FILE OK!");
+			}
+			else{
+				bWriter.write(stringFile[i][1] + " NOT EXISTS!");
+			}
+			bWriter.newLine();
+			
+			//Lizensierung pruefen
+			if(type.equals(FOLDERNAME_PICTURES)){
+				if(stringFile[i][2].toLowerCase().matches("cc-0|cc-by|selfmade")){
+					bWriter.write(stringFile[i][2] + " ENTRY OK!");
+				}
+				else{
+					bWriter.write(stringFile[i][2] + " NOT VALID!");
+				}
+				bWriter.newLine();
+			}
+		}
+		catch (IOException e) {
+			System.out.println("Couldn't write to logfile!");
 		}
 	}
 }
