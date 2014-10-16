@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.level.util.overlay.button.pause.PauseButton;
+import com.haw.projecthorse.level.util.overlay.GameNavigationBar;
+import com.haw.projecthorse.level.util.overlay.NavigationBar;
+import com.haw.projecthorse.level.util.overlay.button.PauseButton;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -15,7 +17,7 @@ import com.haw.projecthorse.level.util.overlay.button.pause.PauseButton;
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
  *         müssen stattdessen jeweils doDispose() usw. implementieren
- *         
+ * 
  *         Alle Implementierungen MÜSSEN im Konstruktor super() aufrufen!
  * 
  * 
@@ -27,7 +29,7 @@ public abstract class Level implements Screen {
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
-	private PauseButton pauseButton = new PauseButton();
+	private NavigationBar nav;
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
@@ -40,33 +42,31 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-	
+		
+		nav = new GameNavigationBar(this.getViewport(), spriteBatch);
 	}
 
-	
-	public final void setLevelID(String newID){
-		if(levelID != null){
-			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
+	public final void setLevelID(String newID) {
+		if (levelID != null) {
+			System.out.println("ACHTUNG Level id: " + levelID
+					+ " umbenannt in: " + newID);
 		}
-		
+
 		levelID = newID;
-		
+
 	}
-	
-	public final String getLevelID(){
+
+	public final String getLevelID() {
 		return levelID;
 	}
-	
-	
+
 	protected abstract void doRender(float delta); // Called by render() - to be
 													// used in subclasses
 
-	
-	
 	@Override
 	public final void render(float delta) {
 		doRender(delta);
-		
+		nav.draw();
 	}
 
 	protected abstract void doDispose();
@@ -75,7 +75,7 @@ public abstract class Level implements Screen {
 	public final void dispose() {
 		spriteBatch.dispose();
 		doDispose();
-
+		nav.dispose();
 	}
 
 	protected abstract void doResize(int width, int height);
