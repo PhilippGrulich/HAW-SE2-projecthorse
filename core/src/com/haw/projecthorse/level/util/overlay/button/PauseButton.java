@@ -11,8 +11,8 @@ public class PauseButton extends Button {
 
 	public PauseButton() {
 		ImageButton imageButton = new ImageButton(getDrawable());
-		imageButton.setHeight(64);
-		imageButton.setWidth(64);				
+		
+		
 		this.addActor(imageButton);
 	}
 

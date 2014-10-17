@@ -16,17 +16,17 @@ import com.haw.projecthorse.level.util.overlay.button.Button;
 public class NavigationBar extends Overlay {
 
 	private HorizontalGroup horizontalGroup;
-	private final int NAVBAR_HIGH = (int) (this.height * 0.1);
+	private final int NAVBAR_HIGH = (int) (this.height * 0.01);
 	private final int NAVBAR_WITH = this.width;
 
 	public NavigationBar(Viewport viewport, Batch batch) {
 		super(viewport, batch);
 
 		horizontalGroup = new HorizontalGroup();
-		horizontalGroup.setFillParent(true);
+	
 		horizontalGroup.setHeight(NAVBAR_HIGH);
 		horizontalGroup.setWidth(NAVBAR_WITH);
-		
+		setToButton();
 		this.addActor(horizontalGroup);
 		
 		
