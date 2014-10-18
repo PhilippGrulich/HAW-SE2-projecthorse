@@ -1,13 +1,29 @@
 Logfile for license check of assets
 ***PICTURES***
 worldmap.png FILE OK!
-cc-0 ENTRY OK!
-sankt-michaelis-kirche_hamburg.jpg NOT EXISTS!
-cc-0 ENTRY OK!
+CC-0 ENTRY OK!
+Sankt-Michaelis-Kirche_Hamburg.jpg FILE OK!
+CC-0 ENTRY OK!
 germanymap.png FILE OK!
-cc-0 ENTRY OK!
-background.png NOT EXISTS!
-cc-0 ENTRY OK!
+CC-0 ENTRY OK!
+Background.png FILE OK!
+CC-0 ENTRY OK!
+ground.png FILE OK!
+CC-0 ENTRY OK!
+apple1.png FILE OK!
+CC-0 ENTRY OK!
+apple2.png FILE OK!
+CC-0 ENTRY OK!
+apple3.png FILE OK!
+CC-0 ENTRY OK!
+apple4.png FILE OK!
+CC-0 ENTRY OK!
+branch1.png FILE OK!
+CC-0 ENTRY OK!
+branch2.png FILE OK!
+CC-0 ENTRY OK!
+tree.png FILE OK!
+CC-0 ENTRY OK!
 logo.png FILE OK!
 selfmade ENTRY OK!
 hut.png FILE OK!

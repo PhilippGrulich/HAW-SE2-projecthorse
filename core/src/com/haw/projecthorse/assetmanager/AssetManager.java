@@ -45,7 +45,8 @@ public final class AssetManager {
 	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
 	private static Texture errorPic;
 	
-	private AssetManager(){};
+	private AssetManager(){
+	};
 	
 	public static AssetManager getInstance(){
 		if(AssetManager.ownAssetManager == null){
@@ -74,8 +75,6 @@ public final class AssetManager {
 			findAssetFolder(levelID, directory_music, Assets.MUSIC);
 		}
 		if(loadPictures){	
-			String[] licenseType = {"cc-0_license", "cc-by_license","selfmade_license"};
-			checkFiles(readLicensesAndSplitEntries(licenseType));
 			findAssetFolder(levelID, directory_pictures, Assets.PICTURES);
 		}
 		assetManager.finishLoading();
@@ -333,6 +332,11 @@ public final class AssetManager {
 		SOUNDS, MUSIC, PICTURES
 	}
 	
+	public static void checkLicenses(){
+		String[] licenseType = {"cc-0_license", "cc-by_license","selfmade_license"};
+		checkFiles(readLicensesAndSplitEntries(licenseType));
+	}
+	
 	/**
 	 * Liest aus den Lizenzdateien die Zeilen aus und splittet
 	 * deren Eintraege getrennt nach dem Semikolon. Somit
@@ -363,7 +367,7 @@ public final class AssetManager {
 								+ FILESEPARATOR + item + ".txt"));
 				String fileLinePic = null;
 				while((fileLinePic = bufReadPic.readLine()) != null) {
-					stringList.add(fileLinePic.toLowerCase());
+					stringList.add(fileLinePic);
 				}
 				bufReadPic.close();
 			} catch (FileNotFoundException e) {
@@ -408,7 +412,7 @@ public final class AssetManager {
 					FileReader(licenseDir));
 			String fileLine = null;
 			while((fileLine = bufRead.readLine()) != null) {
-				stringList.add(fileLine.toLowerCase());
+				stringList.add(fileLine);
 			}
 			bufRead.close();
 		} catch (FileNotFoundException e) {
@@ -439,7 +443,7 @@ public final class AssetManager {
 		}
 		return seperatedEntries;
 	}
-	
+		
 	/**
 	 * Geht durch die jeweiligen Level Ordner und prueft, ob die Dateien,
 	 * welche in den Lizenztextdateien aufgelistet sind, vorhanden sind.
@@ -472,7 +476,8 @@ public final class AssetManager {
 			//**************************************************
 			for(int i = 0; i < pictures.length; i++){
 				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES
-						+ FILESEPARATOR + pictures[i][0] + FILESEPARATOR + pictures[i][1]);		
+						+ FILESEPARATOR + pictures[i][0] + FILESEPARATOR
+						+ pictures[i][1]);		
 				writeFile(FOLDERNAME_PICTURES, pictures, checkFile, bWriter, i);					
 			}
 
@@ -519,7 +524,6 @@ public final class AssetManager {
 	 */
 	private static void writeFile(String type, String[][] stringFile, File checkFile,
 			BufferedWriter bWriter, int i){
-
 		try{
 			//Pruefen, ob Datei im jeweiligen Ordner
 			//vorhanden ist		
