@@ -34,6 +34,8 @@ public class PauseButton extends Button {
 				NavigationBar navBar = PauseButton.this.getNavigationBar();
 		
 				Popup p = new Popup();
+				navBar.getOverlay().getLevel().pause();
+			
 				navBar.getOverlay().showPopup(p);
 				
 				return true;				

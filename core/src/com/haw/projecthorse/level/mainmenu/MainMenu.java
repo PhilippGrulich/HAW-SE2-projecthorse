@@ -246,6 +246,7 @@ public class MainMenu extends Level {
 	@Override
 	public void doPause() {
 		// TODO Auto-generated method stub
+		
 
 	}
 

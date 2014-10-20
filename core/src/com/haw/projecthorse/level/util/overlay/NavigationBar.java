@@ -38,8 +38,8 @@ public class NavigationBar extends OverlayWidgetGroup {
 	 */	
 	public Overlay getOverlay() {
 		if(this.getParent() == null) return null;
-		if (!(this.getParent() instanceof Overlay)) return null;
-		return (Overlay) this.getParent();
+		if (!(this.getStage() instanceof Overlay)) return null;
+		return (Overlay) this.getStage();
 	}
 
 	public void setToTop() {
