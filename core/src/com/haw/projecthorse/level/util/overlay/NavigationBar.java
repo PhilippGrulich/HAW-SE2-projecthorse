@@ -1,10 +1,8 @@
 package com.haw.projecthorse.level.util.overlay;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.button.Button;
 
 /**
@@ -13,23 +11,35 @@ import com.haw.projecthorse.level.util.overlay.button.Button;
  * @author Philipp
  *
  */
-public class NavigationBar extends Overlay {
+public class NavigationBar extends OverlayWidgetGroup {
 
 	private HorizontalGroup horizontalGroup;
 	private final int NAVBAR_HIGH = (int) (this.height * 0.01);
-	private final int NAVBAR_WITH = this.width;
+	private final int NAVBAR_WITH = (int) (this.width-this.width*0.1);
 
-	public NavigationBar(Viewport viewport, Batch batch) {
-		super(viewport, batch);
+	public NavigationBar() {
+		
 
 		horizontalGroup = new HorizontalGroup();
-	
+		horizontalGroup.reverse();
 		horizontalGroup.setHeight(NAVBAR_HIGH);
 		horizontalGroup.setWidth(NAVBAR_WITH);
 		setToButton();
 		this.addActor(horizontalGroup);
 		
-		
+			
+	}
+	
+	
+	/**
+	 * Returnt das Parent Overlay Object. 
+	 * Wenn die NavigationBar nicht auf einem Overlay liegt wird null zurück gegeben
+	 * @return
+	 */	
+	public Overlay getOverlay() {
+		if(this.getParent() == null) return null;
+		if (!(this.getParent() instanceof Overlay)) return null;
+		return (Overlay) this.getParent();
 	}
 
 	public void setToTop() {
@@ -40,7 +50,8 @@ public class NavigationBar extends Overlay {
 		this.horizontalGroup.setY(horizontalGroup.getHeight());
 	}
 
-	public void addButton(Button btn) {
-		this.horizontalGroup.addActor(btn);
+	public void addButton(Button btn) {	
+			this.horizontalGroup.addActor(btn);
+	
 	}
 }
