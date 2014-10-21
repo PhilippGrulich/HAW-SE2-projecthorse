@@ -179,7 +179,6 @@ public class Gamestate {
 	}
 
 	public void update(float delta) {
-		// fallingEntities.act(delta);
 		stage.act(delta);
 		stage.draw();
 		horse.act(delta);
@@ -188,9 +187,6 @@ public class Gamestate {
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
 		removeDroppedDownEntities();
 		updateTimer(delta);
-//		System.out.println("Horse: "+horse.getZIndex());
-//		System.out.println(backgroundGraphics.getZIndex());
-		
 	}
 
 	private void removeDroppedDownEntities() {
@@ -245,7 +241,7 @@ public class Gamestate {
 
 	public void dispose(){
 		GameObjectFactory.dispose();
-		atlas.dispose();
+		//atlas.dispose(); //Removed due to AssetManager-Management
 	}
 	
 	public void playerHitByBranch() {
