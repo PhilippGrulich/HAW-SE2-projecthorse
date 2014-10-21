@@ -1,6 +1,7 @@
 package com.haw.projecthorse.intputmanager;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -8,9 +9,10 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
 
 public class InputManager implements InputProcessor {
 
-	private static ArrayList<InputProcessor> processors = new ArrayList<InputProcessor>();
+	private static PriorityArray<InputProcessor> processors = new PriorityArray<InputProcessor>();
 	private static InputManager instance;
-	private static Overlay overlayStage;
+
+	
 
 	private InputManager() {
 		InputProcessor defaultInputProcessor = new DefaultInputProcessor();
@@ -23,17 +25,17 @@ public class InputManager implements InputProcessor {
 		instance = new InputManager();
 	}
 
-	public static void setOverlay(Overlay overlay) {
-		overlayStage = overlay;
-	}
+	
 
+	public static void addInputProcessor(InputProcessor inputProcessor, int priority) {
+		processors.add(inputProcessor,priority);
+	}
+	
 	public static void addInputProcessor(InputProcessor inputProcessor) {
-		processors.add(inputProcessor);
+		processors.add(inputProcessor,1);
 	}
 
-	public static void removeInputProcessor(InputProcessor inputProcessor) {
-		processors.remove(inputProcessor);
-	}
+	
 
 	public static void clear() {
 		processors.clear();
@@ -45,10 +47,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (overlayStage.keyDown(keycode))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+		
+		for (InputProcessor processor : processors){
 			if (processor.keyDown(keycode))
 				return true;
 		}
@@ -57,10 +57,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if (overlayStage.keyUp(keycode))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+	
+		for (InputProcessor processor : processors){
 			if (processor.keyUp(keycode))
 				return true;
 		}
@@ -69,13 +67,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		if (overlayStage.keyTyped(character))
-			return true;
-		if (overlayStage.keyDown(character))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
-
+		
+		for (InputProcessor processor : processors){
 			if (processor.keyTyped(character))
 				return true;
 		}
@@ -84,10 +77,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (overlayStage.touchDown(screenX, screenY, pointer, button))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+		
+		for (InputProcessor processor : processors){
 			if (processor.touchDown(screenX, screenY, pointer, button))
 				return true;
 		}
@@ -96,10 +87,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (overlayStage.touchUp(screenX, screenY, pointer, button))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+		
+		for (InputProcessor processor : processors){
 			if (processor.touchUp(screenX, screenY, pointer, button))
 				return true;
 		}
@@ -108,10 +97,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if (overlayStage.touchDragged(screenX, screenY, pointer))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+		
+		for (InputProcessor processor : processors){
 			if (processor.touchDragged(screenX, screenY, pointer))
 				return true;
 		}
@@ -120,10 +107,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		if (overlayStage.mouseMoved(screenX, screenY))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+		
+		for (InputProcessor processor : processors){
 			if (processor.mouseMoved(screenX, screenY))
 				return true;
 		}
@@ -132,10 +117,8 @@ public class InputManager implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		if (overlayStage.scrolled(amount))
-			return true;
-		for (int i = processors.size() - 1; i >= 0; i--) {
-			InputProcessor processor = processors.get(i);
+	
+		for (InputProcessor processor : processors){
 			if (processor.scrolled(amount))
 				return true;
 		}

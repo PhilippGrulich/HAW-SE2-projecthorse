@@ -15,7 +15,7 @@ public class Overlay extends Stage {
 
 	public Overlay(Viewport viewport, SpriteBatch spriteBatch, Level level) {
 		super(viewport, spriteBatch);
-		InputManager.setOverlay(this);
+		InputManager.addInputProcessor(this, Integer.MAX_VALUE);
 		this.level = level;
 	}
 

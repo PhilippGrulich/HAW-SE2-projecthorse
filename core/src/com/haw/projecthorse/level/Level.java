@@ -5,14 +5,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.util.overlay.GameNavBar;
-import com.haw.projecthorse.level.util.overlay.NavBar;
 import com.haw.projecthorse.level.util.overlay.Overlay;
-import com.haw.projecthorse.level.util.overlay.button.NavbarPauseButton;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
