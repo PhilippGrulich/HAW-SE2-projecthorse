@@ -14,14 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.level.util.overlay.NavigationBar;
+import com.haw.projecthorse.level.util.overlay.NavBar;
+import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.level.util.overlay.popup.GamePausePopup;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 
-public class PauseButton extends Button {
+public class NavbarPauseButton extends NavbarButton {
 
 	private Popup p;
 	
-	public PauseButton() {
+	public NavbarPauseButton() {
 		ImageButton imageButton = new ImageButton(getDrawable());
 		
 		
@@ -31,12 +33,12 @@ public class PauseButton extends Button {
 			@Override
 			public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("PAUSE Button", "PAUSE BUTTON CLick");
-				NavigationBar navBar = PauseButton.this.getNavigationBar();
+				NavBar navBar = NavbarPauseButton.this.getNavigationBar();
 		
-				Popup p = new Popup();
-				navBar.getOverlay().getLevel().pause();
-			
-				navBar.getOverlay().showPopup(p);
+				Popup p = new GamePausePopup();
+				Overlay overlay = navBar.getOverlay();
+				overlay.getLevel().pause();
+				overlay.showPopup(p);
 				
 				return true;				
 			};

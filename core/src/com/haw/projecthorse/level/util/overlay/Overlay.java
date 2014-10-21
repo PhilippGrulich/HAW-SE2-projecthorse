@@ -9,17 +9,17 @@ import com.haw.projecthorse.level.util.overlay.popup.Popup;
 
 public class Overlay extends Stage {
 
-	private NavigationBar navBar;
+	private NavBar navBar;
 
 	private Level level;
 
 	public Overlay(Viewport viewport, SpriteBatch spriteBatch, Level level) {
 		super(viewport, spriteBatch);
-		InputManager.addInputProcessor(this);
+		InputManager.setOverlay(this);
 		this.level = level;
 	}
 
-	public void setNavigationBar(NavigationBar nav) {
+	public void setNavigationBar(NavBar nav) {
 		//if (navBar != null)
 			// this.re(navBar);
 			this.addActor(nav);
@@ -35,7 +35,9 @@ public class Overlay extends Stage {
 	}
 
 	public void disposePopup() {
-
+		this.clear();
+		this.level.resume();
+		this.addActor(navBar);
 	}
 
 }
