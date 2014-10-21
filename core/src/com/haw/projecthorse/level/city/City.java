@@ -131,7 +131,7 @@ public class City extends Level {
 	@Override
 	protected void doDispose() {
 		stage.dispose();
-		atlant.dispose();
+		// atlant.dispose(); -> sollte nicht mehr gebraucht werden
 	}
 
 	@Override

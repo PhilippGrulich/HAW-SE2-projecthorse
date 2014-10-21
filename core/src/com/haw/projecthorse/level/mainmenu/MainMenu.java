@@ -227,7 +227,7 @@ public class MainMenu extends Level {
 	public void doDispose() {
 		stage.dispose();
 		
-		atlas.dispose();
+		// atlas.dispose(); <- sollte nicht mehr gebraucht werden
 		
 	}
 

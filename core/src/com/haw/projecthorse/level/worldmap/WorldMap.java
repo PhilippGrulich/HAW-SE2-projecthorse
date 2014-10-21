@@ -197,8 +197,11 @@ public class WorldMap extends Level {
 	@Override
 	public void doDispose() {
 		stage.dispose();
-		worldmapatlas.dispose();
-		wappenatlas.dispose();
+		/*
+		 * -> sollte nicht mehr gebraucht werden
+		 * worldmapatlas.dispose();
+		 * wappenatlas.dispose(); 
+		*/
 	}
 
 }
