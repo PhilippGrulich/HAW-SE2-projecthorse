@@ -1,6 +1,6 @@
 
 Parcours_BackgroundGraphics.png
-size: 722,1284
+size: 1236,1284
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -16,5 +16,12 @@ landscape
   xy: 2, 109
   size: 720, 1175
   orig: 720, 1175
+  offset: 0, 0
+  index: -1
+scoreFont
+  rotate: false
+  xy: 724, 772
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
