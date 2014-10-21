@@ -180,7 +180,7 @@ public class Gamestate {
 
 	public void update(float delta) {
 		// fallingEntities.act(delta);
-		stage.act(Gdx.graphics.getDeltaTime());
+		stage.act(delta);
 		stage.draw();
 		horse.act(delta);
 		spawnEntities(delta);
@@ -188,6 +188,8 @@ public class Gamestate {
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
 		removeDroppedDownEntities();
 		updateTimer(delta);
+//		System.out.println("Horse: "+horse.getZIndex());
+//		System.out.println(backgroundGraphics.getZIndex());
 		
 	}
 
