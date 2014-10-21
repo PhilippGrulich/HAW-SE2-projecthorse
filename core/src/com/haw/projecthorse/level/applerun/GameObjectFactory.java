@@ -51,7 +51,7 @@ public final class GameObjectFactory {
 		isInitialized = false;
 		constructedApples = new LinkedList<Apple>();
 		constructedBranches = new LinkedList<Branch>();
-		spritemap.dispose();
+//		spritemap.dispose(); //Removed due to AssetManager-management 
 	}
 	
 	public static void giveBackEntity(Entity entity){
