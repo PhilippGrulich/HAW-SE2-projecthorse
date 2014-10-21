@@ -88,18 +88,18 @@ public class PlayerImpl extends Player {
 	public PlayerImpl(PlayerColor color) {
 		if (color.hasBlackBase()) {
 			black = true;
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("white_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
 			positions[2] = sprite.getRegionX();
 			positions[3] = sprite.getRegionY();
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("black_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
 			positions[0] = sprite.getRegionX();
 			positions[1] = sprite.getRegionY();
 		} else {
 			black = false;
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("black_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
 			positions[0] = sprite.getRegionX();
 			positions[1] = sprite.getRegionY();
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("white_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
 			positions[2] = sprite.getRegionX();
 			positions[3] = sprite.getRegionY();
 		}
