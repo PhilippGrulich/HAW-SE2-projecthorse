@@ -41,6 +41,11 @@
                title:"MovementTest",
                className:"com.haw.projecthorse.level.test.MovementTest",
                levelID:"MovementTest"
+            },
+            {
+               title:"huetchenspiel",
+			   className:"com.haw.projecthorse.level.huetchenspiel.HuetchenSpiel",
+               levelID:"huetchenspiel"
             }
          ]
       }

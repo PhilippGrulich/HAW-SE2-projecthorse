@@ -4,14 +4,13 @@ package com.haw.projecthorse.level.huetchenspiel;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
 public class HatListener extends InputListener{
 	
 	private int id;
 	private HuetchenSpiel hs;
 	private boolean found = false;
+	private boolean pressed = false;
 	//private Timer timer;
 	//private int time;
 	
@@ -37,6 +36,9 @@ public class HatListener extends InputListener{
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 		if(this.id == hs.rightNum){
 			this.found = true;
+		}
+		else{
+			this.pressed = true;
 		}
         return true;
     }
@@ -87,4 +89,11 @@ public class HatListener extends InputListener{
 		this.found = found;
 	}
 
+	protected boolean getPressed(){
+		return this.pressed;
+	}
+
+	protected void setPressed(boolean pressed){
+		this.pressed = pressed;
+	}
 }

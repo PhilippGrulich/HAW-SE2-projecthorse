@@ -10,3 +10,8 @@ appleRun;apple4.png; CC-0; Lars;
 appleRun;branch1.png; CC-0; Lars; 
 appleRun;branch2.png; CC-0; Lars; 
 appleRun;tree.png; CC-0; Lars;
+huetchenspiel; purple-witch-hat.png; cc-0; Pippi2011; https://openclipart.org/image/300px/svg_to_png/181468/purple-witch-hat.png
+huetchenspiel;obj_trees1.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/
+huetchenspiel;obj_trees2.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/
+huetchenspiel;Garden_Witch.png; cc-0; Scout; https://openclipart.org/detail/191073/garden-witch--by-scout-191073
+huetchenspiel;nicubunu_Callout_cloud_center.png; cc-0; nicubunu; https://openclipart.org/image/300px/svg_to_png/13925/nicubunu_Callout_cloud_center.png

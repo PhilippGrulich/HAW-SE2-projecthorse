@@ -1,6 +1,6 @@
 package com.haw.projecthorse.level.huetchenspiel;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Hat extends Image{
@@ -13,7 +13,7 @@ public class Hat extends Image{
 	 * @param id Identifikation, um beim Speil den gewaehlten
 	 * 			 Hut zu erkennen
 	 */
-	public Hat(Texture tex, int id){
+	public Hat(TextureRegion tex, int id){
 		super(tex);
 		this.id = id;
 	}
@@ -25,5 +25,7 @@ public class Hat extends Image{
 	public int getID(){
 		return this.id;
 	}
+	
+
 	
 }
