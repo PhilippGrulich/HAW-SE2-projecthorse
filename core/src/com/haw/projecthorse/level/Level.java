@@ -3,13 +3,16 @@ package com.haw.projecthorse.level;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.level.util.overlay.GameNavigationBar;
-import com.haw.projecthorse.level.util.overlay.NavigationBar;
-import com.haw.projecthorse.level.util.overlay.button.PauseButton;
+import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.level.util.overlay.GameNavBar;
+import com.haw.projecthorse.level.util.overlay.NavBar;
+import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.level.util.overlay.button.NavbarPauseButton;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -25,11 +28,16 @@ import com.haw.projecthorse.level.util.overlay.button.PauseButton;
 
 public abstract class Level implements Screen {
 
+	private Boolean paused = false;
+	
 	private String levelID = null;
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
-	private NavigationBar nav;
+	private Stage rootStage;
+	protected Overlay overlay;
+	
+	
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
@@ -42,8 +50,15 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
+		overlay = new Overlay(viewport, spriteBatch, this);
+		this.rootStage = new Stage(viewport, spriteBatch);
+		//this.rootStage.addActor(overlay);
 		
-		nav = new GameNavigationBar(this.getViewport(), spriteBatch);
+		InputManager.addInputProcessor(rootStage);
+		
+		GameNavBar nav = new GameNavBar();
+		this.overlay.setNavigationBar(nav);
+		
 	}
 
 	public final void setLevelID(String newID) {
@@ -65,8 +80,15 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void render(float delta) {
+		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0 übergeben.
+		// Hierdurch wird sichergestellt das die Interaktionen 
+		if(paused){ 
+			delta = 0;
+			};
 		doRender(delta);
-		nav.draw();
+		//rootStage.draw();
+		overlay.draw();
+	
 	}
 
 	protected abstract void doDispose();
@@ -75,7 +97,8 @@ public abstract class Level implements Screen {
 	public final void dispose() {
 		spriteBatch.dispose();
 		doDispose();
-		nav.dispose();
+		rootStage.dispose();
+		
 	}
 
 	protected abstract void doResize(int width, int height);
@@ -90,8 +113,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void show() {
-		doShow();
-
+		doShow();	
 	}
 
 	protected abstract void doHide();
@@ -105,6 +127,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void pause() {
+		paused = true;
 		doPause();
 	}
 
@@ -112,6 +135,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void resume() {
+		paused = false;
 		doResume();
 	}
 
