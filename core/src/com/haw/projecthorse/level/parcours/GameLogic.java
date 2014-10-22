@@ -13,10 +13,6 @@ public class GameLogic {
 	private float maxDistanceX;
 	private float minDistanceY;
 	private float maxDistanceY;
-	private float predecessorWidth;
-	private float predecessorHeight;
-	private float predecessorX;
-	private float predecessorY;
 	private ArrayList<GameObject> objects;
 	
 	public GameLogic(){
@@ -25,10 +21,6 @@ public class GameLogic {
 		maxDistanceX = 0;
 		minDistanceY = 0;
 		maxDistanceY = 0;
-		predecessorHeight = 0;
-		predecessorWidth = 0;
-		predecessorX = 0;
-		predecessorY = 0;
 	}
 	
 	public void initGameObjects(TextureAtlas a, int gameWidth, int gameHeight){
@@ -74,39 +66,15 @@ public class GameLogic {
 	public float getRandomX(GameObject o){
 		float rand = (float)Math.floor(Math.random() * (maxDistanceX - minDistanceX) + minDistanceX);
 		float x =  o.getGameWidth() + rand ;
-		setPredecessorsX(x);
-		setPredecessorVars(o.getHeight(), o.getWidth());
 		return x;
 	}
 	
 	public float getRandomY(GameObject o){
 		float y = o.getGameHeight() + (float)Math.floor(Math.random() * (maxDistanceY - minDistanceY) + minDistanceY); 
-		setPredecessorsY(y);
-		setPredecessorVars(o.getHeight(), o.getWidth());
 		return y;
 	}
-	/*
-	public void setPredecessorsWidth(float w){
-		predecessorWidth = w;
-	}
-	*/
-	public void setPredecessorVars(float height, float width){
-		predecessorHeight = height;
-		predecessorWidth = width;
-	}
 	
-	/*
-	public void setPredecessorHeight(float h){
-		predecessorHeight = h;
-	}
-	*/
-	public void setPredecessorsX(float x){
-		predecessorX = x;
-	}
 	
-	public void setPredecessorsY(float y){
-		predecessorY = y;
-	}
 	
 	public GameObject getRandomObject(){
 		return objects.get((int)Math.floor(Math.random() * objects.size()));
