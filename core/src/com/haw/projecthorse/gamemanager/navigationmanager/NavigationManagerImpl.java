@@ -10,7 +10,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.LevelManager;
-
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 
 /**
@@ -36,7 +36,7 @@ public class NavigationManagerImpl implements NavigationManager {
 
 		try {
 			if (game.getScreen() != null) {
-				
+				InputManager.clear();
 				game.getScreen().dispose();
 				game.setScreen(null);
 			}
