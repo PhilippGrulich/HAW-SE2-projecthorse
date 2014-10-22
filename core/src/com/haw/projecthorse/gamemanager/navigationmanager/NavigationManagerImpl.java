@@ -86,7 +86,7 @@ public class NavigationManagerImpl implements NavigationManager {
 
 	@Override
 	public void navigateBack() {
-		if (levelIDHistory.size()>1)
+		if ((levelIDHistory.size()>1))
 			levelIDHistory.pop();
 		if (!levelIDHistory.isEmpty())
 			navigateToLevel(levelIDHistory.peek());

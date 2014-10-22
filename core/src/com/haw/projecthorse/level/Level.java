@@ -4,9 +4,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.level.util.overlay.GameNavBar;
+import com.haw.projecthorse.level.util.overlay.Overlay;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -14,19 +15,24 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
  *         müssen stattdessen jeweils doDispose() usw. implementieren
- *         
- *         Alle Implementierungen MÜSSEN im Konstruktor super() aufrufen!
  * 
+ *         Alle Implementierungen MÜSSEN im Konstruktor super() aufrufen!
+ *         
+ *         Jedes level hat ein Overlay. Über das Overlay können Popups unter anderm Popups angezeigt werden. * 
  * 
  */
 
 public abstract class Level implements Screen {
 
+	private Boolean paused = false;
+	
 	private String levelID = null;
 	private Viewport viewport;
 	private OrthographicCamera cam;
-	private SpriteBatch spriteBatch;
-
+	private SpriteBatch spriteBatch;	
+	protected Overlay overlay;
+	
+	
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
@@ -39,32 +45,40 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-
+		overlay = new Overlay(viewport, spriteBatch, this);	
+		
+		GameNavBar nav = new GameNavBar();
+		this.overlay.setNavigationBar(nav);
+		
 	}
 
-	
-	public final void setLevelID(String newID){
-		if(levelID != null){
-			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
+	public final void setLevelID(String newID) {
+		if (levelID != null) {
+			System.out.println("ACHTUNG Level id: " + levelID
+					+ " umbenannt in: " + newID);
 		}
-		
+
 		levelID = newID;
-		
+
 	}
-	
-	public final String getLevelID(){
+
+	public final String getLevelID() {
 		return levelID;
 	}
-	
-	
+
 	protected abstract void doRender(float delta); // Called by render() - to be
 													// used in subclasses
 
-	
-	
 	@Override
 	public final void render(float delta) {
-		doRender(delta);
+		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0 übergeben.
+		// Hierdurch wird sichergestellt das die Interaktionen 
+		if(paused){ 
+			delta = 0;
+			};
+		doRender(delta);		
+		overlay.draw();
+	
 	}
 
 	protected abstract void doDispose();
@@ -72,8 +86,9 @@ public abstract class Level implements Screen {
 	@Override
 	public final void dispose() {
 		spriteBatch.dispose();
+		overlay.dispose();
 		doDispose();
-
+		
 	}
 
 	protected abstract void doResize(int width, int height);
@@ -88,8 +103,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void show() {
-		doShow();
-
+		doShow();	
 	}
 
 	protected abstract void doHide();
@@ -103,6 +117,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void pause() {
+		paused = true;
 		doPause();
 	}
 
@@ -110,6 +125,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void resume() {
+		paused = false;
 		doResume();
 	}
 
