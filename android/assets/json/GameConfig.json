@@ -3,7 +3,7 @@
    menus:[
       {
          levelID:"mainMenu",
-         className:"com.haw.projecthorse.level.mainmenu.MainMenu"
+         className:"com.haw.projecthorse.level.menu.mainmenu.MainMenu"
       },
       {
          levelID:"playerMenu",
@@ -19,7 +19,7 @@
       {
          name:"Hamburg",
          levelID:"Hamburg",
-         className:"com.haw.projecthorse.level.city.City",
+         className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
          			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
          		},
