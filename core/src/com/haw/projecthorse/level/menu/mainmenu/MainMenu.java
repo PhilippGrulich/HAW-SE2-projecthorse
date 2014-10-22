@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.mainmenu;
+package com.haw.projecthorse.level.menu.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
