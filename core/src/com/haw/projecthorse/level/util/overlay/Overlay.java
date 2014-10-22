@@ -1,6 +1,8 @@
 package com.haw.projecthorse.level.util.overlay;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.intputmanager.InputManager;
@@ -17,6 +19,9 @@ public class Overlay extends Stage {
 		super(viewport, spriteBatch);
 		InputManager.addInputProcessor(this, Integer.MAX_VALUE);
 		this.level = level;
+		
+		
+		
 	}
 
 	public void setNavigationBar(NavBar nav) {

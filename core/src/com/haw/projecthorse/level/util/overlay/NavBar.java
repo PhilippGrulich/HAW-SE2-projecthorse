@@ -1,9 +1,6 @@
 package com.haw.projecthorse.level.util.overlay;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.button.NavbarButton;
 
 /**

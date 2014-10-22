@@ -30,8 +30,7 @@ public abstract class Level implements Screen {
 	private String levelID = null;
 	private Viewport viewport;
 	private OrthographicCamera cam;
-	private SpriteBatch spriteBatch;
-	private Stage rootStage;
+	private SpriteBatch spriteBatch;	
 	protected Overlay overlay;
 	
 	
@@ -47,11 +46,7 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-		overlay = new Overlay(viewport, spriteBatch, this);
-		this.rootStage = new Stage(viewport, spriteBatch);
-		//this.rootStage.addActor(overlay);
-		
-		InputManager.addInputProcessor(rootStage);
+		overlay = new Overlay(viewport, spriteBatch, this);	
 		
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
@@ -93,8 +88,9 @@ public abstract class Level implements Screen {
 	@Override
 	public final void dispose() {
 		spriteBatch.dispose();
+		overlay.dispose();
 		doDispose();
-		rootStage.dispose();
+	
 		
 	}
 
