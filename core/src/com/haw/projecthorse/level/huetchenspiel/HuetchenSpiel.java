@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,27 +21,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
 /**
  * Richtiges Huetchen finden, unter dem das Pferd versteckt ist
- * @author Fabian
+ * @author Fabian Reiber
  * 
- * BUGS: EventListener muss irgendwie zurueckgesetzt werden, da bei Rundenende
- * und weiterem Klicken, die Auswahl vermerkt wird
+ * TODO: Huetchen nicht anklicken, sondern ein Stueck hochziehen -> Swipe
+ * TODO: "Neue Runde?"-Button generell fuer alle Spiele?
  *
  */
 
 public class HuetchenSpiel extends Level{
 
-	//private TextureAtlas assetAtlas;
 	private Stage stage;
 	
 	/**
@@ -93,14 +89,14 @@ public class HuetchenSpiel extends Level{
 	private TextureRegion upReg;
 	private TextButtonStyle buttonStyle;
 	private TextButton newGame;
-	private TextButton back;
+//	private TextButton back;
 	
 	/**
 	 * Konstruktor
 	 */
 	public HuetchenSpiel(){
 		super();
-		//this.assetAtlas = AssetManager.load("huetchenspiel", true, false, true);
+		AssetManager.loadSounds("huetchenspiel");
 		this.rnd = new Random();
 		XCORDHAT = new float[HAT_NUMBER];
 		this.choiceCounter = 0;
@@ -108,9 +104,9 @@ public class HuetchenSpiel extends Level{
 		this.scoreStr = "Score: ";
 		this.wins = 0;
 		
+		//Sobald es fonts gibt mit Ziffern, diese verwenden.
 	//	this.labelFont = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
 		this.labelFont = new BitmapFont();
-
 		
 		initStage();
 		initPlayer();
@@ -139,7 +135,6 @@ public class HuetchenSpiel extends Level{
 		this.stage.addActor(this.pl);
 		this.stage.addActor(this.buttonTable);
 		this.stage.addActor(this.labelWin);
-		
 	}
 
 	/**
@@ -218,6 +213,7 @@ public class HuetchenSpiel extends Level{
 								this.wins--;
 								this.labelWin.setText(this.scoreStr + this.wins);
 							}
+							this.roundFinished = true;
 						}
 						else{
 							this.labelStart.setVisible(false);
@@ -234,38 +230,26 @@ public class HuetchenSpiel extends Level{
 		this.stage.dispose();	
 		this.labelFont.dispose();
 		this.upTex.dispose();
-	//	this.assetAtlas.dispose();
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+	protected void doResize(int width, int height) {		
 	}
 
 	@Override
 	protected void doShow() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected void doHide() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	protected void doPause() {
-		
-		// TODO Auto-generated method stub
-		
+	protected void doPause() {		
 	}
 
 	@Override
 	protected void doResume() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	/**
@@ -281,7 +265,6 @@ public class HuetchenSpiel extends Level{
 	 */
 	private void initPlayer(){
 		this.pl = new PlayerImpl();
-		//this.pl.setPosition(50, 200);
 		this.pl.setVisible(false);
 	}
 	
@@ -289,13 +272,6 @@ public class HuetchenSpiel extends Level{
 	 * Background initialisieren
 	 */
 	private void initBackground(){
-		/*TextureRegion bgTableTexReg = this.assetAtlas.findRegion("table");
-		TextureRegion bgTreeTexReg1 = this.assetAtlas.findRegion("obj_trees1");
-		TextureRegion bgTreeTexReg2 = this.assetAtlas.findRegion("obj_trees2");
-		TextureRegion bgBackground = this.assetAtlas.findRegion("hintergrund");
-		TextureRegion bgWitch = this.assetAtlas.findRegion("Garden_Witch");
-		TextureRegion bgSpeechBalloon = this.assetAtlas.findRegion("nicubunu_Callout_cloud_center");
-		*/
 		TextureRegion bgTableTexReg = AssetManager.getTextureRegion("huetchenspiel", "table");
 		TextureRegion bgTreeTexReg1 = AssetManager.getTextureRegion("huetchenspiel", "obj_trees1");
 		TextureRegion bgTreeTexReg2 = AssetManager.getTextureRegion("huetchenspiel", "obj_trees2");
@@ -362,7 +338,6 @@ public class HuetchenSpiel extends Level{
 	 * Positionierung auf den Screen
 	 */
 	private void initHats(){
-		//TextureRegion texHat = this.assetAtlas.findRegion("purple-witch-hat");
 		TextureRegion texHat = AssetManager.getTextureRegion("huetchenspiel", "purple-witch-hat");
 		this.hats = new Hat[HAT_NUMBER];
 		this.group = new Group();
@@ -439,13 +414,13 @@ public class HuetchenSpiel extends Level{
 		this.buttonStyle.font = this.labelFont;
 		
 		this.newGame = new TextButton("Neue Runde?", this.buttonStyle);
-		this.back = new TextButton("Zurück", this.buttonStyle);
+		//this.back = new TextButton("Zurück", this.buttonStyle);
 		
 		this.newGame.toFront();
-		this.back.toFront();
+		//this.back.toFront();
 		
 		this.buttonTable.addActor(this.newGame);
-		this.buttonTable.addActor(this.back);
+		//this.buttonTable.addActor(this.back);
 		
 		this.newGame.addListener(new InputListener(){
 			 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -469,7 +444,7 @@ public class HuetchenSpiel extends Level{
 				 
 			 }
 		});
-		
+		/*
 		this.back.addListener(new ChangeListener() {
 			
 			@Override
@@ -477,7 +452,7 @@ public class HuetchenSpiel extends Level{
 				GameManagerFactory.getInstance().navigateBack();
 				
 			}
-		});
+		});*/
 
 		this.buttonTable.setVisible(false);
 	}
@@ -487,6 +462,14 @@ public class HuetchenSpiel extends Level{
 	 */
 	protected void generateHatNum(){
 		this.rightNum = rnd.nextInt(HAT_NUMBER);
+	}
+	
+	/**
+	 * Info, ob eine Runde beendet wurde
+	 * @return Wurde Runde beendet true, sonst false
+	 */
+	protected boolean getRoundFinished(){
+		return this.roundFinished;
 	}
 	
 }

@@ -1,26 +1,33 @@
 
 menu.png
-size: 2166,1282
+size: 2166,1435
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Background
   rotate: false
-  xy: 2, 2
+  xy: 2, 155
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
+buttonBackground
+  rotate: false
+  xy: 2, 2
+  size: 535, 151
+  orig: 535, 151
+  offset: 0, 0
+  index: -1
 first_grass
   rotate: false
-  xy: 724, 2
+  xy: 724, 155
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
 ground
   rotate: false
-  xy: 1446, 2
+  xy: 1446, 155
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
