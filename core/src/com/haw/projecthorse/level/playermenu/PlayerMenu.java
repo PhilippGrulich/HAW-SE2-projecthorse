@@ -205,8 +205,7 @@ public class PlayerMenu extends Level {
 
 	@Override
 	protected void doDispose() {
-		atlas.dispose();
-		buttonAtlas.dispose();
+		
 	}
 
 	@Override
