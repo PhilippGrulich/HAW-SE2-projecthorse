@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
@@ -257,7 +258,7 @@ public class HuetchenSpiel extends Level{
 	 */
 	private void initStage(){
 		this.stage = new Stage(this.getViewport(), this.getSpriteBatch());
-		Gdx.input.setInputProcessor(this.stage);
+		InputManager.addInputProcessor(stage);
 	}
 	
 	/**
