@@ -1,5 +1,7 @@
 package com.haw.projecthorse.level.huetchenspiel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -34,7 +36,9 @@ import com.haw.projecthorse.player.PlayerImpl;
  * @author Fabian Reiber
  * 
  * TODO: Huetchen nicht anklicken, sondern ein Stueck hochziehen -> Swipe
- * TODO: "Neue Runde?"-Button generell fuer alle Spiele?
+ * TODO: "Neue Runde?"-Button generell fuer alle Spiele?  
+ * TODO: wenn fonts, mit Ziffern vorhanden, dann einbinden
+ * TODO: wenn loadmusic gebaut ist, die musikdatei laden und abspielen
  *
  */
 
@@ -56,6 +60,9 @@ public class HuetchenSpiel extends Level{
 	//choiceCounter zaehlt die Versuche in einer Runde
 	private int choiceCounter;
 	private boolean roundFinished;
+	//wurde ein Hut in der Runde gewaehlt: zur Liste hinzufuegen, damit 
+	//dieser nicht nochmal gewaehlt werden kann
+	private List<Integer> hatIndexList;
 	/**
 	 * Backgroundobjekte
 	 */
@@ -104,6 +111,7 @@ public class HuetchenSpiel extends Level{
 		this.roundFinished = false;
 		this.scoreStr = "Score: ";
 		this.wins = 0;
+		this.hatIndexList = new ArrayList<Integer>();
 		
 		//Sobald es fonts gibt mit Ziffern, diese verwenden.
 	//	this.labelFont = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
@@ -118,7 +126,7 @@ public class HuetchenSpiel extends Level{
 		initEventHatListener();	
 		generateHatNum();
 		initButtons();
-
+		
 		this.stage.addActor(this.bgBackground);
 		this.stage.addActor(this.bgTree1);
 		this.stage.addActor(this.bgTree2);
@@ -155,15 +163,16 @@ public class HuetchenSpiel extends Level{
 			for(int i = 0; i < HAT_NUMBER; i++){
 				Array<EventListener> eventList = hats[i].getListeners();
 				if(eventList.get(0) instanceof HatListener){
-					if(((HatListener)eventList.get(0)).getFound() 
-							&& this.choiceCounter < 2){
+					
+					if(((HatListener)eventList.get(0)).getFound()){
 						
 						//Positionen von Pferd und korrektem Hut setzen
 						this.pl.setPosition(this.hats[i].getX() + 50, this.hats[i].getY());
 						this.hats[i].setPosition(this.hats[i].getX(), this.hats[i].getY() + 80);
-						
 						this.pl.setVisible(true);
+						
 						this.labelStart.setVisible(false);
+						
 						((HatListener)eventList.get(0)).setFound(false);
 						
 						/*
@@ -187,22 +196,28 @@ public class HuetchenSpiel extends Level{
 						default:
 							break;
 						}
+						
 						this.buttonTable.setVisible(true);
 						this.roundFinished = true;
 						//springe aus Schleife, wenn Pferd gefunden wurde
 						break;
 					}
-					//Wurde Pferd nicht gefunden und Hut gewaehlt, entsprechende Ausgabe
+					//Wurde Hut gewaehlt, Pferd nicht gefunden und wurde der Hut vorher in gleicher
+					//Runde noch nicht gewaehlt
 					else if(((HatListener)eventList.get(0)).getPressed()
-							&& !((HatListener)eventList.get(0)).getFound()){
+							&& !((HatListener)eventList.get(0)).getFound()
+							&& !this.hatIndexList.contains(i)){
+						
 						AssetManager.playSound(this.getLevelID(), "jingles_STEEL04.ogg");
 						this.hats[i].setPosition(this.hats[i].getX(), this.hats[i].getY() + 80);
-						((HatListener)eventList.get(0)).setPressed(false);
-						this.choiceCounter++;
 						
+						((HatListener)eventList.get(0)).setPressed(false);
+
+						this.choiceCounter++;
+						this.hatIndexList.add(i);
 						/*
 						 * Sind alle zwei Versuche gescheitert, dann wird Score um
-						 * einen runtergezaehlt. Weniger als 0 geht aber nicht
+						 * einen runtergezaehlt und Runde beendet. Weniger als 0 geht aber nicht
 						 */
 						if(this.choiceCounter == 2){
 							AssetManager.playSound(this.getLevelID(), "jingles_STEEL07.ogg");
@@ -258,7 +273,7 @@ public class HuetchenSpiel extends Level{
 	 */
 	private void initStage(){
 		this.stage = new Stage(this.getViewport(), this.getSpriteBatch());
-		InputManager.addInputProcessor(stage);
+		InputManager.addInputProcessor(this.stage);
 	}
 	
 	/**
@@ -424,6 +439,7 @@ public class HuetchenSpiel extends Level{
 		//this.buttonTable.addActor(this.back);
 		
 		this.newGame.addListener(new InputListener(){
+			//alle Werte auf Default zuruecksetzen, damit neue Runde beginnen kann
 			 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				 buttonTable.setVisible(false);
 				 pl.setVisible(false);
@@ -434,9 +450,15 @@ public class HuetchenSpiel extends Level{
 				 labelFail.setVisible(false);
 				 choiceCounter = 0;
 				 roundFinished = false;
+				 hatIndexList.clear();
 				 for(int i = 0; i < HAT_NUMBER; i++){
-					 //hats[i].setVisible(true);
 					 hats[i].setPosition(XCORDHAT[i], YCORDHAT);
+					 /*
+					  * Setze fuer jeweiligen Hut des Wert, dass er gewaehlt wurde auf false
+					  *da sonst bei doppelt angewaehltem Hut in letzter Runde, dieser in der
+					  *neuen Runde bereits gewaehlt wurde
+					 */
+					 ((HatListener)hats[i].getListeners().get(0)).setPressed(false);
 				 }
 				 generateHatNum();
 				 return true;
@@ -472,5 +494,4 @@ public class HuetchenSpiel extends Level{
 	protected boolean getRoundFinished(){
 		return this.roundFinished;
 	}
-	
 }
