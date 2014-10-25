@@ -9,14 +9,15 @@ public class CoreGameMain extends Game {
 
 	@Override
 	public final void create() {
-
+		AssetManager.initialize();
+		AssetManager.checkLicenses();
 		InputManager.createInstance();
 		GameManagerImpl gameManager = GameManagerImpl.getInstance();
 		NavigationManagerImpl navigationManager = new NavigationManagerImpl(this);		
 		
 		gameManager.setNavigationManager(navigationManager);	
 		//beim Start der APP die Lizenzeintraege pruefen
-		AssetManager.checkLicenses();
+	
 			
 	}
 	
