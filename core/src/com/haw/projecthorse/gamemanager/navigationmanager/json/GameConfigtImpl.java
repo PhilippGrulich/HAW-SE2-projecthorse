@@ -65,6 +65,17 @@ class GameConfigtImpl implements GameConfig {
 		throw new LevelNotFoundException(levelID);
 
 	}
+	
+	public final MenuObjectImpl getMenuByLevelID(final String levelID) throws LevelNotFoundException {
+		for (MenuObjectImpl menu : menus) {		
+			if (menu.getLevelID().equals(levelID)) {
+				return menu;
+			}
+		}
+		throw new LevelNotFoundException(levelID);
+
+	}
+	
 
 
 

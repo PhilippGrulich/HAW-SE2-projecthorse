@@ -10,6 +10,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.LevelManager;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 
@@ -66,6 +67,12 @@ public class NavigationManagerImpl implements NavigationManager {
 	public final GameObject getGameObject(final String levelID) throws LevelNotFoundException {
 		return levelManager.getGameObject(levelID);
 	}
+	
+	@Override
+	public final MenuObject getMenuObject(final String levelID) throws LevelNotFoundException {
+		return levelManager.getMenuObject(levelID);
+	}
+
 
 	@Override
 	public final GameConfig getGameConfig() {

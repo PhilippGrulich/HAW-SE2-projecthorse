@@ -11,7 +11,19 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.worldmap.WorldMap"
+         className:"com.haw.projecthorse.level.worldmap.WorldMapOLD",
+         parameter:{
+         			   	cityCoordinates:"Hamburg,329,786;
+         			   						Berlin,593,668"
+         }
+      },
+       {
+         levelID:"worldmapnew",
+         className:"com.haw.projecthorse.level.worldmap.WorldMap",
+         parameter:{
+         			   	cityCoordinates:"Hamburg,329,786;
+         			   						Berlin,593,668"
+         }
       }
 
    ],
@@ -37,6 +49,26 @@
                className:"com.haw.projecthorse.level.parcours.Parcours",
                levelID:"Parcours"
             },
+             {
+               title:"MovementTest",
+               className:"com.haw.projecthorse.level.test.MovementTest",
+               levelID:"MovementTest"
+            },
+            {
+               title:"Huetchenspiel",
+			   className:"com.haw.projecthorse.level.huetchenspiel.HuetchenSpiel",
+               levelID:"huetchenspiel"
+            }
+         ]
+      },
+            {
+         name:"Berlin",
+         levelID:"Berlin",
+         className:"com.haw.projecthorse.level.menu.city.City",
+         parameter:{
+         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         		},
+         games:[
              {
                title:"MovementTest",
                className:"com.haw.projecthorse.level.test.MovementTest",

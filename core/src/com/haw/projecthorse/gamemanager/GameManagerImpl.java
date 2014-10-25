@@ -6,6 +6,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.gamemanager.settings.Settings;
 import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
 
@@ -81,6 +82,22 @@ final class GameManagerImpl implements GameManager {
 			throws LevelNotFoundException {
 		return navigationManager.getGameObject(levelID);
 	}
+	
+	/**
+	 * Liefert das MenuObject zurück falls die LevelID existiert. Wenn nicht
+	 * wird eine LevelNotFoundException geworfen.
+	 * 
+	 * @param levelID
+	 * @return {@link GameObjecttImpl}
+	 * @throws LevelNotFoundException
+	 */
+	
+	@Override
+	public MenuObject getMenuObject(final String levelID)
+			throws LevelNotFoundException {
+		return navigationManager.getMenuObject(levelID);
+	}
+
 
 	/**
 	 * Liefert eine Referenz auf das Spielstand Modul. *
