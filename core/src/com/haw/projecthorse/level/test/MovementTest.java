@@ -140,7 +140,7 @@ public class MovementTest extends Level {
 				}
 				
 				PlayerImpl p = (PlayerImpl) a;
-				p.toogleColor();
+				p.toggleColor();
 				black = !black;
 				return true;
 			}

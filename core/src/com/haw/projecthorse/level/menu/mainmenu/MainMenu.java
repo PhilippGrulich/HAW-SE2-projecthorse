@@ -40,9 +40,9 @@ public class MainMenu extends Level {
 //
 //
 //	private TextureRegion upRegion; // Aussehen des buttons wenn nicht
-//									// gedr�ckt;
+//									// gedr?ckt;
 //	private TextureRegion downRegion; // Aussehen des buttons wenn nicht
-//										// gedr�ckt;
+//										// gedr?ckt;
 //
 //	private AtlasRegion backgroundTexture;
 //	private Image background;

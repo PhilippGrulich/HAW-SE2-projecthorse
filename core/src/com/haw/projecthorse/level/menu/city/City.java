@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -31,20 +32,19 @@ import com.haw.projecthorse.level.Level;
 public class City extends Level {
 
 	private Stage stage;
-	private TextureAtlas atlant;
+
 	private SpriteBatch batcher = this.getSpriteBatch();
 	private CityObject cityObject;
 	Skin skin = new Skin();
 
 	private int lastButtonY = (int)(this.height - this.height * 0.35F);
-	private AtlasRegion region;
+	private TextureRegion region;
 	private ImageTextButtonStyle imageButtonStyle;
 	private VerticalGroup verticalGroup = new VerticalGroup();
 
 	@Override
-	protected void doShow() {
-
-		atlant = AssetManager.load("city", false, false, true);	
+	protected void doShow() {		
+		
 		stage = new Stage(this.getViewport(), batcher);		
 		
 		try {			
@@ -71,7 +71,7 @@ public class City extends Level {
 		stage.addActor(cityLabel);
 	}
 	private void addBackground(String backgroundImage) {
-		region = atlant.findRegion(backgroundImage);
+		region = AssetManager.getTextureRegion("city",backgroundImage);
 
 		Image background = new Image(region);
 		background.toBack();
@@ -80,7 +80,7 @@ public class City extends Level {
 
 	private void addGameButtons() throws LevelNotFoundException {
 		
-		Drawable drawable = new TextureRegionDrawable(atlant.findRegion("Button0"));
+		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("city","Button0"));
 		
 
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
