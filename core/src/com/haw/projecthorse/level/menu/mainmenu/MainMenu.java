@@ -2,24 +2,13 @@ package com.haw.projecthorse.level.menu.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -47,20 +36,20 @@ public class MainMenu extends Level {
 
 	private Stage stage;
 
-	private TextButtonStyle buttonStyle; // Defines style how buttons appear
-
-
-	private TextureRegion upRegion; // Aussehen des buttons wenn nicht
-									// gedr�ckt;
-	private TextureRegion downRegion; // Aussehen des buttons wenn nicht
-										// gedr�ckt;
-
-	private AtlasRegion backgroundTexture;
-	private Image background;
-
-	private BitmapFont buttonFont = new BitmapFont(); // Standard 15pt Arial
-														// Font. (inside
-														// libgdx.jar file)
+//	private TextButtonStyle buttonStyle; // Defines style how buttons appear
+//
+//
+//	private TextureRegion upRegion; // Aussehen des buttons wenn nicht
+//									// gedr�ckt;
+//	private TextureRegion downRegion; // Aussehen des buttons wenn nicht
+//										// gedr�ckt;
+//
+//	private AtlasRegion backgroundTexture;
+//	private Image background;
+//
+//	private BitmapFont buttonFont = new BitmapFont(); // Standard 15pt Arial
+//														// Font. (inside
+//														// libgdx.jar file)
 
 	private ImageTextButton buttonCredits;
 	private ImageTextButton buttonSpiel1;
@@ -69,7 +58,7 @@ public class MainMenu extends Level {
 
 	private Player player;
 
-	private TextureAtlas atlas;
+	//private TextureAtlas atlas;
 
 	public MainMenu() {
 		float moveToDuration = width / 5 / 30;
@@ -95,22 +84,22 @@ public class MainMenu extends Level {
 	}
 
 	private void addBackground() {
-		//
-		atlas = AssetManager.load("menu", false, false, true);
+		
+//		atlas = AssetManager.load("menu", false, false, true);
 
-		EndlessBackground background = new EndlessBackground(width, atlas.findRegion("sky"), 30);
+		EndlessBackground background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "sky"), 30);
 		background.toBack();
 		stage.addActor(background);
 
-		background = new EndlessBackground(width, atlas.findRegion("second_grass"), 0);
+		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "second_grass"), 0);
 		background.toBack();
 		stage.addActor(background);
 
-		background = new EndlessBackground(width, atlas.findRegion("first_grass"), 0);
+		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "first_grass"), 0);
 		background.toBack();
 		stage.addActor(background);
 
-		background = new EndlessBackground(width, atlas.findRegion("ground"), 0);
+		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "ground"), 0);
 		background.toBack();
 
 		stage.addActor(background);
@@ -121,7 +110,7 @@ public class MainMenu extends Level {
 	}
 
 	private ImageTextButtonStyle createButtonImageStyle() {
-		Drawable drawable = new TextureRegionDrawable(atlas.findRegion("buttonBackground"));
+		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("menu", "buttonBackground"));
 
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
@@ -159,7 +148,7 @@ public class MainMenu extends Level {
 	private void loadCredits() {
 		// TODO: Implement Creditscreen
 
-		System.out.println("CreditScreen not yet implemented - Todo");
+		Gdx.app.log("DEBUG", "CreditScreen not yet implemented - Todo");
 	}
 
 	private void setupEventListeners() {
@@ -199,12 +188,9 @@ public class MainMenu extends Level {
 	@Override
 	public void doRender(float delta) {
 
-		Gdx.gl.glClearColor(1, 1, 1, 1); // Hintergrund malen - einfarbig,
-											// langweilig
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();
-		Table.drawDebug(stage); // show debug lines
+		//Table.drawDebug(stage); // show debug lines
 
 	}
 
