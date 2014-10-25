@@ -29,8 +29,8 @@ public abstract class Level implements Screen {
 	private Boolean paused = false;
 	
 	private String levelID = null;
-	private Viewport viewport;
-	private OrthographicCamera cam;
+	private Viewport viewport, overlayViewport;
+	private OrthographicCamera cam, overlayCam;
 	private SpriteBatch spriteBatch;	
 	protected Overlay overlay;
 	
@@ -47,7 +47,11 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-		overlay = new Overlay(viewport, spriteBatch, this);	
+		
+		overlayCam = new OrthographicCamera(width, height);
+		overlayCam.setToOrtho(false); // Set to Y-Up - Coord system
+		overlayViewport = new FitViewport(width, height, overlayCam);
+		overlay = new Overlay(overlayViewport, spriteBatch, this);	
 		
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
