@@ -99,17 +99,6 @@ public class WorldMap extends Level {
 		initAnimation();
 	}
 
-<<<<<<< HEAD
-	private Image addBackground() {
-
-		AtlasRegion wolrldmapatlasregion = worldmapatlas
-				.findRegion("erde-und-sterne");
-		Image worldmapimage = new Image(new Texture(Gdx.files.internal("pictures/worldmap/erde-und-sterne.png")));
-		worldmapimage.toBack();
-		worldmapimage.setY((height - worldmapimage.getHeight()) / 2);
-		stage.addActor(worldmapimage);
-		return worldmapimage;
-=======
 	// Erstellt eine Startanimation die einmalig abgearbeitet wird
 	private void initAnimation() {
 		germanyImg.setColor(1, 1, 1, 0);
@@ -159,7 +148,6 @@ public class WorldMap extends Level {
 		stage.addActor(pointImg);
 		stage.addActor(germanyImg);
 		stage.addActor(player);
->>>>>>> 8f0811905b1221469c5a470e8d67bd115d0c3839
 
 	}
 
