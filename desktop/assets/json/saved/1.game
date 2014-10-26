@@ -34,6 +34,10 @@ lootCollection: [
 ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
+	color: {
+		name: Weiss,
+		black: false
+	},
 	name: Blacky
 }
 }
