@@ -61,7 +61,7 @@ public class City extends Level {
 	}
 
 	private void createCityLabel(String cityName){
-		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/selfmade/font.txt"));
+		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/city/font.txt"));
 		font.setScale(1f, 1f);
 		font.setColor(Color.MAGENTA);
 		LabelStyle labelStyle = new LabelStyle(font,Color.MAGENTA);
@@ -87,7 +87,7 @@ public class City extends Level {
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
 
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
+		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.txt"));
 		;
 		imageButtonStyle.font.scale(-0.5f);
 		imageButtonStyle.fontColor = Color.WHITE;
