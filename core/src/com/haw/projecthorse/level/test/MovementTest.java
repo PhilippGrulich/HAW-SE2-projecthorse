@@ -36,7 +36,7 @@ public class MovementTest extends Level {
 
 	@Override
 	protected void doRender(float delta) {
-		player1.setPlayerColor(new PlayerColor(black, color.r, color.g, color.b));
+		player1.setPlayerColor(new PlayerColor(black, color.r, color.g, color.b, ""));
 //		player2.setColor(color);
 		
 		Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);

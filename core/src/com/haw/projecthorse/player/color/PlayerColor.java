@@ -1,33 +1,34 @@
 package com.haw.projecthorse.player.color;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.haw.projecthorse.lootmanager.Loot;
 
 /**
- * Klasse für die Färbung des Spielers.
- * Es sind bereits einige Farben als in statischen Variablen vorgegeben.
+ * Klasse für die Färbung des Spielers. Es sind bereits einige Farben als in
+ * statischen Variablen vorgegeben.
  * 
  * @author Oliver
- *
+ * 
  */
-public class PlayerColor {
+public class PlayerColor extends Loot {
 	static final PlayerColor[] DEFINED_COLORS = new PlayerColor[] {
-		new PlayerColor(true, 255, 255, 255),
-		new PlayerColor(false, 255, 255, 255),
-		new PlayerColor(true, 255, 214, 86),
-		new PlayerColor(true, 255, 163, 44),
-		new PlayerColor(false, 255, 158, 72),
-		new PlayerColor(false, 255, 126, 223),
-		new PlayerColor(false, 255, 202, 214),
-		new PlayerColor(false, 255, 58, 146),
-		new PlayerColor(false, 213, 110, 255),
-		new PlayerColor(false, 192, 255, 250),
-		new PlayerColor(true, 50, 214, 255),
-		new PlayerColor(false, 255, 254, 92),
-		new PlayerColor(false, 255, 72, 72),
-		new PlayerColor(true, 104, 255, 84),
-		new PlayerColor(false, 132, 255, 108)
-	};
-	
+			new PlayerColor(),
+			new PlayerColor(false, 255, 255, 255, "Weiss"),
+			new PlayerColor(true, 255, 214, 86, "Braun"),
+			new PlayerColor(true, 255, 163, 44, "Dunkelbraun"),
+			new PlayerColor(false, 255, 158, 72, "Hellbraun"),
+			new PlayerColor(false, 255, 126, 223, "Pink"),
+			new PlayerColor(false, 255, 202, 214, "Helles Pink"),
+			new PlayerColor(false, 255, 58, 146, "Dunkles Pink"),
+			new PlayerColor(false, 213, 110, 255, "Lila"),
+			new PlayerColor(false, 192, 255, 250, "Eisblau"),
+			new PlayerColor(true, 50, 214, 255, "Dunkelblau"),
+			new PlayerColor(false, 255, 254, 92, "Gelb"),
+			new PlayerColor(false, 255, 72, 72, "Rot"),
+			new PlayerColor(true, 104, 255, 84, "Dunkelgrün"),
+			new PlayerColor(false, 132, 255, 108, "Hellgrün") };
+
 	public static final PlayerColor BLACK = DEFINED_COLORS[0];
 	public static final PlayerColor WHITE = DEFINED_COLORS[1];
 	public static final PlayerColor BROWN = DEFINED_COLORS[2];
@@ -49,7 +50,43 @@ public class PlayerColor {
 	boolean enabled = false;
 
 	public PlayerColor() {
-		this(true, 1f, 1f, 1f);
+		this(true, 1f, 1f, 1f, "Schwarz");
+	}
+
+	/**
+	 * Konstruktor für eine Spielerfarbe
+	 * 
+	 * @param red
+	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
+	 * @param green
+	 *            Grünanteil der Farbe (Wert zwischen 0 und 255)
+	 * @param blue
+	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
+	 * @param name
+	 *            Bezeichnung der Farbe
+	 */
+	public PlayerColor(int red, int green, int blue, String name) {
+		this(false, red, green, blue, name);
+	}
+
+	/**
+	 * Konstruktor für eine Spielerfarbe
+	 * 
+	 * @param blackBase
+	 *            Wahr, wenn das schwarze Spritesheet als Grundlage benutzt
+	 *            werden soll
+	 * @param red
+	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
+	 * @param green
+	 *            Grünanteil der Farbe (Wert zwischen 0 und 255)
+	 * @param blue
+	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
+	 * @param name
+	 *            Bezeichnung der Farbe
+	 */
+	public PlayerColor(boolean blackBase, int red, int green, int blue,
+			String name) {
+		this(blackBase, red / 255f, green / 255f, blue / 255f, name);	
 	}
 	
 	/**
@@ -64,61 +101,30 @@ public class PlayerColor {
 	 *            Grünanteil der Farbe (Wert zwischen 0 und 1)
 	 * @param blue
 	 *            Blauanteil der Farbe (Wert zwischen 0 und 1)
+	 * @param name
+	 *            Bezeichnung der Farbe
 	 */
-	public PlayerColor(boolean blackBase, float red, float green, float blue) {
-		black  = blackBase;
-		color = new Color(red, green, blue, 1);
-	}
-	
-	/**
-	 * Konstruktor für eine Spielerfarbe
-	 * 
-	 * @param red
-	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
-	 * @param green
-	 *            Grünanteil der Farbe (Wert zwischen 0 und 255)
-	 * @param blue
-	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
-	 */
-	public PlayerColor(int red, int green, int blue) {
-		this(false, red, green, blue);
-	}
-	
-	/**
-	 * Konstruktor für eine Spielerfarbe
-	 * 
-	 * @param blackBase
-	 *            Wahr, wenn das schwarze Spritesheet als Grundlage benutzt
-	 *            werden soll
-	 * @param red
-	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
-	 * @param green
-	 *            Grünanteil der Farbe (Wert zwischen 0 und 255)
-	 * @param blue
-	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
-	 */
-	public PlayerColor(boolean blackBase, int red, int green, int blue) {
-		float r = red / 255f;
-		float g = green / 255f;
-		float b = blue / 255f;
+	public PlayerColor(boolean blackBase, float red, float green, float blue,
+			String name) {
+		super(name, "Die Farbe '" + name + "' für dein Pferd");
 		
 		black = blackBase;
-		color = new Color(r, g, b, 1);
+		color = new Color(red, green, blue, 1);
 	}
 
 	/**
-	 * @return Wahr, wenn das schwarze Spritesheet als Grundlage benutzt wird
+	 * @return True, wenn das schwarze Spritesheet als Grundlage benutzt wird
 	 */
 	public boolean hasBlackBase() {
 		return black;
 	}
-	
+
 	public Color getColor() {
 		return new Color(color);
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int doHashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (black ? 1231 : 1237);
@@ -127,13 +133,7 @@ public class PlayerColor {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+	public boolean doEquals(Object obj) {
 		PlayerColor other = (PlayerColor) obj;
 		if (black != other.black)
 			return false;
@@ -143,5 +143,11 @@ public class PlayerColor {
 		} else if (!color.equals(other.color))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Image getImage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,8 +1,9 @@
 package com.haw.projecthorse.player.color;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class ColorManager {
 	private static ColorManager instance = null;
@@ -20,7 +21,8 @@ public class ColorManager {
 	}
 	
 	public List<PlayerColor> getPossibleColors() {
-		return Arrays.asList(PlayerColor.DEFINED_COLORS);
+//		return Arrays.asList(PlayerColor.DEFINED_COLORS);
+		return SaveGameManager.getLoadedGame().getSpecifiedLoot(PlayerColor.class);
 	}
 	
 	public List<PlayerColor> getEnabledColors() {

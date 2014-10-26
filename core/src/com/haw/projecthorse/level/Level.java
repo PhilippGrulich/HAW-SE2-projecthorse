@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.GameNavBar;
 import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.lootmanager.Chest;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -31,7 +32,7 @@ public abstract class Level implements Screen {
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;	
 	protected Overlay overlay;
-	
+	protected Chest chest;	
 	
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
@@ -45,7 +46,8 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-		overlay = new Overlay(viewport, spriteBatch, this);	
+		overlay = new Overlay(viewport, spriteBatch, this);
+		chest = new Chest();
 		
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
