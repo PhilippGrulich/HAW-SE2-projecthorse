@@ -19,7 +19,7 @@ public class PlayerImpl extends Player {
 	private TextureRegion sprite;
 	private float speed = 0f;
 	private int spriteStartX, spriteStartY;
-	private Color color;
+	private Color colorTint;
 
 	private Direction direction = Direction.RIGHT;
 
@@ -88,18 +88,18 @@ public class PlayerImpl extends Player {
 	public PlayerImpl(PlayerColor color) {
 		if (color.hasBlackBase()) {
 			black = true;
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("white_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
 			positions[2] = sprite.getRegionX();
 			positions[3] = sprite.getRegionY();
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("black_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
 			positions[0] = sprite.getRegionX();
 			positions[1] = sprite.getRegionY();
 		} else {
 			black = false;
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("black_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
 			positions[0] = sprite.getRegionX();
 			positions[1] = sprite.getRegionY();
-			sprite = AssetManager.load("notChecked", false, false, true).findRegion("white_sprites");
+			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
 			positions[2] = sprite.getRegionX();
 			positions[3] = sprite.getRegionY();
 		}
@@ -107,7 +107,7 @@ public class PlayerImpl extends Player {
 		spriteStartY = sprite.getRegionY();
 		sprite.setRegion(spriteStartX, spriteStartY, DEFAULT_WIDTH,
 				DEFAULT_HEIGHT);
-		this.color = color.getColor();
+		this.colorTint = color.getColor();
 
 		setBounds(getX(), getY(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		addAction(new AnimationAction());
@@ -116,8 +116,8 @@ public class PlayerImpl extends Player {
 	@Override
 	public void draw(Batch batch, float alpha) {
 		Color batchColor = batch.getColor();
-		
-		batch.setColor(color);
+	
+		batch.setColor(getColor().mul(1, 1, 1, alpha));
 		batch.draw(sprite.getTexture(), getX(), getY(), getOriginX(),
 				getOriginY(), getWidth(), getHeight(), getScaleX(),
 				getScaleY(), getRotation(), sprite.getRegionX(),
@@ -129,10 +129,11 @@ public class PlayerImpl extends Player {
 	
 	@Override
 	public void setPlayerColor(PlayerColor color) {
-		this.color = color.getColor();
+		this.colorTint = color.getColor();
+		setColor(color.getColor());
 		
 		if (black != color.hasBlackBase()) {
-			toogleColor();
+			toggleColor();
 		}
 	}
 
@@ -173,7 +174,7 @@ public class PlayerImpl extends Player {
 	}
 	
 	// for testing
-	public void toogleColor() {
+	public void toggleColor() {
 		if (black) {
 			spriteStartX = positions[2];
 			spriteStartY = positions[3];

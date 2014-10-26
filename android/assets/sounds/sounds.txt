@@ -1,0 +1,4 @@
+worldmap;flap.wav; -; kilobolt; http://www.kilobolt.com/uploads/1/2/5/7/12571940/flap.wav
+huetchenspiel;jingles_STEEL04.ogg;-;Kenney;http://www.kenney.nl
+huetchenspiel;jingles_STEEL07.ogg;-;Kenney;http://www.kenney.nl
+huetchenspiel;jingles_STEEL10.ogg;-;Kenney;http://www.kenney.nl

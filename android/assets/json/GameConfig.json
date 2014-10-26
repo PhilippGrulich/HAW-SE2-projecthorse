@@ -3,7 +3,7 @@
    menus:[
       {
          levelID:"mainMenu",
-         className:"com.haw.projecthorse.level.mainmenu.MainMenu"
+         className:"com.haw.projecthorse.level.menu.mainmenu.MainMenu"
       },
       {
          levelID:"playerMenu",
@@ -11,7 +11,19 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.worldmap.WorldMap"
+         className:"com.haw.projecthorse.level.worldmap.WorldMapOLD",
+         parameter:{
+         			   	cityCoordinates:"Hamburg,329,786;
+         			   						Berlin,593,668"
+         }
+      },
+       {
+         levelID:"worldmapnew",
+         className:"com.haw.projecthorse.level.worldmap.WorldMap",
+         parameter:{
+         			   	cityCoordinates:"Hamburg,329,786;
+         			   						Berlin,593,668"
+         }
       }
 
    ],
@@ -19,7 +31,7 @@
       {
          name:"Hamburg",
          levelID:"Hamburg",
-         className:"com.haw.projecthorse.level.city.City",
+         className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
          			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
          		},
@@ -39,8 +51,33 @@
             },
              {
                title:"MovementTest",
-               className:"com.haw.projecthorse.level.MovementTest",
+               className:"com.haw.projecthorse.level.test.MovementTest",
                levelID:"MovementTest"
+            },
+            {
+               title:"Huetchenspiel",
+			   className:"com.haw.projecthorse.level.huetchenspiel.HuetchenSpiel",
+               levelID:"huetchenspiel"
+            }
+         ]
+      },
+            {
+         name:"Berlin",
+         levelID:"Berlin",
+         className:"com.haw.projecthorse.level.menu.city.City",
+         parameter:{
+         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         		},
+         games:[
+             {
+               title:"MovementTest",
+               className:"com.haw.projecthorse.level.test.MovementTest",
+               levelID:"MovementTest"
+            },
+            {
+               title:"Huetchenspiel",
+			   className:"com.haw.projecthorse.level.huetchenspiel.HuetchenSpiel",
+               levelID:"huetchenspiel"
             }
          ]
       }

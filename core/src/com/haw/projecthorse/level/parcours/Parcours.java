@@ -1,15 +1,16 @@
 package com.haw.projecthorse.level.parcours;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -17,11 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
@@ -30,7 +30,7 @@ import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
 /**
- * Ein Spiel bei dem man über Hindernisse Springen muss.
+ * Ein Spiel in dem man über Hindernisse Springen muss.
  * @author Francis
  *
  */
@@ -98,11 +98,6 @@ public class Parcours extends Level {
 	private float runUp;
 	
 	/**
-	 * Players Fallen
-	 */
-	private float runDown;
-	
-	/**
 	 * Delta für Jump-Methode
 	 */
 	private float delta;
@@ -113,7 +108,7 @@ public class Parcours extends Level {
 	 */
 	private MoveByAction vorwaerts;
 	private float vorwaertsPos;
-	
+	private Text text;
 	/**
 	 * Action + x-Position für Vorwaertsbewegung beim Fallen
 	 * (Setzen in installPlayer())
@@ -125,6 +120,13 @@ public class Parcours extends Level {
 	 * Action bei Sprung (Setzen in installPlayer())
 	 */
 	private MoveToAction springen;
+	
+	private BitmapFont font;
+	private Batch batch = new SpriteBatch();
+	private int challengedObstacles = 0;
+	private Skin textSkin;
+	private LabelStyle textStyle;
+	private Label textLabel;
 	/**
 	 * Konstruktor initialisiert
 	 * Atlases
@@ -134,13 +136,12 @@ public class Parcours extends Level {
 	 * Objekte
 	 */
 	public Parcours(){
-		gameobjectAtlas = AssetManager.load("Parcours_Gameobjects", false, false, true);
-		backgroundAtlas = AssetManager.load("Parcours_BackgroundGraphics", false, false, true);
+		//gameobjectAtlas = AssetManager.load("Parcours_Gameobjects", false, false, true);
+		//backgroundAtlas = AssetManager.load("Parcours_BackgroundGraphics", false, false, true);
 		
 		
 		installPlayer();
 		initGameLogic();
-		
 		stage = new Stage(this.getViewport());
 		stage.addCaptureListener(new InputListener(){
 			 public boolean touchDown(InputEvent e, float x, float y, int pointer, int button){
@@ -153,6 +154,7 @@ public class Parcours extends Level {
 		
 		initBackgroundGraphics();
 		initObstacles();
+		
 		
 		stage.addActor(player);
 		InputManager.addInputProcessor(stage);
@@ -169,7 +171,7 @@ public class Parcours extends Level {
 	 * Background moveable o. scrollable o. animated (todo)
 	 */
 	private void initBackgroundGraphics(){
-		AtlasRegion atlasRegion= backgroundAtlas.findRegion("ground");
+		/*AtlasRegion atlasRegion= backgroundAtlas.findRegion("ground");
 		Texture page = atlasRegion.getTexture();
 		TextureRegion ground = new TextureRegion(page, atlasRegion.getRegionX(),
 								atlasRegion.getRegionY(), atlasRegion.getRegionWidth(),
@@ -180,11 +182,17 @@ public class Parcours extends Level {
 		TextureRegion landscape = new TextureRegion(page, atlasRegion.getRegionX(),
 								atlasRegion.getRegionY(), atlasRegion.getRegionWidth(),
 								atlasRegion.getRegionHeight());
+		*/
+		/*font = AssetManager.getFont("Parcours_BackgroundGraphics", "scoreFont");
+		font.setScale(2.5F);
+		*/
 		
+		TextureRegion ground = AssetManager.getTextureRegion("Parcours_BackgroundGraphics", "ground");
+		TextureRegion landscape = AssetManager.getTextureRegion("Parcours_BackgroundGraphics", "landscape");
 		this.ground = new Image(ground);
 		this.groundCopy = new Image(ground);
 		this.landscape = new Image(landscape);
-		
+	
 	
 		this.ground.setWidth(this.width); 
 		this.ground.setHeight(this.height - (this.height - 105));
@@ -203,8 +211,19 @@ public class Parcours extends Level {
 		moveableBackgroundGroup.addActor(this.ground);
 		moveableBackgroundGroup.addActor(groundCopy);
 		fixedBackgroundGroup.addActor(this.landscape);
+		//fixedBackgroundGroup.addActor(text);
+		
+		/*textStyle = new LabelStyle(font, Color.BLACK);
+	
+		textLabel = new Label("0", textStyle);
+		textLabel.setPosition(this.width / 2, this.height * 60 / 100);
+		textLabel.setWidth(textLabel.getWidth()*2);
+		textLabel.setHeight(textLabel.getHeight()*2);
+		fixedBackgroundGroup.addActor(textLabel);*/
 		stage.addActor(this.fixedBackgroundGroup);
+		
 		stage.addActor(this.moveableBackgroundGroup);
+		//stage.addActor(text);
 		
 	
 	}
@@ -231,25 +250,16 @@ public class Parcours extends Level {
 		int i = 0;
 		float tmpWidth = 0;
 		for(GameObject o : logic.getObjects()){
-			//o.setBounds(logic.getRandomX(o), 0, 20, 20);
 			if(i == 0){
 				i++;
-				
-				//System.out.println("1 : " + (this.width));
 				o.setBounds(this.width, 0, o.getWidth1(), o.getHeight1());
-				//o.setOrigin(this.width - o.getWidth1(), o.getHeight());
 				o.setScale(0.5F);
 				tmpWidth = o.getWidth();
-				//System.out.println("" + o.getHeight() + " " + o.getWidth() + " " + o.getScaleX());
 			}else{
-				float rand = logic.getRandomX(o);
-				//System.out.println("2: " + rand);
 				o.setBounds(this.width + tmpWidth + ((float)Math.floor(Math.random() * (logic.getMaxDistanceX()- logic.getMinDistanceX()) + logic.getMinDistanceX())) , 0, o.getWidth1(), o.getHeight1());
-				//o.setOrigin(rand, o.getHeight());
 				tmpWidth = o.getWidth();
 				o.setScale(0.5F);
 			}
-			//stage.addActor(o);
 			o.setName("Huerde_" + i);
 			
 			moveableObstacleGroup.addActor(o);
@@ -266,8 +276,8 @@ public class Parcours extends Level {
 	 * Kameramove wenn Vorwärtssprung (todo)
 	 */
 	private void jump(){
-		initPlayerActions();
-		ParallelAction a = new ParallelAction(vorwaerts, springen);
+		initPlayerActions();	
+		//Vorwaerts bewegen
 		player.addAction(vorwaerts);
 		player.setX(vorwaertsPos);
 		
@@ -276,11 +286,7 @@ public class Parcours extends Level {
 
 		
 		//Fallen
-		player.addAction(fallen);
-	//	player.setX(fallenPos);
-		
-		
-		
+		player.addAction(fallen);		
 		
 	}
 	
@@ -293,7 +299,6 @@ public class Parcours extends Level {
 		 player = new PlayerImpl();
 		 player.setScale(1.5F);
 		 runUp = player.getWidth() * 1.3f;
-		 runDown =  runUp * 1.0f;
 		 player.setPosition(playersPointOfView, 0);
 		 player.scaleBy(0.2F);
 		 
@@ -348,6 +353,8 @@ public class Parcours extends Level {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		player.setAnimation(Direction.RIGHT, 0.2f);
 		
+		
+		
 		//Bewege Gameobjects
 		for(GameObject o : logic.getObjects()){
 			o.moveBy(0-gameSpeed, 0);	
@@ -356,6 +363,7 @@ public class Parcours extends Level {
 			if(o.getX() + o.getWidth() < 0){
 				float rand = logic.getRandomX(o);
 				o.setPosition(rand, 0);
+				//textLabel.setText("" + ++challengedObstacles);
 			}
 			
 		}
@@ -377,14 +385,16 @@ public class Parcours extends Level {
 		moveableBackgroundGroup.moveBy(0-gameSpeed, 0);
 	
 		stage.act(delta);
+		/*batch.begin();
+		font.draw(batch, "a", 50, 300);
+		batch.end();*/
 		stage.draw();
 		
 	}
 
 	@Override
 	protected void doDispose() {
-		backgroundAtlas.dispose();
-		gameobjectAtlas.dispose();
+		
 		
 	}
 

@@ -4,16 +4,13 @@ package com.haw.projecthorse.level.huetchenspiel;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
 public class HatListener extends InputListener{
 	
 	private int id;
 	private HuetchenSpiel hs;
 	private boolean found = false;
-	//private Timer timer;
-	//private int time;
+	private boolean pressed = false;
 	
 	/**
 	 * Konstruktor
@@ -25,8 +22,6 @@ public class HatListener extends InputListener{
 		super();
 		this.hs = hs;
 		this.id = id;
-		//this.timer = new Timer();
-		//this.time = 2;
 	}
 
 	/**
@@ -35,9 +30,15 @@ public class HatListener extends InputListener{
 	 */
 	@Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-		if(this.id == hs.rightNum){
-			this.found = true;
+		if(!hs.getRoundFinished()){
+			if(this.id == hs.rightNum){
+				this.found = true;
+			}
+			else{
+				this.pressed = true;
+			}
 		}
+		
         return true;
     }
 	
@@ -46,33 +47,11 @@ public class HatListener extends InputListener{
 	 */
 	@Override
     public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-       // if(this.found){       
-        /*	Timer.schedule(new Task(){
-        	@Override
-        	public void run(){
-        		System.out.println("bla");
-        		}
-        	}, this.time);
-        	*/
-        	//this.found = false;
-        	//this.hs.getPlayer().setVisible(false);
-        //    hs.generateRightNum();
-        //}
-
-        
-        
-        /*
-        try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+      
     }
 
 	/**
-	 * Rueckgabe der "gefunden"-Variable
+	 * Info, ob Pferd gefunden wurde
 	 * @return true fuer Horse gefunden, sonst false
 	 */
 	protected boolean getFound(){
@@ -87,4 +66,19 @@ public class HatListener extends InputListener{
 		this.found = found;
 	}
 
+	/**
+	 * Info, ob Hut gewaehlt wurde
+	 * @return true fuer gedrueckt, sonst false
+	 */
+	protected boolean getPressed(){
+		return this.pressed;
+	}
+
+	/**
+	 * Setzen des "gewaehlt"-Wertes
+	 * @param pressed Wert festlegen, ob Hut gewaehlt wurde
+	 */
+	protected void setPressed(boolean pressed){
+		this.pressed = pressed;
+	}
 }

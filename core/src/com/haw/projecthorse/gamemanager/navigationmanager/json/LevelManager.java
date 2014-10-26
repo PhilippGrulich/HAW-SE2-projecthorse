@@ -89,5 +89,9 @@ public class LevelManager {
 		return config.getGameByLevelID(levelID);
 	}
 	
+	public final MenuObject getMenuObject(final String levelID) throws LevelNotFoundException {		
+		return  config.getMenuByLevelID(levelID);
+	}
+	
 
 }

@@ -1,4 +1,17 @@
-worldmap.png; CC-0; San Jose; http://commons.wikimedia.org/wiki/File:Blank_political_map_Europe_in_2006_WF.svg
-Sankt-Michaelis-Kirche_Hamburg.jpg;CC-0;Thomas Wolf; www.foto-tw.de
-germanymap.png; CC0; unbekannter Autor; http://pixabay.com/de/karte-deutschland-staaten-304071/
-background .png; CC0;Sam; http://opengameart.org/content/country-field
+worldmap;worldmap.png; CC-0; San Jose; http://commons.wikimedia.org/wiki/File:Blank_political_map_Europe_in_2006_WF.svg
+city;Sankt-Michaelis-Kirche_Hamburg.jpg;CC-0;Thomas Wolf; www.foto-tw.de
+worldmap;germanymap.png; CC-0; unbekannter Autor; http://pixabay.com/de/karte-deutschland-staaten-304071/
+menu;Background.png; CC-0;Sam; http://opengameart.org/content/country-field
+appleRun;ground.png; CC-0; Kenney; http://www.kenney.nl
+appleRun;apple1.png; CC-0; Lars;
+appleRun;apple2.png; CC-0; Lars; 
+appleRun;apple3.png; CC-0; Lars; 
+appleRun;apple4.png; CC-0; Lars; 
+appleRun;branch1.png; CC-0; Lars; 
+appleRun;branch2.png; CC-0; Lars; 
+appleRun;tree.png; CC-0; Lars;
+huetchenspiel; purple-witch-hat.png; cc-0; Pippi2011; https://openclipart.org/image/300px/svg_to_png/181468/purple-witch-hat.png
+huetchenspiel;obj_trees1.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/
+huetchenspiel;obj_trees2.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/
+huetchenspiel;Garden_Witch.png; cc-0; Scout; https://openclipart.org/detail/191073/garden-witch--by-scout-191073
+huetchenspiel;nicubunu_Callout_cloud_center.png; cc-0; nicubunu; https://openclipart.org/image/300px/svg_to_png/13925/nicubunu_Callout_cloud_center.png

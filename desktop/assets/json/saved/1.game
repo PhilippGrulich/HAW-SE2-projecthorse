@@ -5,10 +5,11 @@ horse: {
 	color: {
 		color: {
 			a: 1,
-			b: 0.17254902,
-			g: 0.6392157,
+			b: 0.8745098,
+			g: 0.49411765,
 			r: 1
-		}
+		},
+		black: false
 	},
 	name: "Brauner Blitz"
 }

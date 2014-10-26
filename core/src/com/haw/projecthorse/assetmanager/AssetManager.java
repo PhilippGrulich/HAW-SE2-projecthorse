@@ -12,7 +12,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,425 +22,781 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.haw.projecthorse.assetmanager.exceptions.*;
+
 public final class AssetManager {
-	
-	private static AssetManager ownAssetManager;
+
 	private static String assetDir = "";
-	private static final String FILESEPARATOR = 
-			System.getProperty("file.separator");
+	private static final String FILESEPARATOR = System
+			.getProperty("file.separator");
 	private static final String FOLDERNAME_SOUNDS = "sounds";
 	private static final String FOLDERNAME_MUSIC = "music";
 	private static final String FOLDERNAME_PICTURES = "pictures";
 	private static String directory_sounds;
 	private static String directory_music;
 	private static String directory_pictures;
-	private static com.badlogic.gdx.assets.AssetManager assetManager = 
-			new com.badlogic.gdx.assets.AssetManager();
+	private static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
 	private static TextureAtlas assets = null;
 	private static boolean isApplicationTypeChoosen = false;
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
+	
+	//Mapped mit LevelID auf TextureAtlas - Haelt AtlasObjekte Vorraetig zwecks Performance
 	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
-	private static Texture errorPic;
+	//Mapped mit LevelID auf Pfade von Atlas Objekten im Falle von Verlust eines Atlas bei dispose (Performance)
+	private static Map<String, String> administratedAtlasesPath = new HashMap<String, String>();
+	//Mapped mit LevelID auf Pfade von Sound / Music sofern 1 Mal vorher darauf zugegriffen wurde.
+	//da laden aller Sounds / Music am Anfang, wie bei Atlas Dateien, nicht Sinnvoll.
+	private static Map<String, ArrayList<String>> administratedSoundPath;
+	private static Map<String, ArrayList<String>> administratedMusicPath;
 	
-	private AssetManager(){};
-	
-	public static AssetManager getInstance(){
-		if(AssetManager.ownAssetManager == null){
-			AssetManager.ownAssetManager = new AssetManager();
-		}
-		return ownAssetManager;
-	}
-	
-	/**
-	 * Lädt Sounds, Musik, Bilder. Bilder werden als TextureAtlas-Objekte zurückgegeben. 
-	 * @param levelID
-	 * @param loadSounds true, wenn Soundfiles geladen werden sollen, sonst false
-	 * @param loadMusic true, wenn Musikfiles geladen werden sollen, sonst false
-	 * @param loadPictures true, wenn Bilder geladen werden sollen, sonst false
-	 * @return assets Alle Textures zusammengefasst als TextureAtlas
-	 */
-	public static TextureAtlas load(String levelID, boolean loadSounds, boolean loadMusic, boolean loadPictures){
-		if(!isApplicationChoosen()){
-			setApplicationRoot();
-		}
-		
-		if(loadSounds){
-			findAssetFolder(levelID, directory_sounds, Assets.SOUNDS);
-		}
-		if(loadMusic){
-			findAssetFolder(levelID, directory_music, Assets.MUSIC);
-		}
-		if(loadPictures){	
-			String[] licenseType = {"cc-0_license", "cc-by_license","selfmade_license"};
-			//checkFiles(readLicensesAndSplitEntries(licenseType));
-			findAssetFolder(levelID, directory_pictures, Assets.PICTURES);
-		}
-		assetManager.finishLoading();
-		
-	
-			
-		if(assets == null){
-			System.out.println("Bilder konnten nicht geladen werden," + 
-					"da kein TextureAtlas erstellt wurde. TexturePacker.main() nicht ausgef�hrt?");
-			
-		}
-		
-		return assets;
-	}
-	
+	private static TextureRegion errorPic;
 
+	
+	public static void initialize(){
+		setApplicationRoot();
+		loadAtlases(directory_pictures, directory_pictures);
+		loadAudioPaths();
+	}
+	
 	/**
-	 * Setzen des root-Verzeichnisses. Wird für den Zugriff auf Assets benötigt.
-	 * Weiterhin werden die Sound, Music und Texture Pfade gesetzt
+	 * Setzen des root-Verzeichnisses. Wird fuer den Zugriff auf Assets
+	 * benoetigt. Weiterhin werden die Sound, Music und Texture Pfade gesetzt
 	 */
-	private static void setApplicationRoot(){
+	private static void setApplicationRoot() {
 		if (Gdx.app.getType() == ApplicationType.Android) {
-		
-			assetDir = "" ;
+
+			assetDir = "";
 			setApplicationType();
-			} 
-		else if (Gdx.app.getType() == ApplicationType.Desktop) {
-		
-			assetDir = System.getProperty("user.dir") + FILESEPARATOR+"bin"+FILESEPARATOR ;
+		} else if (Gdx.app.getType() == ApplicationType.Desktop) {
+
+			assetDir = System.getProperty("user.dir") + FILESEPARATOR + "bin"
+					+ FILESEPARATOR;
 			setApplicationType();
-			}
-		else{
+		} else {
 			System.out.println("In AssetManager: No android or desktop device");
 		}
 		
-		directory_sounds = assetDir+FOLDERNAME_SOUNDS+ FILESEPARATOR;
-		directory_music = assetDir+FOLDERNAME_MUSIC+ FILESEPARATOR;
-		directory_pictures = assetDir+FOLDERNAME_PICTURES + FILESEPARATOR;
-		
-		//errorPic = new Texture(Gdx.files.internal(FOLDERNAME_PICTURES + FILESEPARATOR + "errorPic.png"));
-		System.out.println("test");
-	}
+		directory_sounds = assetDir + FOLDERNAME_SOUNDS  ;
+		directory_music = assetDir + FOLDERNAME_MUSIC ;
+		directory_pictures = assetDir + FOLDERNAME_PICTURES ;
 	
-	private static boolean isApplicationChoosen(){
-		return isApplicationTypeChoosen;
-	}
-	
-	private static void setApplicationType(){
-		isApplicationTypeChoosen = true;
 	}
 	
 	/**
-	 * Sucht im Ordner FOLDERNAME_type den Ordner mit der levelID. 
-	 * @param levelID
-	 * @param path assetDir + FOLDERNAME_type 
-	 * @param type Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
+	 * HashMap f�r Pfade zu Sound- und Musikdateien erzeugen,
+	 * Methode f�r rekursiven Abstieg in Verzeichnisstruktur aufrufen.
 	 */
-	private static void findAssetFolder(String levelID, String path, Assets type){
+	private static void loadAudioPaths(){
+		administratedSoundPath = new HashMap<String, ArrayList<String>>();
+		administratedMusicPath = new HashMap<String, ArrayList<String>>();
+		loadAudioPaths(directory_sounds, directory_sounds, Assets.SOUNDS);
+		loadAudioPaths(directory_sounds, directory_sounds, Assets.MUSIC);
+	}
 	
+	/**
+	 * 
+	 * Arbeitet rekursiv, durchsucht Pfad path nach Audiodateien, 
+	 * ruft bei Auffinden von Audiodatei chooseAudioMap auf.
+	 * @param path Pfad zum Verzeichnis dessen Inhalt nach Audiodateien durchsucht wird.
+	 * @param levelID Name des aktuellen Verzeichnisses.
+	 * @param type Assets.SOUND oder Assets.MUSIC
+	 */
+	private static void loadAudioPaths(String path, String levelID, Assets type) {
+		FileHandle[] files = Gdx.files.internal(path).list();
+		for (FileHandle file : files) {
+			if (file.isDirectory()) {
+				System.out.println("AssetManager.loadAudioPaths: file.name(): "
+						+ file.name() + " is dir");
+				loadAudioPaths(path + FILESEPARATOR + file.name(), file.name(), type);
+			} else {
+				if (file.name().toLowerCase()
+						.matches(".*(\\.mp3|\\.wav|\\.ogg)$")) {
+					chooseAudioMap(levelID, path + FILESEPARATOR + file.name(), type);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Fuer type == Assets.Sound wird (levelID, Path) als (Key, Value) in administratedSoundPaths abgelegt.
+	 * Fuer type == Assets.Music analog.
+	 * @param levelID Name des Ordners
+	 * @param path
+	 * @param type
+	 */
+	private static void chooseAudioMap(String levelID, String path, Assets type){
+		if(type == Assets.SOUNDS){
+			if (!administratedSoundPath.containsKey(levelID)) {
+				administratedSoundPath.put(levelID,
+						new ArrayList<String>());
+			}
+			int startIdx = path.indexOf(FOLDERNAME_SOUNDS);
+			path = path.substring(startIdx, path.length()).replace("\\",
+					"/");
+		administratedSoundPath.get(levelID).add(path);
+		}else if(type == Assets.SOUNDS){
+			if (!administratedMusicPath.containsKey(levelID)) {
+				administratedMusicPath.put(levelID,
+						new ArrayList<String>());
+			}
+			int startIdx = path.indexOf(FOLDERNAME_MUSIC);
+			path = path.substring(startIdx, path.length()).replace("\\",
+					"/");
+			administratedMusicPath.get(levelID).add(path);
+		}
+	}
+	
+	/**
+	 * L�dt alle Dateien von levelID die im sounds Ordner sind. 
+	 * @param levelID ID des Levels.
+	 */
+	public static void loadSounds(String levelID){
+		System.out.println("loadSounds: " + levelID);
+		ArrayList<String> soundsPaths = administratedSoundPath.get(levelID);
+		if(soundsPaths == null){
+			System.out.println("Sounds f�r levelID: " + levelID + " nicht gefunden.");
+		}else{
+			for(String path : soundsPaths){
+				System.out.println("loadSounds: " + path);
+				assetManager.load(path, Sound.class);
+				System.out.println("" + path + " geladen? " + assetManager.isLoaded(path));
+			}
+		}
+		assetManager.finishLoading();
+	}
+	
+	/**
+	 * Laedt einmal beim Start der Anwendung alle .atlas-Dateien in den Speicher.
+	 * @param path Pfad zum Parent-Directory der Bilder.
+	 * @param levelID path Pfad zum Parent-Directory der Bilder.
+	 */
+	private static void loadAtlases(String path, String levelID) {
+		FileHandle[] files = Gdx.files.internal(path).list();
+		for (FileHandle file : files) {
+			if (file.name().matches(".*\\.atlas")) {
+				int startIdx = path.indexOf(FOLDERNAME_PICTURES);
+				String relativeFilePath = path.substring(startIdx,
+						path.length()).replace("\\", "/")
+						+ "/" + file.name();
+				// assets = new
+				// TextureAtlas(Gdx.files.internal(relativeFilePath));
+				TextureAtlas atlas = new TextureAtlas(
+						Gdx.files.internal(relativeFilePath));
+				assetManager.load(relativeFilePath, TextureAtlas.class);
+				administratedAtlasesPath.put(levelID, relativeFilePath);
+				administratedAtlases.put(levelID, atlas);
+
+			} else {
+				loadAtlases(path + FILESEPARATOR + file.name(), file.name());
+			}
+		}
+	}
+	
+	/**
+	 * Liefert TextureAtlas
+	 * @param levelID
+	 * @return
+	 */
+	/*public static TextureAtlas loadAtlas(String levelID){
+		if(!administratedAtlases.containsKey(levelID)){
+			administratedAtlases.put(levelID, new TextureAtlas(Gdx.files.internal(
+					administratedAtlasesPath.get(levelID))));
+		}
+		return administratedAtlases.get(levelID);
+	}*/
+	/**
+	 * VERALTET!
+	 * Stattdessen:
+	 * Zugriff direkt auf TextureRegions: {@link #getTextureRegion(String, String)}
+	 * Sounds laden: {@link #loadSounds(String)}
+	 * Sounds spielen: {@link #playSound(String, String)}
+	 * Musik noch nicht implementiert.
+	 */
+	public static TextureAtlas load(String levelID, boolean loadSounds,
+			boolean loadMusic, boolean loadPictures) {
+		
+		if (!isApplicationChoosen()) {
+			initialize();
+		}
+
+		if (loadSounds) {
+			if(administratedSoundPath.containsKey(levelID)){
+				for(String path : administratedSoundPath.get(levelID)){
+					assetManager.load(path, Sound.class);
+				}
+			}else {
+				findAssetFolder(levelID, directory_sounds, Assets.SOUNDS);
+			}
+			
+		}
+		if (loadMusic) {
+			if(administratedSoundPath.containsKey(levelID)){
+				for(String path : administratedMusicPath.get(levelID)){
+					assetManager.load(path, Music.class);
+				}
+			}else {
+				findAssetFolder(levelID, directory_music, Assets.MUSIC);
+			}
+			
+		}
+		
+		
+		assetManager.finishLoading();
+		
+		// return assets;
+		return administratedAtlases.get(levelID);
+	}
+
+
+
+	private static boolean isApplicationChoosen() {
+		return isApplicationTypeChoosen;
+	}
+
+	private static void setApplicationType() {
+		isApplicationTypeChoosen = true;
+	}
+
+	/**
+	 * Sucht im Ordner FOLDERNAME_type den Ordner mit der levelID.
+	 * 
+	 * @param levelID
+	 * @param path
+	 *            assetDir + FOLDERNAME_type
+	 * @param type
+	 *            Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
+	 */
+	private static void findAssetFolder(String levelID, String path, Assets type) {
+
 		FileHandle[] files = Gdx.files.internal(path).list();
 		ArrayList<String> content = new ArrayList<String>();
 
-		for(FileHandle file: files) {
+		for (FileHandle file : files) {
 			content.add(file.name());
 		}
-		
-		try{
-			if(content.contains(levelID)){
-				loadAssets(levelID, path + FILESEPARATOR + levelID, type);			
-		}else {
-			throw new LevelDirectoryNotFoundException("Ordner mit LevelID " + levelID + " in " + path + " nicht gefunden");
-		
-		}
-		}catch(LevelDirectoryNotFoundException e){
+
+		try {
+			if (content.contains(levelID)) {
+				loadAssets(levelID, path + FILESEPARATOR + levelID, type);
+			} else {
+				throw new LevelDirectoryNotFoundException("Ordner mit LevelID "
+						+ levelID + " in " + path + " nicht gefunden");
+
+			}
+		} catch (LevelDirectoryNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
-	
+
 	/**
-	 * Geht für type== Assets.Sound, type == Assets.Music etc. rekursiv durch die Verzeichnisse
-	 * ab path. Bei auffinden einer Datei Audio oder Bilddatei wird loadAudio oder
-	 *  loadTextureAtlas aufgerufen.
-	 * @param levelID 
-	 * @param path assetDir + FOLDERNAME_type ODER Unterverzeichnis (rekursiver Aufruf)
-	 * @param type Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
+	 * Geht für type== Assets.Sound, type == Assets.Music etc. rekursiv durch
+	 * die Verzeichnisse ab path. Bei auffinden einer Datei Audio oder Bilddatei
+	 * wird loadAudio oder loadTextureAtlas aufgerufen.
+	 * 
+	 * @param levelID
+	 * @param path
+	 *            assetDir + FOLDERNAME_type ODER Unterverzeichnis (rekursiver
+	 *            Aufruf)
+	 * @param type
+	 *            Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
 	 */
-	private static void loadAssets(String levelID, String path, Assets type){
-		
+	private static void loadAssets(String levelID, String path, Assets type) {
+
 		FileHandle[] files = Gdx.files.internal(path).list();
-	
-		for(FileHandle file: files) {
-			if(file.isDirectory()){
-				loadAssets(levelID, path + FILESEPARATOR +file.name(), type);
-			}else{
-				if(type == Assets.SOUNDS || type == Assets.MUSIC){
-					loadAudio(path, file.name(), type);
-				}else if(type == Assets.PICTURES){
+
+		for (FileHandle file : files) {
+			if (file.isDirectory()) {
+				loadAssets(levelID, path + FILESEPARATOR + file.name(), type);
+			} else {
+				if (type == Assets.SOUNDS) {
+					if(administratedSoundPath.get(levelID) == null){
+						administratedSoundPath.put(levelID, new ArrayList<String>());
+					}
+					loadAudio(path, levelID, file.name(), type);
+				} else if(type == Assets.MUSIC) {
+					if(administratedMusicPath.get(levelID) == null){
+						administratedMusicPath.put(levelID, new ArrayList<String>());
+					}
+					loadAudio(path, levelID, file.name(), type);
+				}
+				  else if (type == Assets.PICTURES) {
 					loadTextureAtlas(levelID, path, file.name());
 				}
 			}
-		}		
-		
-		
+		}
+
 	}
 	
 	/**
-	 * Prüft ob die gefundene Datei im path eine .atlas Datei ist und lädt diese.
-	 * Ruft anschließend insertAtlasMap().
+	 * Liefert BitmapFont einer .fnt Datei
+	 * @param levelID 
+	 * @param filename
+	 * @return b BitmapFont
+	 */
+	public static BitmapFont getFont(String levelID, String filename){
+		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
+		String relativeFilePath = directory_pictures.substring(startIdx,
+				directory_pictures.length()).replace("\\", "/")
+				 + levelID + "/" + filename + ".fnt";
+		System.out.println(relativeFilePath);
+		TextureRegion t = getTextureRegion(levelID, filename);
+		
+		BitmapFont b = new BitmapFont(Gdx.files.internal(relativeFilePath), t);
+		return b;
+	}
+
+	/**
+	 * Prueft ob die gefundene Datei im path eine .atlas Datei ist und laedt
+	 * diese. Ruft anschließend insertAtlasMap().
+	 * 
 	 * @param levelID
 	 * @param path
-	 * @param filename 
+	 * @param filename
 	 */
-	private static void loadTextureAtlas(String levelID, String path, String filename){
-		if(filename.toLowerCase().matches(".*(\\.atlas)$")){
+	private static void loadTextureAtlas(String levelID, String path,
+			String filename) {
+		if (filename.toLowerCase().matches(".*(\\.atlas)$")) {
 			int startIdx = path.indexOf(FOLDERNAME_PICTURES);
-			String relativeFilePath = path.substring(startIdx, path.length()).replace("\\", "/") + "/" + filename;
+			String relativeFilePath = path.substring(startIdx, path.length())
+					.replace("\\", "/") + "/" + filename;
 			assetManager.load(relativeFilePath, TextureAtlas.class);
 			assets = new TextureAtlas(Gdx.files.internal(relativeFilePath));
-			administratedAtlases.put(levelID, new TextureAtlas(Gdx.files.internal(relativeFilePath)));
+			administratedAtlases.put(levelID,
+					new TextureAtlas(Gdx.files.internal(relativeFilePath)));
+			administratedAtlasesPath.put(levelID, relativeFilePath);
 		}
 	}
-	
+
 	/**
-	 * Prüft ob File eine Audiodatei ist die unterstützt wird. Falls ja, wird bei
-	 * type == Assets.SOUND die Datei als SOUND geladen. Analog bei type == Assets.MUSIC
+	 * Prueft ob File eine Audiodatei ist die unterstuetzt wird. Falls ja, wird
+	 * bei type == Assets.SOUND die Datei als SOUND geladen. Analog bei type ==
+	 * Assets.MUSIC
+	 * 
 	 * @param path
 	 * @param filename
 	 * @param type
 	 */
-	private static void loadAudio(String path, String filename, Assets type){
-		if(filename.toLowerCase().matches(".*(\\.mp3|\\.wav|\\.ogg)$")){
-			if(type == Assets.SOUNDS){
+	private static void loadAudio(String path, String levelID, String filename, Assets type) {
+		if (filename.toLowerCase().matches(".*(\\.mp3|\\.wav|\\.ogg)$")) {
+			if (type == Assets.SOUNDS) {
 				int startIdx = path.indexOf(FOLDERNAME_SOUNDS);
-				path = path.substring(startIdx, path.length()).replace("\\", "/") + "/" + filename;
+				path = path.substring(startIdx, path.length()).replace("\\",
+						"/")
+						+ "/" + filename;
 				assetManager.load(path, Sound.class);
-			}else if(type == Assets.MUSIC){
+				administratedSoundPath.get(levelID).add(path);
+			} else if (type == Assets.MUSIC) {
 				int startIdx = path.indexOf(FOLDERNAME_MUSIC);
-				path = path.substring(startIdx, path.length()).replace("\\", "/") + "/" + filename;
-				
+				path = path.substring(startIdx, path.length()).replace("\\",
+						"/")
+						+ "/" + filename;
 				assetManager.load(path, Music.class);
+				administratedMusicPath.get(levelID).add(path);
 			}
 		}
 	}
 
 	/**
-	 * Zerstört den Assetmanager, disposed alle Assets.
+	 * Zerstoert den Assetmanager, disposed alle Assets.
 	 */
-	public static void disposeAll(){
+	public static void disposeAll() {
 		assetManager.dispose();
 		assets = null;
 	}
-	
+
 	/**
 	 * Disposed die Assets die durch den Atlas referenziert sind.
-	 * @param levelID Die Level ID
-	 * @param atlas Der Atlas, den man beim load(...) erhalten hat.
+	 * 
+	 * @param levelID
+	 *            Die Level ID
+	 * @param atlas
+	 *            Der Atlas, den man beim load(...) erhalten hat.
 	 */
-	public static void disposeAtlas(String levelID, String atlas){
+	public static void disposeAtlas(String levelID, String atlas) {
 		assetManager.unload(atlas);
 		administratedAtlases.remove(levelID);
 		assets = null;
 	}
-	
-	
+
 	/**
-	 * Spielt Sound ab, indem der Sound in den Arbeitsspeicher geladen wird.
-	 * Der Pfad zur Sounddatei startet relativ zum Oberordner mit der levelID.
-	 * Z.B. liegt die Datei in sounds/mainMenu/asdfa/flap.wav dann ist der name als asdfa/flap.wav
-	 * anzugeben. 
-	 * @param name Pfad zur Sounddatei
-	 * @param levelID Die ID des Levels
+	 * Spielt Sound ab, indem der Sound in den Arbeitsspeicher geladen wird. Der
+	 * Pfad zur Sounddatei startet relativ zum Oberordner mit der levelID. Z.B.
+	 * liegt die Datei in sounds/mainMenu/abc/flap.wav dann ist der name als
+	 * abc/flap.wav anzugeben.
+	 * 
+	 * @param name
+	 *            Pfad zur Sounddatei
+	 * @param levelID
+	 *            Die ID des Levels
 	 */
-	public static void playSound(String levelID, String name){
-		assetManager.get(FOLDERNAME_SOUNDS + "/" + levelID + "/" + name, Sound.class).play(soundVolume);
+	public static void playSound(String levelID, String name) {
+		assetManager.get(FOLDERNAME_SOUNDS + "/" + levelID + "/" + name,
+				Sound.class).play(soundVolume);
 	}
-	
+
 	/**
-	 * Ändert die Soundlautstärke, indem die Spieltlautstaerke fuer Sounds neu gesetzt wird
-	 * @param volume Die Lautstärke des Sounds im Bereich [0,1]. 0 ist stumm.
+	 * Aendert die Soundlautst�rke, indem die Spieltlautstaerke fuer Sounds neu
+	 * gesetzt wird
+	 * 
+	 * @param volume
+	 *            Die Lautstärke des Sounds im Bereich [0,1]. 0 ist stumm.
 	 */
-	public static void changeSoundVolume(float volume){
+	public static void changeSoundVolume(float volume) {
 		soundVolume = volume;
 	}
-	
+
 	/**
-	 * Spielt die Musikdatei ab, indem der Sound in den Arbeitsspeicher geladen wird.
-	 * Der Pfad zur Sounddatei startet relativ zum Oberordner mit der levelID.
-	 * Z.B. liegt die Datei in music/mainMenu/asdfa/flap.wav dann ist der name als asdfa/life.wav
-	 * anzugeben. 
-	 * @param leveldID ID des Levels
-	 * @param name Name der Datei ink. relativem Pfad (ohne Oberordner mit Namen "levelID"
+	 * Spielt die Musikdatei ab, indem der Sound in den Arbeitsspeicher geladen
+	 * wird. Der Pfad zur Sounddatei startet relativ zum Oberordner mit der
+	 * levelID. Z.B. liegt die Datei in music/mainMenu/asdfa/flap.wav dann ist
+	 * der name als asdfa/life.wav anzugeben.
+	 * 
+	 * @param leveldID
+	 *            ID des Levels
+	 * @param name
+	 *            Name der Datei ink. relativem Pfad (ohne Oberordner mit Namen
+	 *            "levelID"
 	 */
-	public static void playMusic(String levelID, String name){
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name, 
+	public static void playMusic(String levelID, String name) {
+		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
 				Music.class).play();
 		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
 				Music.class).setVolume(musicVolume);
 	}
-	
+
 	/**
 	 * Schaltet die Musik aus, indem sie angehalten wird.
-	 * @param levelID ID des Levels
-	 * @param name Name der Datei inkl. relativem Pfad (ohne Oberordner mit Namen "levelID").
+	 * 
+	 * @param levelID
+	 *            ID des Levels
+	 * @param name
+	 *            Name der Datei inkl. relativem Pfad (ohne Oberordner mit Namen
+	 *            "levelID").
 	 */
-	public static void turnMusicOff(String levelID, String name){
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name, Music.class).stop();
+	public static void turnMusicOff(String levelID, String name) {
+		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
+				Music.class).stop();
 	}
-	
-	public static String getFileseparator(){
+
+	public static String getFileseparator() {
 		return FILESEPARATOR;
 	}
-	
+
 	/**
-	 * Ändert die Musiklautstärke und setzt die Spiellautstaerke auf neuen Wert
-	 * @param levelID ID des Levels
-	 * @param name Name der Datei inkl. relativem Pfad (ohne Oberordner mit Namen "levelID").
-	 * @param volume Float-Wert zwischen [0,1]. 0 ist Stumm, 1 volle Lautstärke.
+	 * Aendert die Musiklautstärke und setzt die Spiellautstaerke auf neuen
+	 * Wert
+	 * 
+	 * @param levelID
+	 *            ID des Levels
+	 * @param name
+	 *            Name der Datei inkl. relativem Pfad (ohne Oberordner mit Namen
+	 *            "levelID").
+	 * @param volume
+	 *            Float-Wert zwischen [0,1]. 0 ist Stumm, 1 volle Lautstärke.
 	 */
-	public static void changeMusicVolume(String levelID, String name, float volume){
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name, Music.class).setVolume(volume);
+	public static void changeMusicVolume(String levelID, String name,
+			float volume) {
+		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
+				Music.class).setVolume(volume);
 		musicVolume = volume;
 	}
-	
+
 	/**
-	 * Greift auf den TextrueAtlas der levelID zu und liefert die Texture
-	 * "filename".
-	 * @param levelID ID des Levels
-	 * @param filename Dateiname
-	 * @return result Ist die Texture, sonst ein rotes Kreuz zur Fehleranzeige
+	 * Greift auf den TextrueAtlas der levelID zu und liefert die TextureRegion
+	 * "filename"
+	 * 
+	 * @param levelID
+	 *            ID des Levels
+	 * @param filename
+	 *            Dateiname
+	 * @return result Ist die TextureRegion, sonst ein rotes Kreuz zur
+	 *         Fehleranzeige
 	 */
-	public static Texture getTexture(String levelID, String filename){
-		Texture result;
-		
-		try{
-			if(administratedAtlases.get(levelID).findRegion(filename) != null){
-				result = administratedAtlases.get(levelID).findRegion(filename).getTexture();
-				return result;
+	public static TextureRegion getTextureRegion(String levelID, String filename) {
+		AtlasRegion atlasRegion;
+
+		if(!administratedAtlases.containsKey(levelID)){
+			if(!administratedAtlasesPath.containsKey(levelID)){
+				System.out.println("TextureAtlas + " + levelID + " existiert nicht.");
 			}else{
-				throw new TextureNotFoundException("Bild " + filename + " nicht gefunden.");
+				assetManager.load(administratedAtlasesPath.get(levelID), TextureAtlas.class);
+				administratedAtlases.put(levelID, new TextureAtlas(
+						Gdx.files.internal(administratedAtlasesPath.get(levelID))));
+				assetManager.finishLoading();
 			}
-		}catch(TextureNotFoundException e){
+		}
+		
+		try {
+			if (administratedAtlases.get(levelID).findRegion(filename) != null) {
+				atlasRegion = administratedAtlases.get(levelID).findRegion(
+						filename);
+				Texture page = atlasRegion.getTexture();
+				TextureRegion result = new TextureRegion(page,
+						atlasRegion.getRegionX(), atlasRegion.getRegionY(),
+						atlasRegion.getRegionWidth(),
+						atlasRegion.getRegionHeight());
+				return result;
+			} else {
+				throw new TextureNotFoundException("Bild " + filename
+						+ " nicht gefunden.");
+			}
+		} catch (TextureNotFoundException e) {
 			e.printStackTrace();
 		}
 		return errorPic;
 	}
-	
+
 	/**
-	 * Assettypen die zur Zeit unterstütz werden.
-	 * @author Francis
+	 * Assettypen die zur Zeit unterstuetz werden.
 	 *
 	 */
 	public enum Assets {
 		SOUNDS, MUSIC, PICTURES
 	}
+
 	
-	/**
-	 * Liest aus den Lizenzdateien die Zeilen aus und splittet
-	 * deren Eintraege getrennt nach dem Semikolon. Somit
-	 * kann auf das 2D Array, auf jede Zeichenkette die in
-	 * der Textdatei durch das Semikolon getrennt ist, zugegriffen werden
-	 * @param licenseTypes cc-0, cc-by oder selfmade wird bei Aufruf
-	 * automatisch uebergeben
-	 * @return Key:=licenseType Values:=2D Array das die Zeilen im txt-File
-	 * repraesentiert
+	/***********************************************************************************************
+	 ***********************************************************************************************
+	 *********************************Lizenz-File-Handling******************************************
+	 ***********************************************************************************************
+	 ***********************************************************************************************
 	 */
-	private static Map<String, String[][]> readLicensesAndSplitEntries(final String[] licenseTypes) {
-		List<String> stringList;
-		String licenseDir = assetDir + FILESEPARATOR + "pictures";
-		String[][] seperatedEntries;
-		final int maxLicenseLineSize = 5;
-		String[] listLine;
-		Map<String, String[][]> stringMap = new
-				HashMap<String, String[][]>();
-		
-		//Zeilen aus den Lizenztextdateien lesen und
-		//einer Liste hinzufuegen
+	public static void checkLicenses() {
+		String[] licenseType = { "cc-0_license", "cc-by_license",
+				"selfmade_license" };
+		checkFiles(readLicensesAndSplitEntries(licenseType));
+	}
+
+	/**
+	 * Liest aus den Lizenzdateien die Zeilen aus und splittet deren Eintraege
+	 * getrennt nach dem Semikolon. Somit kann auf das 2D Array, auf jede
+	 * Zeichenkette die in der Textdatei durch das Semikolon getrennt ist,
+	 * zugegriffen werden
+	 * 
+	 * @param licenseTypes
+	 *            cc-0, cc-by oder selfmade wird bei Aufruf automatisch
+	 *            uebergeben
+	 * @return Key:=licenseType Values:=2D Array das die Zeilen im txt-File
+	 *         repraesentiert
+	 */
+	private static Map<String, String[][]> readLicensesAndSplitEntries(
+			final String[] licenseTypes) {
+		List<String> stringList = new ArrayList<String>();
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR
+				+ ".." + FILESEPARATOR + "android" + FILESEPARATOR + "assets";
+		Map<String, String[][]> stringMap = new HashMap<String, String[][]>();
+
+		// **************************************************
+		// Pictures Lizenzen
+		// **************************************************
+
+		// Zeilen aus den Lizenztextdateien lesen und
+		// einer Liste hinzufuegen
 		for (String item : licenseTypes) {
-			stringList = new ArrayList<String>();
 			try {
-				BufferedReader bufRead = new BufferedReader(new
-						FileReader(licenseDir + FILESEPARATOR + item + ".txt"));
-				String fileLine = null;
-				while((fileLine = bufRead.readLine()) != null) {
-					stringList.add(fileLine);
+				BufferedReader bufReadPic = new BufferedReader(new FileReader(
+						licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES
+								+ FILESEPARATOR + item + ".txt"));
+				String fileLinePic = null;
+				while ((fileLinePic = bufReadPic.readLine()) != null) {
+					stringList.add(fileLinePic);
 				}
-				bufRead.close();
+				bufReadPic.close();
 			} catch (FileNotFoundException e) {
 				System.out.println("License-file not found");
 			} catch (IOException e) {
 				System.out.println("License-file couldn't read");
 			}
-			
-			//aufsplitten der Zeilen, anhand des Semikolons
-			//und abspeichern in ein 2D-Array. Anschließendes
-			//einfuegen in die HashMap
-			seperatedEntries = new String[stringList.size()][maxLicenseLineSize];
-			for(int i = 0; i < stringList.size(); i++){
-				listLine = stringList.get(i).split(";");
-				for (int j = 0; j < listLine.length; j++) {
-					seperatedEntries[i][j] = listLine[j].trim();
-				}
-			}
-			stringMap.put(item, seperatedEntries);
 		}
-		
+		stringMap.put(FOLDERNAME_PICTURES, createSeperatedEntries(stringList));
+		stringList.clear();
+
+		// **************************************************
+		// Sound Lizenzen
+		// **************************************************
+
+		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_SOUNDS
+				+ FILESEPARATOR + FOLDERNAME_SOUNDS + ".txt");
+		stringMap.put(FOLDERNAME_SOUNDS, createSeperatedEntries(stringList));
+		stringList.clear();
+
+		// **************************************************
+		// Music LizenzenfolderName
+		// **************************************************
+
+		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_MUSIC
+				+ FILESEPARATOR + FOLDERNAME_MUSIC + ".txt");
+		stringMap.put(FOLDERNAME_MUSIC, createSeperatedEntries(stringList));
+
 		return stringMap;
 	}
-	
+
 	/**
-	 * Geht durch die jeweiligen Level Ordner und prueft, ob die Dateien,
-	 * welche in den Lizenztextdateien aufgelistet sind, vorhanden sind.
-	 * Weiterhin wird geprueft, ob ein Lizenzeintrag in den
-	 * Lizenztextdateien enthalten ist. Die Ergebnisse werden in einer
-	 * logfile.txt im pictures Ordner gespeichert
-	 * @param stringMap Key:=licenseType Values:=2D Array das die Zeilen
-	 * im txt-File repraesentiert
+	 * Hilfsfunktion die die einzelnen Zeilen aus den Lizenzdateien liest
+	 * 
+	 * @param licenseDir
+	 *            Pfad zur Lizenzdatei
+	 * @return Liste der gelesenen Zeilen aus der Lizenzdatei
 	 */
-	private static void checkFiles(final Map<String, String[][]> stringMap) {
-		String licenseDir = assetDir + FILESEPARATOR + "pictures";
+	private static List<String> readLicense(String licenseDir) {
+		List<String> stringList = new ArrayList<String>();
 
 		try {
-			FileWriter fWriter = new FileWriter(assetDir + FILESEPARATOR + "pictures"
-				+ FILESEPARATOR + "logfile.txt");
-			
-			BufferedWriter bWriter = new BufferedWriter(fWriter);
-			bWriter.write("Logfile for license check of pictures");
-			bWriter.newLine();
-			bWriter.write("***");
-			bWriter.newLine();
-			
-			for(String[][] item : stringMap.values()){				
-				for(int i = 0; i < item.length; i++){
-					File checkFile = new File(licenseDir + FILESEPARATOR 
-							+ item[i][0] + FILESEPARATOR + item[i][1]);
-					
-					//Pruefen, ob Datei im jeweiligen Ordner
-					//vorhanden ist
-					if(checkFile.exists()){
-						bWriter.write(item[i][1] + " FILE OK!");
-					}
-					else{
-						bWriter.write(item[i][1] + " NOT EXISTS!");
-					}
-					bWriter.newLine();
-					
-					//Lizensierung pruefen
-					if(item[i][2].toLowerCase().matches("cc-0|cc-by|selfmade")){
-						bWriter.write(item[i][2] + " ENTRY OK!");
-					}
-					else{
-						bWriter.write(item[i][2] + " NOT VALID!");
-					}
-					bWriter.newLine();
-				}
+			BufferedReader bufRead = new BufferedReader(new FileReader(
+					licenseDir));
+			String fileLine = null;
+			while ((fileLine = bufRead.readLine()) != null) {
+				stringList.add(fileLine);
+			}
+			bufRead.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("License-file not found");
+		} catch (IOException e) {
+			System.out.println("License-file couldn't read");
+		}
+		return stringList;
+	}
 
-				bWriter.write("***");
-				bWriter.newLine();					
-			}			
+	/**
+	 * Hilfsfunktion um die mit Semikolon getrennten Eintraege zu seperieren
+	 * 
+	 * @param stringList
+	 *            Liste der gelesenen Zeilen aus der Lizenzdatei
+	 * @return 2D-Array mit seperierten Eintraegen
+	 */
+	private static String[][] createSeperatedEntries(List<String> stringList) {
+		final int maxLicenseLineSize = 5;
+		String[] listLine;
+		// aufsplitten der Zeilen, anhand des Semikolons
+		// und abspeichern in ein 2D-Array. Anschließendes
+		// einfuegen in die HashMap
+		String[][] seperatedEntries = new String[stringList.size()][maxLicenseLineSize];
+		for (int i = 0; i < stringList.size(); i++) {
+			listLine = stringList.get(i).split(";");
+			for (int j = 0; j < listLine.length; j++) {
+				seperatedEntries[i][j] = listLine[j].trim();
+			}
+		}
+		return seperatedEntries;
+	}
+
+	/**
+	 * Geht durch die jeweiligen Level Ordner und prueft, ob die Dateien, welche
+	 * in den Lizenztextdateien aufgelistet sind, vorhanden sind. Weiterhin wird
+	 * geprueft, ob ein Lizenzeintrag in den Lizenztextdateien enthalten ist.
+	 * Die Ergebnisse werden in einer logfile.txt im pictures Ordner gespeichert
+	 * 
+	 * @param stringMap
+	 *            Key:=licenseType Values:=2D Array das die Zeilen im txt-File
+	 *            repraesentiert
+	 */
+	private static void checkFiles(final Map<String, String[][]> stringMap) {
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR
+				+ ".." + FILESEPARATOR + "android" + FILESEPARATOR + "assets";
+
+		String[][] pictures = stringMap.get(FOLDERNAME_PICTURES);
+		String[][] sounds = stringMap.get(FOLDERNAME_SOUNDS);
+		String[][] music = stringMap.get(FOLDERNAME_MUSIC);
+
+		File checkFile = null;
+
+		try {
+			FileWriter fWriter = new FileWriter(licenseDir + FILESEPARATOR
+					+ "logfile.txt");
+			BufferedWriter bWriter = new BufferedWriter(fWriter);
+			bWriter.write("Logfile for license check of assets");
+			bWriter.newLine();
+			bWriter.write("***PICTURES***");
+			bWriter.newLine();
+
+			// **************************************************
+			// Pictures Eintraege
+			// **************************************************
+			for (int i = 0; i < pictures.length; i++) {
+				checkFile = new File(licenseDir + FILESEPARATOR
+						+ FOLDERNAME_PICTURES + FILESEPARATOR + pictures[i][0]
+						+ FILESEPARATOR + pictures[i][1]);
+				writeFile(FOLDERNAME_PICTURES, pictures, checkFile, bWriter, i);
+			}
+
+			bWriter.write("***SOUNDS**");
+			bWriter.newLine();
+
+			// **************************************************
+			// Sounds Eintraege
+			// **************************************************
+			for (int i = 0; i < sounds.length; i++) {
+				checkFile = new File(licenseDir + FILESEPARATOR
+						+ FOLDERNAME_SOUNDS + FILESEPARATOR + sounds[i][0]
+						+ FILESEPARATOR + sounds[i][1]);
+				writeFile(FOLDERNAME_SOUNDS, sounds, checkFile, bWriter, i);
+			}
+
+			bWriter.write("***MUSIC***");
+			bWriter.newLine();
+
+			// **************************************************
+			// Music Eintraege
+			// **************************************************
+			for (int i = 0; i < music.length; i++) {
+				checkFile = new File(licenseDir + FILESEPARATOR
+						+ FOLDERNAME_MUSIC + FILESEPARATOR + music[i][0]
+						+ FILESEPARATOR + music[i][1]);
+				writeFile(FOLDERNAME_MUSIC, music, checkFile, bWriter, i);
+			}
+
 			bWriter.close();
 			fWriter.close();
 
 		} catch (IOException e) {
 			System.out.println("Couldn't generate a logfile!");
+		}
+	}
+
+	/**
+	 * Hilfsfunktion um in die log-Datei zu schreiben
+	 * 
+	 * @param type
+	 *            jeweiliger Assettyp
+	 * @param stringFile
+	 *            erstelltes 2D-Array mit seperierten Eintraegen
+	 * @param checkFile
+	 *            Pfad zu den jeweiligen Asset-Ordnern
+	 * @param bWriter
+	 *            BufferedWriter
+	 * @param i
+	 *            Laufvariable
+	 */
+	private static void writeFile(String type, String[][] stringFile,
+			File checkFile, BufferedWriter bWriter, int i) {
+		try {
+			// Pruefen, ob Datei im jeweiligen Ordner
+			// vorhanden ist
+			if (checkFile.exists()) {
+				bWriter.write(stringFile[i][1] + " FILE OK!");
+			} else {
+				bWriter.write(stringFile[i][1] + " NOT EXISTS!");
+			}
+			bWriter.newLine();
+
+			// Lizensierung pruefen
+			if (type.equals(FOLDERNAME_PICTURES)) {
+				if (stringFile[i][2].toLowerCase().matches(
+						"cc-0|cc-by|selfmade")) {
+					bWriter.write(stringFile[i][2] + " ENTRY OK!");
+				} else {
+					bWriter.write(stringFile[i][2] + " NOT VALID!");
+				}
+				bWriter.newLine();
+			}
+		} catch (IOException e) {
+			System.out.println("Couldn't write to logfile!");
 		}
 	}
 }
