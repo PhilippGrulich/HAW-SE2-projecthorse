@@ -1,207 +1,406 @@
 package com.haw.projecthorse.level.worldmap;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.player.PlayerImpl;
 
 public class WorldMap extends Level {
 
-	private Stage stage;
-	final Image worldmapimage;
-	final TextureAtlas worldmapatlas;
-	private ImageButton imagebutton1;
-	private ImageButton imagebutton2;
-	private TextureAtlas wappenatlas;
+	// Dieses Enum stellt den aktuellen Zustand in der Worldmap dar,
+	// um verschiedene Situationen unterscheiden zu können
+	private enum State {
+		INIT, ZOOMING, NORMAL, RUNNING
+	}
 
-	public WorldMap() {
+	private final OrthographicCamera camera; // Zum Zentrieren des Bildes auf
+												// das Pferd
+	private final PlayerImpl player;
+	private final Stage stage, uiStage;
+	private final Preferences prefs; // Zum Speichern der zuletzt besuchten
+										// Stadt
+	private final Image germanyImg, worldImg, pointImg;
+
+	private String[] cities;
+	private int selectedCityIndex;
+	private HashMap<String, int[]> cityInfos;
+	private boolean cityChanged;
+	private Image[] cityPoints; // TODO Städte mit Punkten markieren
+	
+	private float targetX, targetY;
+
+	private State state;
+
+	private ImageButton leftButton, rightButton, flagButton;
+	private final float BUTTONALPHA = 0.3f;  // Transparenz der Buttons falls deaktiviert
+
+	public WorldMap() throws LevelNotFoundException {
 		super();
 
-		worldmapatlas = AssetManager.load("worldmap", false, false, true);
-
-		wappenatlas = AssetManager.load("flaggen", false, false, true);
-
 		stage = new Stage(getViewport());
-		InputManager.addInputProcessor(stage);
+		uiStage = new Stage(new FitViewport(width, height));
+		InputManager.addInputProcessor(uiStage);
+		
+		camera = getCam();
+		player = new PlayerImpl(); // TODO color auslesen und im Konstruktor
+									// setzen
+		player.clearActions(); // TODO Workaround bis Player umgebaut 
+		
+		getJasonCities();
 
-		worldmapimage = addBackground("erde-und-sterne");
+		prefs = Gdx.app.getPreferences("WorldMapPrefs");
+		if (!prefs.contains("lastCity"))
+			prefs.putString("lastCity", cities[0]); // setze die erste Stadt als
+													// Standartort falls nicht
+													// gesetzt
 
-		imagebutton1 = createImageButton("berlinflagge", 0.5f * width,
-				0.13f * height);
-		imagebutton2 = createImageButton("hamburgflagge", 0.1f * width,
-				0.13f * height);
+		selectedCityIndex = Arrays.asList(cities).indexOf(
+				prefs.getString("lastCity"));
+		
+		cityChanged = true;
 
-		// GameManagerFactory.getInstance().
+		germanyImg = new Image(AssetManager.getTextureRegion("worldmap",
+				"germanymap_scaled"));
+		germanyImg.toBack();
+		worldImg = new Image(AssetManager.getTextureRegion("worldmap",
+				"erde-und-sterne"));
+		worldImg.toBack();
+		pointImg = new Image(AssetManager.getTextureRegion("worldmap",
+				"shadedLight28"));
 
-		List<ImageButton> l = new ArrayList<ImageButton>();
-		l.add(imagebutton1);
-		l.add(imagebutton2);
-		for (int i = 0; i < l.size(); i++) {
-			addListener(l.get(i));
-			stage.addActor(l.get(i));
+		pointImg.setColor(Color.RED);
+		pointImg.setScale(0.5f * (width / 720));
 
-		}
-		// stage.addActor(imagebutton1);
-		// stage.addActor(imagebutton2);
+		state = State.INIT;
+		
+		
+		createButtons();
+		initAnimation();
+	}
+
+	// Erstellt eine Startanimation die einmalig abgearbeitet wird
+	private void initAnimation() {
+		germanyImg.setColor(1, 1, 1, 0);
+		worldImg.setColor(1, 1, 1, 0);
+		pointImg.setColor(1, 1, 1, 0);
+		player.setColor(1, 1, 1, 0);
+		player.scaleBy(-0.5f);
+
+		int[] cityCoordinates = cityInfos.get(prefs.getString("lastCity"));
+
+		player.setPosition(cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(),
+				cityCoordinates[1]);
+
+		// player.setPosition(cityCoordinates[0] - player.getWidth()/2, 900);
+
+		worldImg.setOrigin(0.643f * width, 0.65f * height); // Setzt den
+															// Zielpunkt auf
+															// Europa
+
+		pointImg.setPosition(worldImg.getOriginX() - pointImg.getWidth() / 2,
+				worldImg.getOriginY() - pointImg.getHeight() / 2);
+
+		ScaleByAction scaleWorld = Actions.scaleBy(8f, 8f, 1f); // Setzt den
+																// Zoomfaktor
+																// und die Dauer
+
+		SequenceAction worldMapSequence = Actions.sequence(Actions.fadeIn(1f),
+				Actions.delay(1f), scaleWorld, Actions.fadeOut(0.25f));
+		SequenceAction pointBlinkSequence = Actions.sequence(
+				Actions.delay(1.0f), Actions.fadeIn(0.25f),
+				Actions.fadeOut(0.25f), Actions.fadeIn(0.25f),
+				Actions.fadeOut(0.25f));
+		SequenceAction germanyMapSequence = Actions.sequence(
+				Actions.delay(3.0f), Actions.fadeIn(0.25f));
+		SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
+				Actions.fadeIn(0.25f));
+//		SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
+//				Actions.fadeIn(0.25f), Actions.delay(3.0f),
+//				Actions.moveBy(200, -100, 2f));
+
+		worldImg.addAction(worldMapSequence);
+		pointImg.addAction(pointBlinkSequence);
+		germanyImg.addAction(germanyMapSequence);
+		player.addAction(playerSequence);
+
+		stage.addActor(worldImg);
+		stage.addActor(pointImg);
+		stage.addActor(germanyImg);
+		stage.addActor(player);
 
 	}
 
-	private Image addBackground(String str) {
-
-		AtlasRegion atlasregion = worldmapatlas.findRegion(str);
-		Image image = new Image(atlasregion);
-		image.toBack();
-		image.setY((height - image.getHeight()) / 2);
-		stage.addActor(image);
-		return image;
-
-	}
-
-	private ImageButton createImageButton(String imagename, float x, float y) {
-
-		Drawable drawable = new TextureRegionDrawable(
-				wappenatlas.findRegion(imagename));
-		// new TextureRegion(
-		// new Texture(Gdx.files.internal("pictures/wappen/" + imagename
-		// + ".png"))));
-		ImageButton buttonFlagge = new ImageButton(drawable);
-
-		buttonFlagge.setHeight(180);
-		buttonFlagge.setWidth(280);
-		buttonFlagge.setX(x);
-		buttonFlagge.setY(y);
-		buttonFlagge.setName(imagename);
-		return buttonFlagge;
-	}
-
-	private void addListener(final ImageButton imagebutton) {
-		imagebutton.addListener(new ChangeListener() {
-
+	private void createButtons() {
+		flagButton = new ImageButton(new TextureRegionDrawable(
+				AssetManager.getTextureRegion("flaggen", cities[selectedCityIndex])));
+		updateFlag();
+		
+		
+		leftButton = new ImageButton(new TextureRegionDrawable(
+				AssetManager.getTextureRegion("worldmap", "shadedLight24")));
+		leftButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
-				imagebutton1.remove();
-				imagebutton2.remove();
-
-				String imagename = imagebutton.getName();
-				if (imagename == "hamburgflagge") {
-					navigateToGermany("hamburgflagge");
-				} else if (imagename == "berlinflagge") {
-					navigateToGermany("berlinflagge");
-				} else {
-
+				if (actor.getColor().a >= 0.9f && selectedCityIndex > 0) {
+					selectedCityIndex--;
+					cityChanged = true;
+					movePlayer(cities[selectedCityIndex]);
 				}
 			}
-
 		});
+		leftButton.setName("leftButton");
+		leftButton.setHeight(100);
+		leftButton.setWidth(100);
+
+		leftButton.setPosition(flagButton.getX() / 2 - leftButton.getWidth() / 2, 
+								flagButton.getY() + flagButton.getHeight() / 2 
+								- leftButton.getHeight() / 2);
+		leftButton.toFront();
+		
+		
+		rightButton = new ImageButton(new TextureRegionDrawable(
+				AssetManager.getTextureRegion("worldmap", "shadedLight25")));
+		rightButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (actor.getColor().a >= 0.9f && selectedCityIndex < cities.length-1) {
+					selectedCityIndex++;
+					cityChanged = true;
+					movePlayer(cities[selectedCityIndex]);
+				}
+			}
+		});
+		rightButton.setName("rightButton");
+		rightButton.setHeight(100);
+		rightButton.setWidth(100);
+
+		rightButton.setPosition(width - flagButton.getX() / 2 - rightButton.getWidth() / 2, 
+								flagButton.getY() + flagButton.getHeight() / 2 
+								- rightButton.getHeight() / 2);
+		rightButton.toFront();
+		
+		uiStage.addActor(leftButton);
+		uiStage.addActor(rightButton);
+		
 
 	}
+	
+	private void movePlayer(String city) {
+		int[] cityCoordinates = cityInfos.get(city);
 
-	public void navigateToGermany(String imagename) {
+		MoveByAction movement = new MoveByAction();
+		movement.setAmount(cityCoordinates[0] - player.getX() - player.getWidth()/2*player.getScaleX(), 
+				cityCoordinates[1] - player.getY());
+		movement.setDuration(1.5f);
+		
+		player.clearActions();
+		player.addAction(movement);
+				
+	}
 
-		worldmapimage.setOrigin(0.643f * width, 0.65f * height);
-		ScaleByAction scale1 = Actions.scaleBy(8f, 8f, 2f);
-		final DelayAction delay = Actions.delay(1.5f);
-		final Image germanyimage = addBackground("germanymap_scaled");
-		if (imagename == "hamburgflagge") {
-			germanyimage.setOrigin(0.463f * width, 0.65f * height);
-		} else if (imagename == "berlinflagge") {
-			germanyimage.setOrigin(0.859f * width, 0.541f * height);
-		} else {
+	private void updateFlag() {
+		
+		if (cityChanged) {
+			flagButton.clearListeners();
+			flagButton.remove();
+			flagButton.setBounds(0,0,0,0);
+			
 
+			flagButton = new ImageButton(new TextureRegionDrawable(
+					AssetManager.getTextureRegion("flaggen", cities[selectedCityIndex])));
+			
+			flagButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					//if (actor.getColor().a == 1f) 
+					System.out.println("Flagge angeklickt");
+						GameManagerFactory.getInstance()
+						.navigateToLevel(cities[selectedCityIndex]);
+				}
+			});
+			
+			flagButton.setName(cities[selectedCityIndex]);
+			flagButton.setHeight(180*1.4f);
+			flagButton.setWidth(280*1.4f);
+	
+			flagButton.setPosition(width / 2 - flagButton.getWidth() / 2, 
+									height*0.75f - flagButton.getHeight() /2);
+			flagButton.toFront();
+			uiStage.addActor(flagButton);			
+		}
+	}
+
+	private void getJasonCities() throws LevelNotFoundException {
+
+		MenuObject menuObject = GameManagerFactory.getInstance().getMenuObject(
+				"worldmap");
+		String cityCoordinates = menuObject.getParameter()
+				.get("cityCoordinates").replaceAll("\\s", "");
+
+		cities = new String[cityCoordinates.split(";").length];
+		cityInfos = new HashMap<String, int[]>();
+
+		int i = 0;
+		for (String cityEntry : cityCoordinates.split(";")) {
+			String[] cityDetails = cityEntry.split(",");
+			if (cityDetails.length == 3) {
+				cities[i++] = cityDetails[0];
+
+				int x = Integer.parseInt(cityDetails[1]);
+				int y = Integer.parseInt(cityDetails[2]);
+
+				int[] xy = new int[] { x, y };
+
+				cityInfos.put(cityDetails[0], xy);
+
+			} else {
+				Gdx.app.log("WARNING",
+						"Falscher gameconfig.json Eintrag für cityCoordinate! Ignoriere Eintrag");
+			}
+		}
+	}
+
+	@Override
+	protected void doRender(float delta) {
+		updateState();
+		updateUI(delta);
+		updateCamera(delta);
+		stage.act(delta);
+		uiStage.act(delta);
+		stage.draw();
+		uiStage.draw();
+	}
+
+	private void updateState() {
+		// INIT ist durch wenn Deutschlandkarte fertig animiert
+		if (germanyImg.getActions().size == 0) {
+			if (camera.zoom > .31f)
+				state = State.ZOOMING;
+			else if (player.getActions().size > 0 )
+				state = State.RUNNING;
+			else
+				state = State.NORMAL;
+		}
+	}
+
+	private void updateUI(float delta) {
+
+		//state = State.NORMAL;
+		
+		updateFlag();
+		
+		switch (state) {
+		case NORMAL:
+			// Alle Elemente anzeigen wenn möglich
+			if (selectedCityIndex > 0)
+				leftButton.setColor(1,1,1,1);
+			else
+				leftButton.setColor(1,1,1,BUTTONALPHA);
+			
+			if (selectedCityIndex < cities.length-1)
+				rightButton.setColor(1,1,1,1);
+			else
+				rightButton.setColor(1,1,1,BUTTONALPHA);
+			
+			flagButton.setColor(1, 1, 1, 1);
+			break;
+			
+		case RUNNING:
+			// Buttons transparent, Flagge ausblenden
+			leftButton.setColor(1,1,1,BUTTONALPHA);
+			rightButton.setColor(1,1,1,BUTTONALPHA);
+			flagButton.setColor(1, 1, 1, 0);
+			break;
+			
+		default:
+			// Alle Elemente unsichtbar machen
+			leftButton.setColor(1,1,1,0);
+			rightButton.setColor(1,1,1,0);
+			flagButton.setColor(1, 1, 1, 0);
+			break;
 		}
 
-		final ScaleByAction scale2 = Actions.scaleBy(7f, 7f, 2f);
+	}
 
-		germanyimage.setColor(1, 1, 1, 0);
+	private void updateCamera(float delta) {
+		switch (state) {
+		case INIT:
+			break; // tue nichts während der Init Animation
+		case ZOOMING:
+			// sanft heranzoomen
+			camera.zoom -= delta * 0.6f;
+			// kein Break, damit die anderen Anweisungen ebenfalls durchgeführt
+			// werden
+		default:
+			// Zielkoordinaten für die Kamera berechnen
+			targetX = player.getX() + player.getWidth() * player.getScaleX()
+					/ 2.0f;
+			targetY = player.getY() + player.getHeight() * player.getScaleY();
 
-		SequenceAction sequence1 = Actions.sequence(scale1, delay,
-				Actions.run(new Runnable() {
-					public void run() {
-						worldmapimage.addAction(Actions.alpha(0));
-						germanyimage.addAction(Actions.sequence(
-								Actions.fadeIn(3), delay));
-						Action sequence2 = Actions.sequence(delay, scale2,
-								delay, Actions.run(new Runnable() {
-									public void run() {
-										GameManagerFactory.getInstance()
-												.navigateToLevel("Hamburg");// .navigateToMainMenu();
-									}
-								}));
-						germanyimage.addAction(sequence2);
-					}
-				}));
-
-		worldmapimage.addAction(sequence1);
+			// Kamera sanft zum Ziel schwenken
+			camera.position.set(camera.position.x
+					+ (targetX - camera.position.x) * delta * 2,
+					camera.position.y + (targetY - camera.position.y) * delta
+							* 2, 0);
+			break;
+		}
 	}
 
 	@Override
-	public void doRender(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(delta);// akktualisiere
-		stage.draw();
-	}
-
-	@Override
-	public void doResize(int width, int height) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void doShow() {
-		// TODO Auto-generated method stub
-		// AssetManager.load();
-		// AssetManager.playSound("sounds/flap.wav");
-		// AssetManager.playMusic("music/life.mp3");
-
-	}
-
-	@Override
-	public void doHide() {
+	protected void doResize(int width, int height) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void doPause() {
+	protected void doShow() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void doResume() {
+	protected void doHide() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void doDispose() {
+	protected void doPause() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void doResume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void doDispose() {
 		stage.dispose();
-		/*
-		 * -> sollte nicht mehr gebraucht werden
-		 * worldmapatlas.dispose();
-		 * wappenatlas.dispose(); 
-		*/
+		uiStage.dispose();
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.haw.projecthorse.level;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -28,8 +30,8 @@ public abstract class Level implements Screen {
 	private Boolean paused = false;
 	
 	private String levelID = null;
-	private Viewport viewport;
-	private OrthographicCamera cam;
+	private Viewport viewport, overlayViewport;
+	private OrthographicCamera cam, overlayCam;
 	private SpriteBatch spriteBatch;	
 	protected Overlay overlay;
 	protected Chest chest;	
@@ -46,8 +48,13 @@ public abstract class Level implements Screen {
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-		overlay = new Overlay(viewport, spriteBatch, this);
+		overlay = new Overlay(viewport, spriteBatch, this);	
 		chest = new Chest();
+		
+		overlayCam = new OrthographicCamera(width, height);
+		overlayCam.setToOrtho(false); // Set to Y-Up - Coord system
+		overlayViewport = new FitViewport(width, height, overlayCam);
+		overlay = new Overlay(overlayViewport, spriteBatch, this);	
 		
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
@@ -78,9 +85,10 @@ public abstract class Level implements Screen {
 		if(paused){ 
 			delta = 0;
 			};
+		Gdx.gl.glClearColor(0,0,0,1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);	    
 		doRender(delta);		
 		overlay.draw();
-	
 	}
 
 	protected abstract void doDispose();

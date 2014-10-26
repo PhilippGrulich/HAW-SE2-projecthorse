@@ -42,8 +42,8 @@ public class NavbarPauseButton extends NavbarButton {
 	}
 	
 	private Drawable getDrawable() {
-		TextureAtlas atlant = AssetManager.load("ui", false, false, true);
-		Drawable drawable = new TextureRegionDrawable(atlant.findRegion("pause_icon"));
+	
+		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("ui","pause_icon"));
 		return drawable;
 	}	
 

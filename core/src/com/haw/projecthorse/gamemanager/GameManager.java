@@ -4,6 +4,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.gamemanager.settings.Settings;
 
 /**
@@ -62,6 +63,16 @@ public interface GameManager {
 	 * @throws LevelNotFoundException
 	 */
 	GameObject getGameObject(final String levelID) throws LevelNotFoundException;
+	
+	/** 
+	 * Liefert das MenuObject zurück falls die LevelID existiert.
+	 * Wenn nicht wird eine LevelNotFoundException geworfen.
+	 * @param levelID
+	 * @return {@link MenuObject}
+	 * @throws LevelNotFoundException
+	 */
+	MenuObject getMenuObject(final String levelID) throws LevelNotFoundException;
+	
 	
 	/**
 	 * Liefert eine Referenz auf das Spielstand Modul.	 * 

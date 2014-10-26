@@ -4,6 +4,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
+import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 
 public interface NavigationManager {
 
@@ -16,6 +17,8 @@ public interface NavigationManager {
 	CityObject getCityObject(String levelID) throws LevelNotFoundException;
 
 	GameObject getGameObject(String levelID) throws LevelNotFoundException;
+	
+	MenuObject getMenuObject(String levelID) throws LevelNotFoundException;
 
 	GameConfig getGameConfig();
 

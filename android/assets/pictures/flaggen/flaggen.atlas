@@ -4,14 +4,14 @@ size: 1284,428
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-berlinflagge
+Berlin
   rotate: false
   xy: 2, 2
   size: 640, 426
   orig: 640, 426
   offset: 0, 0
   index: -1
-hamburgflagge
+Hamburg
   rotate: false
   xy: 644, 2
   size: 640, 426
