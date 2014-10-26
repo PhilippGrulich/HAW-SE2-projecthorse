@@ -45,9 +45,9 @@ public class WorldMapOLD extends Level {
 
 		worldmapimage = addBackground("erde-und-sterne");
 
-		imagebutton1 = createImageButton("berlinflagge", 0.5f * width,
+		imagebutton1 = createImageButton("Berlin", 0.5f * width,
 				0.13f * height);
-		imagebutton2 = createImageButton("hamburgflagge", 0.1f * width,
+		imagebutton2 = createImageButton("Hamburg", 0.1f * width,
 				0.13f * height);
 
 		// GameManagerFactory.getInstance().
@@ -103,10 +103,10 @@ public class WorldMapOLD extends Level {
 				imagebutton2.remove();
 
 				String imagename = imagebutton.getName();
-				if (imagename == "hamburgflagge") {
-					navigateToGermany("hamburgflagge");
-				} else if (imagename == "berlinflagge") {
-					navigateToGermany("berlinflagge");
+				if (imagename == "Hamburg") {
+					navigateToGermany("Hamburg");
+				} else if (imagename == "Berlin") {
+					navigateToGermany("Berlin");
 				} else {
 
 				}
@@ -122,9 +122,9 @@ public class WorldMapOLD extends Level {
 		ScaleByAction scale1 = Actions.scaleBy(8f, 8f, 2f);
 		final DelayAction delay = Actions.delay(1.5f);
 		final Image germanyimage = addBackground("germanymap_scaled");
-		if (imagename == "hamburgflagge") {
+		if (imagename == "Hamburg") {
 			germanyimage.setOrigin(0.463f * width, 0.65f * height);
-		} else if (imagename == "berlinflagge") {
+		} else if (imagename == "Berlin") {
 			germanyimage.setOrigin(0.859f * width, 0.541f * height);
 		} else {
 
