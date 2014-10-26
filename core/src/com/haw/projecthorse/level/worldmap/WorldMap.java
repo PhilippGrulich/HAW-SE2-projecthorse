@@ -70,11 +70,13 @@ public class WorldMap extends Level {
 		getJasonCities();
 
 		prefs = Gdx.app.getPreferences("WorldMapPrefs");
+	
 		if (!prefs.contains("lastCity"))
 			prefs.putString("lastCity", cities[0]); // setze die erste Stadt als
 													// Standartort falls nicht
 													// gesetzt
-
+		prefs.flush();
+		
 		selectedCityIndex = Arrays.asList(cities).indexOf(
 				prefs.getString("lastCity"));
 		

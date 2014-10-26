@@ -1,16 +1,43 @@
 {
+lootCollection: [
+	{
+		class: com.haw.projecthorse.player.color.PlayerColor,
+		name: Weiss,
+		black: false
+	},
+	{
+		class: com.haw.projecthorse.player.color.PlayerColor,
+		color: {
+			a: 1,
+			b: 0.3372549,
+			g: 0.8392157,
+			r: 1
+		},
+		achievedDate: {},
+		name: Braun
+	},
+	{
+		class: com.haw.projecthorse.player.color.PlayerColor
+	},
+	{
+		class: com.haw.projecthorse.player.color.PlayerColor,
+		color: {
+			a: 1,
+			b: 0.3372549,
+			g: 0.8392157,
+			r: 1
+		},
+		achievedDate: {},
+		name: Braun
+	}
+],
 ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
 	color: {
-		color: {
-			a: 1,
-			b: 0.8745098,
-			g: 0.49411765,
-			r: 1
-		},
+		name: Weiss,
 		black: false
 	},
-	name: "Brauner Blitz"
+	name: Blacky
 }
 }
