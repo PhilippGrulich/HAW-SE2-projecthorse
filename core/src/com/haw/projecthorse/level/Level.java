@@ -2,6 +2,7 @@ package com.haw.projecthorse.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,6 +28,12 @@ import com.haw.projecthorse.lootmanager.Chest;
 
 public abstract class Level implements Screen {
 
+	// ########### DEBUG ##################
+	// TODO für Release entfernen
+	private FPSLogger fpsLogger = new FPSLogger();	
+	// ####################################
+	
+	
 	private Boolean paused = false;
 	
 	private String levelID = null;
@@ -89,6 +96,12 @@ public abstract class Level implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);	    
 		doRender(delta);		
 		overlay.draw();
+		
+		// ########### DEBUG ##################
+		// TODO für Release entfernen
+		fpsLogger.log();	
+		// ####################################
+	
 	}
 
 	protected abstract void doDispose();
