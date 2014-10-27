@@ -48,7 +48,7 @@
             },
             {
                title:"Huetchenspiel",
-			   className:"com.haw.projecthorse.level.huetchenspiel.HuetchenSpiel",
+			   className:"com.haw.projecthorse.level.game.huetchenspiel.HuetchenSpiel",
                levelID:"huetchenspiel"
             }
          ]
@@ -68,7 +68,7 @@
             },
             {
                title:"Huetchenspiel",
-			   className:"com.haw.projecthorse.level.huetchenspiel.HuetchenSpiel",
+			   className:"com.haw.projecthorse.level.game.huetchenspiel.HuetchenSpiel",
                levelID:"huetchenspiel"
             }
          ]

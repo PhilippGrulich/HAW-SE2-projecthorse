@@ -39,9 +39,9 @@ public class PlayerMenu extends Level {
 	private String playerName;
 	private TextureAtlas atlas, buttonAtlas;
 
-	private static List<PlayerColor> colors = ColorManager.getColorManager()
-			.getPossibleColors();
-	private static final int MAX = colors.size(), DURATION = 2;
+	private List<PlayerColor> colors;
+	private int max;
+	private final int DURATION = 2;
 
 	private void updateNameLabel() {
 		SaveGameManager.getLoadedGame().setHorseName(playerName);
@@ -54,13 +54,13 @@ public class PlayerMenu extends Level {
 	}
 
 	private void incIndex() {
-		index = ++index % MAX;
+		index = ++index % max;
 		updatePlayer(true);
 	}
 
 	private void decIndex() {
 		if (--index < 0)
-			index = MAX - 1;
+			index = max - 1;
 		updatePlayer(false);
 	}
 
@@ -216,6 +216,8 @@ public class PlayerMenu extends Level {
 	@Override
 	protected void doShow() {
 		SaveGameManager.loadSavedGame(1); // TODO: zum testen
+		colors = ColorManager.getColorManager().getPossibleColors();
+		max = colors.size();
 
 		playerName = SaveGameManager.getLoadedGame().getHorseName();
 		if (playerName.length() == 0) {

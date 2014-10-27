@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.huetchenspiel;
+package com.haw.projecthorse.level.game.huetchenspiel;
 
 import java.util.ArrayList;
 import java.util.List;

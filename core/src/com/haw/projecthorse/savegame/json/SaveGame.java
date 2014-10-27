@@ -1,5 +1,9 @@
 package com.haw.projecthorse.savegame.json;
 
+import java.util.Collection;
+import java.util.List;
+
+import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.player.color.PlayerColor;
 
 public interface SaveGame {
@@ -31,7 +35,7 @@ public interface SaveGame {
 	 *            Der neue Name.
 	 */
 	void setHorseName(String name);
-	
+
 	/**
 	 * @return Die Farbe des Pferdes
 	 */
@@ -44,4 +48,30 @@ public interface SaveGame {
 	 *            Die neue Farbe.
 	 */
 	void setHorseColor(PlayerColor color);
+
+	/**
+	 * Fügt ein gesammelten Gegenstand dem Spieler hinzu
+	 * 
+	 * @param loot
+	 *            Der gesammelte Gegenstand
+	 */
+	void addCollectedLoot(Loot loot);
+	
+	/**
+	 * Fügt eine Liste von gesammelten Gegenständen dem Spieler hinzu
+	 * 
+	 * @param loots
+	 *            Liste der gesammelte Gegenstände
+	 */
+	void addCollectedLootList(Collection<Loot> loots);
+
+	/**
+	 * Erstellt eine Liste von gesammelten Gegeständen eines bestimmten Typs.
+	 * 
+	 * @param c
+	 *            Die Klasse der Lootobjekte, die zurück kommen sollen.
+	 *            
+	 * @return Die Liste von Gegenständen.
+	 */
+	<T extends Loot> List<T> getSpecifiedLoot(Class<T> c);
 }
