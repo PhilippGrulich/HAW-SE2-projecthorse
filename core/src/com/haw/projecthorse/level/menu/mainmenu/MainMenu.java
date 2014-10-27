@@ -153,14 +153,9 @@ public class MainMenu extends Level {
 
 	private void setupEventListeners() {
 		buttonSpiel1.addListener(new SavegameButtonListener(1));
-		// buttonSpiel2.addListener(new SavegameButtonListener(2));
+		buttonSpiel2.addListener(new SavegameButtonListener(2));
 		// buttonSpiel3.addListener(new SavegameButtonListener(3));
-		buttonSpiel2.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				GameManagerFactory.getInstance().navigateToLevel("worldmapnew");
-			}
-		});
+		
 		buttonSpiel3.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

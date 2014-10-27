@@ -11,15 +11,7 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.worldmap.WorldMapOLD",
-         parameter:{
-         			   	cityCoordinates:"Hamburg,329,786;
-         			   						Berlin,593,668"
-         }
-      },
-       {
-         levelID:"worldmapnew",
-         className:"com.haw.projecthorse.level.worldmap.WorldMap",
+         className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
          			   						Berlin,593,668"

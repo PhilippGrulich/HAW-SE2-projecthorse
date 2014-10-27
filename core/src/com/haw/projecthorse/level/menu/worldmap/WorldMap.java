@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.worldmap;
+package com.haw.projecthorse.level.menu.worldmap;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -47,13 +48,15 @@ public class WorldMap extends Level {
 	private HashMap<String, int[]> cityInfos;
 	private boolean cityChanged;
 	private Image[] cityPoints; // TODO Städte mit Punkten markieren
-	
+
 	private float targetX, targetY;
 
 	private State state;
 
 	private ImageButton leftButton, rightButton, flagButton;
-	private final float BUTTONALPHA = 0.3f;  // Transparenz der Buttons falls deaktiviert
+	private ImageButtonStyle flagStyle;
+	private final float BUTTONALPHA = 0.3f; // Transparenz der Buttons falls
+											// deaktiviert
 
 	public WorldMap() throws LevelNotFoundException {
 		super();
@@ -61,24 +64,26 @@ public class WorldMap extends Level {
 		stage = new Stage(getViewport());
 		uiStage = new Stage(new FitViewport(width, height));
 		InputManager.addInputProcessor(uiStage);
-		
+
 		camera = getCam();
 		player = new PlayerImpl(); // TODO color auslesen und im Konstruktor
 									// setzen
-		player.clearActions(); // TODO Workaround bis Player umgebaut 
-		
+		player.clearActions(); // TODO Workaround bis Player umgebaut
+
 		getJasonCities();
 
 		prefs = Gdx.app.getPreferences("WorldMapPrefs");
-	
+
 		if (!prefs.contains("lastCity"))
 			prefs.putString("lastCity", cities[0]); // setze die erste Stadt als
 													// Standartort falls nicht
 													// gesetzt
 		prefs.flush();
-		
+
 		selectedCityIndex = Arrays.asList(cities).indexOf(
 				prefs.getString("lastCity"));
+
+		Gdx.app.log("INFO", "Zuletzt gewählte Stadt hat Index " + String.valueOf(selectedCityIndex));
 		
 		cityChanged = true;
 
@@ -96,6 +101,7 @@ public class WorldMap extends Level {
 
 		state = State.INIT;
 		
+		flagStyle = new ImageButtonStyle();
 		
 		createButtons();
 		initAnimation();
@@ -111,7 +117,8 @@ public class WorldMap extends Level {
 
 		int[] cityCoordinates = cityInfos.get(prefs.getString("lastCity"));
 
-		player.setPosition(cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(),
+		player.setPosition(
+				cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(),
 				cityCoordinates[1]);
 
 		// player.setPosition(cityCoordinates[0] - player.getWidth()/2, 900);
@@ -137,9 +144,9 @@ public class WorldMap extends Level {
 				Actions.delay(3.0f), Actions.fadeIn(0.25f));
 		SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
 				Actions.fadeIn(0.25f));
-//		SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
-//				Actions.fadeIn(0.25f), Actions.delay(3.0f),
-//				Actions.moveBy(200, -100, 2f));
+		// SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
+		// Actions.fadeIn(0.25f), Actions.delay(3.0f),
+		// Actions.moveBy(200, -100, 2f));
 
 		worldImg.addAction(worldMapSequence);
 		pointImg.addAction(pointBlinkSequence);
@@ -155,10 +162,26 @@ public class WorldMap extends Level {
 
 	private void createButtons() {
 		flagButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("flaggen", cities[selectedCityIndex])));
+				AssetManager.getTextureRegion("flaggen",
+						cities[selectedCityIndex])));
+		flagButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (actor.getColor().a == 1f) {
+					GameManagerFactory.getInstance().navigateToLevel(
+							cities[selectedCityIndex]);
+				}
+			}
+		});
+		flagButton.setHeight(180 * 1.4f);
+		flagButton.setWidth(280 * 1.4f);
+		flagButton.setPosition(width / 2 - flagButton.getWidth() / 2,
+				height * 0.75f - flagButton.getHeight() / 2);
+		flagButton.toFront();
+		uiStage.addActor(flagButton);
+
 		updateFlag();
-		
-		
+
 		leftButton = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("worldmap", "shadedLight24")));
 		leftButton.addListener(new ChangeListener() {
@@ -175,18 +198,18 @@ public class WorldMap extends Level {
 		leftButton.setHeight(100);
 		leftButton.setWidth(100);
 
-		leftButton.setPosition(flagButton.getX() / 2 - leftButton.getWidth() / 2, 
-								flagButton.getY() + flagButton.getHeight() / 2 
-								- leftButton.getHeight() / 2);
+		leftButton.setPosition(flagButton.getX() / 2 - leftButton.getWidth()
+				/ 2, flagButton.getY() + flagButton.getHeight() / 2
+				- leftButton.getHeight() / 2);
 		leftButton.toFront();
-		
-		
+
 		rightButton = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("worldmap", "shadedLight25")));
 		rightButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (actor.getColor().a >= 0.9f && selectedCityIndex < cities.length-1) {
+				if (actor.getColor().a >= 0.9f
+						&& selectedCityIndex < cities.length - 1) {
 					selectedCityIndex++;
 					cityChanged = true;
 					movePlayer(cities[selectedCityIndex]);
@@ -197,59 +220,40 @@ public class WorldMap extends Level {
 		rightButton.setHeight(100);
 		rightButton.setWidth(100);
 
-		rightButton.setPosition(width - flagButton.getX() / 2 - rightButton.getWidth() / 2, 
-								flagButton.getY() + flagButton.getHeight() / 2 
-								- rightButton.getHeight() / 2);
+		rightButton.setPosition(
+				width - flagButton.getX() / 2 - rightButton.getWidth() / 2,
+				flagButton.getY() + flagButton.getHeight() / 2
+						- rightButton.getHeight() / 2);
 		rightButton.toFront();
-		
+
 		uiStage.addActor(leftButton);
 		uiStage.addActor(rightButton);
-		
 
 	}
-	
+
 	private void movePlayer(String city) {
 		int[] cityCoordinates = cityInfos.get(city);
 
 		MoveByAction movement = new MoveByAction();
-		movement.setAmount(cityCoordinates[0] - player.getX() - player.getWidth()/2*player.getScaleX(), 
+		movement.setAmount(
+				cityCoordinates[0] - player.getX() - player.getWidth() / 2
+						* player.getScaleX(),
 				cityCoordinates[1] - player.getY());
 		movement.setDuration(1.5f);
-		
+
 		player.clearActions();
 		player.addAction(movement);
-				
+
 	}
 
 	private void updateFlag() {
-		
 		if (cityChanged) {
-			flagButton.clearListeners();
-			flagButton.remove();
-			flagButton.setBounds(0,0,0,0);
-			
-
-			flagButton = new ImageButton(new TextureRegionDrawable(
-					AssetManager.getTextureRegion("flaggen", cities[selectedCityIndex])));
-			
-			flagButton.addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					//if (actor.getColor().a == 1f) 
-					System.out.println("Flagge angeklickt");
-						GameManagerFactory.getInstance()
-						.navigateToLevel(cities[selectedCityIndex]);
-				}
-			});
-			
+			flagStyle.imageUp = new TextureRegionDrawable(
+					AssetManager.getTextureRegion("flaggen",
+					cities[selectedCityIndex]));
+			flagButton.setStyle(flagStyle);
 			flagButton.setName(cities[selectedCityIndex]);
-			flagButton.setHeight(180*1.4f);
-			flagButton.setWidth(280*1.4f);
-	
-			flagButton.setPosition(width / 2 - flagButton.getWidth() / 2, 
-									height*0.75f - flagButton.getHeight() /2);
-			flagButton.toFront();
-			uiStage.addActor(flagButton);			
+			cityChanged = false;
 		}
 	}
 
@@ -299,7 +303,7 @@ public class WorldMap extends Level {
 		if (germanyImg.getActions().size == 0) {
 			if (camera.zoom > .31f)
 				state = State.ZOOMING;
-			else if (player.getActions().size > 0 )
+			else if (player.getActions().size > 0)
 				state = State.RUNNING;
 			else
 				state = State.NORMAL;
@@ -308,37 +312,37 @@ public class WorldMap extends Level {
 
 	private void updateUI(float delta) {
 
-		//state = State.NORMAL;
-		
+		// state = State.NORMAL;
+
 		updateFlag();
-		
+
 		switch (state) {
 		case NORMAL:
 			// Alle Elemente anzeigen wenn möglich
 			if (selectedCityIndex > 0)
-				leftButton.setColor(1,1,1,1);
+				leftButton.setColor(1, 1, 1, 1);
 			else
-				leftButton.setColor(1,1,1,BUTTONALPHA);
-			
-			if (selectedCityIndex < cities.length-1)
-				rightButton.setColor(1,1,1,1);
+				leftButton.setColor(1, 1, 1, BUTTONALPHA);
+
+			if (selectedCityIndex < cities.length - 1)
+				rightButton.setColor(1, 1, 1, 1);
 			else
-				rightButton.setColor(1,1,1,BUTTONALPHA);
-			
+				rightButton.setColor(1, 1, 1, BUTTONALPHA);
+
 			flagButton.setColor(1, 1, 1, 1);
 			break;
-			
+
 		case RUNNING:
 			// Buttons transparent, Flagge ausblenden
-			leftButton.setColor(1,1,1,BUTTONALPHA);
-			rightButton.setColor(1,1,1,BUTTONALPHA);
+			leftButton.setColor(1, 1, 1, BUTTONALPHA);
+			rightButton.setColor(1, 1, 1, BUTTONALPHA);
 			flagButton.setColor(1, 1, 1, 0);
 			break;
-			
+
 		default:
 			// Alle Elemente unsichtbar machen
-			leftButton.setColor(1,1,1,0);
-			rightButton.setColor(1,1,1,0);
+			leftButton.setColor(1, 1, 1, 0);
+			rightButton.setColor(1, 1, 1, 0);
 			flagButton.setColor(1, 1, 1, 0);
 			break;
 		}
