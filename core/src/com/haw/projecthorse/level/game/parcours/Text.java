@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.parcours;
+package com.haw.projecthorse.level.game.parcours;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;

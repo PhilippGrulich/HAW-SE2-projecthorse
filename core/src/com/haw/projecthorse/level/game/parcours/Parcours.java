@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.parcours;
+package com.haw.projecthorse.level.game.parcours;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -234,7 +234,9 @@ public class Parcours extends Level {
 	 */
 	private void initGameLogic(){
 		logic = new GameLogic();
-		logic.initGameObjects(AssetManager.load("Parcours_Gameobjects", false, false, true), this.width, this.height);
+		TextureRegion huerde = AssetManager.getTextureRegion("Parcours_Gameobjects", "Level_1/HuerdeClean");
+		
+		logic.initGameobject(huerde, this.width, this.height);
 		//logic.setMinMaxDistancesX(20,50);
 		//System.out.println("player: " + player.getWidth());
 		logic.setMinMaxDistancesX(player.getWidth()+(player.getWidth()/2), player.getWidth()+player.getWidth());
