@@ -222,7 +222,7 @@ public final class AssetManager {
 		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
 		String relativeFilePath = directory_pictures.substring(startIdx,
 				directory_pictures.length()).replace("\\", "/")
-				 + levelID + "/" + filename + ".fnt";
+				 + FILESEPARATOR + levelID + "/" + filename + ".fnt";
 		System.out.println(relativeFilePath);
 		TextureRegion t = getTextureRegion(levelID, filename);
 		
