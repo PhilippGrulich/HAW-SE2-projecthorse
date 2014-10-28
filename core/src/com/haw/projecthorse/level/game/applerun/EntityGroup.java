@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.applerun;
+package com.haw.projecthorse.level.game.applerun;
 
 import java.util.ArrayList;
 

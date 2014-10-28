@@ -31,7 +31,7 @@
             {
                title:"Apple Run",
                levelID:"AppleRun",
-               className:"com.haw.projecthorse.level.applerun.AppleRun",
+               className:"com.haw.projecthorse.level.game.applerun.AppleRun",
                 parameter:{
          			teaser_image:"blau"
          		}
