@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -37,7 +36,7 @@ public class PlayerMenu extends Level {
 	private int index = 0;
 	private float playerPositionX, playerPositionY = 120, invisiblePositionX;
 	private String playerName;
-	private TextureAtlas atlas, buttonAtlas;
+//	private TextureAtlas atlas, buttonAtlas;
 
 	private List<PlayerColor> colors;
 	private int max;
@@ -99,19 +98,17 @@ public class PlayerMenu extends Level {
 	}
 
 	private void createBackground() {
-		stage.addActor(new EndlessBackground(width, atlas.findRegion("sky"), 30));
-		stage.addActor(new EndlessBackground(width, atlas
-				.findRegion("second_grass"), 11));
-		stage.addActor(new EndlessBackground(width, atlas
-				.findRegion("first_grass"), 8));
-		stage.addActor(new EndlessBackground(width, atlas.findRegion("ground"),
+		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "sky"), 30));
+		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "second_grass"), 11));
+		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "first_grass"), 8));
+		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "ground"),
 				4));
 	}
 
 	private void createButtons() {
 		Image next, prev;
 
-		prev = new Image(buttonAtlas.findRegion("button_prev"));
+		prev = new Image(AssetManager.getTextureRegion("selfmade", "button_prev"));
 		prev.setPosition(10, 300);
 		prev.setScale(2);
 		prev.addListener(new InputListener() {
@@ -124,7 +121,7 @@ public class PlayerMenu extends Level {
 		});
 		stage.addActor(prev);
 
-		next = new Image(buttonAtlas.findRegion("button_next"));
+		next = new Image(AssetManager.getTextureRegion("selfmade", "button_next"));
 		next.setPosition(width - 70, 300);
 		next.setScale(2);
 		next.addListener(new InputListener() {
@@ -236,8 +233,8 @@ public class PlayerMenu extends Level {
 		InputManager.addInputProcessor(new StageGestureDetector(stage, true,
 				ControlMode.HORIZONTAL));
 
-		atlas = AssetManager.load("menu", false, false, true);
-		buttonAtlas = AssetManager.load("selfmade", false, false, true);
+		//atlas = AssetManager.load("menu", false, false, true);
+		//buttonAtlas = AssetManager.load("selfmade", false, false, true);
 
 		createBackground();
 		createButtons();
