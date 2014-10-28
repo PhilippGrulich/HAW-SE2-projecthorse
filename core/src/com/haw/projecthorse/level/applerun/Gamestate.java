@@ -27,7 +27,7 @@ import com.haw.projecthorse.player.Direction;
 public class Gamestate {
 
 	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
-	TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
+	//TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
 	
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 	int roll; //Temp var
@@ -224,8 +224,8 @@ public class Gamestate {
 	private void initBackground() {
 		backgroundGraphics = new Group();
 
-		TextureRegion tree = atlas.findRegion("tree");
-		TextureRegion ground = atlas.findRegion("ground");
+		TextureRegion tree = AssetManager.getTextureRegion("appleRun", "tree");
+		TextureRegion ground = AssetManager.getTextureRegion("appleRun", "ground");
 		
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);

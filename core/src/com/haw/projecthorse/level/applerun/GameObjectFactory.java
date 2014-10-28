@@ -11,7 +11,7 @@ public final class GameObjectFactory {
 
 	private final static int PRE_GENERATED_OBJECTS = 7; //Generated objects per class at initialilze 
 	private static int rand; //Temp var
-	private static TextureAtlas spritemap;
+	//private static TextureAtlas spritemap;
 	private static TextureRegion apple1;
 	private static TextureRegion apple2;
 	private static TextureRegion apple3;
@@ -29,13 +29,13 @@ public final class GameObjectFactory {
 		if (isInitialized) {
 			return;
 		}
-		spritemap = AssetManager.load("appleRun", false, false, true);
-		apple1 = spritemap.findRegion("apple1");
-		apple2 = spritemap.findRegion("apple2");
-		apple3 = spritemap.findRegion("apple3");
-		apple4 = spritemap.findRegion("apple4");
-		branch1 = spritemap.findRegion("branch1");
-		branch2 = spritemap.findRegion("branch2");
+		//spritemap = AssetManager.load("appleRun", false, false, true);
+		apple1 = AssetManager.getTextureRegion("appleRun", "apple1");
+		apple2 = AssetManager.getTextureRegion("appleRun", "apple2");
+		apple3 = AssetManager.getTextureRegion("appleRun", "apple3");
+		apple4 = AssetManager.getTextureRegion("appleRun", "apple4");
+		branch1 = AssetManager.getTextureRegion("appleRun", "branch1");
+		branch2 = AssetManager.getTextureRegion("appleRun", "branch2");
 		
 		for(int i = 0; i<PRE_GENERATED_OBJECTS; i++){
 			constructedApples.add(generateApple());
