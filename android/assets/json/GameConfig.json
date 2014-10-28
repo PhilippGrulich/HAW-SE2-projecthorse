@@ -38,7 +38,7 @@
             },
             {
                title:"Parcours",
-               className:"com.haw.projecthorse.level.parcours.Parcours",
+               className:"com.haw.projecthorse.level.game.parcours.Parcours",
                levelID:"Parcours"
             },
              {

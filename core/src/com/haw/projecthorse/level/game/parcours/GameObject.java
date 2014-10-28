@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.parcours;
+package com.haw.projecthorse.level.game.parcours;
 
 /**
  * @author Francis Opoku

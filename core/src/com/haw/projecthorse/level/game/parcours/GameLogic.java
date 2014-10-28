@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.parcours;
+package com.haw.projecthorse.level.game.parcours;
 
 import java.util.ArrayList;
 
