@@ -88,14 +88,14 @@ public final class AssetManager {
 	}
 	
 	/**
-	 * HashMap für Pfade zu Sound- und Musikdateien erzeugen,
-	 * Methode für rekursiven Abstieg in Verzeichnisstruktur aufrufen.
+	 * HashMap fï¿½r Pfade zu Sound- und Musikdateien erzeugen,
+	 * Methode fï¿½r rekursiven Abstieg in Verzeichnisstruktur aufrufen.
 	 */
 	private static void loadAudioPaths(){
 		administratedSoundPath = new HashMap<String, ArrayList<String>>();
 		administratedMusicPath = new HashMap<String, ArrayList<String>>();
 		loadAudioPaths(directory_sounds, directory_sounds, Assets.SOUNDS);
-		loadAudioPaths(directory_sounds, directory_sounds, Assets.MUSIC);
+		loadAudioPaths(directory_music, directory_music, Assets.MUSIC);
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public final class AssetManager {
 			path = path.substring(startIdx, path.length()).replace("\\",
 					"/");
 		administratedSoundPath.get(levelID).add(path);
-		}else if(type == Assets.SOUNDS){
+		}else if(type == Assets.MUSIC){
 			if (!administratedMusicPath.containsKey(levelID)) {
 				administratedMusicPath.put(levelID,
 						new ArrayList<String>());
@@ -152,18 +152,37 @@ public final class AssetManager {
 	}
 	
 	/**
-	 * Lädt alle Dateien von levelID die im sounds Ordner sind. 
+	 * Lï¿½dt alle Dateien von levelID die im sounds Ordner sind. 
 	 * @param levelID ID des Levels.
 	 */
 	public static void loadSounds(String levelID){
 		System.out.println("loadSounds: " + levelID);
 		ArrayList<String> soundsPaths = administratedSoundPath.get(levelID);
 		if(soundsPaths == null){
-			System.out.println("Sounds für levelID: " + levelID + " nicht gefunden.");
+			System.out.println("Sounds fï¿½r levelID: " + levelID + " nicht gefunden.");
 		}else{
 			for(String path : soundsPaths){
 				System.out.println("loadSounds: " + path);
 				assetManager.load(path, Sound.class);
+				System.out.println("" + path + " geladen? " + assetManager.isLoaded(path));
+			}
+		}
+		assetManager.finishLoading();
+	}
+	
+	/**
+	 * Lï¿½dt alle Dateien von levelID die im music Ordner sind. 
+	 * @param levelID ID des Levels.
+	 */
+	public static void loadMusic(String levelID){
+		System.out.println("loadMusic: " + levelID);
+		ArrayList<String> musicPaths = administratedMusicPath.get(levelID);
+		if(musicPaths == null){
+			System.out.println("Music fï¿½r levelID: " + levelID + " nicht gefunden.");
+		}else{
+			for(String path : musicPaths){
+				System.out.println("loadMusic: " + path);
+				assetManager.load(path, Music.class);
 				System.out.println("" + path + " geladen? " + assetManager.isLoaded(path));
 			}
 		}
@@ -441,7 +460,7 @@ public final class AssetManager {
 	}
 
 	/**
-	 * Aendert die Soundlautstärke, indem die Spieltlautstaerke fuer Sounds neu
+	 * Aendert die Soundlautstï¿½rke, indem die Spieltlautstaerke fuer Sounds neu
 	 * gesetzt wird
 	 * 
 	 * @param volume
