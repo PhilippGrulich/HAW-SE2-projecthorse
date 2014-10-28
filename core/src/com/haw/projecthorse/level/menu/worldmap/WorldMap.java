@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
@@ -25,7 +26,12 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.swipehandler.ControlMode;
+import com.haw.projecthorse.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.swipehandler.SwipeListener;
 
 public class WorldMap extends Level {
 
@@ -35,6 +41,8 @@ public class WorldMap extends Level {
 		INIT, ZOOMING, NORMAL, RUNNING
 	}
 
+	private static boolean firstStart = true;
+	
 	private final OrthographicCamera camera; // Zum Zentrieren des Bildes auf
 												// das Pferd
 	private final PlayerImpl player;
@@ -55,15 +63,20 @@ public class WorldMap extends Level {
 
 	private ImageButton leftButton, rightButton, flagButton;
 	private ImageButtonStyle flagStyle;
+	
 	private final float BUTTONALPHA = 0.3f; // Transparenz der Buttons falls
 											// deaktiviert
 
+	private final float MAXZOOM = 0.3f; // Maximaler Kamera Zoom
+	
 	public WorldMap() throws LevelNotFoundException {
 		super();
 
 		stage = new Stage(getViewport());
 		uiStage = new Stage(new FitViewport(width, height));
 		InputManager.addInputProcessor(uiStage);
+		InputManager.addInputProcessor(stage);
+		
 
 		camera = getCam();
 		player = new PlayerImpl(); // TODO color auslesen und im Konstruktor
@@ -120,9 +133,7 @@ public class WorldMap extends Level {
 		player.setPosition(
 				cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(),
 				cityCoordinates[1]);
-
-		// player.setPosition(cityCoordinates[0] - player.getWidth()/2, 900);
-
+		
 		worldImg.setOrigin(0.643f * width, 0.65f * height); // Setzt den
 															// Zielpunkt auf
 															// Europa
@@ -130,28 +141,32 @@ public class WorldMap extends Level {
 		pointImg.setPosition(worldImg.getOriginX() - pointImg.getWidth() / 2,
 				worldImg.getOriginY() - pointImg.getHeight() / 2);
 
-		ScaleByAction scaleWorld = Actions.scaleBy(8f, 8f, 1f); // Setzt den
-																// Zoomfaktor
-																// und die Dauer
+		
+		
+		if (firstStart) {
+			SequenceAction worldMapSequence = Actions.sequence(Actions.fadeIn(1f),
+					Actions.delay(1f), Actions.scaleBy(8f, 8f, 1f), Actions.fadeOut(0.25f));
+			SequenceAction pointBlinkSequence = Actions.sequence(
+					Actions.delay(1.0f), Actions.fadeIn(0.25f),
+					Actions.fadeOut(0.25f), Actions.fadeIn(0.25f),
+					Actions.fadeOut(0.25f));
+			SequenceAction germanyMapSequence = Actions.sequence(
+					Actions.delay(3.0f), Actions.fadeIn(0.25f));
+			SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
+					Actions.fadeIn(0.25f));
 
-		SequenceAction worldMapSequence = Actions.sequence(Actions.fadeIn(1f),
-				Actions.delay(1f), scaleWorld, Actions.fadeOut(0.25f));
-		SequenceAction pointBlinkSequence = Actions.sequence(
-				Actions.delay(1.0f), Actions.fadeIn(0.25f),
-				Actions.fadeOut(0.25f), Actions.fadeIn(0.25f),
-				Actions.fadeOut(0.25f));
-		SequenceAction germanyMapSequence = Actions.sequence(
-				Actions.delay(3.0f), Actions.fadeIn(0.25f));
-		SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
-				Actions.fadeIn(0.25f));
-		// SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f),
-		// Actions.fadeIn(0.25f), Actions.delay(3.0f),
-		// Actions.moveBy(200, -100, 2f));
+			worldImg.addAction(worldMapSequence);
+			pointImg.addAction(pointBlinkSequence);
+			germanyImg.addAction(germanyMapSequence);
+			player.addAction(playerSequence);
+			
+			firstStart = false;
+		} else {
+			camera.zoom = MAXZOOM;
+			germanyImg.addAction(Actions.fadeIn(0.25f));
+			player.addAction(Actions.fadeIn(0.25f));
+		}
 
-		worldImg.addAction(worldMapSequence);
-		pointImg.addAction(pointBlinkSequence);
-		germanyImg.addAction(germanyMapSequence);
-		player.addAction(playerSequence);
 
 		stage.addActor(worldImg);
 		stage.addActor(pointImg);
@@ -168,6 +183,8 @@ public class WorldMap extends Level {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (actor.getColor().a == 1f) {
+					prefs.putString("lastCity", cities[selectedCityIndex]);
+					prefs.flush();
 					GameManagerFactory.getInstance().navigateToLevel(
 							cities[selectedCityIndex]);
 				}
@@ -178,6 +195,28 @@ public class WorldMap extends Level {
 		flagButton.setPosition(width / 2 - flagButton.getWidth() / 2,
 				height * 0.75f - flagButton.getHeight() / 2);
 		flagButton.toFront();
+		
+		InputManager.addInputProcessor(new StageGestureDetector(stage, true));
+		germanyImg.addListener(new SwipeListener() {
+
+					@Override
+					public void swiped(SwipeEvent event, Actor actor) {
+						
+						switch (event.getDirection()) {
+						case LEFT:
+							rightButton.fire(new ChangeEvent());
+							return;
+							
+						case RIGHT:
+							leftButton.fire(new ChangeEvent());
+							return;
+						default:
+							return;
+						}
+					}
+					
+				});
+		
 		uiStage.addActor(flagButton);
 
 		updateFlag();
@@ -228,7 +267,7 @@ public class WorldMap extends Level {
 
 		uiStage.addActor(leftButton);
 		uiStage.addActor(rightButton);
-
+				
 	}
 
 	private void movePlayer(String city) {
@@ -301,7 +340,7 @@ public class WorldMap extends Level {
 	private void updateState() {
 		// INIT ist durch wenn Deutschlandkarte fertig animiert
 		if (germanyImg.getActions().size == 0) {
-			if (camera.zoom > .31f)
+			if (camera.zoom > MAXZOOM)
 				state = State.ZOOMING;
 			else if (player.getActions().size > 0)
 				state = State.RUNNING;
@@ -352,7 +391,7 @@ public class WorldMap extends Level {
 	private void updateCamera(float delta) {
 		switch (state) {
 		case INIT:
-			break; // tue nichts während der Init Animation
+			return; // tue nichts während der Init Animation
 		case ZOOMING:
 			// sanft heranzoomen
 			camera.zoom -= delta * 0.6f;

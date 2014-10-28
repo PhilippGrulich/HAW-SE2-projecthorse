@@ -87,7 +87,7 @@ public class City extends Level {
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
 
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.txt"));
+		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
 		;
 		imageButtonStyle.font.scale(-0.5f);
 		imageButtonStyle.fontColor = Color.WHITE;
