@@ -40,8 +40,6 @@ public final class AssetManager {
 	private static String directory_music;
 	private static String directory_pictures;
 	private static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
-	private static TextureAtlas assets = null;
-	private static boolean isApplicationTypeChoosen = false;
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
 	
@@ -71,12 +69,10 @@ public final class AssetManager {
 		if (Gdx.app.getType() == ApplicationType.Android) {
 
 			assetDir = "";
-			setApplicationType();
 		} else if (Gdx.app.getType() == ApplicationType.Desktop) {
 
 			assetDir = System.getProperty("user.dir") + FILESEPARATOR + "bin"
 					+ FILESEPARATOR;
-			setApplicationType();
 		} else {
 			System.out.println("In AssetManager: No android or desktop device");
 		}
@@ -88,8 +84,8 @@ public final class AssetManager {
 	}
 	
 	/**
-	 * HashMap f�r Pfade zu Sound- und Musikdateien erzeugen,
-	 * Methode f�r rekursiven Abstieg in Verzeichnisstruktur aufrufen.
+	 * HashMap fuer Pfade zu Sound- und Musikdateien erzeugen,
+	 * Methode fuer rekursiven Abstieg in Verzeichnisstruktur aufrufen.
 	 */
 	private static void loadAudioPaths(){
 		administratedSoundPath = new HashMap<String, ArrayList<String>>();
@@ -215,143 +211,7 @@ public final class AssetManager {
 			}
 		}
 	}
-	
-	/**
-	 * Liefert TextureAtlas
-	 * @param levelID
-	 * @return
-	 */
-	/*public static TextureAtlas loadAtlas(String levelID){
-		if(!administratedAtlases.containsKey(levelID)){
-			administratedAtlases.put(levelID, new TextureAtlas(Gdx.files.internal(
-					administratedAtlasesPath.get(levelID))));
-		}
-		return administratedAtlases.get(levelID);
-	}*/
-	/**
-	 * VERALTET!
-	 * Stattdessen:
-	 * Zugriff direkt auf TextureRegions: {@link #getTextureRegion(String, String)}
-	 * Sounds laden: {@link #loadSounds(String)}
-	 * Sounds spielen: {@link #playSound(String, String)}
-	 * Musik noch nicht implementiert.
-	 */
-	public static TextureAtlas load(String levelID, boolean loadSounds,
-			boolean loadMusic, boolean loadPictures) {
-		
-		if (!isApplicationChoosen()) {
-			initialize();
-		}
 
-		if (loadSounds) {
-			if(administratedSoundPath.containsKey(levelID)){
-				for(String path : administratedSoundPath.get(levelID)){
-					assetManager.load(path, Sound.class);
-				}
-			}else {
-				findAssetFolder(levelID, directory_sounds, Assets.SOUNDS);
-			}
-			
-		}
-		if (loadMusic) {
-			if(administratedSoundPath.containsKey(levelID)){
-				for(String path : administratedMusicPath.get(levelID)){
-					assetManager.load(path, Music.class);
-				}
-			}else {
-				findAssetFolder(levelID, directory_music, Assets.MUSIC);
-			}
-			
-		}
-		
-		
-		assetManager.finishLoading();
-		
-		// return assets;
-		return administratedAtlases.get(levelID);
-	}
-
-
-
-	private static boolean isApplicationChoosen() {
-		return isApplicationTypeChoosen;
-	}
-
-	private static void setApplicationType() {
-		isApplicationTypeChoosen = true;
-	}
-
-	/**
-	 * Sucht im Ordner FOLDERNAME_type den Ordner mit der levelID.
-	 * 
-	 * @param levelID
-	 * @param path
-	 *            assetDir + FOLDERNAME_type
-	 * @param type
-	 *            Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
-	 */
-	private static void findAssetFolder(String levelID, String path, Assets type) {
-
-		FileHandle[] files = Gdx.files.internal(path).list();
-		ArrayList<String> content = new ArrayList<String>();
-
-		for (FileHandle file : files) {
-			content.add(file.name());
-		}
-
-		try {
-			if (content.contains(levelID)) {
-				loadAssets(levelID, path + FILESEPARATOR + levelID, type);
-			} else {
-				throw new LevelDirectoryNotFoundException("Ordner mit LevelID "
-						+ levelID + " in " + path + " nicht gefunden");
-
-			}
-		} catch (LevelDirectoryNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Geht für type== Assets.Sound, type == Assets.Music etc. rekursiv durch
-	 * die Verzeichnisse ab path. Bei auffinden einer Datei Audio oder Bilddatei
-	 * wird loadAudio oder loadTextureAtlas aufgerufen.
-	 * 
-	 * @param levelID
-	 * @param path
-	 *            assetDir + FOLDERNAME_type ODER Unterverzeichnis (rekursiver
-	 *            Aufruf)
-	 * @param type
-	 *            Assets.SOUNDS oder Assets.MUSIC oder Assets.PICTURES
-	 */
-	private static void loadAssets(String levelID, String path, Assets type) {
-
-		FileHandle[] files = Gdx.files.internal(path).list();
-
-		for (FileHandle file : files) {
-			if (file.isDirectory()) {
-				loadAssets(levelID, path + FILESEPARATOR + file.name(), type);
-			} else {
-				if (type == Assets.SOUNDS) {
-					if(administratedSoundPath.get(levelID) == null){
-						administratedSoundPath.put(levelID, new ArrayList<String>());
-					}
-					loadAudio(path, levelID, file.name(), type);
-				} else if(type == Assets.MUSIC) {
-					if(administratedMusicPath.get(levelID) == null){
-						administratedMusicPath.put(levelID, new ArrayList<String>());
-					}
-					loadAudio(path, levelID, file.name(), type);
-				}
-				  else if (type == Assets.PICTURES) {
-					loadTextureAtlas(levelID, path, file.name());
-				}
-			}
-		}
-
-	}
-	
 	/**
 	 * Liefert BitmapFont einer .fnt Datei
 	 * @param levelID 
@@ -371,62 +231,10 @@ public final class AssetManager {
 	}
 
 	/**
-	 * Prueft ob die gefundene Datei im path eine .atlas Datei ist und laedt
-	 * diese. Ruft anschließend insertAtlasMap().
-	 * 
-	 * @param levelID
-	 * @param path
-	 * @param filename
-	 */
-	private static void loadTextureAtlas(String levelID, String path,
-			String filename) {
-		if (filename.toLowerCase().matches(".*(\\.atlas)$")) {
-			int startIdx = path.indexOf(FOLDERNAME_PICTURES);
-			String relativeFilePath = path.substring(startIdx, path.length())
-					.replace("\\", "/") + "/" + filename;
-			assetManager.load(relativeFilePath, TextureAtlas.class);
-			assets = new TextureAtlas(Gdx.files.internal(relativeFilePath));
-			administratedAtlases.put(levelID,
-					new TextureAtlas(Gdx.files.internal(relativeFilePath)));
-			administratedAtlasesPath.put(levelID, relativeFilePath);
-		}
-	}
-
-	/**
-	 * Prueft ob File eine Audiodatei ist die unterstuetzt wird. Falls ja, wird
-	 * bei type == Assets.SOUND die Datei als SOUND geladen. Analog bei type ==
-	 * Assets.MUSIC
-	 * 
-	 * @param path
-	 * @param filename
-	 * @param type
-	 */
-	private static void loadAudio(String path, String levelID, String filename, Assets type) {
-		if (filename.toLowerCase().matches(".*(\\.mp3|\\.wav|\\.ogg)$")) {
-			if (type == Assets.SOUNDS) {
-				int startIdx = path.indexOf(FOLDERNAME_SOUNDS);
-				path = path.substring(startIdx, path.length()).replace("\\",
-						"/")
-						+ "/" + filename;
-				assetManager.load(path, Sound.class);
-				administratedSoundPath.get(levelID).add(path);
-			} else if (type == Assets.MUSIC) {
-				int startIdx = path.indexOf(FOLDERNAME_MUSIC);
-				path = path.substring(startIdx, path.length()).replace("\\",
-						"/")
-						+ "/" + filename;
-				assetManager.load(path, Music.class);
-				administratedMusicPath.get(levelID).add(path);
-			}
-		}
-	}
-
-	/**
 	 * Zerstoert den Assetmanager, disposed alle Assets.
 	 */
 	public static void disposeAll() {
 		assetManager.dispose();
-		assets = null;
 	}
 
 	/**
@@ -440,7 +248,6 @@ public final class AssetManager {
 	public static void disposeAtlas(String levelID, String atlas) {
 		assetManager.unload(atlas);
 		administratedAtlases.remove(levelID);
-		assets = null;
 	}
 
 	/**
@@ -501,10 +308,6 @@ public final class AssetManager {
 	public static void turnMusicOff(String levelID, String name) {
 		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
 				Music.class).stop();
-	}
-
-	public static String getFileseparator() {
-		return FILESEPARATOR;
 	}
 
 	/**

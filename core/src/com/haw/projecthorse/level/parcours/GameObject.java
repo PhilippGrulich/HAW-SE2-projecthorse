@@ -17,8 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class GameObject extends Actor {
 	
-	private Texture t;
-	private TextureRegionDrawable tr;
+	private TextureRegion tr;
 	private float width;
 	private float height;
 	private Image image;
@@ -27,18 +26,18 @@ public class GameObject extends Actor {
 	private int gameWidth;
 	private int gameHeight;
 	
-	public GameObject(Texture t, int gameWidth, int gameHeight){
-		this.t = t;
-		width = t.getWidth();
-		height = t.getHeight();
+	public GameObject(TextureRegion t, int gameWidth, int gameHeight){
+		this.tr = t;
+		width = t.getRegionWidth();
+		height = t.getRegionHeight();
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 	}
 	
-	public GameObject(TextureRegionDrawable tr){
+	public GameObject(TextureRegion tr){
 		this.tr = tr;
-		width = tr.getRegion().getRegionWidth();
-		height = tr.getRegion().getRegionHeight();
+		width = tr.getRegionWidth();
+		height = tr.getRegionHeight();
 	}
 	
 	public float getWidth1(){
@@ -53,8 +52,8 @@ public class GameObject extends Actor {
 		return height;
 	}
 	
-	public Texture getTexture(){
-		return t;
+	public TextureRegion getTextureRegion(){
+		return this.tr;
 	}
 	
 	public int getGameWidth(){
@@ -69,7 +68,7 @@ public class GameObject extends Actor {
 	  @Override
 	    public void draw (Batch batch, float parentAlpha) {
 		   
-		  batch.draw(t, getX(), getY(), this.getScaleX() * this.getWidth(), this.getScaleY() * this.getHeight());
+		  batch.draw(tr, getX(), getY(), this.getScaleX() * this.getWidth(), this.getScaleY() * this.getHeight());
 	     
 }
 	  

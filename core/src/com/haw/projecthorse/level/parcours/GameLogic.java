@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.ObjectSet.SetIterator;
 
@@ -23,18 +24,8 @@ public class GameLogic {
 		maxDistanceY = 0;
 	}
 	
-	public void initGameObjects(TextureAtlas a, int gameWidth, int gameHeight){
-		if(objects.size() > 0){ objects.clear();}
-		
-		ObjectSet<Texture> t = a.getTextures();
-		SetIterator<Texture> iterator = t.iterator();
-		
-		while(iterator.hasNext){
-			objects.add(new GameObject(iterator.next(), gameWidth, gameHeight));
-			System.out.println("init");
-		}
-		
-		
+	public void initGameobject(TextureRegion r, int gameWidth, int gameHeight){
+		objects.add(new GameObject(r, gameWidth, gameHeight));
 	}
 	
 	public void setMinMaxDistancesX(float minDistance, float maxDistance){
