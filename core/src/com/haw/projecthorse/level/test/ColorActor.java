@@ -10,7 +10,7 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 
 public class ColorActor extends Actor {
 	private Pixmap colors;
-	private TextureRegion c = AssetManager.load("notChecked", false, false, true).findRegion("colors");
+	private TextureRegion c = AssetManager.getTextureRegion("notChecked", "colors");
 	
 	public ColorActor() {
 		TextureData td = c.getTexture().getTextureData();
