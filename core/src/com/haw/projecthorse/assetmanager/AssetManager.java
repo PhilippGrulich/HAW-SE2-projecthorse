@@ -148,14 +148,14 @@ public final class AssetManager {
 	}
 	
 	/**
-	 * L�dt alle Dateien von levelID die im sounds Ordner sind. 
+	 * Laedt alle Dateien von levelID die im sounds Ordner sind. 
 	 * @param levelID ID des Levels.
 	 */
 	public static void loadSounds(String levelID){
 		System.out.println("loadSounds: " + levelID);
 		ArrayList<String> soundsPaths = administratedSoundPath.get(levelID);
 		if(soundsPaths == null){
-			System.out.println("Sounds f�r levelID: " + levelID + " nicht gefunden.");
+			System.out.println("Sounds fuer levelID: " + levelID + " nicht gefunden.");
 		}else{
 			for(String path : soundsPaths){
 				System.out.println("loadSounds: " + path);
@@ -167,14 +167,14 @@ public final class AssetManager {
 	}
 	
 	/**
-	 * L�dt alle Dateien von levelID die im music Ordner sind. 
+	 * Laedt alle Dateien von levelID die im music Ordner sind. 
 	 * @param levelID ID des Levels.
 	 */
 	public static void loadMusic(String levelID){
 		System.out.println("loadMusic: " + levelID);
 		ArrayList<String> musicPaths = administratedMusicPath.get(levelID);
 		if(musicPaths == null){
-			System.out.println("Music f�r levelID: " + levelID + " nicht gefunden.");
+			System.out.println("Music fuer levelID: " + levelID + " nicht gefunden.");
 		}else{
 			for(String path : musicPaths){
 				System.out.println("loadMusic: " + path);
