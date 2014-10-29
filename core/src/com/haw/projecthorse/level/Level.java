@@ -18,18 +18,18 @@ import com.haw.projecthorse.lootmanager.Chest;
  * 
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
- *         müssen stattdessen jeweils doDispose() usw. implementieren
+ *         mï¿½ssen stattdessen jeweils doDispose() usw. implementieren
  * 
- *         Alle Implementierungen MÜSSEN im Konstruktor super() aufrufen!
+ *         Alle Implementierungen Mï¿½SSEN im Konstruktor super() aufrufen!
  *         
- *         Jedes level hat ein Overlay. Über das Overlay können Popups unter anderm Popups angezeigt werden. * 
+ *         Jedes level hat ein Overlay. ï¿½ber das Overlay kï¿½nnen Popups unter anderm Popups angezeigt werden. * 
  * 
  */
 
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
-	// TODO für Release entfernen
+	// TODO fï¿½r Release entfernen
 	private FPSLogger fpsLogger = new FPSLogger();	
 	// ####################################
 	
@@ -87,7 +87,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void render(float delta) {
-		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0 übergeben.
+		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0 ï¿½bergeben.
 		// Hierdurch wird sichergestellt das die Interaktionen 
 		if(paused){ 
 			delta = 0;
@@ -98,7 +98,7 @@ public abstract class Level implements Screen {
 		overlay.draw();
 		
 		// ########### DEBUG ##################
-		// TODO für Release entfernen
+		// TODO fï¿½r Release entfernen
 		fpsLogger.log();	
 		// ####################################
 	

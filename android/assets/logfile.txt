@@ -42,8 +42,9 @@ table.png FILE OK!
 selfmade ENTRY OK!
 ***SOUNDS**
 flap.wav FILE OK!
-jingles_STEEL04.ogg FILE OK!
-jingles_STEEL07.ogg FILE OK!
-jingles_STEEL10.ogg FILE OK!
+jingles_SAX04.ogg FILE OK!
+jingles_SAX07.ogg FILE OK!
+jingles_SAX10.ogg FILE OK!
 ***MUSIC***
 life.mp3 FILE OK!
+Little_Bits.mp3 FILE OK!
