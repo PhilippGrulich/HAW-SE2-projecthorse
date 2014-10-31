@@ -1,6 +1,6 @@
-package com.haw.projecthorse.level.util.overlay;
+package com.haw.projecthorse.level.util.overlay.navbar;
 
-import com.haw.projecthorse.level.util.overlay.button.NavbarPauseButton;
+import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarPauseButton;
 
 public class GameNavBar extends NavBar {
 

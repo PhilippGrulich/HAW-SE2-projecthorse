@@ -5,6 +5,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
+/**
+ * Dieses Popup ist speziell für die Verwendung in Mini Spielen gedacht.
+ * Es bietet dem Nutzer zugriff auf die Funktionen:
+ * 	Musik : An/Aus
+ *  Spiel Verlassen
+ *  Weiter Spielen
+ * @author Philipp
+ *
+ */
 public class GamePausePopup extends Popup {
 
 	public GamePausePopup() {

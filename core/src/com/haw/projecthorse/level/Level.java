@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.level.util.overlay.GameNavBar;
 import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.level.util.overlay.navbar.GameNavBar;
 import com.haw.projecthorse.lootmanager.Chest;
 
 /**
