@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
-import com.haw.projecthorse.level.util.overlay.background.EndlessBackground;
+import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;

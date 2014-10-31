@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.util.overlay.background;
+package com.haw.projecthorse.level.util.background;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
