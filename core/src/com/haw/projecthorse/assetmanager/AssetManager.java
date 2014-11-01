@@ -297,6 +297,18 @@ public final class AssetManager {
 	}
 
 	/**
+	 * Looping einer Musikdatei setzen. Wenn Musikstück zu Ende ist, wird dieses wiederholt
+	 * abgespielt, wenn looping auf true gesetzt wurde. 
+	 * @param levelID ID des Levels
+	 * @param name Name der Datei ink. relativem Pfad (ohne Oberordner mit Namen "levelID"
+	 * @param looping true um Looping zu setzen, sonst false
+	 */
+	public static void setMusicLooping(String levelID, String name, boolean looping) {
+		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
+				Music.class).setLooping(looping);
+	}
+	
+	/**
 	 * Schaltet die Musik aus, indem sie angehalten wird.
 	 * 
 	 * @param levelID

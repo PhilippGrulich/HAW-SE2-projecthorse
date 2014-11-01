@@ -231,6 +231,7 @@ public class HuetchenSpiel extends Level{
 		AssetManager.loadMusic("huetchenspiel");
 		AssetManager.playMusic("huetchenspiel", "Little_Bits.mp3");
 		AssetManager.changeMusicVolume("huetchenspiel", "Little_Bits.mp3", 0.5f);
+		AssetManager.setMusicLooping("huetchenspiel", "Little_Bits.mp3", true);
 	}
 
 	@Override

@@ -35,8 +35,14 @@ ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
 	color: {
-		name: Weiss,
-		black: false
+		color: {
+			a: 1,
+			b: 0.3372549,
+			g: 0.8392157,
+			r: 1
+		},
+		achievedDate: {},
+		name: Braun
 	},
 	name: Blacky
 }
