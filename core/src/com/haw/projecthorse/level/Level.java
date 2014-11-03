@@ -98,15 +98,13 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void render(float delta) {
+		paintBackground();
 		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
 		// übergeben.
 		// Hierdurch wird sichergestellt das die Interaktionen
 		if (paused) {
 			delta = 0;
-		}
-		;
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		}				
 		doRender(delta);
 		overlay.draw();
 
@@ -115,6 +113,14 @@ public abstract class Level implements Screen {
 		fpsLogger.log();
 		// ####################################
 
+	}
+	
+	/**
+	 * Male den Hintergrund
+	 */
+	private void paintBackground(){
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
 	protected abstract void doDispose();
