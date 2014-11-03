@@ -25,24 +25,26 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 /**
  * @author Philipp
  * 
- * Dies ist ein grundlegendes Popup und alle weiteren Popops können ein spezielles
- * Verhalten in Supklassen implementieren.
- * Außerdem bittet es Implementierungen für Standart-Komponenten. (createButton,createLabel) 
- * Diese sollten von dem Erbenen Popup verwendet werden um ein Einheitliches Look and Feel zu erhalten. 
- * Damit alle Popups immer ähnlich aussehen werden in dieser Klasse mehrere gennerelle Settings gesetzt. 
- * Popups werden immer zental auf dem Bildschirm dargestellt und haben ein {@link VerticalGroup} Layout.
- * Des weiteren ist die addActor Methode so überschrieben das alle {@link Actor} zur {@link VerticalGroup} hinzugefügt werden.
- * Das {@link VerticalGroup} Layout ordnet alle Elemente Vertikal untereinander an.
- * Weitere Informationen zum Layout unter https://github.com/libgdx/libgdx/wiki/Scene2d.ui#verticalgroup 
+ *         Dies ist ein grundlegendes Popup und alle weiteren Popops können ein
+ *         spezielles Verhalten in Supklassen implementieren. Außerdem bittet es
+ *         Implementierungen für Standart-Komponenten.
+ *         (createButton,createLabel) Diese sollten von dem Erbenen Popup
+ *         verwendet werden um ein Einheitliches Look and Feel zu erhalten.
+ *         Damit alle Popups immer ähnlich aussehen werden in dieser Klasse
+ *         mehrere gennerelle Settings gesetzt. Popups werden immer zental auf
+ *         dem Bildschirm dargestellt und haben ein {@link VerticalGroup}
+ *         Layout. Des weiteren ist die addActor Methode so überschrieben das
+ *         alle {@link Actor} zur {@link VerticalGroup} hinzugefügt werden. Das
+ *         {@link VerticalGroup} Layout ordnet alle Elemente Vertikal
+ *         untereinander an. Weitere Informationen zum Layout unter
+ *         https://github.com/libgdx/libgdx/wiki/Scene2d.ui#verticalgroup
  */
 public class Popup extends OverlayWidgetGroup {
 
-	
 	int popupHeigh = (int) (height / 2.5);
 	int popupWith = width - 100;
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
-	
 
 	public Popup() {
 
@@ -51,7 +53,8 @@ public class Popup extends OverlayWidgetGroup {
 		content.setX(50);
 		this.setHeight(height);
 		this.setWidth(width);
-		// Setzen eines neuen KeyDown Listener um Back Keys abzufangen. So wird nur das Popups disposed.
+		// Setzen eines neuen KeyDown Listener um Back Keys abzufangen. So wird
+		// nur das Popups disposed.
 		this.addListener(new InputListener() {
 
 			@Override
@@ -89,14 +92,16 @@ public class Popup extends OverlayWidgetGroup {
 	 */
 	private void createBackgroundImage() {
 
-		Image backgroundImage = new Image(new TextureRegionDrawable(AssetManager.getTextureRegion("ui","panel_beige")));
+		Image backgroundImage = new Image(new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "panel_beige")));
 		backgroundImage.setHeight(popupHeigh);
 		backgroundImage.setWidth(popupWith);
 
 		backgroundImage.setY((height / 2) - popupHeigh / 2);
 		backgroundImage.addListener(new InputListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
 				event.cancel();
 				return true;
 			}
@@ -105,7 +110,8 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Die addActor Methode wird überschrieben damit alle Kind Elemente immer auf das Vertical Layout gelegt werden.
+	 * Die addActor Methode wird überschrieben damit alle Kind Elemente immer
+	 * auf das Vertical Layout gelegt werden.
 	 */
 	@Override
 	public void addActor(Actor actor) {
@@ -114,6 +120,7 @@ public class Popup extends OverlayWidgetGroup {
 
 	/**
 	 * Methode um auf das Parent Overlay zuzugreifen.
+	 * 
 	 * @return
 	 */
 	protected Overlay getOverlay() {
@@ -125,28 +132,33 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Diese Methode ermöglicht das erstellen eines Standart Labels. Dieses Label wird zurückgegeben und kann weiter Verändert werden.
-	 * Außerdem muss es noch dem Popup mit AddActor hinzugefügt werden.
+	 * Diese Methode ermöglicht das erstellen eines Standart Labels. Dieses
+	 * Label wird zurückgegeben und kann weiter Verändert werden. Außerdem muss
+	 * es noch dem Popup mit AddActor hinzugefügt werden.
+	 * 
 	 * @param message
 	 * @return {@link Label}
-	 */	
+	 */
 	protected Label createLabel(String message) {
 
 		LabelStyle style = new LabelStyle();
-		style.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
+		style.font = new BitmapFont(
+				Gdx.files.internal("pictures/fontButton/font.fnt"));
 		style.font.scale(-0.5f);
 		Label label = new Label(message, style);
 		label.setWrap(true);
 		label.setAlignment(Align.center);
-	
+
 		label.setWidth(popupWith);
-		
+
 		return label;
 	}
 
 	/**
-	 * Diese Methode ermöglicht das erstellen ein Standart Button. Dieses Button wird zurückgegeben und kann weiter Verändert werden.
-	 * Es wird z.b. ein Standart Image gesetzt.
+	 * Diese Methode ermöglicht das erstellen ein Standart Button. Dieses Button
+	 * wird zurückgegeben und kann weiter Verändert werden. Es wird z.b. ein
+	 * Standart Image gesetzt.
+	 * 
 	 * @param text
 	 * @return {@link ImageTextButton}
 	 */
@@ -155,19 +167,22 @@ public class Popup extends OverlayWidgetGroup {
 		ImageTextButton button = new ImageTextButton(text, style);
 		return button;
 	}
-	
+
 	/**
 	 * Erstellt den {@link ImageTextButtonStyle} für die Methode createButton.
+	 * 
 	 * @return {@link ImageTextButtonStyle}
 	 */
 	private ImageTextButtonStyle getImageButtonStyle() {
-		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("ui","popup_button"));
+		Drawable drawable = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "popup_button"));
 
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
 
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
+		imageButtonStyle.font = new BitmapFont(
+				Gdx.files.internal("pictures/fontButton/font.fnt"));
 
 		imageButtonStyle.font.scale(-0.5f);
 		new Color();
@@ -175,9 +190,10 @@ public class Popup extends OverlayWidgetGroup {
 
 		return imageButtonStyle;
 	}
-	
+
 	/**
 	 * Diese Methode erstellt eine Standard Checkbox
+	 * 
 	 * @param text
 	 * @return {@link CheckBox}
 	 */
@@ -187,19 +203,23 @@ public class Popup extends OverlayWidgetGroup {
 
 		return box;
 	}
-	
+
 	/**
-	 * Erstellt den {@link CheckBoxStyle} für die MEthode createCheckbox. 
+	 * Erstellt den {@link CheckBoxStyle} für die MEthode createCheckbox.
+	 * 
 	 * @return {@link CheckBoxStyle}
 	 */
 	private CheckBoxStyle createCheckboxStyle() {
-		Drawable on = new TextureRegionDrawable(AssetManager.getTextureRegion("ui","on"));
+		Drawable on = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"ui", "on"));
 
-		Drawable off = new TextureRegionDrawable(AssetManager.getTextureRegion("ui","off"));
+		Drawable off = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"ui", "off"));
 		CheckBoxStyle style = new CheckBoxStyle();
 		style.checkboxOn = on;
 		style.checkboxOff = off;
-		style.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
+		style.font = new BitmapFont(
+				Gdx.files.internal("pictures/fontButton/font.fnt"));
 		return style;
 	}
 
