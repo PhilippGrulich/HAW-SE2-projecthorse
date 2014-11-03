@@ -2,7 +2,6 @@ package com.haw.projecthorse.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -53,29 +52,30 @@ public abstract class Level implements Screen {
 		viewport = new FitViewport(width, height, cam);
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
-		spriteBatch.setProjectionMatrix(cam.combined);		
+		spriteBatch.setProjectionMatrix(cam.combined);
 
-		FitViewport overlayViewport = new FitViewport(width, height, createCamera());
+		FitViewport overlayViewport = new FitViewport(width, height,
+				createCamera());
 		overlay = new Overlay(overlayViewport, spriteBatch, this);
 
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
-		
+
 		chest = new Chest();
 
 	}
-	
-	
-	
+
 	/**
-	 * Erstellt eine OrthographicCamera diese wird für die jeweiliegen Viewports gebraucht.
+	 * Erstellt eine OrthographicCamera diese wird für die jeweiliegen Viewports
+	 * gebraucht.
+	 * 
 	 * @return {@link OrthographicCamera}
 	 */
 	private OrthographicCamera createCamera() {
 
 		OrthographicCamera cam = new OrthographicCamera(width, height);
 		cam.setToOrtho(false); // Set to Y-Up - Coord system
-		
+
 		return cam;
 	}
 
@@ -104,7 +104,7 @@ public abstract class Level implements Screen {
 		// Hierdurch wird sichergestellt das die Interaktionen
 		if (paused) {
 			delta = 0;
-		}				
+		}
 		doRender(delta);
 		overlay.draw();
 
@@ -114,11 +114,11 @@ public abstract class Level implements Screen {
 		// ####################################
 
 	}
-	
+
 	/**
 	 * Male den Hintergrund
 	 */
-	private void paintBackground(){
+	private void paintBackground() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
