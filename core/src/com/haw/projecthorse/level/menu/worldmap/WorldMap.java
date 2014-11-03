@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -26,10 +25,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
-import com.haw.projecthorse.player.Direction;
-import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
-import com.haw.projecthorse.swipehandler.ControlMode;
 import com.haw.projecthorse.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.swipehandler.SwipeListener;
 
@@ -55,7 +51,10 @@ public class WorldMap extends Level {
 	private int selectedCityIndex;
 	private HashMap<String, int[]> cityInfos;
 	private boolean cityChanged;
-	private Image[] cityPoints; // TODO Städte mit Punkten markieren
+	private Image[] cityPoints;
+	private float cityScaleMax, cityScaleMin;
+	private boolean cityScaleDirection;
+	
 
 	private float targetX, targetY;
 
@@ -117,6 +116,7 @@ public class WorldMap extends Level {
 		flagStyle = new ImageButtonStyle();
 		
 		createButtons();
+		createCityPoints();
 		initAnimation();
 	}
 
@@ -172,9 +172,64 @@ public class WorldMap extends Level {
 		stage.addActor(pointImg);
 		stage.addActor(germanyImg);
 		stage.addActor(player);
+		
+		germanyImg.toBack();
+		worldImg.toBack();
 
 	}
+	
+	private void createCityPoints(){
+		cityScaleMax = 0.4f * (width / 720) * 1.2f;
+		cityScaleMin = 0.4f * (width / 720) * 0.8f;
+		cityScaleDirection = true;
+		cityPoints = new Image[cities.length];
+		
+		for (int i = 0; i < cities.length; i++){
+			cityPoints[i] = new Image(AssetManager.getTextureRegion("worldmap",
+					"shadedLight28"));
+			cityPoints[i].setName(cities[i]);
+			cityPoints[i].setScale(0.5f * (width / 720));
+			cityPoints[i].setColor(1, 1, 1, 0);
+			cityPoints[i].setPosition(cityInfos.get(cities[i])[0] 
+											- cityPoints[i].getWidth()*cityPoints[i].getScaleX()/2, 
+									  cityInfos.get(cities[i])[1] 
+											- cityPoints[i].getHeight()*cityPoints[i].getScaleX()/2);
+			
+			cityPoints[i].toFront();
+			stage.addActor(cityPoints[i]);
+		}
+		
+	}
 
+	private void updateCityPoints(float delta){
+		if (state == State.INIT)
+			return;
+		
+		
+		if (cityPoints[0].getScaleX() > cityScaleMax)
+			cityScaleDirection = false;
+		else if (cityPoints[0].getScaleX() < cityScaleMin)
+			cityScaleDirection = true;
+		
+		for (Image city : cityPoints) {
+			city.setColor(1, 1, 1, 1);			
+			if (cityScaleDirection) {
+				city.scaleBy(delta * 0.3f);
+			} else {
+				city.scaleBy(delta * -0.3f);
+			}
+			
+			city.setPosition(cityInfos.get(city.getName())[0] 
+					- city.getWidth()*city.getScaleX()/2, 
+			  cityInfos.get(city.getName())[1] 
+					- city.getHeight()*city.getScaleX()/2);
+
+		}
+		
+		
+
+	}
+	
 	private void createButtons() {
 		flagButton = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("flaggen",
@@ -329,6 +384,7 @@ public class WorldMap extends Level {
 	@Override
 	protected void doRender(float delta) {
 		updateState();
+		updateCityPoints(delta);
 		updateUI(delta);
 		updateCamera(delta);
 		stage.act(delta);
