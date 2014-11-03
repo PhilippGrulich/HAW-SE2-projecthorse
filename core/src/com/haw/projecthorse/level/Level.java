@@ -2,6 +2,7 @@ package com.haw.projecthorse.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,51 +22,61 @@ import com.haw.projecthorse.lootmanager.Chest;
  *         mï¿½ssen stattdessen jeweils doDispose() usw. implementieren
  * 
  *         Alle Implementierungen Mï¿½SSEN im Konstruktor super() aufrufen!
- *         
- *         Jedes level hat ein Overlay. ï¿½ber das Overlay kï¿½nnen Popups unter anderm Popups angezeigt werden. * 
+ * 
+ *         Jedes level hat ein Overlay. ï¿½ber das Overlay kï¿½nnen Popups unter
+ *         anderm Popups angezeigt werden. *
  * 
  */
 
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
-	// TODO fï¿½r Release entfernen
-	private FPSLogger fpsLogger = new FPSLogger();	
+	// TODO für Release entfernen
+	private FPSLogger fpsLogger = new FPSLogger();
 	// ####################################
-	
-	
+
 	private Boolean paused = false;
-	
 	private String levelID = null;
-	private Viewport viewport, overlayViewport;
-	private OrthographicCamera cam, overlayCam;
-	private SpriteBatch spriteBatch;	
+	private Viewport viewport;
+	private OrthographicCamera cam;
+	private SpriteBatch spriteBatch;
 	protected Overlay overlay;
-	protected Chest chest;	
-	
+	protected Chest chest;
+
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenWidth();
 
 	public Level() {
-		cam = new OrthographicCamera(width, height);
-		cam.setToOrtho(false); // Set to Y-Up - Coord system
+		cam = createCamera();
 		viewport = new FitViewport(width, height, cam);
 		System.out.println(viewport.getTopGutterHeight());
 		spriteBatch = new SpriteBatch();
-		spriteBatch.setProjectionMatrix(cam.combined);
-		overlay = new Overlay(viewport, spriteBatch, this);	
-		chest = new Chest();
-		
-		overlayCam = new OrthographicCamera(width, height);
-		overlayCam.setToOrtho(false); // Set to Y-Up - Coord system
-		overlayViewport = new FitViewport(width, height, overlayCam);
-		overlay = new Overlay(overlayViewport, spriteBatch, this);	
-		
+		spriteBatch.setProjectionMatrix(cam.combined);		
+
+		FitViewport overlayViewport = new FitViewport(width, height, createCamera());
+		overlay = new Overlay(overlayViewport, spriteBatch, this);
+
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
 		
+		chest = new Chest();
+
+	}
+	
+	
+	
+	/**
+	 * Erstellt eine OrthographicCamera diese wird für die jeweiliegen Viewports gebraucht.
+	 * @return {@link OrthographicCamera}
+	 */
+	private OrthographicCamera createCamera() {
+
+		OrthographicCamera cam = new OrthographicCamera(width, height);
+		cam.setToOrtho(false); // Set to Y-Up - Coord system
+		
+		return cam;
 	}
 
 	public final void setLevelID(String newID) {
@@ -87,21 +98,23 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void render(float delta) {
-		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0 ï¿½bergeben.
-		// Hierdurch wird sichergestellt das die Interaktionen 
-		if(paused){ 
+		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
+		// übergeben.
+		// Hierdurch wird sichergestellt das die Interaktionen
+		if (paused) {
 			delta = 0;
-			};
-		Gdx.gl.glClearColor(0,0,0,1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);	    
-		doRender(delta);		
+		}
+		;
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		doRender(delta);
 		overlay.draw();
-		
+
 		// ########### DEBUG ##################
-		// TODO fï¿½r Release entfernen
-		fpsLogger.log();	
+		// TODO für Release entfernen
+		fpsLogger.log();
 		// ####################################
-	
+
 	}
 
 	protected abstract void doDispose();
@@ -111,7 +124,7 @@ public abstract class Level implements Screen {
 		spriteBatch.dispose();
 		overlay.dispose();
 		doDispose();
-		
+
 	}
 
 	protected abstract void doResize(int width, int height);
@@ -126,7 +139,7 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void show() {
-		doShow();	
+		doShow();
 	}
 
 	protected abstract void doHide();
