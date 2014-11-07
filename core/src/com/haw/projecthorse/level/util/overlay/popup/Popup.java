@@ -41,15 +41,14 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
  */
 public class Popup extends OverlayWidgetGroup {
 
-	int popupHeigh = (int) (height / 2.5);
-	int popupWith = width - 100;
+	protected int popupHeigh = (int) (height / 2.5), popupWidth = width - 100;;
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
 
 	public Popup() {
 
 		content.setHeight(popupHeigh);
-		content.setWidth(popupWith);
+		content.setWidth(popupWidth);
 		content.setX(50);
 		this.setHeight(height);
 		this.setWidth(width);
@@ -83,7 +82,7 @@ public class Popup extends OverlayWidgetGroup {
 		contentGroup.setY((height / 2) - popupHeigh / 2 - 60);
 		contentGroup.space(10);
 		contentGroup.setHeight(popupHeigh);
-		contentGroup.setWidth(popupWith);
+		contentGroup.setWidth(popupWidth);
 		content.addActor(contentGroup);
 	}
 
@@ -95,7 +94,7 @@ public class Popup extends OverlayWidgetGroup {
 		Image backgroundImage = new Image(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "panel_beige")));
 		backgroundImage.setHeight(popupHeigh);
-		backgroundImage.setWidth(popupWith);
+		backgroundImage.setWidth(popupWidth);
 
 		backgroundImage.setY((height / 2) - popupHeigh / 2);
 		backgroundImage.addListener(new InputListener() {
@@ -149,7 +148,7 @@ public class Popup extends OverlayWidgetGroup {
 		label.setWrap(true);
 		label.setAlignment(Align.center);
 
-		label.setWidth(popupWith);
+		label.setWidth(popupWidth);
 
 		return label;
 	}
