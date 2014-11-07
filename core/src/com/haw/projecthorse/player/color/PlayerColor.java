@@ -1,7 +1,11 @@
 package com.haw.projecthorse.player.color;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.lootmanager.Loot;
 
 /**
@@ -146,8 +150,36 @@ public class PlayerColor extends Loot {
 	}
 
 	@Override
-	public Image getImage() {
-		// TODO Auto-generated method stub
-		return null;
+	public Drawable getImage() {
+		return new PlayerColorImage();
+	}
+	
+	private class PlayerColorImage extends TextureRegionDrawable {
+		public PlayerColorImage() {
+			TextureRegion sprite = AssetManager.getTextureRegion("notChecked", black ? "black_sprites" : "white_sprites");
+			sprite.setRegion(sprite.getRegionX(), sprite.getRegionY(), 115, 140);
+			
+			setRegion(sprite);
+		}
+		
+		@Override
+		public void draw(Batch batch, float x, float y, float width,
+				float height) {
+			Color batchColor = batch.getColor();
+			batch.setColor(color);
+			super.draw(batch, x, y, width, height);
+			batch.setColor(batchColor);
+		}
+		
+		@Override
+		public void draw(Batch batch, float x, float y, float originX,
+				float originY, float width, float height, float scaleX,
+				float scaleY, float rotation) {
+			Color batchColor = batch.getColor();
+			batch.setColor(color);
+			super.draw(batch, x, y, originX, originY, width, height, scaleX, scaleY,
+					rotation);
+			batch.setColor(batchColor);
+		}
 	}
 }

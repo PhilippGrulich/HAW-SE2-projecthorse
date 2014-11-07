@@ -61,7 +61,7 @@ public abstract class Level implements Screen {
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
 
-		chest = new Chest();
+		chest = new Chest(overlay);
 
 	}
 
