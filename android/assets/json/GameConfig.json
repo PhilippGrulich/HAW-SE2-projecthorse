@@ -7,7 +7,7 @@
       },
       {
          levelID:"playerMenu",
-         className:"com.haw.projecthorse.level.playermenu.PlayerMenu"
+         className:"com.haw.projecthorse.level.menu.playermenu.PlayerMenu"
       },
       {
          levelID:"worldmap",

@@ -1,4 +1,4 @@
-package com.haw.projecthorse.swipehandler;
+package com.haw.projecthorse.level.util.swipehandler;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -10,10 +10,14 @@ public abstract class SwipeListener implements EventListener {
 	@Override
 	public boolean handle(Event event) {
 		if (!(event instanceof SwipeEvent)) return false;
-		swiped((SwipeEvent)event, event.getTarget());
-		return false;
+		return handleSwiped((SwipeEvent)event, event.getTarget());
 	}
 	
+	protected boolean handleSwiped(SwipeEvent event, Actor actor) {
+		swiped(event, actor);
+		return false;
+	}
+
 	/**
 	 * Verarbeitet das SwipeEvent
 	 * @param event Das SwipeEvent, welches auch die Richtung beinhaltet.

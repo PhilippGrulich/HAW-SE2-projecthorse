@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.playermenu;
+package com.haw.projecthorse.level.menu.playermenu;
 
 import java.util.List;
 
@@ -18,6 +18,9 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
+import com.haw.projecthorse.level.util.swipehandler.ControlMode;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
@@ -25,9 +28,6 @@ import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.color.ColorManager;
 import com.haw.projecthorse.player.color.PlayerColor;
 import com.haw.projecthorse.savegame.SaveGameManager;
-import com.haw.projecthorse.swipehandler.ControlMode;
-import com.haw.projecthorse.swipehandler.StageGestureDetector;
-import com.haw.projecthorse.swipehandler.SwipeListener;
 
 public class PlayerMenu extends Level {
 	private Stage stage;
@@ -43,10 +43,6 @@ public class PlayerMenu extends Level {
 	private final int DURATION = 2;
 
 	private void updateNameLabel() {
-		SaveGameManager.getLoadedGame().setHorseName(playerName);
-		SaveGameManager.saveLoadedGame(); // TODO: sollte in eine "am Ende"
-											// Methdode ausgelagert werden
-
 		label.setText(playerName);
 		label.setWidth(label.getTextBounds().width);
 		label.setPosition((width - label.getWidth()) / 2, height - 200);
@@ -64,10 +60,6 @@ public class PlayerMenu extends Level {
 	}
 
 	private void updatePlayer(boolean right) {
-		SaveGameManager.getLoadedGame().setHorseColor(colors.get(index));
-		SaveGameManager.saveLoadedGame(); // TODO: sollte in eine "am Ende"
-											// Methdode ausgelagert werden
-
 		Player inActive;
 
 		if (active == player1) {
@@ -202,7 +194,10 @@ public class PlayerMenu extends Level {
 
 	@Override
 	protected void doDispose() {
-		
+		// Alles speichern, bevor das Menü verlassen wird
+		SaveGameManager.getLoadedGame().setHorseName(playerName);
+		SaveGameManager.getLoadedGame().setHorseColor(colors.get(index));
+		SaveGameManager.saveLoadedGame();
 	}
 
 	@Override
@@ -232,9 +227,6 @@ public class PlayerMenu extends Level {
 		stage = new Stage(getViewport(), getSpriteBatch());
 		InputManager.addInputProcessor(new StageGestureDetector(stage, true,
 				ControlMode.HORIZONTAL));
-
-		//atlas = AssetManager.load("menu", false, false, true);
-		//buttonAtlas = AssetManager.load("selfmade", false, false, true);
 
 		createBackground();
 		createButtons();

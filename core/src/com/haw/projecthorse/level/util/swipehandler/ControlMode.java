@@ -1,4 +1,4 @@
-package com.haw.projecthorse.swipehandler;
+package com.haw.projecthorse.level.util.swipehandler;
 
 import com.haw.projecthorse.player.Direction;
 
