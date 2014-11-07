@@ -44,7 +44,7 @@ public class Player extends PlayerImpl{
 		
 		//Springen
 		this.addAction(springen);
-
+		System.out.println("player jump");
 		
 		//Fallen
 		this.addAction(fallen);		
@@ -58,7 +58,7 @@ public class Player extends PlayerImpl{
 	public void initialize(){
 		this.setScale(1.5F);
 		 runUp = this.getWidth() * 1.3f;
-		 this.setPosition(playersPointOfView, 0);
+		 this.setPosition(playersPointOfView, 1);
 		 this.scaleBy(0.2F);
 		 
 		initPlayerActions();
@@ -70,7 +70,7 @@ public class Player extends PlayerImpl{
 		
 	     //Vorwaerts Action
 	 	vorwaerts = Actions.moveBy(vorwaertsPos, 0, 0.5f, new Interpolation() {
-
+	 		
 	 		@Override
 			public float apply(float a) {
 				// TODO Auto-generated method stub

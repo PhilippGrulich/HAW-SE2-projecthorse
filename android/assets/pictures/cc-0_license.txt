@@ -15,3 +15,16 @@ huetchenspiel;obj_trees1.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blog
 huetchenspiel;obj_trees2.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/
 huetchenspiel;Garden_Witch.png; cc-0; Scout; https://openclipart.org/detail/191073/garden-witch--by-scout-191073
 huetchenspiel;nicubunu_Callout_cloud_center.png; cc-0; nicubunu; https://openclipart.org/image/300px/svg_to_png/13925/nicubunu_Callout_cloud_center.png
+parcours;cratetex.png;CC-0;Philman401;http://opengameart.org/content/simple-toon-wooden-crate-texture
+parcours;bling_birdhouse_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bling_wildmushrooms_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;rainbow.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bush_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bush_2.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bush_3.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;cliff_cover_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;cliff_cover_3.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;cloud_fluffy_2.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;dirt_mountaint_dirt_cap_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;grass_ground.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;Hintergrund.png;CC-0;Francis
