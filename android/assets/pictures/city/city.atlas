@@ -1,54 +1,61 @@
 
 city.png
-size: 1866,1282
+size: 1866,1919
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 AppleRunsButton
   rotate: false
-  xy: 1149, 754
+  xy: 455, 510
   size: 299, 127
   orig: 299, 127
   offset: 0, 0
   index: -1
 Button0
   rotate: false
-  xy: 797, 883
+  xy: 797, 1520
   size: 1069, 399
   orig: 1069, 399
   offset: 0, 0
   index: -1
 CityButton1
   rotate: false
-  xy: 797, 629
+  xy: 2, 2
   size: 311, 122
   orig: 311, 122
   offset: 0, 0
   index: -1
 CityButton2
   rotate: false
-  xy: 1450, 755
+  xy: 1149, 1392
   size: 280, 126
   orig: 280, 126
   offset: 0, 0
   index: -1
 ParcoursButton
   rotate: false
-  xy: 797, 514
+  xy: 797, 1275
   size: 311, 113
   orig: 311, 113
   offset: 0, 0
   index: -1
 Sankt-Michaelis-Kirche_Hamburg
   rotate: false
-  xy: 2, 2
+  xy: 2, 639
   size: 793, 1280
   orig: 793, 1280
   offset: 0, 0
   index: -1
+font
+  rotate: false
+  xy: 2, 126
+  size: 451, 511
+  orig: 451, 511
+  offset: 0, 0
+  index: -1
 raw_game_teaser_icon
   rotate: false
-  xy: 797, 753
+  xy: 797, 1390
   size: 350, 128
   orig: 350, 128
   offset: 0, 0

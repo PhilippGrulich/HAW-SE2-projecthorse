@@ -1,68 +1,62 @@
 
 worldmap.png
-size: 2181,1922
+size: 3949,2008
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 erde-und-sterne
   rotate: false
-  xy: 1379, 642
+  xy: 1379, 2
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
 germanymap
   rotate: false
-  xy: 2, 2
+  xy: 2, 88
   size: 1375, 1920
   orig: 1375, 1920
   offset: 0, 0
   index: -1
-shadedLight24
-  rotate: false
-  xy: 1379, 560
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
-shadedLight25
-  rotate: false
-  xy: 2101, 1842
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
-shadedLight28
-  rotate: false
-  xy: 1379, 478
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
-
-worldmap2.png
-size: 2008,1452
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 germanymap_scaled
   rotate: false
-  xy: 1288, 447
+  xy: 2101, 277
   size: 720, 1005
   orig: 720, 1005
   offset: 0, 0
   index: -1
 karte
   rotate: false
-  xy: 2, 728
+  xy: 1379, 1284
   size: 1284, 724
   orig: 1284, 724
   offset: 0, 0
   index: -1
 logo
   rotate: false
-  xy: 2, 2
+  xy: 2665, 1284
   size: 1284, 724
   orig: 1284, 724
+  offset: 0, 0
+  index: -1
+shadedLight24
+  rotate: false
+  xy: 2, 6
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+shadedLight25
+  rotate: false
+  xy: 84, 6
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+shadedLight28
+  rotate: false
+  xy: 166, 6
+  size: 80, 80
+  orig: 80, 80
   offset: 0, 0
   index: -1
