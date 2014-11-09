@@ -14,10 +14,12 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -43,6 +45,7 @@ import com.haw.projecthorse.player.PlayerImpl;
 public class HuetchenSpiel extends Level{
 
 	private Stage stage;
+	private static boolean ISPAUSED;
 	
 	/**
 	 * Hut und Logik Objekte
@@ -104,6 +107,7 @@ public class HuetchenSpiel extends Level{
 	 */
 	public HuetchenSpiel(){
 		super();
+		ISPAUSED = false;
 		this.rnd = new Random();
 		XCORDHAT = new float[HAT_NUMBER];
 		this.choiceCounter = 0;
@@ -135,18 +139,20 @@ public class HuetchenSpiel extends Level{
 	protected void doRender(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 0); 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.stage.act(Gdx.graphics.getDeltaTime());
+		this.stage.act(delta);
 		this.stage.draw();
 		
 		//eigentliche Spiellogik
-		if(!this.roundFinished){
+		if(!this.roundFinished && !ISPAUSED){
 			for(int i = 0; i < HAT_NUMBER; i++){
 				if(this.hats[i].isFlinged() && this.hats[i].isChoosed()){
 					//Positionen von Pferd und korrektem Hut setzen
 					this.pl.setPosition(this.hats[i].getX() + 50, this.hats[i].getY());
-					this.hats[i].setPosition(this.hats[i].getX(), this.hats[i].getY() + 80);
-					this.pl.setVisible(true);
 					
+					Action moveTo = Actions.moveTo(this.hats[i].getX(),
+							this.hats[i].getY() + 80);
+					this.hats[i].addAction(moveTo);
+					this.pl.setVisible(true);
 					this.labelStart.setVisible(false);
 					
 					/*
@@ -182,7 +188,9 @@ public class HuetchenSpiel extends Level{
 						&& !this.hatIndexList.contains(i)){
 					
 					AssetManager.playSound(this.getLevelID(), "jingles_SAX04.ogg");
-					this.hats[i].setPosition(this.hats[i].getX(), this.hats[i].getY() + 80);
+					Action moveTo = Actions.moveTo(this.hats[i].getX(), 
+							this.hats[i].getY() + 80);
+					this.hats[i].addAction(moveTo);
 					this.choiceCounter++;
 					this.hatIndexList.add(i);
 					/*
@@ -222,7 +230,8 @@ public class HuetchenSpiel extends Level{
 	}
 
 	@Override
-	protected void doResize(int width, int height) {		
+	protected void doResize(int width, int height) {
+		
 	}
 
 	@Override
@@ -240,10 +249,12 @@ public class HuetchenSpiel extends Level{
 
 	@Override
 	protected void doPause() {		
+		ISPAUSED = true;
 	}
 
 	@Override
 	protected void doResume() {
+		ISPAUSED = false;
 	}
 	
 	/**
@@ -394,28 +405,30 @@ public class HuetchenSpiel extends Level{
 		this.newGame.addListener(new InputListener(){
 			//alle Werte auf Default zuruecksetzen, damit neue Runde beginnen kann
 			 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				 buttonTable.setVisible(false);
-				 pl.setVisible(false);
-				 labelStart.setVisible(true);
-				 labelGood.setVisible(false);
-				 labelTryAgain.setVisible(false);
-				 labelOk.setVisible(false);
-				 labelFail.setVisible(false);
-				 choiceCounter = 0;
-				 roundFinished = false;
-				 hatIndexList.clear();
-				 hats[rightNum].setChoosed(false);
-				 for(int i = 0; i < HAT_NUMBER; i++){
-					 hats[i].setPosition(XCORDHAT[i], YCORDHAT);
-					 hats[i].setFlinged(false);
-					 /*
-					  * Setze fuer jeweiligen Hut des Wert, dass er gewaehlt wurde auf false
-					  *da sonst bei doppelt angewaehltem Hut in letzter Runde, dieser in der
-					  *neuen Runde bereits gewaehlt wurde
-					 */
-					 //((HatListener)hats[i].getListeners().get(0)).setPressed(false);
+				 if(!ISPAUSED){
+					 buttonTable.setVisible(false);
+					 pl.setVisible(false);
+					 labelStart.setVisible(true);
+					 labelGood.setVisible(false);
+					 labelTryAgain.setVisible(false);
+					 labelOk.setVisible(false);
+					 labelFail.setVisible(false);
+					 choiceCounter = 0;
+					 roundFinished = false;
+					 hatIndexList.clear();
+					 hats[rightNum].setChoosed(false);
+					 for(int i = 0; i < HAT_NUMBER; i++){
+						 hats[i].setPosition(XCORDHAT[i], YCORDHAT);
+						 hats[i].setFlinged(false);
+						 /*
+						  * Setze fuer jeweiligen Hut des Wert, dass er gewaehlt wurde auf false
+						  *da sonst bei doppelt angewaehltem Hut in letzter Runde, dieser in der
+						  *neuen Runde bereits gewaehlt wurde
+						 */
+						 //((HatListener)hats[i].getListeners().get(0)).setPressed(false);
+					 }
+					 generateHatNum();
 				 }
-				 generateHatNum();
 				 return true;
 			 }
 			 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -469,14 +482,16 @@ public class HuetchenSpiel extends Level{
 			
 			@Override
 			public void onUp(float actualX, float actualY) {				
-				for(int i = 0; i < hats.length; i++){
-					if(actualX > (hats[i].getX() / factor)
-	 						&& actualX < (hats[i].getX() + hats[i].getWidth()) / factor
-							&& actualY > hats[i].getY() + 205 
-							&& actualY < hats[i].getY() + 200 + hatDiffY){
-						
-	 					hats[i].setFlinged(true);
-						break;
+				if(!ISPAUSED){
+					for(int i = 0; i < hats.length; i++){
+						if(actualX > (hats[i].getX() / factor)
+		 						&& actualX < (hats[i].getX() + hats[i].getWidth()) / factor
+								&& actualY > hats[i].getY() + 205 
+								&& actualY < hats[i].getY() + 200 + hatDiffY){
+							
+		 					hats[i].setFlinged(true);
+							break;
+						}
 					}
 				}
 			}
