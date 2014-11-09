@@ -199,12 +199,12 @@ public final class AssetManager {
 						path.length()).replace("\\", "/")
 						+ "/" + file.name();
 				// assets = new
-				// TextureAtlas(Gdx.files.internal(relativeFilePath));
-				TextureAtlas atlas = new TextureAtlas(
-						Gdx.files.internal(relativeFilePath));
-				assetManager.load(relativeFilePath, TextureAtlas.class);
+				// TextureAtlas(Gdx.files.internal(relativeFilePath)); #Changed
+				/*TextureAtlas atlas = new TextureAtlas( #Changed
+						Gdx.files.internal(relativeFilePath));*/ 
+				//assetManager.load(relativeFilePath, TextureAtlas.class); #Changed
 				administratedAtlasesPath.put(levelID, relativeFilePath);
-				administratedAtlases.put(levelID, atlas);
+				//administratedAtlases.put(levelID, atlas); #Changed
 
 			} else {
 				loadAtlases(path + FILESEPARATOR + file.name(), file.name());
