@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.memoryspiel;
+package com.haw.projecthorse.level.game.memoryspiel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,18 +10,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.level.memoryspiel.Karte.State;
+import com.haw.projecthorse.level.game.memoryspiel.Karte.State;
 
 public class KartenManager {
 
 	private ArrayList<Karte> karten  = new ArrayList<Karte>();
-	private TextureAtlas atlant;
+	private TextureRegion atlant;
 	private Texture newlyOpened;
 	private ArrayList<Karte> lastChanged;
 	
 	
 	public KartenManager(){
-		atlant = AssetManager.load("hamburg", false, false, true);
+		atlant = AssetManager.getTextureRegion("city","Sankt-Michaelis-Kirche_Hamburg");
 	}
 	
 	public void setUpKarten(){	

@@ -11,13 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.util.swipehandler.ControlMode;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.color.PlayerColor;
-import com.haw.projecthorse.swipehandler.ControlMode;
-import com.haw.projecthorse.swipehandler.StageGestureDetector;
-import com.haw.projecthorse.swipehandler.SwipeListener;
 
 /**
  * Klasse zum Simulieren und Testen von Wisch-Bewegungen (Swipe-Gesten)

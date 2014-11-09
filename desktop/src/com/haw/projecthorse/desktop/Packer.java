@@ -35,9 +35,9 @@ public class Packer {
 		String outputFile = "";
 		String[] content = dir.list();
 		Settings settings = new Settings();
-		settings.maxWidth = 2560;
-		settings.maxHeight = 2000;
-		settings.pot = false;
+		settings.maxWidth = 4096;
+		settings.maxHeight = 4096;
+		settings.pot = true;
 
 		for (int i = 0; i < content.length; i++) {
 			if (new File(root + filesep + content[i]).isDirectory()) {

@@ -1,4 +1,4 @@
-package com.haw.projecthorse.swipehandler;
+package com.haw.projecthorse.level.util.swipehandler;
 
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -32,6 +32,7 @@ public class StageGestureDetector extends GestureDetector {
 		public boolean fling(float velocityX, float velocityY, int button) {
 			float ratio = Math.abs(velocityX / velocityY);
 			Direction dir = null;
+			boolean ret = false;
 			
 			if ((mode == ControlMode.FOUR_AXIS) && (0.6 < ratio && ratio < 1.7)) {
 				// Bewegung in eine Ecke
@@ -67,30 +68,34 @@ public class StageGestureDetector extends GestureDetector {
 			}
 			
 			if (fullScreen) {
-				fireSwipeEvent(stage.getRoot(), dir);
+				ret = fireSwipeEvent(stage.getRoot(), dir);
 			} else {
 				Actor actor = stage.hit(posX, posY, false);
 				if (actor != null) {
-					fireSwipeEvent(actor, dir);
+					ret = fireSwipeEvent(actor, dir);
 				}
 			}
 			
-			return super.fling(velocityX, velocityY, button);
+			return ret;
 		}
 		
-		private void fireSwipeEvent(Actor target, Direction dir) {
+		private boolean fireSwipeEvent(Actor target, Direction dir) {
 			if (target == null)
-				return;
+				return false;
+			
+			if (target.fire(new SwipeListener.SwipeEvent(dir)))
+				return true;
 			
 			if (target instanceof Group) {
 				Group group = (Group) target;
 				Actor[] children = group.getChildren().items;
 				for (Actor child : children) {
-					fireSwipeEvent(child, dir);
+					if (fireSwipeEvent(child, dir))
+						return true;
 				}
 			}
 			
-			target.fire(new SwipeListener.SwipeEvent(dir));
+			return false;
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.memoryspiel;
+package com.haw.projecthorse.level.game.memoryspiel;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;

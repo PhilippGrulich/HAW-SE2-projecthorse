@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.memoryspiel;
+package com.haw.projecthorse.level.game.memoryspiel;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;

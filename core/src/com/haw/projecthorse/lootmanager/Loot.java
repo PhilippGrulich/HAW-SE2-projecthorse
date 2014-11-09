@@ -2,7 +2,7 @@ package com.haw.projecthorse.lootmanager;
 
 import java.util.Date;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public abstract class Loot {
 	private String description = null, name = null;
@@ -30,7 +30,7 @@ public abstract class Loot {
 	 * Ein kleines Bild, wie eine Medaille, ein Stern o.Ä.
 	 * @return Das Bild des Loots.
 	 */
-	public abstract Image getImage();
+	public abstract Drawable getImage();
 	
 	public final Date getAchievedDate() {
 		return achievedDate;

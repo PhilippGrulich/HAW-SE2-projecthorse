@@ -25,9 +25,9 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.PlayerImpl;
-import com.haw.projecthorse.swipehandler.StageGestureDetector;
-import com.haw.projecthorse.swipehandler.SwipeListener;
 
 public class WorldMap extends Level {
 

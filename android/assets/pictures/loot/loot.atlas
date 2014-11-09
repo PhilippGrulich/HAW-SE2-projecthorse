@@ -1,0 +1,20 @@
+
+loot.png
+size: 164,82
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+arrow_left
+  rotate: false
+  xy: 2, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+arrow_right
+  rotate: false
+  xy: 84, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1

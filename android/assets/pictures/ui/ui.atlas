@@ -1,47 +1,47 @@
 
 ui.png
-size: 2083,1128
+size: 1685,1962
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 off
   rotate: false
-  xy: 1157, 11
+  xy: 1157, 1786
   size: 50, 51
   orig: 50, 51
   offset: 0, 0
   index: -1
 on
   rotate: false
-  xy: 1157, 64
+  xy: 930, 663
   size: 199, 171
   orig: 199, 171
   offset: 0, 0
   index: -1
 panel_beige
   rotate: false
-  xy: 1157, 362
+  xy: 2, 68
   size: 926, 766
   orig: 926, 766
   offset: 0, 0
   index: -1
 panel_brown
   rotate: false
-  xy: 2, 2
+  xy: 2, 836
   size: 1153, 1126
   orig: 1153, 1126
   offset: 0, 0
   index: -1
 pause_icon
   rotate: false
-  xy: 1687, 296
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 popup_button
   rotate: false
-  xy: 1157, 237
+  xy: 1157, 1839
   size: 528, 123
   orig: 528, 123
   offset: 0, 0
