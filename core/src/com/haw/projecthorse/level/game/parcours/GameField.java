@@ -45,6 +45,7 @@ public class GameField {
 	public int visibleCloudObjects = 0;
 
 	public GameField(Stage s, Viewport p, int width, int height) {
+		System.out.println("width: " +  width + " height: " + height + " viewport: " + p.getViewportWidth() + " viewportheight: " + p.getViewportWidth() + " worldheight" + p.getWorldWidth());
 		gameObjects = new ArrayList<GameObject>();
 		cloudObjects = new ArrayList<BackgroundObject>();
 		lootObjects = new ArrayList<LootObject>();
@@ -58,7 +59,7 @@ public class GameField {
 		maxPosYForObjectsInTheAir = new BigDecimal(0).setScale(5,
 				RoundingMode.HALF_UP);
 
-		heightInRelationToScreenHeight = (float) GameField.height / 7.0f;
+		heightInRelationToScreenHeight = (float) GameField.height / 4.0f;
 
 		player = new Player();
 
@@ -255,17 +256,10 @@ public class GameField {
 				"cratetex");
 
 		GameObject kisteObj = new GameObject(kiste, getGameSpeed());
-		float playerWidthInRelationToScreenHeight = kiste.getRegionWidth()
-				/ (float) this.getHeight();
-		float playerHeightInRelationToScreenHeight = kiste.getRegionHeight()
-				/ (float) this.getHeight();
-		float seventhPartHeight = getHeightInRelationToScreenHeight();
-		float relativelWidthOfPlayer = seventhPartHeight
-				* playerWidthInRelationToScreenHeight
-				/ playerHeightInRelationToScreenHeight;
-
-		kisteObj.setHeight(seventhPartHeight);
-		kisteObj.setWidth(relativelWidthOfPlayer);
+		float[] widthHeight = getRelativeSize(kiste, GameField.height * 15 / 100);
+		
+		kisteObj.setHeight(widthHeight[1]);
+		kisteObj.setWidth(widthHeight[0]);
 		kisteObj.setName("Kiste");
 		kisteObj.setX(-1);
 		kisteObj.setY(getGroundHeight()
@@ -329,10 +323,10 @@ public class GameField {
 				getHeightInRelationToScreenHeight());
 		player.setHeight(newWidthHeight[1]);
 		player.setWidth(newWidthHeight[0]);
-
+		System.out.println("player width: " + newWidthHeight[0] + " 2: " + player.getWidth());
+		
 		player.setPosition(playersPointOfView, getPlayerYDefault());
 		player.setName("Player");
-
 		stage.addActor(player);
 	}
 

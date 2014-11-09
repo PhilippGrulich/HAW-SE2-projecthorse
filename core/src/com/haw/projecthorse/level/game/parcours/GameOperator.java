@@ -15,9 +15,7 @@ public class GameOperator {
 	private int maxVisibleLootObjects;
 	private int maxVisibleGameObjects;
 	public static int maxVisibleBackgroundObjects;
-	int counter;
-	float firstDelta;
-	float followingDelta;
+	private Player player;
 	float epsilon;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height) {
@@ -25,15 +23,14 @@ public class GameOperator {
 		maxVisibleGameObjects = 2;
 		maxVisibleBackgroundObjects = 4;
 		epsilon = 0.01f; // 0.0001f zu klein
-		firstDelta = -1;
-		followingDelta = 0;
-		counter = 0;
 		gameField = new GameField(stage, viewport, width, height);
 		// Reihenfolge der Methodenaufrufe bestimmt die z-Order in der Stage
 		gameField.loadBackgroundObjects();
 		gameField.loadGameObjects();
 		gameField.initializeLootObjects();
 		gameField.initializePlayer();
+		player = gameField.getPlayer();
+		
 		// System.out.println in txt umleiten
 		/*
 		 * try { System.setOut(new PrintStream(new
@@ -52,9 +49,16 @@ public class GameOperator {
 		updateGameObjects(delta);
 		updateBackgroundObjects(delta);
 		updateLootObjects(delta);
-
+		checkPlayerConstraints(delta);
+		
 		gameField.drawGameField();
 
+	}
+
+	private void checkPlayerConstraints(float delta) {
+		if(player.getX() > gameField.getPlayersPointOfView()){
+			player.setX(player.getX() - gameField.getGameSpeed());
+		}
 	}
 
 	public void updateGameObjects(float delta) {
