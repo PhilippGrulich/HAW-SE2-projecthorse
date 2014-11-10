@@ -1,61 +1,61 @@
 
 appleRun.png
-size: 982,1552
+size: 852,1292
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 apple1
   rotate: false
-  xy: 724, 1424
+  xy: 724, 1164
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 apple2
   rotate: false
-  xy: 2, 132
+  xy: 724, 1034
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 apple3
   rotate: false
-  xy: 724, 1294
+  xy: 724, 904
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 apple4
   rotate: false
-  xy: 854, 1424
+  xy: 724, 774
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 branch1
   rotate: false
-  xy: 2, 2
+  xy: 724, 644
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 branch2
   rotate: false
-  xy: 132, 132
+  xy: 724, 514
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ground
   rotate: false
-  xy: 2, 262
+  xy: 2, 2
   size: 720, 144
   orig: 720, 144
   offset: 0, 0
   index: -1
 tree
   rotate: false
-  xy: 2, 408
+  xy: 2, 148
   size: 720, 1144
   orig: 720, 1144
   offset: 0, 0

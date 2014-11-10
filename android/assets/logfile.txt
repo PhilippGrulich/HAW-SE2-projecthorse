@@ -4,7 +4,7 @@ worldmap.png FILE OK!
 CC-0 ENTRY OK!
 Sankt-Michaelis-Kirche_Hamburg.jpg FILE OK!
 CC-0 ENTRY OK!
-germanymap.png FILE OK!
+germanymap.png NOT EXISTS!
 CC-0 ENTRY OK!
 Background.png FILE OK!
 CC-0 ENTRY OK!
@@ -74,7 +74,7 @@ kuerbis6.png FILE OK!
 CC-by ENTRY OK!
 grass.png FILE OK!
 CC-by ENTRY OK!
-logo.png FILE OK!
+logo.png NOT EXISTS!
 selfmade ENTRY OK!
 hintergrund.png FILE OK!
 selfmade ENTRY OK!

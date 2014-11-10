@@ -1,26 +1,26 @@
 
 notChecked.png
-size: 924,960
+size: 1182,702
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 black_sprites
   rotate: false
-  xy: 2, 260
+  xy: 2, 2
   size: 460, 700
   orig: 460, 700
   offset: 0, 0
   index: -1
 colors
   rotate: false
-  xy: 2, 2
+  xy: 926, 446
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 white_sprites
   rotate: false
-  xy: 464, 260
+  xy: 464, 2
   size: 460, 700
   orig: 460, 700
   offset: 0, 0

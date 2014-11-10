@@ -14,7 +14,8 @@
          className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
-         			   						Berlin,593,668"
+         			   						Berlin,593,668;
+         			   						Muenchen,438,108"
          }
       }
 
@@ -40,16 +41,6 @@
                title:"Parcours",
                className:"com.haw.projecthorse.level.game.parcours.Parcours",
                levelID:"Parcours"
-            },
-             {
-               title:"MovementTest",
-               className:"com.haw.projecthorse.level.test.MovementTest",
-               levelID:"MovementTest"
-            },
-            {
-               title:"Huetchenspiel",
-			   className:"com.haw.projecthorse.level.game.huetchenspiel.HuetchenSpiel",
-               levelID:"huetchenspiel"
             }
          ]
       },
@@ -61,15 +52,38 @@
          			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
          		},
          games:[
-             {
-               title:"MovementTest",
-               className:"com.haw.projecthorse.level.test.MovementTest",
-               levelID:"MovementTest"
-            },
-            {
+                 {
                title:"Huetchenspiel",
 			   className:"com.haw.projecthorse.level.game.huetchenspiel.HuetchenSpiel",
                levelID:"huetchenspiel"
+            },
+                  {
+               title:"Memoryspiel",
+			   className:"com.haw.projecthorse.level.game.memoryspiel.MemorySpiel",
+               levelID:"Memoryspiel"
+            }
+         ]
+      },
+      {
+         name:"Muenchen",
+         levelID:"Muenchen",
+         className:"com.haw.projecthorse.level.menu.city.City",
+         parameter:{
+         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         		},
+         games:[
+                 {
+              title:"Apple Run",
+               levelID:"AppleRun",
+               className:"com.haw.projecthorse.level.game.applerun.AppleRun",
+                parameter:{
+         			teaser_image:"blau"
+         		}
+            },
+                  {
+               title:"Puzzlespiel",
+			   className:"com.haw.projecthorse.level.game.puzzlespiel.PuzzleSpiel",
+               levelID:"Puzzlespiel"
             }
          ]
       }

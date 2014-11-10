@@ -1,20 +1,27 @@
 
 flaggen.png
-size: 1284,428
+size: 1144,856
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Berlin
   rotate: false
-  xy: 2, 2
+  xy: 504, 430
   size: 640, 426
   orig: 640, 426
   offset: 0, 0
   index: -1
 Hamburg
   rotate: false
-  xy: 644, 2
+  xy: 504, 2
   size: 640, 426
   orig: 640, 426
+  offset: 0, 0
+  index: -1
+Muenchen
+  rotate: false
+  xy: 2, 237
+  size: 500, 619
+  orig: 500, 619
   offset: 0, 0
   index: -1
