@@ -68,3 +68,4 @@ build/
 /html/war/WEB-INF/classes/.gitignore
 local.properties
 desktop/assets/json/saved/1.game
+/android/assets/logfile.txt

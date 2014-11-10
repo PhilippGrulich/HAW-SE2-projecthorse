@@ -37,7 +37,7 @@ public class Packer {
 		Settings settings = new Settings();
 		settings.maxWidth = 4096;
 		settings.maxHeight = 4096;
-		settings.pot = true;
+		settings.pot = false;
 
 		for (int i = 0; i < content.length; i++) {
 			if (new File(root + filesep + content[i]).isDirectory()) {
