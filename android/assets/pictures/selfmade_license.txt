@@ -1,3 +1,3 @@
 worldmap;logo.png; selfmade; Francis und Fabian; Studis an der HAW
-huetchenspiel;hintergrund.png;selfmade;fabian
-huetchenspiel;table.png;selfmade;fabian
+thimblerig;hintergrund.png;selfmade;fabian
+thimblerig;table.png;selfmade;fabian

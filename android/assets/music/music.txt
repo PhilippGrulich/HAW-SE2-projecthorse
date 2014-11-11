@@ -1,2 +1,2 @@
 worldmap;life.mp3; -; -; -
-huetchenspiel;Little_Bits.mp3;-;Jimmy Blythe;http://openmusicarchive.org/browse_tag.php?tag=Little%20Bits
+thimblerig;Little_Bits.mp3;-;Jimmy Blythe;http://openmusicarchive.org/browse_tag.php?tag=Little%20Bits

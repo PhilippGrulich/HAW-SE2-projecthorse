@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.game.huetchenspiel;
+package com.haw.projecthorse.level.game.thimblerig;
 
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;

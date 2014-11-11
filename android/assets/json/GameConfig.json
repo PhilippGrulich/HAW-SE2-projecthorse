@@ -53,9 +53,9 @@
          		},
          games:[
                  {
-               title:"Huetchenspiel",
-			   className:"com.haw.projecthorse.level.game.huetchenspiel.HuetchenSpiel",
-               levelID:"huetchenspiel"
+               title:"Hütchenspiel",
+			   className:"com.haw.projecthorse.level.game.thimblerig.Thimblerig",
+               levelID:"thimblerig"
             },
                   {
                title:"Memoryspiel",

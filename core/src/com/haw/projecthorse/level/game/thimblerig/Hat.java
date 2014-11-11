@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.game.huetchenspiel;
+package com.haw.projecthorse.level.game.thimblerig;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;

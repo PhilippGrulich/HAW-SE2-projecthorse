@@ -1,4 +1,4 @@
-package com.haw.projecthorse.level.game.huetchenspiel;
+package com.haw.projecthorse.level.game.thimblerig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
-import com.haw.projecthorse.level.game.huetchenspiel.HatGestureDetector.IOnDirection;
+import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
@@ -42,7 +42,7 @@ import com.haw.projecthorse.player.PlayerImpl;
  *
  */
 
-public class HuetchenSpiel extends Level{
+public class Thimblerig extends Level{
 
 	private Stage stage;
 	private static boolean ISPAUSED;
@@ -105,7 +105,7 @@ public class HuetchenSpiel extends Level{
 	/**
 	 * Konstruktor
 	 */
-	public HuetchenSpiel(){
+	public Thimblerig(){
 		super();
 		ISPAUSED = false;
 		this.rnd = new Random();
@@ -226,7 +226,7 @@ public class HuetchenSpiel extends Level{
 		this.stage.dispose();	
 		this.labelFont.dispose();
 		this.upTex.dispose();
-		AssetManager.turnMusicOff("huetchenspiel", "Little_Bits.mp3");
+		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
 	}
 
 	@Override
@@ -236,11 +236,11 @@ public class HuetchenSpiel extends Level{
 
 	@Override
 	protected void doShow() {
-		AssetManager.loadSounds("huetchenspiel");
-		AssetManager.loadMusic("huetchenspiel");
-		AssetManager.playMusic("huetchenspiel", "Little_Bits.mp3");
-		AssetManager.changeMusicVolume("huetchenspiel", "Little_Bits.mp3", 0.5f);
-		AssetManager.setMusicLooping("huetchenspiel", "Little_Bits.mp3", true);
+		AssetManager.loadSounds("thimblerig");
+		AssetManager.loadMusic("thimblerig");
+		AssetManager.playMusic("thimblerig", "Little_Bits.mp3");
+		AssetManager.changeMusicVolume("thimblerig", "Little_Bits.mp3", 0.5f);
+		AssetManager.setMusicLooping("thimblerig", "Little_Bits.mp3", true);
 	}
 
 	@Override
@@ -276,12 +276,12 @@ public class HuetchenSpiel extends Level{
 	 * Background initialisieren und positionieren
 	 */
 	private void initBackground(){
-		TextureRegion bgTableTexReg = AssetManager.getTextureRegion("huetchenspiel", "table");
-		TextureRegion bgTreeTexReg1 = AssetManager.getTextureRegion("huetchenspiel", "obj_trees1");
-		TextureRegion bgTreeTexReg2 = AssetManager.getTextureRegion("huetchenspiel", "obj_trees2");
-		TextureRegion bgBackground = AssetManager.getTextureRegion("huetchenspiel", "hintergrund");
-		TextureRegion bgWitch = AssetManager.getTextureRegion("huetchenspiel", "Garden_Witch");
-		TextureRegion bgSpeechBalloon = AssetManager.getTextureRegion("huetchenspiel", "nicubunu_Callout_cloud_center");
+		TextureRegion bgTableTexReg = AssetManager.getTextureRegion("thimblerig", "table");
+		TextureRegion bgTreeTexReg1 = AssetManager.getTextureRegion("thimblerig", "obj_trees1");
+		TextureRegion bgTreeTexReg2 = AssetManager.getTextureRegion("thimblerig", "obj_trees2");
+		TextureRegion bgBackground = AssetManager.getTextureRegion("thimblerig", "hintergrund");
+		TextureRegion bgWitch = AssetManager.getTextureRegion("thimblerig", "Garden_Witch");
+		TextureRegion bgSpeechBalloon = AssetManager.getTextureRegion("thimblerig", "nicubunu_Callout_cloud_center");
 		
 		this.bgTable = new Image(bgTableTexReg);
 		this.bgTree1 = new Image(bgTreeTexReg1);
@@ -340,7 +340,7 @@ public class HuetchenSpiel extends Level{
 	 * Positionierung auf den Screen
 	 */
 	private void initHats(){
-		TextureRegion texHat = AssetManager.getTextureRegion("huetchenspiel", "purple-witch-hat");
+		TextureRegion texHat = AssetManager.getTextureRegion("thimblerig", "purple-witch-hat");
 		this.hats = new Hat[HAT_NUMBER];
 		this.group = new Group();
 		int xPosition = 0;

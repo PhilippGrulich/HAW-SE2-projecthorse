@@ -1,54 +1,61 @@
 
-huetchenspiel.png
-size: 1350,2130
+thimblerig.png
+size: 2698,2134
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Garden_Witch
   rotate: false
-  xy: 748, 1830
+  xy: 2102, 1834
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 hintergrund
   rotate: false
-  xy: 2, 324
+  xy: 1356, 328
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
+huetchenspiel
+  rotate: false
+  xy: 2, 2
+  size: 1352, 2132
+  orig: 1352, 2132
+  offset: 0, 0
+  index: -1
 nicubunu_Callout_cloud_center
   rotate: false
-  xy: 1050, 1830
+  xy: 1356, 26
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 obj_trees1
   rotate: false
-  xy: 724, 804
+  xy: 2078, 808
   size: 620, 800
   orig: 620, 800
   offset: 0, 0
   index: -1
 obj_trees2
   rotate: false
-  xy: 724, 2
+  xy: 2078, 6
   size: 620, 800
   orig: 620, 800
   offset: 0, 0
   index: -1
 purple-witch-hat
   rotate: false
-  xy: 2, 22
+  xy: 1658, 26
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 table
   rotate: false
-  xy: 2, 1606
+  xy: 1356, 1610
   size: 744, 524
   orig: 744, 524
   offset: 0, 0

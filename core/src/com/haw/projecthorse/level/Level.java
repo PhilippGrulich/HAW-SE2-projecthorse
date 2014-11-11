@@ -30,7 +30,7 @@ import com.haw.projecthorse.lootmanager.Chest;
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
-	// TODO für Release entfernen
+	// TODO fï¿½r Release entfernen
 	private FPSLogger fpsLogger = new FPSLogger();
 	// ####################################
 
@@ -66,7 +66,7 @@ public abstract class Level implements Screen {
 	}
 
 	/**
-	 * Erstellt eine OrthographicCamera diese wird für die jeweiliegen Viewports
+	 * Erstellt eine OrthographicCamera diese wird fï¿½r die jeweiliegen Viewports
 	 * gebraucht.
 	 * 
 	 * @return {@link OrthographicCamera}
@@ -100,7 +100,7 @@ public abstract class Level implements Screen {
 	public final void render(float delta) {
 		paintBackground();
 		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
-		// übergeben.
+		// ï¿½bergeben.
 		// Hierdurch wird sichergestellt das die Interaktionen
 		if (paused) {
 			delta = 0;
@@ -109,7 +109,7 @@ public abstract class Level implements Screen {
 		overlay.draw();
 
 		// ########### DEBUG ##################
-		// TODO für Release entfernen
+		// TODO fï¿½r Release entfernen
 		fpsLogger.log();
 		// ####################################
 
