@@ -227,6 +227,7 @@ public final class AssetManager {
 		TextureRegion t = getTextureRegion(levelID, filename);
 		
 		BitmapFont b = new BitmapFont(Gdx.files.internal(relativeFilePath), t);
+		assetManager.finishLoading();
 		return b;
 	}
 
@@ -386,6 +387,14 @@ public final class AssetManager {
 		return errorPic;
 	}
 
+	/**
+	 * Ermittelt, ob alles Assets vom Manager geladen wurden
+	 * @return true, wenn alle Assets geladen wurden, sonst false
+	 */
+	public static boolean isLoadingFinished(){
+		return assetManager.update();
+	}
+	
 	/**
 	 * Assettypen die zur Zeit unterstuetz werden.
 	 *
