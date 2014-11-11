@@ -475,19 +475,17 @@ public class HuetchenSpiel extends Level{
 	 * initialisiert den GestureDetector fuer die Swipes und fuegt diesen und
 	 * die Stage dem InputProcessor hinzu
 	 */
-	public void initProcessorAndGestureDetector(){
+	private void initProcessorAndGestureDetector(){
 		this.hatGestureDetector = new HatGestureDetector(new IOnDirection() {
-			private float factor = 2f;
-			private float hatDiffY = 65f;
 			
 			@Override
 			public void onUp(float actualX, float actualY) {				
 				if(!ISPAUSED){
 					for(int i = 0; i < hats.length; i++){
-						if(actualX > (hats[i].getX() / factor)
-		 						&& actualX < (hats[i].getX() + hats[i].getWidth()) / factor
-								&& actualY > hats[i].getY() + 205 
-								&& actualY < hats[i].getY() + 200 + hatDiffY){
+						if(actualX > hats[i].getX()
+		 						&& actualX < (hats[i].getX() + hats[i].getWidth())
+								&& actualY > hats[i].getY()
+								&& actualY < hats[i].getY() + hats[i].getHeight()){
 							
 		 					hats[i].setFlinged(true);
 							break;
@@ -516,7 +514,7 @@ public class HuetchenSpiel extends Level{
 			@Override
 			public void onDown() {
 			}
-		});
+		}, this.stage);
 
 		this.hatGameMultiplexer = new InputMultiplexer();
 		this.hatGameMultiplexer.addProcessor(this.hatGestureDetector);

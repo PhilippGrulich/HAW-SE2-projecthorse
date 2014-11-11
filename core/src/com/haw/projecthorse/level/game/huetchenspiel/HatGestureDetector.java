@@ -1,6 +1,8 @@
 package com.haw.projecthorse.level.game.huetchenspiel;
 
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /**
  * Fuer die "Wisch"-Bewegung in alle Richtungen wird hier ein Detector und Listener
@@ -35,8 +37,8 @@ public class HatGestureDetector extends GestureDetector{
 		void onUp(float actualX, float actualY);
  	}
 	
-	public HatGestureDetector(IOnDirection onDirection) {
-		super(new HatGestureListener(onDirection));
+	public HatGestureDetector(IOnDirection onDirection, Stage stage) {
+		super(new HatGestureListener(onDirection, stage));
 	}
 	
 	/**
@@ -45,22 +47,27 @@ public class HatGestureDetector extends GestureDetector{
 	 *
 	 */
 	private static class HatGestureListener extends GestureAdapter{
-
+		
+		private Stage stage;
 		private float actualX;
 		private float actualY;
  		private IOnDirection onDirection;
  		
- 		public HatGestureListener(IOnDirection directionListener){
+ 		public HatGestureListener(IOnDirection directionListener, Stage stage){
  			this.onDirection = directionListener;
+ 			this.stage = stage;
  		}
  		
  		/**
  		 * aktuelle Position des Cursors ermittelt, da touchDown vor fling aufgerufen wird
+ 		 * mit dem Vektor werden immer die aktuellen stage-koordinaten gewaehtl, da bei 
+ 		 * einem rezsie sich diese aendern
  		 */
  		@Override
  		public boolean touchDown(float x, float y, int pointer, int button) {
- 			this.actualX = x;
- 			this.actualY = y;
+			Vector2 stageCoordinates = stage.screenToStageCoordinates(new Vector2(x, y));
+ 			this.actualX = stageCoordinates.x;
+ 			this.actualY = stageCoordinates.y;
  			return false;
  		}
 
