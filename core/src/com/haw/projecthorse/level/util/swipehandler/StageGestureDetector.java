@@ -1,6 +1,7 @@
 package com.haw.projecthorse.level.util.swipehandler;
 
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,8 +24,9 @@ public class StageGestureDetector extends GestureDetector {
 		
 		@Override
 		public boolean touchDown(float x, float y, int pointer, int button) {
-			posX = x;
-			posY = y;
+			Vector2 stageCoordinates = stage.screenToStageCoordinates(new Vector2(x, y));
+			posX = stageCoordinates.x;
+			posY = stageCoordinates.y;
 			return false;
 		}
 
