@@ -43,14 +43,15 @@ public class GameOperator {
 
 	public void update(float delta) {
 		gameField.getPlayer().setAnimation(Direction.RIGHT, 0.2f);
-
+		
+		if(!(delta == 0)){
 		gameField.actGameField(delta);
 
 		updateGameObjects(delta);
 		updateBackgroundObjects(delta);
 		updateLootObjects(delta);
 		checkPlayerConstraints(delta);
-		
+		}
 		gameField.drawGameField();
 
 	}

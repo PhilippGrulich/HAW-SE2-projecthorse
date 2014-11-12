@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -16,6 +18,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
+import com.haw.projecthorse.level.util.swipehandler.ControlMode;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener.SwipeEvent;
+import com.haw.projecthorse.player.ChangeDirectionAction;
 
 public class GameField {
 
@@ -72,17 +79,38 @@ public class GameField {
 
 		stage = s;
 		stage.setViewport(p);
-		stage.addCaptureListener(new InputListener() {
-			public boolean touchDown(InputEvent e, float x, float y,
-					int pointer, int button) {
-				if (!(player.getY() > getPlayerYDefault())) {
-					player.jump();
-				}
-				return true;
-			}
-		});
-
-		InputManager.addInputProcessor(stage);
+		SwipeListener listener = new SwipeListener() {
+			@Override
+			public void swiped(SwipeEvent event, Actor actor) {
+				          if (!(actor instanceof Player))
+				               return;
+				         System.out.println(" " + player.getDirection() + " event: " + event.getDirection());
+				           //player = (Player) actor;
+				           if (player.getDirection() == event.getDirection()) {
+				              //Bewegen hier ausführen.
+				        	  /* if (!(player.getY() > getPlayerYDefault())) {
+									System.out.println("out");
+				   				player.jump();
+				   				}*/
+				        } else {
+				             player.setAnimationSpeed(0.3f);
+				             player.addAction(new ChangeDirectionAction(event.getDirection()));
+				         }
+				      }
+				 };
+				 
+		GestureDetector listener2 = new GestureDetector(new GameInputListener(this));
+	 
+		stage.addListener(listener);
+				 
+		//Gdx.input.setInputProcessor(new GameInputProcessor(this));
+		
+		//InputManager.addInputProcessor(stage);
+		InputManager.addInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
+		InputManager.addInputProcessor(listener2);
+		//Gdx.input.setInputProcessor(stage);
+		/*Führt dazu, dass der Pause-Button nicht mehr funktioniert*/
+		//Gdx.input.setInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
 
 	}
 
@@ -327,6 +355,7 @@ public class GameField {
 		
 		player.setPosition(playersPointOfView, getPlayerYDefault());
 		player.setName("Player");
+		
 		stage.addActor(player);
 	}
 
