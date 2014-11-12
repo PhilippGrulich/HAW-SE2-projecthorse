@@ -8,29 +8,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
+import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
@@ -93,14 +88,10 @@ public class Thimblerig extends Level{
 	private Label labelWin;
 	
 	/**
-	 * Buttonobjekte -> kommen spaeter weg
+	 * Button-Objekt
 	 */
-	private VerticalGroup buttonTable;
-	private Texture upTex;
-	private TextureRegion upReg;
-	private TextButtonStyle buttonStyle;
-	private TextButton newGame;
-//	private TextButton back;
+	private Dialog newGame;
+
 	
 	/**
 	 * Konstruktor
@@ -177,7 +168,7 @@ public class Thimblerig extends Level{
 						break;
 					}
 					
-					this.buttonTable.setVisible(true);
+					this.newGame.setVisible(true);
 					this.roundFinished = true;
 					//springe aus Schleife, wenn Pferd gefunden wurde
 					break;
@@ -201,7 +192,8 @@ public class Thimblerig extends Level{
 						AssetManager.playSound(this.getLevelID(), "jingles_SAX07.ogg");
 						this.labelTryAgain.setVisible(false);
 						this.labelFail.setVisible(true);
-						this.buttonTable.setVisible(true);
+						this.newGame.setVisible(true);
+						
 						
 						if(this.wins > 0){
 							this.wins--;
@@ -225,7 +217,6 @@ public class Thimblerig extends Level{
 	protected void doDispose() {
 		this.stage.dispose();	
 		this.labelFont.dispose();
-		this.upTex.dispose();
 		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
 	}
 
@@ -344,12 +335,12 @@ public class Thimblerig extends Level{
 		this.hats = new Hat[HAT_NUMBER];
 		this.group = new Group();
 		int xPosition = 0;
+		YCORDHAT = this.bgTable.getHeight() / 2.12f;
 		for(int i = 0; i < HAT_NUMBER; i++){
 			XCORDHAT[i] = xPosition;
 			this.hats[i] = new Hat(texHat);
 			this.hats[i].setWidth(200);
 			this.hats[i].setHeight(150);
-			YCORDHAT = this.bgTable.getHeight() / 2.12f;
 			this.hats[i].setPosition(xPosition, YCORDHAT);
 			this.group.addActor(this.hats[i]);
 			xPosition += (this.width / 2) - 100;
@@ -373,40 +364,15 @@ public class Thimblerig extends Level{
 	 * das korrekte Huetchen gewaehlt wurde.
 	 * Weiterhin werden die Listener fuer die Buttons erstellt
 	 */
-	//kommt wieder raus, wenn buttons erstellt wurden
 	private void initButtons(){
-		this.buttonTable = new VerticalGroup();
-		this.buttonTable.setPosition(0,  (YCORDHAT - this.height / 3));
-		this.buttonTable.setFillParent(true);	
-		
-		Pixmap pix = new Pixmap(200, 100, Format.RGBA8888);
-		pix.setColor(Color.GREEN);
-		pix.fill();
-		this.upTex = new Texture(pix, Format.RGBA8888, true);
-		pix.dispose();
-		
-		this.upReg = new TextureRegion(this.upTex, pix.getWidth(), pix.getHeight());
-
-		this.buttonStyle = new TextButtonStyle();
-		
-		this.buttonStyle.up = new TextureRegionDrawable(this.upReg);
-		//this.labelFont.setScale(2f, 2f);
-		this.buttonStyle.font = this.labelFont;
-		
-		this.newGame = new TextButton("Neue Runde?", this.buttonStyle);
-		//this.back = new TextButton("Zurück", this.buttonStyle);
-		
-		this.newGame.toFront();
-		//this.back.toFront();
-		
-		this.buttonTable.addActor(this.newGame);
-		//this.buttonTable.addActor(this.back);
-		
-		this.newGame.addListener(new InputListener(){
-			//alle Werte auf Default zuruecksetzen, damit neue Runde beginnen kann
-			 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+		this.newGame = new Dialog("Möchtest du eine\nweitere Runde spielen?");
+		this.newGame.setSize(10, 10);
+		this.newGame.addButton("jaa, sehr gerne", new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
 				 if(!ISPAUSED){
-					 buttonTable.setVisible(false);
+					 newGame.setVisible(false);
 					 pl.setVisible(false);
 					 labelStart.setVisible(true);
 					 labelGood.setVisible(false);
@@ -420,32 +386,24 @@ public class Thimblerig extends Level{
 					 for(int i = 0; i < HAT_NUMBER; i++){
 						 hats[i].setPosition(XCORDHAT[i], YCORDHAT);
 						 hats[i].setFlinged(false);
-						 /*
-						  * Setze fuer jeweiligen Hut des Wert, dass er gewaehlt wurde auf false
-						  *da sonst bei doppelt angewaehltem Hut in letzter Runde, dieser in der
-						  *neuen Runde bereits gewaehlt wurde
-						 */
-						 //((HatListener)hats[i].getListeners().get(0)).setPressed(false);
 					 }
-					 generateHatNum();
+					 generateHatNum();	
 				 }
-				 return true;
-			 }
-			 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				 
-			 }
+			}
+			
 		});
-		/*
-		this.back.addListener(new ChangeListener() {
+		
+		this.newGame.addButton("och nö, lieber nicht", new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				GameManagerFactory.getInstance().navigateBack();
-				
 			}
-		});*/
+			
+		});
 
-		this.buttonTable.setVisible(false);
+		this.newGame.setPosition(0,  YCORDHAT);
+		this.newGame.setVisible(false);
 	}
 	
 	/**
@@ -456,6 +414,7 @@ public class Thimblerig extends Level{
 		this.stage.addActor(this.bgTree1);
 		this.stage.addActor(this.bgTree2);
 		this.stage.addActor(this.bgWitch);
+		this.stage.addActor(this.newGame);
 		this.stage.addActor(this.bgSpeechBalloon);
 		
 		this.stage.addActor(this.labelStart);
@@ -467,7 +426,6 @@ public class Thimblerig extends Level{
 		this.stage.addActor(this.bgTable);
 		this.stage.addActor(this.group);
 		this.stage.addActor(this.pl);
-		this.stage.addActor(this.buttonTable);
 		this.stage.addActor(this.labelWin);
 	}
 	
