@@ -74,6 +74,10 @@ kuerbis6.png NOT EXISTS!
 CC-by ENTRY OK!
 grass.png FILE OK!
 CC-by ENTRY OK!
+Grundschrift-Bold.ttf FILE OK!
+CC-by ENTRY OK!
+GetVoIP Grotesque.ttf FILE OK!
+CC-by ENTRY OK!
 logo.png NOT EXISTS!
 selfmade ENTRY OK!
 hintergrund.png FILE OK!

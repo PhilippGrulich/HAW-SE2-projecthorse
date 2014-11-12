@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.haw.projecthorse.assetmanager.exceptions.*;
 
 public final class AssetManager {
@@ -211,22 +212,64 @@ public final class AssetManager {
 			}
 		}
 	}
-
-	/**
-	 * Liefert BitmapFont einer .fnt Datei
-	 * @param levelID 
-	 * @param filename
-	 * @return b BitmapFont
-	 */
+	
+	 //TODO: OLD kann spaeter raus
+	 /**
+	  * Liefert BitmapFont einer .fnt Datei
+	  * @param levelID
+	  * @param filename
+	  * @return b BitmapFont
+	  */
+	/*
 	public static BitmapFont getFont(String levelID, String filename){
 		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
 		String relativeFilePath = directory_pictures.substring(startIdx,
 				directory_pictures.length()).replace("\\", "/")
-				 + FILESEPARATOR + levelID + "/" + filename + ".fnt";
+				+ FILESEPARATOR + levelID + "/" + filename + ".fnt";
 		System.out.println(relativeFilePath);
 		TextureRegion t = getTextureRegion(levelID, filename);
-		
 		BitmapFont b = new BitmapFont(Gdx.files.internal(relativeFilePath), t);
+		assetManager.finishLoading();
+		return b;
+	}
+*/
+
+	/**
+	 * Liefert BitmapFont, die gut geeignet sind fuer Ueberschriften
+	 * @param size vom Typ FontSize umd die Groesse der Schriftart zu definieren
+	 * @return b BitmapFont
+	 */
+	@SuppressWarnings("deprecation")
+	public static BitmapFont getHeadlineFont(FontSize size){
+		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
+		String relativeFilePath = directory_pictures.substring(startIdx,
+				directory_pictures.length()).replace("\\", "/")
+				 + FILESEPARATOR + "headlinefont/GetVoIP Grotesque.ttf";
+
+		FreeTypeFontGenerator generator = new 
+				FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
+		BitmapFont b = generator.generateFont(size.getVal());
+		generator.dispose();
+		assetManager.finishLoading();
+		return b;
+	}
+	
+	/**
+	 * Liefert BitmapFont, die gut geeignet sind fuer Texte
+	 * @param size vom Typ FontSize umd die Groesse der Schriftart zu definieren
+	 * @return b BitmapFont
+	 */
+	@SuppressWarnings("deprecation")
+	public static BitmapFont getTextFont(FontSize size){
+		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
+		String relativeFilePath = directory_pictures.substring(startIdx,
+				directory_pictures.length()).replace("\\", "/")
+				 + FILESEPARATOR + "textfont/Grundschrift-Bold.ttf";
+
+		FreeTypeFontGenerator gen = new 
+				FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
+		BitmapFont b = gen.generateFont(size.getVal());
+		gen.dispose();
 		assetManager.finishLoading();
 		return b;
 	}

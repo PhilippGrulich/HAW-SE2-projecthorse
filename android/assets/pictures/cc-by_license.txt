@@ -5,3 +5,5 @@ parcours;kuerbis4.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-go
 parcours;kuerbis5.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
 parcours;kuerbis6.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
 parcours;grass.png;CC-by;draconx;http://opengameart.org/node/10485
+textfont;Grundschrift-Bold.ttf;CC-by;Christian Urff;http://openfontlibrary.org/de/font/grundschrift
+headlinefont;GetVoIP Grotesque.ttf;CC-by;Sergiy S. Tkachenko;http://openfontlibrary.org/de/font/free-grotesque-web-font
