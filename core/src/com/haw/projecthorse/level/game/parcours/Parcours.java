@@ -10,7 +10,7 @@ import com.haw.projecthorse.level.Level;
  */
 public class Parcours extends Level{
 
-	private GameOperator gameOperator;
+	private static GameOperator gameOperator;
 	
 	public Parcours(){
 		gameOperator = new GameOperator(new Stage(), this.getViewport(), this.width, this.height);
@@ -57,6 +57,10 @@ public class Parcours extends Level{
 	protected void doResume() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static GameOperator getGameOperator(){
+		return gameOperator;
 	}
 
 }

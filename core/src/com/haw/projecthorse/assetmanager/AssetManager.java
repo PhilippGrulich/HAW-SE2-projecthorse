@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+//import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.haw.projecthorse.assetmanager.exceptions.*;
 
 public final class AssetManager {
@@ -239,7 +239,7 @@ public final class AssetManager {
 	 * @param size vom Typ FontSize umd die Groesse der Schriftart zu definieren
 	 * @return b BitmapFont
 	 */
-	@SuppressWarnings("deprecation")
+/*	@SuppressWarnings("deprecation")
 	public static BitmapFont getHeadlineFont(FontSize size){
 		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
 		String relativeFilePath = directory_pictures.substring(startIdx,
@@ -252,14 +252,14 @@ public final class AssetManager {
 		generator.dispose();
 		assetManager.finishLoading();
 		return b;
-	}
+	}*/
 	
 	/**
 	 * Liefert BitmapFont, die gut geeignet sind fuer Texte
 	 * @param size vom Typ FontSize umd die Groesse der Schriftart zu definieren
 	 * @return b BitmapFont
 	 */
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	public static BitmapFont getTextFont(FontSize size){
 		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
 		String relativeFilePath = directory_pictures.substring(startIdx,
@@ -272,7 +272,7 @@ public final class AssetManager {
 		gen.dispose();
 		assetManager.finishLoading();
 		return b;
-	}
+	}*/
 
 	/**
 	 * Zerstoert den Assetmanager, disposed alle Assets.

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sun.org.mozilla.javascript.internal.ast.Jump;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
@@ -46,13 +48,13 @@ public class GameField {
 	private BigDecimal maxPosXForObjectsOnTheGround;
 	private BigDecimal maxPosXForObjectsInTheAir;
 	private BigDecimal maxPosYForObjectsInTheAir;
+	private float SWIPEMOVE = 5;
 	TextureRegion ground;
 	EndlessBackground groundObj;
 	Map<String, List<Float>> cloudPos = new HashMap<String, List<Float>>();
 	public int visibleCloudObjects = 0;
 
 	public GameField(Stage s, Viewport p, int width, int height) {
-		System.out.println("width: " +  width + " height: " + height + " viewport: " + p.getViewportWidth() + " viewportheight: " + p.getViewportWidth() + " worldheight" + p.getWorldWidth());
 		gameObjects = new ArrayList<GameObject>();
 		cloudObjects = new ArrayList<BackgroundObject>();
 		lootObjects = new ArrayList<LootObject>();
@@ -79,19 +81,17 @@ public class GameField {
 
 		stage = s;
 		stage.setViewport(p);
+		
 		SwipeListener listener = new SwipeListener() {
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
 				          if (!(actor instanceof Player))
 				               return;
-				         System.out.println(" " + player.getDirection() + " event: " + event.getDirection());
-				           //player = (Player) actor;
+				            //player = (Player) actor;
 				           if (player.getDirection() == event.getDirection()) {
-				              //Bewegen hier ausführen.
-				        	  /* if (!(player.getY() > getPlayerYDefault())) {
-									System.out.println("out");
-				   				player.jump();
-				   				}*/
+				            //player.moveBy(SWIPEMOVE, 0);
+				            player.moveBy(50, 0);
+				              
 				        } else {
 				             player.setAnimationSpeed(0.3f);
 				             player.addAction(new ChangeDirectionAction(event.getDirection()));
@@ -101,13 +101,11 @@ public class GameField {
 				 
 		GestureDetector listener2 = new GestureDetector(new GameInputListener(this));
 	 
-		stage.addListener(listener);
-				 
-		//Gdx.input.setInputProcessor(new GameInputProcessor(this));
 		
-		//InputManager.addInputProcessor(stage);
-		InputManager.addInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
+		stage.addListener(listener);
 		InputManager.addInputProcessor(listener2);
+		InputManager.addInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
+		
 		//Gdx.input.setInputProcessor(stage);
 		/*Führt dazu, dass der Pause-Button nicht mehr funktioniert*/
 		//Gdx.input.setInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
@@ -346,14 +344,21 @@ public class GameField {
 	}
 
 	public void initializePlayer() {
-
 		float[] newWidthHeight = getRelativeSize(player,
 				getHeightInRelationToScreenHeight());
 		player.setHeight(newWidthHeight[1]);
 		player.setWidth(newWidthHeight[0]);
-		System.out.println("player width: " + newWidthHeight[0] + " 2: " + player.getWidth());
+
 		
 		player.setPosition(playersPointOfView, getPlayerYDefault());
+		
+		//Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen setzen
+
+		
+		player.setJumpHeight(300);
+		player.setJumpWitdh(300);
+		player.setJumpSpeed(15);
+		player.setupJumpFunction();
 		player.setName("Player");
 		
 		stage.addActor(player);
@@ -473,7 +478,7 @@ public class GameField {
 		} else if (a instanceof BackgroundObject) {
 			visibleCloudObjects += 1;
 		} else {
-			System.out.println("false");
+
 		}
 	}
 

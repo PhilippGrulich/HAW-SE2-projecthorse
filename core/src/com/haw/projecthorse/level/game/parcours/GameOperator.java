@@ -3,6 +3,8 @@ package com.haw.projecthorse.level.game.parcours;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -17,6 +19,8 @@ public class GameOperator {
 	public static int maxVisibleBackgroundObjects;
 	private Player player;
 	float epsilon;
+	boolean shouldPlayerJump;
+	float tmpPlayerY;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height) {
 		maxVisibleLootObjects = 3;
@@ -30,7 +34,8 @@ public class GameOperator {
 		gameField.initializeLootObjects();
 		gameField.initializePlayer();
 		player = gameField.getPlayer();
-		
+		shouldPlayerJump = false;
+		tmpPlayerY = 0;
 		// System.out.println in txt umleiten
 		/*
 		 * try { System.setOut(new PrintStream(new
@@ -43,23 +48,78 @@ public class GameOperator {
 
 	public void update(float delta) {
 		gameField.getPlayer().setAnimation(Direction.RIGHT, 0.2f);
-		
-		if(!(delta == 0)){
-		gameField.actGameField(delta);
 
-		updateGameObjects(delta);
-		updateBackgroundObjects(delta);
-		updateLootObjects(delta);
-		checkPlayerConstraints(delta);
+		if (!(delta == 0)) {
+			gameField.actGameField(delta);
+
+			updateGameObjects(delta);
+			updateBackgroundObjects(delta);
+			updateLootObjects(delta);
+			checkPlayerConstraints(delta);
 		}
 		gameField.drawGameField();
 
 	}
 
 	private void checkPlayerConstraints(float delta) {
-		if(player.getX() > gameField.getPlayersPointOfView()){
-			player.setX(player.getX() - gameField.getGameSpeed());
+		// System.out.println("player jump  " + shouldPlayerJump);
+		// Zurück auf Ursprungsposition bewegen
+		if (!isPlayerJumping()) {
+			if (player.getX() > gameField.getPlayersPointOfView()) {
+				player.setX(player.getX() - gameField.getGameSpeed());
+			}
+		} else {
+			handleJump();
+	
 		}
+
+	}
+
+	public void handleJump() {
+		Vector2 v = player.getNextJumpPosition();
+		float x = 0;
+		float y = 0;
+		boolean outOfBound1 = !willPlayerBeLesserThanGround(v.y);
+		boolean outOfBound2 = !willPlayerBeOutOfGameField(v.x);
+		if (outOfBound2) {
+			x = v.x;
+		} else {
+			x = player.getX();
+			outOfBound1 = false;
+		}
+		
+		if (outOfBound1) {
+			y = v.y;
+		} else {
+			y = player.getY() - player.getJumpSpeed();
+
+			if (y < gameField.getPlayerYDefault()) {
+				y = gameField.getPlayerYDefault();
+			}
+		}
+
+		player.moveBy(x, y);
+		player.setPosition(x, y);
+
+		if (player.getY() == gameField.getPlayerYDefault()) {
+			setPlayerJump(false);
+		}
+	}
+
+	private boolean willPlayerBeLesserThanGround(float y) {
+		
+		if ( y < gameField.getPlayerYDefault()) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean willPlayerBeOutOfGameField(float x) {
+		if (player.getX() + player.getWidth() + (x - player.getX()) > gameField
+				.getWidth()) {
+			return true;
+		}
+		return false;
 	}
 
 	public void updateGameObjects(float delta) {
@@ -208,4 +268,11 @@ public class GameOperator {
 		return false;
 	}
 
+	public void setPlayerJump(boolean a) {
+		this.shouldPlayerJump = a;
+	}
+
+	public boolean isPlayerJumping() {
+		return shouldPlayerJump;
+	}
 }

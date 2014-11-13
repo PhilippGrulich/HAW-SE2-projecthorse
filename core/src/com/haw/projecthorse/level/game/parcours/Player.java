@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.haw.projecthorse.player.PlayerImpl;
 
 public class Player extends PlayerImpl {
@@ -20,58 +23,95 @@ public class Player extends PlayerImpl {
 	private float jumpHeight;
 	private float jumpUpTime;
 	private float jumpDownTime;
+//	private List<Vector2> jumpVectors;
+	private float jumpSpeed;
+	private float a,b,c;
+	private float player_jumpspeed = 10;
+	private float player_jumpheight = 150;
+	private float player_jumpwidth = 300;
 
+	
 	public Player() {
 		super();
-		initialize();
 		toFront();
 		jumpHeight = 50;
 		jumpUpTime = 0.4f;
 		jumpDownTime = 0.4f;
 	}
+	
 
 	/**
-	 * Sprung von player, smoothing (todo), nicht aus Spielfeld raus (todo),
+	 * Berechnung von nächstem Punkt (x,y) des Spielersprunges
 	 */
-	public void jump() {
-
-		if (this.getX() + this.getWidth() + 2 * vorwaertsPos + fallenPos > GameField.width) {
-			
-			/*for(Action a : getJumpActions()){
-				this.addAction(a);
-			}*/
-			
-			cutPlayerActions();
-			// Vorwaerts bewegen
-			this.addAction(vorwaerts);
-			this.setX(this.getX());
-			System.out.println("old");
-			// Springen
-			this.addAction(springen);
-			setX(getX());
-
-			// Fallen
-			this.addAction(fallen);
-			setX(getX());
-		} else {
-			initPlayerActions();
-			// Vorwaerts bewegen
-			this.addAction(vorwaerts);
-			this.setX(vorwaertsPos);
-
-			// Springen
-			this.addAction(springen);
-			System.out.println("player jump");
-
-			// Fallen
-			this.addAction(fallen);
-			/*for(Action a : getJumpActions()){
-				this.addAction(a);
-			}*/
-		}
-
+	public Vector2 getNextJumpPosition() {
+		float x = getX() + player_jumpspeed;
+		Vector2 v = new Vector2();
+		v.x = x;
+		v.y = a*(x*x)+b*x+c;
+		return v;
 	}
 	
+	/**
+	 * Berechnung der Sprungfunktion in abhängigkeit des aktuellen x und y.
+	 */
+	public void setupJumpFunction(){
+		float x1 = getX();
+		float y1 = getY();
+		float x2 = getX() + (player_jumpwidth / 2f);
+		float y2 = getY() + player_jumpheight;
+		float x3 = getX() + player_jumpwidth;
+		float y3 = getY();
+		
+		 a = (x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/((x1-x2)*(x1-x3)*(x3-x2));
+		 b = ((x1*x1)*(y2-y3)+(x2*x2)*(y3-y1)+(x3*x3)*(y1-y2))/((x1-x2)*(x1-x3)*(x2-x3));
+		 c = ((x1*x1)*(x2*y3-x3*y2)+x1*((x3*x3)*y2-(x2*x2)*y3)+x2*x3*y1*(x2-x3))/((x1-x2)*(x1-x3)*(x2-x3));
+	}
+	
+	public void setJumpHeight(float y){
+		this.player_jumpheight = y;
+	}
+	
+	public void setJumpWitdh(float x){
+		this.player_jumpwidth = x;
+	}
+	
+	public void setJumpSpeed(float duration){
+		this.jumpSpeed = duration;
+	}
+	
+	public float getJumpSpeed(){
+		return this.jumpSpeed;
+	}
+
+	/*
+	 * public void jump() {
+	 * 
+	 * if (this.getX() + this.getWidth() + 2 * vorwaertsPos + fallenPos >
+	 * GameField.width) {
+	 * 
+	 * /*for(Action a : getJumpActions()){ this.addAction(a); }
+	 */
+	/*
+	 * cutPlayerActions(); // Vorwaerts bewegen this.addAction(vorwaerts);
+	 * 
+	 * // Springen this.addAction(springen);
+	 * 
+	 * 
+	 * // Fallen this.addAction(fallen);
+	 * 
+	 * } else { initPlayerActions(); // Vorwaerts bewegen
+	 * this.addAction(vorwaerts); this.setX(vorwaertsPos);
+	 * 
+	 * // Springen this.addAction(springen); this.setX(getX() + vorwaertsPos);
+	 * 
+	 * // Fallen this.addAction(fallen);
+	 * 
+	 * /*for(Action a : getJumpActions()){ this.addAction(a); }
+	 */
+	// }
+
+	// }
+
 	private List<Action> getJumpActions() {
 		List<Action> actions = new ArrayList<Action>();
 
@@ -82,7 +122,7 @@ public class Player extends PlayerImpl {
 			} else if (i < 40) {
 				actions.add(Actions.moveTo(getX() + i, getY()));
 				setPosition(getX() + i, getY());
-			} else if(i < 60){
+			} else if (i < 60) {
 				actions.add(Actions.moveTo(getX() - i, getY() - i));
 				setPosition(getX() - i, getY() - i);
 			}
