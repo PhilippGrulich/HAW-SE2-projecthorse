@@ -25,16 +25,16 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 /**
  * @author Philipp
  * 
- *         Dies ist ein grundlegendes Popup und alle weiteren Popops können ein
- *         spezielles Verhalten in Supklassen implementieren. Außerdem bittet es
- *         Implementierungen für Standart-Komponenten.
+ *         Dies ist ein grundlegendes Popup und alle weiteren Popops kï¿½nnen ein
+ *         spezielles Verhalten in Supklassen implementieren. Auï¿½erdem bittet es
+ *         Implementierungen fï¿½r Standart-Komponenten.
  *         (createButton,createLabel) Diese sollten von dem Erbenen Popup
  *         verwendet werden um ein Einheitliches Look and Feel zu erhalten.
- *         Damit alle Popups immer ähnlich aussehen werden in dieser Klasse
+ *         Damit alle Popups immer ï¿½hnlich aussehen werden in dieser Klasse
  *         mehrere gennerelle Settings gesetzt. Popups werden immer zental auf
  *         dem Bildschirm dargestellt und haben ein {@link VerticalGroup}
- *         Layout. Des weiteren ist die addActor Methode so überschrieben das
- *         alle {@link Actor} zur {@link VerticalGroup} hinzugefügt werden. Das
+ *         Layout. Des weiteren ist die addActor Methode so ï¿½berschrieben das
+ *         alle {@link Actor} zur {@link VerticalGroup} hinzugefï¿½gt werden. Das
  *         {@link VerticalGroup} Layout ordnet alle Elemente Vertikal
  *         untereinander an. Weitere Informationen zum Layout unter
  *         https://github.com/libgdx/libgdx/wiki/Scene2d.ui#verticalgroup
@@ -109,7 +109,7 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Die addActor Methode wird überschrieben damit alle Kind Elemente immer
+	 * Die addActor Methode wird ï¿½berschrieben damit alle Kind Elemente immer
 	 * auf das Vertical Layout gelegt werden.
 	 */
 	@Override
@@ -131,9 +131,9 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Diese Methode ermöglicht das erstellen eines Standart Labels. Dieses
-	 * Label wird zurückgegeben und kann weiter Verändert werden. Außerdem muss
-	 * es noch dem Popup mit AddActor hinzugefügt werden.
+	 * Diese Methode ermï¿½glicht das erstellen eines Standart Labels. Dieses
+	 * Label wird zurï¿½ckgegeben und kann weiter Verï¿½ndert werden. Auï¿½erdem muss
+	 * es noch dem Popup mit AddActor hinzugefï¿½gt werden.
 	 * 
 	 * @param message
 	 * @return {@link Label}
@@ -154,8 +154,8 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Diese Methode ermöglicht das erstellen ein Standart Button. Dieses Button
-	 * wird zurückgegeben und kann weiter Verändert werden. Es wird z.b. ein
+	 * Diese Methode ermï¿½glicht das erstellen ein Standart Button. Dieses Button
+	 * wird zurï¿½ckgegeben und kann weiter Verï¿½ndert werden. Es wird z.b. ein
 	 * Standart Image gesetzt.
 	 * 
 	 * @param text
@@ -168,7 +168,7 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Erstellt den {@link ImageTextButtonStyle} für die Methode createButton.
+	 * Erstellt den {@link ImageTextButtonStyle} fï¿½r die Methode createButton.
 	 * 
 	 * @return {@link ImageTextButtonStyle}
 	 */
@@ -204,7 +204,7 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Erstellt den {@link CheckBoxStyle} für die MEthode createCheckbox.
+	 * Erstellt den {@link CheckBoxStyle} fï¿½r die MEthode createCheckbox.
 	 * 
 	 * @return {@link CheckBoxStyle}
 	 */

@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
@@ -64,7 +65,7 @@ public class Thimblerig extends Level{
 	/**
 	 * Backgroundobjekte
 	 */
-	private BitmapFont labelFont;
+	private BitmapFont textFont;
 	private Image bgTable;
 	private Image bgTree1;
 	private Image bgTree2;
@@ -83,6 +84,7 @@ public class Thimblerig extends Level{
 	/**
 	 * Scoreobjekte
 	 */
+	private BitmapFont scoreFont;
 	private String scoreStr;
 	private int wins;
 	private Label labelWin;
@@ -107,8 +109,7 @@ public class Thimblerig extends Level{
 		this.wins = 0;
 		this.hatIndexList = new ArrayList<Integer>();
 		
-		this.labelFont = AssetManager.getFont("fontButton", "font");
-		//this.labelFont = AssetManager.getFont("scoreFont", "scoreFont");
+		this.textFont = AssetManager.getTextFont(FontSize.DREISSIG);
 		
 		initStage();
 		initPlayer();
@@ -216,7 +217,7 @@ public class Thimblerig extends Level{
 	@Override
 	protected void doDispose() {
 		this.stage.dispose();	
-		this.labelFont.dispose();
+		this.textFont.dispose();
 		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
 	}
 
@@ -298,16 +299,16 @@ public class Thimblerig extends Level{
 	 * Dialoge der Hexe initialisieren und positionieren
 	 */
 	private void initSlogans(){
-		String start = "Entscheide dich\nfuer einen Hut\nund 'wische' ihn\nhoch.";
+		String start = "Entscheide dich\nfür einen Hut\nund 'wische' ihn\nhoch.";
 		String tryAgain = "Schade!\nDu hast noch\neinen Versuch!";
-		String good = "Sehr gut gemacht!\nDeine Wahl war\nsofort korrekt!";
+		String good = "Sehr gut\ngemacht!\nDeine Wahl war\nsofort korrekt!";
 		String ok = "Deine Wahl\nwar richtig!";
 		String fail = "Leider hast du\ndas Pferd nicht\ngefunden.";
 		
-		this.labelFont.setScale(0.4f, 0.4f);
-		this.labelFont.setColor(Color.BLUE);
+		this.textFont.setScale(1f, 1f);
+		this.textFont.setColor(Color.BLUE);
 		
-		LabelStyle labelStyle = new LabelStyle(this.labelFont,Color.BLUE);
+		LabelStyle labelStyle = new LabelStyle(this.textFont,Color.BLUE);
 
 		this.labelStart = new Label(start, labelStyle);
 		this.labelGood = new Label(good, labelStyle);
@@ -316,7 +317,7 @@ public class Thimblerig extends Level{
 		this.labelFail = new Label(fail, labelStyle);
 		
 		this.labelStart.setPosition(this.bgSpeechBalloon.getX() + 20, this.bgSpeechBalloon.getY() + 120);
-		this.labelGood.setPosition(this.bgSpeechBalloon.getX() + 30, this.bgSpeechBalloon.getY() + 135);
+		this.labelGood.setPosition(this.bgSpeechBalloon.getX() + 30, this.bgSpeechBalloon.getY() + 130);
 		this.labelGood.setVisible(false);
 		this.labelTryAgain.setPosition(this.bgSpeechBalloon.getX() + 30, this.bgSpeechBalloon.getY() + 150);
 		this.labelTryAgain.setVisible(false);
@@ -351,9 +352,9 @@ public class Thimblerig extends Level{
 	 * Score initialisieren
 	 */
 	private void initScore(){
-		//labelFont.setScale(1f, 1f);
-		this.labelFont.setColor(Color.BLACK);
-		LabelStyle labelStyle = new LabelStyle(this.labelFont, Color.BLACK);
+		this.scoreFont = AssetManager.getHeadlineFont(FontSize.VIERZIG);
+		this.scoreFont.setScale(1f, 1.5f);
+		LabelStyle labelStyle = new LabelStyle(this.scoreFont, Color.BLACK);
 		this.labelWin = new Label(this.scoreStr + this.wins, labelStyle);
 		this.labelWin.setPosition(this.width  / 2.0f - this.labelWin.getWidth() / 2, 
 			this.height - 2 * this.labelWin.getHeight());
