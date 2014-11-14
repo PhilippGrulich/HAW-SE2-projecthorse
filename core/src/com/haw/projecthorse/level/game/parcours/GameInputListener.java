@@ -15,18 +15,18 @@ public class GameInputListener implements GestureListener {
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
-		if(!Parcours.getGameOperator().isPlayerJumping()){
-			Parcours.getGameOperator().setPlayerJump(true);
-			//Ausgehend von aktueller x-Position die Parabel berechnen.
-			gameField.getPlayer().setupJumpFunction();
-		}
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		// TODO Auto-generated method stub
-		return false;
+		if (!Parcours.getGameOperator().isPlayerJumping()) {
+			Parcours.getGameOperator().setPlayerJump(true);
+			// Ausgehend von aktueller x-Position die Parabel berechnen.
+			gameField.getPlayer().setupJumpFunction();
+		}
+		return true;
 	}
 
 	@Override

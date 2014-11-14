@@ -39,7 +39,7 @@ public class GameOperator {
 		player = gameField.getPlayer();
 		shouldPlayerJump = false;
 		tmpPlayerY = 0;
-		
+
 		// System.out.println in txt umleiten
 		/*
 		 * try { System.setOut(new PrintStream(new
@@ -51,7 +51,7 @@ public class GameOperator {
 	}
 
 	public void update(float delta) {
-		gameField.getPlayer().setAnimation(Direction.RIGHT, 0.2f);
+		// gameField.getPlayer().setAnimation(Direction.RIGHT, 0.2f);
 
 		if (!(delta == 0)) {
 			gameField.actGameField(delta);
@@ -79,10 +79,10 @@ public class GameOperator {
 		}
 
 	}
-	
-	public void collisionDetection(){
-		for(LootObject l : gameField.getLootObjects()){
-			if(l.getRectangle().overlaps(player.getRectangle())){
+
+	public void collisionDetection() {
+		for (LootObject l : gameField.getLootObjects()) {
+			if (l.getRectangle().overlaps(player.getRectangle())) {
 				gameField.setActorUnvisible(l);
 				score += l.getPoints();
 			}
@@ -129,9 +129,38 @@ public class GameOperator {
 	}
 
 	public boolean willPlayerBeOutOfGameField(float x) {
-		if (player.getX() + player.getWidth() + (x - player.getX()) > gameField
-				.getWidth()) {
-			return true;
+		if (player.getDirection() == Direction.RIGHT) {
+
+			float positionOnRightJump = player.getX() + player.getWidth()
+					+ (x - player.getX());
+
+			if (positionOnRightJump > gameField.getWidth()) {
+				return true;
+			}
+
+		} else {
+			float positionOnLeftJump = player.getX() + player.getWidth()
+					- x;
+			
+			float a = (player.getX() + player.getWidth() - (x - player.getX())); //garnicht
+			float b = (player.getX() - player.getWidth() - (x - player.getX())); //zu früh
+			float c = (player.getX() - player.getWidth() - (x + player.getX())); //garnicht
+			float d = (player.getX() + player.getWidth() - (x + player.getX())); //garnicht
+			float e = (player.getX() -player.getWidth() + (x - player.getX())); //garnicht
+			
+			float f = 0;
+			if(x < 0){
+				f = player.getX() + x;
+			}else {
+				f = (player.getX() - x);
+			}
+			
+			
+			
+			
+			if (f < 0) {
+				return true;
+			}
 		}
 		return false;
 	}

@@ -10,12 +10,14 @@ import java.util.Map;
 import sun.org.mozilla.javascript.internal.ast.Jump;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
@@ -25,6 +27,8 @@ import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener.SwipeEvent;
 import com.haw.projecthorse.player.ChangeDirectionAction;
+import com.haw.projecthorse.player.Direction;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 
 public class GameField {
 
@@ -48,11 +52,12 @@ public class GameField {
 	private BigDecimal maxPosXForObjectsOnTheGround;
 	private BigDecimal maxPosXForObjectsInTheAir;
 	private BigDecimal maxPosYForObjectsInTheAir;
-	private float SWIPEMOVE = 5;
+	private final float SWIPEMOVE = 250;
 	TextureRegion ground;
 	EndlessBackground groundObj;
 	Map<String, List<Float>> cloudPos = new HashMap<String, List<Float>>();
 	public int visibleCloudObjects = 0;
+	private final float SWIPEDURATION = 0.2f;
 
 	public GameField(Stage s, Viewport p, int width, int height) {
 		gameObjects = new ArrayList<GameObject>();
@@ -81,34 +86,46 @@ public class GameField {
 
 		stage = s;
 		stage.setViewport(p);
-		
+
 		SwipeListener listener = new SwipeListener() {
+
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
-				          if (!(actor instanceof Player))
-				               return;
-				            //player = (Player) actor;
-				           if (player.getDirection() == event.getDirection()) {
-				            //player.moveBy(SWIPEMOVE, 0);
-				            player.moveBy(50, 0);
-				              
-				        } else {
-				             player.setAnimationSpeed(0.3f);
-				             player.addAction(new ChangeDirectionAction(event.getDirection()));
-				         }
-				      }
-				 };
-				 
-		GestureDetector listener2 = new GestureDetector(new GameInputListener(this));
-	 
-		
-		stage.addListener(listener);
-		InputManager.addInputProcessor(listener2);
-		InputManager.addInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
-		
-		//Gdx.input.setInputProcessor(stage);
-		/*Führt dazu, dass der Pause-Button nicht mehr funktioniert*/
-		//Gdx.input.setInputProcessor(new StageGestureDetector(stage, true, ControlMode.FOUR_AXIS));
+				System.out.println("in");
+				if (!(actor instanceof Player)) {
+					System.out.println("return");
+					return;
+				}
+
+				if (player.getDirection() == event.getDirection()) {
+					if(player.getDirection() == Direction.RIGHT){
+						player.addAction(Actions.moveTo(getRightSwipePosition(),
+								player.getY(), SWIPEDURATION));
+						player.setJumpDirection(Direction.RIGHT);
+					}else {
+						player.addAction(Actions.moveTo(getLeftSwipePosition(),
+								player.getY(), SWIPEDURATION));
+						player.setJumpDirection(Direction.LEFT);
+					}
+				}  else {
+					System.out.println("in3");
+					player.setAnimationSpeed(0.3f);
+					player.addAction(new ChangeDirectionAction(event
+							.getDirection()));
+					player.setJumpDirection(event.getDirection());
+				}
+			}
+		};
+
+		GestureDetector listener2 = new GestureDetector(new GameInputListener(
+				this));
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
+		player.addListener(listener);
+		inputMultiplexer.addProcessor(new StageGestureDetector(stage, true,
+				ControlMode.HORIZONTAL));
+		inputMultiplexer.addProcessor(listener2);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 
 	}
 
@@ -282,8 +299,9 @@ public class GameField {
 				"cratetex");
 
 		GameObject kisteObj = new GameObject(kiste, getGameSpeed());
-		float[] widthHeight = getRelativeSize(kiste, GameField.height * 15 / 100);
-		
+		float[] widthHeight = getRelativeSize(kiste,
+				GameField.height * 15 / 100);
+
 		kisteObj.setHeight(widthHeight[1]);
 		kisteObj.setWidth(widthHeight[0]);
 		kisteObj.setName("Kiste");
@@ -324,7 +342,8 @@ public class GameField {
 
 	}
 
-	public void loadKuerbisse(String name, boolean flipX, boolean flipY, float x, int points) {
+	public void loadKuerbisse(String name, boolean flipX, boolean flipY,
+			float x, int points) {
 		TextureRegion pumpkin = AssetManager.getTextureRegion("parcours", name);
 		pumpkin.flip(flipX, flipY);
 		LootObject pumpkinObj = new LootObject(pumpkin, getGameSpeed(), points);
@@ -350,19 +369,31 @@ public class GameField {
 		player.setHeight(newWidthHeight[1]);
 		player.setWidth(newWidthHeight[0]);
 
-		
 		player.setPosition(playersPointOfView, getPlayerYDefault());
-		
-		//Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen setzen
 
-		
-		player.setJumpHeight(300);
-		player.setJumpWitdh(300);
+		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
+		// setzen
+		float maxHeight = 0;
+		float maxWidth = 0;
+		for (GameObject o : gameObjects) {
+			if (o.getHeight() > maxHeight) {
+				maxHeight = o.getHeight();
+			}
+			if (o.getWidth() > maxWidth) {
+				maxWidth = o.getWidth();
+			}
+		}
+
+		maxHeight = maxHeight * 170 / 100;
+		maxWidth = maxWidth * 250 / 100;
+
+		player.setJumpHeight(maxHeight);
+		player.setJumpWitdh(maxWidth);
 		player.setJumpSpeed(15);
 		player.setupJumpFunction();
 		player.setName("Player");
 		player.applyRactangle();
-		
+		player.setAnimation(Direction.RIGHT, 0.3f);
 		stage.addActor(player);
 	}
 
@@ -377,8 +408,8 @@ public class GameField {
 	public void drawGameField() {
 		stage.draw();
 	}
-	
-	public Actor hitGameField(float stageX, float stageY, boolean touchable){
+
+	public Actor hitGameField(float stageX, float stageY, boolean touchable) {
 		return stage.hit(stageX, stageY, touchable);
 	}
 
@@ -657,5 +688,20 @@ public class GameField {
 	public float getCloudsY(Actor o) {
 		return cloudPos.get(o.getName()).get(1);
 	}
+	
+	private float getRightSwipePosition(){
+		if(player.getX() + player.getWidth() + SWIPEMOVE > GameField.width){
+			return player.getX() + (GameField.width - player.getX() - player.getWidth());
+		}
+		return player.getX() + SWIPEMOVE;
+	}
+	
+	private float getLeftSwipePosition(){
+		if(player.getX() - SWIPEMOVE < 0){
+			return 0;
+		}
+		return player.getX() - SWIPEMOVE;
+	}
+	
 
 }
