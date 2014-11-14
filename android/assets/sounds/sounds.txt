@@ -2,3 +2,4 @@ worldmap;flap.wav; -; kilobolt; http://www.kilobolt.com/uploads/1/2/5/7/12571940
 thimblerig;jingles_SAX04.ogg;-;Kenney;http://www.kenney.nl
 thimblerig;jingles_SAX07.ogg;-;Kenney;http://www.kenney.nl
 thimblerig;jingles_SAX10.ogg;-;Kenney;http://www.kenney.nl
+thimblerig;Wiehern.ogg;cc-0;Hü;http://commons.wikimedia.org/wiki/File:Wiehern.ogg
