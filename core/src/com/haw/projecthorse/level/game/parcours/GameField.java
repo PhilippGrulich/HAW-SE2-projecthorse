@@ -306,28 +306,28 @@ public class GameField {
 	}
 
 	public void initializeLootObjects() {
-		loadKuerbisse("Kuerbis1", true, false, -1);
+		loadKuerbisse("Kuerbis1", true, false, -1, 1);
 
-		loadKuerbisse("Kuerbis2", false, false, -1);
+		loadKuerbisse("Kuerbis2", false, false, -1, 1);
 
-		loadKuerbisse("Kuerbis3", false, false, -1);
+		loadKuerbisse("Kuerbis3", false, false, -1, 1);
 
-		loadKuerbisse("Kuerbis4", false, false, -1);
+		loadKuerbisse("Kuerbis4", false, false, -1, 1);
 
-		loadKuerbisse("Kuerbis5", false, false, -1);
+		loadKuerbisse("Kuerbis5", false, false, -1, 1);
 
-		loadKuerbisse("Kuerbis6", false, false, -1);
+		loadKuerbisse("Kuerbis6", false, false, -1, 1);
 
-		loadKuerbisse("Kuerbis7", false, false, -1);
+		loadKuerbisse("Kuerbis7", false, false, -1, 5);
 
-		loadKuerbisse("Kuerbis8", false, false, -1);
+		loadKuerbisse("Kuerbis8", false, false, -1, 5);
 
 	}
 
-	public void loadKuerbisse(String name, boolean flipX, boolean flipY, float x) {
+	public void loadKuerbisse(String name, boolean flipX, boolean flipY, float x, int points) {
 		TextureRegion pumpkin = AssetManager.getTextureRegion("parcours", name);
 		pumpkin.flip(flipX, flipY);
-		LootObject pumpkinObj = new LootObject(pumpkin, getGameSpeed());
+		LootObject pumpkinObj = new LootObject(pumpkin, getGameSpeed(), points);
 		float[] newWidthHeight = getRelativeSize(pumpkin, GameField.height / 12);
 
 		pumpkinObj.setHeight(newWidthHeight[1]);
@@ -340,6 +340,7 @@ public class GameField {
 		pumpkinObj.setName(name);
 
 		lootObjects.add(pumpkinObj);
+		pumpkinObj.applyRactangle();
 		stage.addActor(pumpkinObj);
 	}
 
@@ -360,6 +361,7 @@ public class GameField {
 		player.setJumpSpeed(15);
 		player.setupJumpFunction();
 		player.setName("Player");
+		player.applyRactangle();
 		
 		stage.addActor(player);
 	}
@@ -374,6 +376,10 @@ public class GameField {
 
 	public void drawGameField() {
 		stage.draw();
+	}
+	
+	public Actor hitGameField(float stageX, float stageY, boolean touchable){
+		return stage.hit(stageX, stageY, touchable);
 	}
 
 	/******************************************************************************/

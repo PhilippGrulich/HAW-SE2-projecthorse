@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,8 +22,10 @@ public class GameOperator {
 	float epsilon;
 	boolean shouldPlayerJump;
 	float tmpPlayerY;
+	private int score;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height) {
+		score = 0;
 		maxVisibleLootObjects = 3;
 		maxVisibleGameObjects = 2;
 		maxVisibleBackgroundObjects = 4;
@@ -36,6 +39,7 @@ public class GameOperator {
 		player = gameField.getPlayer();
 		shouldPlayerJump = false;
 		tmpPlayerY = 0;
+		
 		// System.out.println in txt umleiten
 		/*
 		 * try { System.setOut(new PrintStream(new
@@ -56,6 +60,7 @@ public class GameOperator {
 			updateBackgroundObjects(delta);
 			updateLootObjects(delta);
 			checkPlayerConstraints(delta);
+			collisionDetection();
 		}
 		gameField.drawGameField();
 
@@ -70,9 +75,18 @@ public class GameOperator {
 			}
 		} else {
 			handleJump();
-	
+
 		}
 
+	}
+	
+	public void collisionDetection(){
+		for(LootObject l : gameField.getLootObjects()){
+			if(l.getRectangle().overlaps(player.getRectangle())){
+				gameField.setActorUnvisible(l);
+				score += l.getPoints();
+			}
+		}
 	}
 
 	public void handleJump() {
@@ -87,7 +101,7 @@ public class GameOperator {
 			x = player.getX();
 			outOfBound1 = false;
 		}
-		
+
 		if (outOfBound1) {
 			y = v.y;
 		} else {
@@ -107,8 +121,8 @@ public class GameOperator {
 	}
 
 	private boolean willPlayerBeLesserThanGround(float y) {
-		
-		if ( y < gameField.getPlayerYDefault()) {
+
+		if (y < gameField.getPlayerYDefault()) {
 			return true;
 		}
 		return false;
