@@ -91,9 +91,7 @@ public class GameField {
 
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
-				System.out.println("in");
 				if (!(actor instanceof Player)) {
-					System.out.println("return");
 					return;
 				}
 
@@ -108,7 +106,6 @@ public class GameField {
 						player.setJumpDirection(Direction.LEFT);
 					}
 				}  else {
-					System.out.println("in3");
 					player.setAnimationSpeed(0.3f);
 					player.addAction(new ChangeDirectionAction(event
 							.getDirection()));

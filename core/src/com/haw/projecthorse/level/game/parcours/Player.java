@@ -69,15 +69,7 @@ public class Player extends PlayerImpl {
 			y2 = getY() + player_jumpheight;
 			x3 = getX() + player_jumpwidth;
 			y3 = getY();
-			System.out.println("hier");
-
 		} else {
-			System.out.println("dort");
-			/*
-			 * x1 = getX() + player_jumpwidth; y1 = getY(); x2 = getX() +
-			 * (player_jumpwidth / 2f); y2 = getY() + player_jumpheight; x3 =
-			 * getX(); y3 = getY();
-			 */
 
 			x1 = getX();
 			y1 = getY();

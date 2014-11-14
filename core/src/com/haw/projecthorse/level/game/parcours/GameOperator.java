@@ -139,26 +139,15 @@ public class GameOperator {
 			}
 
 		} else {
-			float positionOnLeftJump = player.getX() + player.getWidth()
-					- x;
-			
-			float a = (player.getX() + player.getWidth() - (x - player.getX())); //garnicht
-			float b = (player.getX() - player.getWidth() - (x - player.getX())); //zu früh
-			float c = (player.getX() - player.getWidth() - (x + player.getX())); //garnicht
-			float d = (player.getX() + player.getWidth() - (x + player.getX())); //garnicht
-			float e = (player.getX() -player.getWidth() + (x - player.getX())); //garnicht
-			
-			float f = 0;
-			if(x < 0){
-				f = player.getX() + x;
-			}else {
-				f = (player.getX() - x);
+
+			float positionOnLeftJump = 0;
+			if (x < 0) {
+				positionOnLeftJump = player.getX() + x;
+			} else {
+				positionOnLeftJump = (player.getX() - x);
 			}
-			
-			
-			
-			
-			if (f < 0) {
+
+			if (positionOnLeftJump < 0) {
 				return true;
 			}
 		}
