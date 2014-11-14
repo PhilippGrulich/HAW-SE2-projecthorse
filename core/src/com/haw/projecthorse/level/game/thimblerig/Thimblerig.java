@@ -34,8 +34,6 @@ import com.haw.projecthorse.player.PlayerImpl;
  * Richtiges Huetchen finden, unter dem das Pferd versteckt ist
  * @author Fabian Reiber
  * 
- * TODO: wenn fonts, mit Ziffern vorhanden, dann einbinden
- *
  */
 
 public class Thimblerig extends Level{
