@@ -3,8 +3,6 @@ package com.haw.projecthorse.level.game.parcours;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +12,6 @@ import com.haw.projecthorse.player.Direction;
 public class GameOperator {
 
 	private GameField gameField;
-	private Sanction sanction;
 	private int maxVisibleLootObjects;
 	private int maxVisibleGameObjects;
 	public static int maxVisibleBackgroundObjects;
@@ -23,6 +20,7 @@ public class GameOperator {
 	boolean shouldPlayerJump;
 	float tmpPlayerY;
 	private int score;
+	private boolean checked = false;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height) {
 		score = 0;
@@ -51,7 +49,6 @@ public class GameOperator {
 	}
 
 	public void update(float delta) {
-		// gameField.getPlayer().setAnimation(Direction.RIGHT, 0.2f);
 
 		if (!(delta == 0)) {
 			gameField.actGameField(delta);
@@ -75,16 +72,20 @@ public class GameOperator {
 			}
 		} else {
 			handleJump();
-
 		}
 
 	}
 
 	public void collisionDetection() {
+		int i = 0;
 		for (LootObject l : gameField.getLootObjects()) {
+
 			if (l.getRectangle().overlaps(player.getRectangle())) {
 				gameField.setActorUnvisible(l);
 				score += l.getPoints();
+				i++;
+				/* System.out.println("score: " + score);
+				 System.out.println("i: " + i); */
 			}
 		}
 	}
@@ -154,6 +155,21 @@ public class GameOperator {
 		return false;
 	}
 
+	/*
+	 * private void updateGameObjects(float delta){ List<GameObject> objects =
+	 * gameField.getGameObjects(); objects.addAll(gameField.getLootObjects());
+	 * 
+	 * for(GameObject o : objects){ int pos =
+	 * gameField.getRandomActorPosition(o); if(!objects.get(pos).isVisible() &&
+	 * outOfGameField(objects.get(pos)) && gameField.visibleGameObjects <
+	 * maxVisibleGameObjects){ float x =
+	 * gameField.getRandomXForObjectOnTheGround(objects.get(pos)); if(x != -1)
+	 * gameField.setActorVisbile(objects.get(pos), x); } if(o.isVisible() &&
+	 * outOfGameField(o)){ gameField.setActorUnvisible(o); }else {
+	 * o.setX(o.getX() - o.getDuration()); } }
+	 * 
+	 * }
+	 */
 	public void updateGameObjects(float delta) {
 		List<GameObject> objects = gameField.getGameObjects();
 		BigDecimal x, width, b_delta;

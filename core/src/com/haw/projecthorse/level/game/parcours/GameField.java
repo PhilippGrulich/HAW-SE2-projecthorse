@@ -7,15 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sun.org.mozilla.javascript.internal.ast.Jump;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,10 +21,8 @@ import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
-import com.haw.projecthorse.level.util.swipehandler.SwipeListener.SwipeEvent;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 
 public class GameField {
 
@@ -50,14 +44,14 @@ public class GameField {
 	public int visibleGameObjects = 0;
 	public int visibleLootObjects = 0;
 	private BigDecimal maxPosXForObjectsOnTheGround;
-	private BigDecimal maxPosXForObjectsInTheAir;
-	private BigDecimal maxPosYForObjectsInTheAir;
 	private final float SWIPEMOVE = 250;
 	TextureRegion ground;
 	EndlessBackground groundObj;
 	Map<String, List<Float>> cloudPos = new HashMap<String, List<Float>>();
 	public int visibleCloudObjects = 0;
 	private final float SWIPEDURATION = 0.2f;
+	private float lastPosition;
+	private float maxObjects;
 
 	public GameField(Stage s, Viewport p, int width, int height) {
 		gameObjects = new ArrayList<GameObject>();
@@ -65,12 +59,9 @@ public class GameField {
 		lootObjects = new ArrayList<LootObject>();
 		GameField.width = width;
 		GameField.height = height;
-
+		lastPosition = GameField.width;
+		
 		maxPosXForObjectsOnTheGround = new BigDecimal(0).setScale(5,
-				RoundingMode.HALF_UP);
-		maxPosXForObjectsInTheAir = new BigDecimal(0).setScale(5,
-				RoundingMode.HALF_UP);
-		maxPosYForObjectsInTheAir = new BigDecimal(0).setScale(5,
 				RoundingMode.HALF_UP);
 
 		heightInRelationToScreenHeight = (float) GameField.height / 4.0f;
@@ -83,6 +74,7 @@ public class GameField {
 		maxDistanceY = 0;
 		gameSpeed = 3;
 		playersPointOfView = 20;
+		maxObjects = 5;
 
 		stage = s;
 		stage.setViewport(p);
@@ -96,16 +88,17 @@ public class GameField {
 				}
 
 				if (player.getDirection() == event.getDirection()) {
-					if(player.getDirection() == Direction.RIGHT){
-						player.addAction(Actions.moveTo(getRightSwipePosition(),
-								player.getY(), SWIPEDURATION));
+					if (player.getDirection() == Direction.RIGHT) {
+						player.addAction(Actions.moveTo(
+								getRightSwipePosition(), player.getY(),
+								SWIPEDURATION));
 						player.setJumpDirection(Direction.RIGHT);
-					}else {
+					} else {
 						player.addAction(Actions.moveTo(getLeftSwipePosition(),
 								player.getY(), SWIPEDURATION));
 						player.setJumpDirection(Direction.LEFT);
 					}
-				}  else {
+				} else {
 					player.setAnimationSpeed(0.3f);
 					player.addAction(new ChangeDirectionAction(event
 							.getDirection()));
@@ -119,9 +112,11 @@ public class GameField {
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
 		player.addListener(listener);
+		inputMultiplexer.addProcessor(Gdx.input.getInputProcessor());
 		inputMultiplexer.addProcessor(new StageGestureDetector(stage, true,
 				ControlMode.HORIZONTAL));
 		inputMultiplexer.addProcessor(listener2);
+		
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 	}
@@ -321,21 +316,21 @@ public class GameField {
 	}
 
 	public void initializeLootObjects() {
-		loadKuerbisse("Kuerbis1", true, false, -1, 1);
+		loadKuerbisse("Kuerbis1", false, true, -100, 1);
 
-		loadKuerbisse("Kuerbis2", false, false, -1, 1);
+		loadKuerbisse("Kuerbis2", false, false, -500, 1);
 
-		loadKuerbisse("Kuerbis3", false, false, -1, 1);
+		loadKuerbisse("Kuerbis3", false, false, -900, 1);
 
-		loadKuerbisse("Kuerbis4", false, false, -1, 1);
+		loadKuerbisse("Kuerbis4", false, false, -1300, 1);
 
-		loadKuerbisse("Kuerbis5", false, false, -1, 1);
+		loadKuerbisse("Kuerbis5", false, false, -1700, 1);
 
-		loadKuerbisse("Kuerbis6", false, false, -1, 1);
+		loadKuerbisse("Kuerbis6", false, false, -2100, 1);
 
-		loadKuerbisse("Kuerbis7", false, false, -1, 5);
+		loadKuerbisse("Kuerbis7", false, false, -2500, 1);
 
-		loadKuerbisse("Kuerbis8", false, false, -1, 5);
+		loadKuerbisse("Kuerbis8", false, false, -2900, 1);
 
 	}
 
@@ -348,7 +343,7 @@ public class GameField {
 
 		pumpkinObj.setHeight(newWidthHeight[1]);
 		pumpkinObj.setWidth(newWidthHeight[0]);
-		pumpkinObj.setX(GameField.width - x);
+		pumpkinObj.setX(0 + x);
 		pumpkinObj.setY(getGroundHeight()
 				- SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP);
 		pumpkinObj.setVisible(false);
@@ -357,6 +352,7 @@ public class GameField {
 
 		lootObjects.add(pumpkinObj);
 		pumpkinObj.applyRactangle();
+		pumpkinObj.setVisible(false);
 		stage.addActor(pumpkinObj);
 	}
 
@@ -406,10 +402,6 @@ public class GameField {
 		stage.draw();
 	}
 
-	public Actor hitGameField(float stageX, float stageY, boolean touchable) {
-		return stage.hit(stageX, stageY, touchable);
-	}
-
 	/******************************************************************************/
 	/************************ Methoden fuer Spiellogik ******************************/
 	/******************************************************************************/
@@ -422,40 +414,17 @@ public class GameField {
 		this.minDistanceY = minDistance;
 		this.maxDistanceY = maxDistance;
 	}
-
-	public float getMinDistanceX() {
-		return minDistanceX;
-	}
-
-	public float getMinDistanceY() {
-		return minDistanceY;
-	}
-
-	public float getMaxDistanceX() {
-		return maxDistanceX;
-	}
-
-	public float getMaxDistanceY() {
-		return maxDistanceY;
-	}
-
-	public float getRandomYForObjectInTheAir(Actor o) {
-		float randY = (float) Math.floor(Math.random()
-				* (maxDistanceY - minDistanceY) + minDistanceY);
-
-		BigDecimal b_randY = new BigDecimal(randY).setScale(5,
-				RoundingMode.HALF_UP);
-
-		maxPosYForObjectsInTheAir = new BigDecimal(b_randY.floatValue()
-				+ o.getHeight()).setScale(5, RoundingMode.HALF_UP);
-
-		return b_randY.floatValue();
-	}
-
-	public float getRandomXForObjectInTheAir(Actor o) {
-
-		return maxPosXForObjectsOnTheGround.floatValue();
-	}
+	
+/*	public float getRandomXForObjectOnTheGround(Actor o){
+		if(visibleLootObjects + visibleGameObjects < maxObjects){
+		float rand = (float) Math.floor(Math.random()
+				* (maxDistanceX - minDistanceX) + minDistanceX);
+		float result = lastPosition + rand;
+		lastPosition = lastPosition + rand + o.getWidth();
+		return result;
+		}
+		return -1;
+	}*/
 
 	public float getRandomXForObjectOnTheGround(Actor o) {
 		float rand = (float) Math.floor(Math.random()
@@ -473,14 +442,8 @@ public class GameField {
 		}
 		maxPosXForObjectsOnTheGround = new BigDecimal(b_rand.floatValue()
 				+ o.getWidth()).setScale(5, RoundingMode.HALF_UP);
+		//System.out.println("maxPos: " + maxPosXForObjectsOnTheGround +  " von: " + o.getName());
 		return b_rand.floatValue();
-	}
-
-	public float getRandomY(GameObject o) {
-		float y = GameField.height
-				+ (float) Math.floor(Math.random()
-						* (maxDistanceY - minDistanceY) + minDistanceY);
-		return y;
 	}
 
 	public List<GameObject> getGameObjects() {
@@ -545,18 +508,6 @@ public class GameField {
 		BigDecimal b_width = new BigDecimal(width).setScale(4,
 				RoundingMode.HALF_UP);
 		maxPosXForObjectsOnTheGround = new BigDecimal(b_x.floatValue()
-				+ b_width.floatValue()).setScale(5, RoundingMode.HALF_UP);
-	}
-
-	public void setObjectsInTheAirMaxPosXY(float x, float y, float width) {
-		BigDecimal b_x = new BigDecimal(x).setScale(4, RoundingMode.HALF_UP);
-		BigDecimal b_y = new BigDecimal(y).setScale(4, RoundingMode.HALF_UP);
-		BigDecimal b_width = new BigDecimal(width).setScale(4,
-				RoundingMode.HALF_UP);
-
-		maxPosXForObjectsInTheAir = new BigDecimal(b_x.floatValue()
-				+ b_width.floatValue()).setScale(5, RoundingMode.HALF_UP);
-		maxPosYForObjectsInTheAir = new BigDecimal(b_y.floatValue()
 				+ b_width.floatValue()).setScale(5, RoundingMode.HALF_UP);
 	}
 
@@ -654,28 +605,12 @@ public class GameField {
 		return playersPointOfView;
 	}
 
-	public void setGroundX(float x) {
-		groundObj.setX(x);
-	}
-
-	public float getGroundX() {
-		return groundObj.getX();
-	}
-
 	private float getHeightInRelationToScreenHeight() {
 		return heightInRelationToScreenHeight;
 	}
 
 	public float getObjectsOnGroundMaxPos() {
 		return maxPosXForObjectsOnTheGround.floatValue();
-	}
-
-	public float getObjectsInTheAirMaxPosX() {
-		return maxPosXForObjectsInTheAir.floatValue();
-	}
-
-	public float getObjectsInTheAirMaxPosY() {
-		return maxPosYForObjectsInTheAir.floatValue();
 	}
 
 	public float getCloudsX(Actor o) {
@@ -685,20 +620,23 @@ public class GameField {
 	public float getCloudsY(Actor o) {
 		return cloudPos.get(o.getName()).get(1);
 	}
-	
-	private float getRightSwipePosition(){
-		if(player.getX() + player.getWidth() + SWIPEMOVE > GameField.width){
-			return player.getX() + (GameField.width - player.getX() - player.getWidth());
+
+	private float getRightSwipePosition() {
+		if (player.getX() + player.getWidth() + SWIPEMOVE > GameField.width) {
+			return player.getX()
+					+ (GameField.width - player.getX() - player.getWidth());
 		}
 		return player.getX() + SWIPEMOVE;
 	}
-	
-	private float getLeftSwipePosition(){
-		if(player.getX() - SWIPEMOVE < 0){
+
+	private float getLeftSwipePosition() {
+		if (player.getX() - SWIPEMOVE < 0) {
 			return 0;
 		}
 		return player.getX() - SWIPEMOVE;
 	}
-	
 
+	public Stage getStage(){
+		return stage;
+	}
 }
