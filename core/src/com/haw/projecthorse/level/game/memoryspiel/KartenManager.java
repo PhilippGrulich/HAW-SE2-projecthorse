@@ -42,16 +42,16 @@ public class KartenManager {
 		
 		Collections.shuffle(karten);
 		
-//		Drawable picture1 = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Foto" + 1));
-//		Drawable picture2 = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Foto" + 2));
-//		Drawable picture3 = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Foto" + 3));
-//		((Karte) karten.get(0)).setPicture(picture1);
-//		((Karte) karten.get(1)).setPicture(picture1);
-//		((Karte) karten.get(2)).setPicture(picture2);
-//		((Karte) karten.get(3)).setPicture(picture2);
-//		((Karte) karten.get(4)).setPicture(picture3);
-//		((Karte) karten.get(5)).setPicture(picture3);
-//			
+		Drawable picture1 = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Foto" + 1));
+		Drawable picture2 = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Foto" + 2));
+		Drawable picture3 = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Foto" + 3));
+		((Karte) karten.get(0)).setPicture(picture1);
+		((Karte) karten.get(1)).setPicture(picture1);
+		((Karte) karten.get(2)).setPicture(picture2);
+		((Karte) karten.get(3)).setPicture(picture2);
+		((Karte) karten.get(4)).setPicture(picture3);
+		((Karte) karten.get(5)).setPicture(picture3);
+			
 	}
 	
 	public ArrayList<Karte> getKarten(){

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.game.memoryspiel.Karte.State;
 
 public class MemorySpiel extends Level {
 
@@ -39,20 +40,15 @@ public class MemorySpiel extends Level {
 		stage = new Stage(this.getViewport(), batcher);
 		region = AssetManager.getTextureRegion("memorySpiel", "Background"
 				+ background);
-		karte = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Karte"));
 		backgroundImage = new Image(region);
 		backgroundImage.toBack();
 		stage.addActor(backgroundImage);
-		
-		
 		initKarten();
 	}
 
 	protected void initKarten() {
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
-//			k.setDrawable(k.getPicture());
 			k.toFront();
 			stage.addActor(k);
 			
@@ -65,20 +61,23 @@ public class MemorySpiel extends Level {
 		int i = rand.nextInt(5);
 		return i;
 	}
+	
+	protected void updateKarten(){
+		List<Karte> karten = manager.getKarten();
+		for(Karte k : karten){
+			if(k.getState() == State.TEMPORARILY_OPENED){
+				k.setDrawable(k.getPicture());
+			}
+			if(k.getState() == State.CLOSED){
+				k.setDrawable(Karte.karte);
+			}
+		}
+	}
 
 	@Override
 	protected void doRender(float delta) {
-		// batcher.begin();
-		// batcher.draw(region, 0, 0);
-		// batcher.draw(karte, karte1.getPosition().x, karte1.getPosition().y);
-		// batcher.draw(karte, karte1.getPosition().x + 225,
-		// karte1.getPosition().y);
-		// batcher.draw(karte, karte1.getPosition().x + 450,
-		// karte1.getPosition().y);
-		// batcher.draw(karte, karte1.getPosition().x, karte1.getPosition().y +
-		// 225);
-		// batcher.end();
-		
+		manager.checkChanged();
+		updateKarten();
 		stage.draw();
 
 	}

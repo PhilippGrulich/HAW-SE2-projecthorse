@@ -1,9 +1,11 @@
 package com.haw.projecthorse.level.game.memoryspiel;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -15,8 +17,8 @@ public class Karte extends Image{
 	private Vector2 position;
 	private State state;
 	private Drawable picture;
-	private static Drawable karte = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Karte"));
-
+	public static Drawable karte = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Karte"));
+	
 	public enum State {
 		OPEN, CLOSED, TEMPORARILY_OPENED;
 	}
@@ -30,9 +32,12 @@ public class Karte extends Image{
 		this.position = position;
 		this.setX(getPosition().x);
 		this.setY(getPosition().y);
-//		this.addListener(new Listener(){
-			
-//		}
+		this.addListener(new InputListener(){
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+		 		onClick();
+		 	}
+
+		});
 	}
 
 	public void onClick() {
@@ -58,12 +63,12 @@ public class Karte extends Image{
 	}
 	 
 	public Drawable getPicture(){
-		return this.picture;
+		return picture;
 	}
 	
 	public void setPicture(Drawable picture1){
 		this.picture = picture1;
 	}
-	 
+	
 	
 }
