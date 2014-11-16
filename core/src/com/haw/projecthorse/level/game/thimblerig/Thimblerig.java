@@ -27,15 +27,16 @@ import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
+import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
 /**
  * Richtiges Huetchen finden, unter dem das Pferd versteckt ist
  * @author Fabian Reiber
- * 
- * TODO: wenn fonts, mit Ziffern vorhanden, dann einbinden
- *
+ * TODO: alle loots sichern -> auskommentieren
+ * TODO: über liste aller loots iterieren
+ * TODO: pferderasse in if-abfragen und dohint aufrufen
  */
 
 public class Thimblerig extends Level{
@@ -44,7 +45,7 @@ public class Thimblerig extends Level{
 	private static boolean ISPAUSED;
 	
 	/**
-	 * Hut und Logik Objekte
+	 * Hut- und Logik-Objekte
 	 */
 	private Hat[] hats;
 	private GestureDetector hatGestureDetector;
@@ -55,7 +56,7 @@ public class Thimblerig extends Level{
 	private static int HAT_NUMBER = 3;
 	private Player pl;
 	private Random rnd;
-	protected int rightNum;
+	private int rightNum;
 	//choiceCounter zaehlt die Versuche in einer Runde
 	private int choiceCounter;
 	private boolean roundFinished;
@@ -63,7 +64,7 @@ public class Thimblerig extends Level{
 	//dieser nicht nochmal gewaehlt werden kann
 	private List<Integer> hatIndexList;
 	/**
-	 * Backgroundobjekte
+	 * Background-Objekte
 	 */
 	private BitmapFont textFont;
 	private Image bgTable;
@@ -73,7 +74,7 @@ public class Thimblerig extends Level{
 	private Image bgWitch;
 	private Image bgSpeechBalloon;
 	/**
-	 * Dialogobjekte
+	 * Dialog-Objekte
 	 */
 	private Label labelStart;
 	private Label labelGood;
@@ -82,7 +83,7 @@ public class Thimblerig extends Level{
 	private Label labelFail;
 	
 	/**
-	 * Scoreobjekte
+	 * Score-Objekte
 	 */
 	private BitmapFont scoreFont;
 	private String scoreStr;
@@ -94,6 +95,24 @@ public class Thimblerig extends Level{
 	 */
 	private Dialog newGame;
 
+	/**
+	 * Loot-Objekte
+	 */
+	private List<Loot> lootObj;
+	private static final int MINSCORE = 10;
+	private static boolean ISMINSCORED;
+	private static final int MIDSCORE = 20;
+	private static boolean ISMIDSCORED;
+	private static final int MAXSCORE = 30;
+	private static boolean ISMAXSCORED;
+	/**
+	 * Hint-Objekte
+	 */
+	private int jiggleVal;
+	private int jiggleCounter;
+	private static final int JIGGLETIMEMIN = 6;
+	private static final int JIGGLETIMEMAX = 12;
+	private static boolean JIGGLECOUNTERFLAG;
 	
 	/**
 	 * Konstruktor
@@ -110,6 +129,14 @@ public class Thimblerig extends Level{
 		this.hatIndexList = new ArrayList<Integer>();
 		
 		this.textFont = AssetManager.getTextFont(FontSize.DREISSIG);
+
+		/**
+		 * damit nicht direkt zu Beginn ein Hinweis kommt, den Counter bereits 
+		 * vorinitialisieren.
+		 */
+		this.jiggleVal = 1000;
+		this.jiggleCounter = 800;
+		JIGGLECOUNTERFLAG = false;
 		
 		initStage();
 		initPlayer();
@@ -121,6 +148,7 @@ public class Thimblerig extends Level{
 		initButtons();
 		addActorsToStage();
 		initProcessorAndGestureDetector();
+		initLoots();
 	}
 
 	/**
@@ -136,6 +164,9 @@ public class Thimblerig extends Level{
 		
 		//eigentliche Spiellogik
 		if(!this.roundFinished && !ISPAUSED){
+			//if(pferderasse == ein stoerrisches pferd) then dohint...
+			doHint(delta);
+			
 			for(int i = 0; i < HAT_NUMBER; i++){
 				if(this.hats[i].isFlinged() && this.hats[i].isChoosed()){
 					//Positionen von Pferd und korrektem Hut setzen
@@ -159,6 +190,7 @@ public class Thimblerig extends Level{
 						this.labelGood.setVisible(true);					
 						this.wins++;
 						this.labelWin.setText(this.scoreStr + this.wins);
+						checkPrize();
 						break;
 					case 1:
 						AssetManager.playSound(this.getLevelID(), "jingles_SAX10.ogg");
@@ -216,6 +248,7 @@ public class Thimblerig extends Level{
 
 	@Override
 	protected void doDispose() {
+		//this.chest.saveAllLoot();
 		this.stage.dispose();	
 		this.textFont.dispose();
 		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
@@ -229,10 +262,13 @@ public class Thimblerig extends Level{
 	@Override
 	protected void doShow() {
 		AssetManager.loadSounds("thimblerig");
+		AssetManager.changeSoundVolume(0.4f);
 		AssetManager.loadMusic("thimblerig");
 		AssetManager.playMusic("thimblerig", "Little_Bits.mp3");
-		AssetManager.changeMusicVolume("thimblerig", "Little_Bits.mp3", 0.5f);
+		AssetManager.changeMusicVolume("thimblerig", "Little_Bits.mp3", 0.2f);
 		AssetManager.setMusicLooping("thimblerig", "Little_Bits.mp3", true);
+		
+		
 	}
 
 	@Override
@@ -481,11 +517,253 @@ public class Thimblerig extends Level{
 		InputManager.addInputProcessor(this.hatGameMultiplexer);
 	}
 	
+	private void initLoots(){
+		this.lootObj = new ArrayList<Loot>();
+		
+		this.lootObj.add(new ThimblerigLoot("lolli", "kleiner Dauerlutscher"
+				, "noonespillow_Lollipop"));
+		this.lootObj.add(new ThimblerigLoot("suger", "etwas Würfelzucker"
+				, "Sugar_cube"));
+		this.lootObj.add(new ThimblerigLoot("ballon", "leichter Ballon"
+				, "Balionai"));
+		this.lootObj.add(new ThimblerigLoot("möhre", "gesunde Möhre"
+				, "2011-02-15_Cartoon_carrot"));
+		this.lootObj.add(new ThimblerigLoot("miniPferd", "süßes Mini-Pferd"
+				, "WOOD_HORSE"));
+		this.lootObj.add(new ThimblerigLoot("hufeisen", "schweres Hufeisen"
+				, "horseshoe"));
+		this.lootObj.add(new ThimblerigLoot("hut", "glückbringender Hut"
+				, "liftarn_Green_hat"));
+		this.lootObj.add(new ThimblerigLoot("heu", "kraftbringendes Heu"
+				, "mcol_haystack"));
+		
+		ISMINSCORED = false;
+		ISMIDSCORED = false;
+		ISMAXSCORED = false;
+	}
+	
+	/**
+	 * ermittelt, ob eine der Scoregrenzen erreicht wurde. Wenn ja, dann wird der Reihe
+	 * nach geprueft, ob die einzelnen Loots, die in diesem Spiel gewonnen werden
+	 * koennen, bereits in der Loot-Galerie vorhanden sind. Wenn ja wird das Loot
+	 * hinzugefuegt, sonst eine entsprechende Ausgabe erzeugt. Wurd der Maxscore erreicht
+	 * kann eine Pferderasse gewonnen werden.
+	 */
+	private void checkPrize(){
+		/**
+		 * wurden beide Werte auf -2 gesetzt, dann darf entsprechend keine Ausgabe
+		 * oder ein hinzufuegen von Loot/Pferd erfolgen
+		 */
+		int indexOfLoot = -1;
+		int indexOfHorseLoot = -1;
+		int maxNumberOfLootsMinscore = (this.lootObj.size() / 2) - 1;
+		int maxNumberOfLootsMidscore = (this.lootObj.size() / 2);
+		switch(this.wins){
+		case MINSCORE:
+			if(!ISMINSCORED){
+				ISMINSCORED = true;
+				indexOfLoot = getLootIndexMinscore(maxNumberOfLootsMinscore);
+				indexOfHorseLoot = -2;
+			}
+			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
+			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
+			else{
+				indexOfLoot = -2;
+				indexOfHorseLoot = -2;
+			}
+			break;
+		case MIDSCORE:
+			if(!ISMIDSCORED){
+				ISMIDSCORED = true;
+				indexOfLoot = getLootIndexMidscore(maxNumberOfLootsMinscore, 
+						maxNumberOfLootsMidscore);		
+				indexOfHorseLoot = -2;
+			}
+			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
+			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
+			else{
+				indexOfLoot = -2;
+				indexOfHorseLoot = -2;
+			}
+			break;
+		case MAXSCORE:
+			if(!ISMAXSCORED){
+				ISMAXSCORED = true;
+				indexOfHorseLoot = getHorseIndexMaxscore();
+				indexOfLoot = -2;
+				//neue Pferderasse gewinnen, sofern noch nicht vorhanden
+				//ggf. über Loots
+			}
+			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
+			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
+			else{
+				indexOfLoot = -2;
+				indexOfHorseLoot = -2;
+			}
+			break;
+		default:
+			//keine Ausgabe oder hinzufuegen eines Loots/Pferdes, da Score keinen 
+			//der Scoregrenzen erreicht hat
+			indexOfLoot = -2;
+			indexOfHorseLoot = -2;
+			break;
+		}
+		
+		/**
+		 * Wurde entweder der Minscore oder Midscore erreicht und ein entsprechendes
+		 * Loot gewaehlt wurde, wird dieses in die Galeri eingefuegt.
+		 * Sonst wurden alle Loots, die in diesem Spiel gewonnen werden konnten,
+		 * bereits gewonnen und ein entsprechender Dialog erscheint
+		 */
+		if (indexOfLoot > -1){
+			//this.chest.addLoot(this.lootObj.get(indexOfLoot));
+			System.out.println("inside switch");
+			//loot-dialog anzeigen....
+		}
+		else if(indexOfLoot == -1){
+			final Dialog d = new Dialog("Bei dieser Scoregrenze\n kannst du leider\n"
+					+ "nichts mehr gewinnen!");
+			d.addButton("na gut...", new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					if(!ISPAUSED){
+						d.setVisible(false);
+					}
+				}
+			});
+			d.setVisible(true);
+			this.stage.addActor(d);
+		}
+		
+		/**
+		 * Wenn Maxscore erreicht wurde, dann kann eine Pferderasse gewonnen werden.
+		 * Sonst, erscheint ein Dialog-Fenster mit dem Hinweis, dass keine Pferderasse
+		 * mehr gewonnen werden kann
+		 */
+		if(indexOfHorseLoot > -1){
+			//pferderasse holen, abspeichern und loot-dialog anzeigen
+		}
+		else if(indexOfHorseLoot == -1){
+			final Dialog d = new Dialog("Du hast bereits\nalle Pferderassen gewonnen.\n"
+					+ "Aber vielleicht kannst\n du noch weitere Gegenstände\n"
+					+ "in diesem Minispiel gewinnen!");
+			d.addButton("ist ok...", new ChangeListener(){
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					if(!ISPAUSED){
+						d.setVisible(false);
+					}
+				}
+			});
+			d.setVisible(true);
+			this.stage.addActor(d);
+		}	
+	}
+	
+	/**
+	 * wurde der Minscore erreicht, kann hier nur ((n / 2) - 1)-mal ein neues
+	 * Loot gewonnen werden. n ist die Listengroesse der moeglichen Loots die in 
+	 * diesem Spiel gewonnen werden koennen
+	 * @return Index des Loots, welches gewonnen wurde. -1, sonst, wenn bereits
+	 * 			maxNumberOfLootsMinscore erreicht wurde.
+	 */
+	private int getLootIndexMinscore(int maxNumberOfLootsMinscore){
+		int index = -1;
+		for(int i = 0; i < maxNumberOfLootsMinscore; i++){
+			//if(!"liste der gewonnenen loots".contains(this.lootObj.get(i))) 
+			//then index = i; break;
+			//liste der loots erhalten und schauen ob item enthalten
+		}
+		return index;
+	}
+	
+	/**
+	 * wurde der Midscore erreicht, kann hier nur (n / 2)-mal ein neues
+	 * Loot gewonnen werden. n ist die Listengroesse der moeglichen Loots die in 
+	 * diesem Spiel gewonnen werden koennen.
+	 * @return Index des Loots, welches gewonnen wurde. -1, sonst, wenn bereits 
+	 * 			maxNumberOfLootsMaxScore erreicht wurde.
+	 */
+	private int getLootIndexMidscore(int maxNumberOfLootsMinscore, 
+			int maxNumberOfLootsMidscore){
+		int index = -1;
+		for(int i = maxNumberOfLootsMinscore; i < maxNumberOfLootsMidscore; i++){
+			//if(!"liste der gewonnenen loots".contains(this.lootObj.get(i))) 
+			//then index = i; break;
+			//liste der loots erhalten und schauen ob item enthalten
+		}
+		return index;
+	}
+	
+	/**
+	 * Wurde der Maxscore erreicht, wird ermittelt, ob eine Pferderasse gewonnen 
+	 * werden kann. 
+	 * @return Index des Pferde, welches gewonnen wurde. -1, sonst, wenn bereits
+	 * alle Pferderassen in der Loot-Galerie vorhanden sind
+	 */
+	private int getHorseIndexMaxscore(){
+		int index = -1;
+		//ueber Lootliste iterieren und pruefen, ob die naechste Pferderasse
+		//bereits vorhanden.
+		return index;
+	}
+	
 	/**
 	 * Generiert die ID des Hutes unter der das Pferd versteckt ist
 	 */
-	protected void generateHatNum(){
-		this.rightNum = rnd.nextInt(HAT_NUMBER);
+	private void generateHatNum(){
+		this.rightNum = this.rnd.nextInt(HAT_NUMBER);
 		this.hats[this.rightNum].setChoosed(true);
+	}
+	
+	/**
+	 * generiert einen Faktor um den jiggleCounter in Abhaengigkeit des delta's
+	 * zu berechnen. Der Faktor liegt zwischen JIGGLETIMEMIN und JIGGLETIMEMAX. 
+	 * Der Faktor kann auch als Zeitspanne in Sekunden gesehen werden. Nach Ablauf
+	 * dieser Zeit bewegt sich der Hut einmal.
+	 * @param delta
+	 */
+	private void generateJiggleCounter(float delta){
+		if(!JIGGLECOUNTERFLAG && Math.round(1/delta) > 0){
+			int factor = this.rnd.nextInt(JIGGLETIMEMAX - JIGGLETIMEMIN)
+					+ JIGGLETIMEMIN;
+			this.jiggleCounter = factor * Math.round(1/delta);
+			this.jiggleVal = this.jiggleCounter;
+			JIGGLECOUNTERFLAG = true;
+		}
+	}
+	
+	/**
+	 * Abhaengig von der Pferderasse gibt es einen Hinweis an den/die Spieler/in.
+	 * Dieser sieht so aus, dass der Hut, unter dem das Pferd versteckt ist, einmal
+	 * kurz wackelt.
+	 * @param delta
+	 */
+	private void doHint(float delta){
+		if(this.jiggleCounter <= 0){
+			JIGGLECOUNTERFLAG = false;
+			generateJiggleCounter(delta);
+		}
+		this.jiggleCounter--;
+		rotateHats();
+	}
+	
+	/**
+	 * laesst den jeweiligen Hut unter dem das Pferd ist wackeln.
+	 */
+	private void rotateHats(){
+		if(this.jiggleCounter == this.jiggleVal){
+			this.hats[this.rightNum].setRotation(10f);
+		}
+		else if(this.jiggleCounter == Math.round(this.jiggleVal * 0.96f)){
+			this.hats[this.rightNum].setRotation(0f);
+			AssetManager.playSound("thimblerig", "Wiehern.ogg");
+		}
+		else if(this.jiggleCounter == Math.round(this.jiggleVal * 0.94f)){
+			this.hats[this.rightNum].setRotation(10f);
+		}
+		else if(this.jiggleCounter == Math.round(this.jiggleVal * 0.92f)){
+			this.hats[this.rightNum].setRotation(0f);
+		}
 	}
 }

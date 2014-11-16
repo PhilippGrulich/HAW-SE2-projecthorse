@@ -1,54 +1,110 @@
 
 thimblerig.png
-size: 1350,2130
+size: 1495,2150
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+2011-02-15_Cartoon_carrot
+  rotate: false
+  xy: 1228, 251
+  size: 266, 280
+  orig: 266, 280
+  offset: 0, 0
+  index: -1
+Balionai
+  rotate: false
+  xy: 1346, 1550
+  size: 120, 300
+  orig: 120, 300
+  offset: 0, 0
+  index: -1
 Garden_Witch
   rotate: false
-  xy: 748, 1830
+  xy: 624, 522
   size: 300, 300
   orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sugar_cube
+  rotate: false
+  xy: 1228, 533
+  size: 258, 289
+  orig: 258, 289
+  offset: 0, 0
+  index: -1
+WOOD_HORSE
+  rotate: false
+  xy: 624, 4
+  size: 270, 214
+  orig: 270, 214
   offset: 0, 0
   index: -1
 hintergrund
   rotate: false
-  xy: 2, 324
+  xy: 2, 870
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
+horseshoe
+  rotate: false
+  xy: 1228, 7
+  size: 199, 242
+  orig: 199, 242
+  offset: 0, 0
+  index: -1
+liftarn_Green_hat
+  rotate: false
+  xy: 926, 234
+  size: 300, 286
+  orig: 300, 286
+  offset: 0, 0
+  index: -1
+mcol_haystack
+  rotate: false
+  xy: 926, 2
+  size: 300, 230
+  orig: 300, 230
+  offset: 0, 0
+  index: -1
 nicubunu_Callout_cloud_center
   rotate: false
-  xy: 1050, 1830
+  xy: 624, 220
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
+noonespillow_Lollipop
+  rotate: false
+  xy: 1346, 1852
+  size: 149, 298
+  orig: 149, 298
+  offset: 0, 0
+  index: -1
 obj_trees1
   rotate: false
-  xy: 724, 804
+  xy: 2, 68
   size: 620, 800
   orig: 620, 800
   offset: 0, 0
   index: -1
 obj_trees2
   rotate: false
-  xy: 724, 2
+  xy: 724, 1350
   size: 620, 800
   orig: 620, 800
   offset: 0, 0
   index: -1
 purple-witch-hat
   rotate: false
-  xy: 2, 22
+  xy: 926, 522
   size: 300, 300
   orig: 300, 300
   offset: 0, 0
   index: -1
 table
   rotate: false
-  xy: 2, 1606
+  xy: 724, 824
   size: 744, 524
   orig: 744, 524
   offset: 0, 0
