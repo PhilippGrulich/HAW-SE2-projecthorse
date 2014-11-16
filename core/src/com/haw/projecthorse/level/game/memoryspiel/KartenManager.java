@@ -59,7 +59,7 @@ public class KartenManager {
 	}
 	
 	
-	public boolean checkChanged(){
+	public void checkChanged(){
 		for (Karte karte1 : karten) {
 			if (karte1.getState() == State.TEMPORARILY_OPENED) {
 				for (Karte karte2 : karten) {
@@ -68,18 +68,16 @@ public class KartenManager {
 						if (karte1.getPicture().equals(karte2.getPicture())) {
 							karte1.setState(State.OPEN);
 							karte2.setState(State.OPEN);
-							return true;
 						}
 						else { 
 							karte1.setState(State.CLOSED);
 							karte2.setState(State.CLOSED);
-							return false;
+							karte1.setDrawable(Karte.karte);
+							karte2.setDrawable(Karte.karte);
 						}
 					}
 				}
 			}
-			return false;
 		}
-		return false;
 	}
 }

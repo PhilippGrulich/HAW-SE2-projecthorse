@@ -68,15 +68,12 @@ public class MemorySpiel extends Level {
 			if(k.getState() == State.TEMPORARILY_OPENED){
 				k.setDrawable(k.getPicture());
 			}
-			if(k.getState() == State.CLOSED){
-				k.setDrawable(Karte.karte);
-			}
 		}
+		manager.checkChanged();
 	}
 
 	@Override
-	protected void doRender(float delta) {
-		manager.checkChanged();
+	protected void doRender(float delta) {	
 		updateKarten();
 		stage.draw();
 
