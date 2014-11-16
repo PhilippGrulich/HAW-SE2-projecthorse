@@ -11,6 +11,7 @@ public abstract class Loot {
 	public Loot() {}
 	
 	public Loot(String name, String description) {
+		this.name = name;
 		this.description = description;
 	}
 	
@@ -19,7 +20,7 @@ public abstract class Loot {
 	}
 	
 	/**
-	 * Gibt einen treffenden, kurzen Namen für den Loot an.
+	 * Gibt einen treffenden, kurzen Namen fï¿½r den Loot an.
 	 * @return Der Name.
 	 */
 	public String getName() {
@@ -27,7 +28,7 @@ public abstract class Loot {
 	}
 	
 	/**
-	 * Ein kleines Bild, wie eine Medaille, ein Stern o.Ä.
+	 * Ein kleines Bild, wie eine Medaille, ein Stern o.ï¿½.
 	 * @return Das Bild des Loots.
 	 */
 	public abstract Drawable getImage();
@@ -50,7 +51,7 @@ public abstract class Loot {
 
 	/*
 	 * Vergleicht das aktuelle Objekt mit other.
-	 * Die trivialen Prüfungen müssen nicht gemacht werden.
+	 * Die trivialen Prï¿½fungen mï¿½ssen nicht gemacht werden.
 	 */
 	protected abstract boolean doEquals(Object other);
 	
