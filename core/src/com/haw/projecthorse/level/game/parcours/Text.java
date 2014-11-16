@@ -27,18 +27,30 @@ public class Text extends Actor{
 		return message;
 	}
 	
-	public void setX1(float x){
+	@Override
+	public void setX(float x){
 		this.x = x;
 	}
 	
-	public void setY1(float y){
+	@Override
+	public void setY(float y){
 		this.y = y;
+	}
+	
+	@Override
+	public float getX(){
+		return x;
+	}
+	
+	@Override
+	public float getY(){
+		return y;
 	}
 	
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
 		/*batch.end dann eigenen batch.begin, fond.draw batch.end dann batch.begin*/
-		
+		//System.out.println("message: " + message);
 		font.draw(batch, message, x, y);
 	}
 	
