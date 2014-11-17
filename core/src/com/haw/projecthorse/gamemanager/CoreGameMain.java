@@ -18,7 +18,7 @@ public class CoreGameMain extends Game {
 		gameManager.setNavigationManager(navigationManager);	
 		//beim Start der APP die Lizenzeintraege pruefen
 	
-			
+		navigationManager.navigateToMainMenu();	
 	}
 	
 }

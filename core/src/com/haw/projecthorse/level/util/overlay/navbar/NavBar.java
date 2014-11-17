@@ -1,6 +1,8 @@
 package com.haw.projecthorse.level.util.overlay.navbar;
 
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
@@ -18,17 +20,19 @@ public class NavBar extends OverlayWidgetGroup {
 
 	private HorizontalGroup horizontalGroup;
 	private final int NAVBAR_HIGH = (int) (this.height * 0.1);
-	private final int NAVBAR_WITH = (int) (this.width - this.width * 0.1);
+	private final int NAVBAR_WITH = (int) (this.width );
 
 	public NavBar() {
 
 		horizontalGroup = new HorizontalGroup();
+		
 		horizontalGroup.reverse();
+		horizontalGroup.space((float) (this.width*0.005));
 		horizontalGroup.setHeight(NAVBAR_HIGH);
 		horizontalGroup.setWidth(NAVBAR_WITH);
 		setToTop();
 		this.addActor(horizontalGroup);
-
+		this.pack();
 	}
 
 	/**
@@ -60,7 +64,9 @@ public class NavBar extends OverlayWidgetGroup {
 	 * @param btn
 	 */
 	public void addButton(NavbarButton btn) {
+		float w = btn.getWidth();
 		this.horizontalGroup.addActor(btn);
+		this.horizontalGroup.layout();
 
 	}
 }

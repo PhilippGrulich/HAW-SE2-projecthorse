@@ -8,4 +8,21 @@ public class OverlayWidgetGroup extends WidgetGroup {
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenWidth();
+	
+	
+	public float getPrefWidth () {
+		return this.getWidth();
+	}
+
+	public float getPrefHeight () {
+		return this.getHeight();
+	}
+
+	public float getMaxWidth () {
+		return this.getWidth();
+	}
+
+	public float getMaxHeight () {
+		return this.getHeight();
+	}
 }

@@ -27,7 +27,7 @@ public class NavigationManagerImpl implements NavigationManager {
 		this.game = newGame;
 		levelManager = new LevelManager();
 
-		navigateToMainMenu();
+	
 		// game.setScreen(new DefaultLevel());
 
 	}
@@ -41,11 +41,12 @@ public class NavigationManagerImpl implements NavigationManager {
 				game.getScreen().dispose();
 				game.setScreen(null);
 			}
+			if (levelIDHistory.isEmpty() || !levelIDHistory.peek().equals(levelID))
+				levelIDHistory.push(levelID);
 			Screen screen = levelManager.getScreenByLevelID(levelID);
 			game.setScreen(screen);
 			
-			if (levelIDHistory.isEmpty() || !levelIDHistory.peek().equals(levelID))
-				levelIDHistory.push(levelID);
+			
 		} catch (LevelLoadException e) {
 			e.printStackTrace();
 			navigateToLevel("worldmap");
@@ -86,9 +87,8 @@ public class NavigationManagerImpl implements NavigationManager {
 	}
 
 	@Override
-	public String getCurrentLevelID() {
-		Level level = (Level) game.getScreen();
-		return level.getLevelID();
+	public String getCurrentLevelID() {		
+		return levelIDHistory.peek();
 	}
 
 	@Override
