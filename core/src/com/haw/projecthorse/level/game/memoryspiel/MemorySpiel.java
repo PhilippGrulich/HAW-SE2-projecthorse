@@ -48,8 +48,6 @@ public class MemorySpiel extends Level {
 	protected void initKarten() {
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
-			if(k.getPicture()!=null){
-			k.setDrawable(k.getPicture());}
 			k.toFront();
 			stage.addActor(k);
 		}
@@ -74,9 +72,9 @@ public class MemorySpiel extends Level {
 
 	@Override
 	protected void doRender(float delta) {
+		
 		updateKarten();
 		stage.draw();
-
 	}
 
 	@Override

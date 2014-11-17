@@ -46,12 +46,12 @@ public class KartenManager {
 		karten.add(karte4);
 		karten.add(karte5);
 		karten.add(karte6);
-		karten.add(karte7);
-		karten.add(karte8);
-		karten.add(karte9);
-		karten.add(karte10);
-		karten.add(karte11);
-		karten.add(karte12);
+//		karten.add(karte7);
+//		karten.add(karte8);
+//		karten.add(karte9);
+//		karten.add(karte10);
+//		karten.add(karte11);
+//		karten.add(karte12);
 		
 		Collections.shuffle(karten);
 		
@@ -73,24 +73,24 @@ public class KartenManager {
 	
 	
 	public void checkChanged(){
-//		for (Karte karte1 : karten) {
-//			if (karte1.getState() == State.TEMPORARILY_OPENED) {
-//				for (Karte karte2 : karten) {
-//					if (!(karte1.equals(karte2))
-//							&& karte2.getState() == State.TEMPORARILY_OPENED) {
-//						if (karte1.getPicture().equals(karte2.getPicture())) {
-//							karte1.setState(State.OPEN);
-//							karte2.setState(State.OPEN);
-//						}
-//						else { 
-//							karte1.setState(State.CLOSED);
-//							karte2.setState(State.CLOSED);
-//							karte1.setDrawable(Karte.karte);
-//							karte2.setDrawable(Karte.karte);
-//						}
-//					}
-//				}
-//			}
-//		}
+		for (Karte karte1 : karten) {
+			if (karte1.getState() == State.TEMPORARILY_OPENED) {
+				for (Karte karte2 : karten) {
+					if (!(karte1.equals(karte2))
+							&& karte2.getState() == State.TEMPORARILY_OPENED) {
+						if (karte1.getPicture().equals(karte2.getPicture())) {
+							karte1.setState(State.OPEN);
+							karte2.setState(State.OPEN);
+						}
+						else { 
+							karte1.setState(State.CLOSED);
+							karte2.setState(State.CLOSED);
+							karte1.setDrawable(Karte.karte);
+							karte2.setDrawable(Karte.karte);
+						}
+					}
+				}
+			}
+		}
 	}
 }
