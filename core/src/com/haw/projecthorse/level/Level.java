@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -9,8 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.navbar.GameNavBar;
+import com.haw.projecthorse.level.util.overlay.navbar.MenuNavBar;
 import com.haw.projecthorse.lootmanager.Chest;
 
 /**
@@ -58,12 +61,29 @@ public abstract class Level implements Screen {
 				createCamera());
 		overlay = new Overlay(overlayViewport, spriteBatch, this);
 
-		GameNavBar nav = new GameNavBar();
-		this.overlay.setNavigationBar(nav);
+		String LevelID  = GameManagerFactory.getInstance().getCurrentLevelID();
+		try {
+			GameManagerFactory.getInstance().getCityObject(LevelID);
+			MenuNavBar nav = new MenuNavBar();
+			this.overlay.setNavigationBar(nav);
+		} catch (LevelNotFoundException e) {
+			try {
+				GameManagerFactory.getInstance().getMenuObject(LevelID);
+				MenuNavBar nav = new MenuNavBar();
+				this.overlay.setNavigationBar(nav);
+			} catch (LevelNotFoundException e1) {
+				GameNavBar nav = new GameNavBar();
+				this.overlay.setNavigationBar(nav);
+			}
+			
+		}
+	
 
 		chest = new Chest(overlay);
 
 	}
+	
+	
 
 	/**
 	 * Erstellt eine OrthographicCamera diese wird f�r die jeweiliegen Viewports

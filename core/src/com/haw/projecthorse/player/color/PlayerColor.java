@@ -7,9 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.lootmanager.Loot;
+import com.haw.projecthorse.lootmanager.LootImage;
 
 /**
- * Klasse für die Färbung des Spielers. Es sind bereits einige Farben als in
+ * Klasse fÃ¼r die FÃ¤rbung des Spielers. Es sind bereits einige Farben als in
  * statischen Variablen vorgegeben.
  * 
  * @author Oliver
@@ -30,8 +31,8 @@ public class PlayerColor extends Loot {
 			new PlayerColor(true, 50, 214, 255, "Dunkelblau"),
 			new PlayerColor(false, 255, 254, 92, "Gelb"),
 			new PlayerColor(false, 255, 72, 72, "Rot"),
-			new PlayerColor(true, 104, 255, 84, "Dunkelgrün"),
-			new PlayerColor(false, 132, 255, 108, "Hellgrün") };
+			new PlayerColor(true, 104, 255, 84, "DunkelgrÃ¼n"),
+			new PlayerColor(false, 132, 255, 108, "HellgrÃ¼n") };
 
 	public static final PlayerColor BLACK = DEFINED_COLORS[0];
 	public static final PlayerColor WHITE = DEFINED_COLORS[1];
@@ -58,12 +59,12 @@ public class PlayerColor extends Loot {
 	}
 
 	/**
-	 * Konstruktor für eine Spielerfarbe
+	 * Konstruktor fÃ¼r eine Spielerfarbe
 	 * 
 	 * @param red
 	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param green
-	 *            Grünanteil der Farbe (Wert zwischen 0 und 255)
+	 *            GrÃ¼nanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param blue
 	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param name
@@ -74,7 +75,7 @@ public class PlayerColor extends Loot {
 	}
 
 	/**
-	 * Konstruktor für eine Spielerfarbe
+	 * Konstruktor fÃ¼r eine Spielerfarbe
 	 * 
 	 * @param blackBase
 	 *            Wahr, wenn das schwarze Spritesheet als Grundlage benutzt
@@ -82,7 +83,7 @@ public class PlayerColor extends Loot {
 	 * @param red
 	 *            Rotanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param green
-	 *            Grünanteil der Farbe (Wert zwischen 0 und 255)
+	 *            GrÃ¼nanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param blue
 	 *            Blauanteil der Farbe (Wert zwischen 0 und 255)
 	 * @param name
@@ -94,7 +95,7 @@ public class PlayerColor extends Loot {
 	}
 	
 	/**
-	 * Konstruktor für eine Spielerfarbe
+	 * Konstruktor fÃ¼r eine Spielerfarbe
 	 * 
 	 * @param blackBase
 	 *            Wahr, wenn das schwarze Spritesheet als Grundlage benutzt
@@ -102,7 +103,7 @@ public class PlayerColor extends Loot {
 	 * @param red
 	 *            Rotanteil der Farbe (Wert zwischen 0 und 1)
 	 * @param green
-	 *            Grünanteil der Farbe (Wert zwischen 0 und 1)
+	 *            GrÃ¼nanteil der Farbe (Wert zwischen 0 und 1)
 	 * @param blue
 	 *            Blauanteil der Farbe (Wert zwischen 0 und 1)
 	 * @param name
@@ -110,7 +111,7 @@ public class PlayerColor extends Loot {
 	 */
 	public PlayerColor(boolean blackBase, float red, float green, float blue,
 			String name) {
-		super(name, "Die Farbe '" + name + "' für dein Pferd");
+		super(name, "Die Farbe '" + name + "' fï¿½r dein Pferd");
 		
 		black = blackBase;
 		color = new Color(red, green, blue, 1);
@@ -181,5 +182,10 @@ public class PlayerColor extends Loot {
 					rotation);
 			batch.setColor(batchColor);
 		}
+	}
+
+	@Override
+	protected LootImage getLootImage() {
+		return null;
 	}
 }

@@ -4,9 +4,16 @@ size: 2083,1128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+backIcon
+  rotate: false
+  xy: 1157, 14
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 off
   rotate: false
-  xy: 1157, 11
+  xy: 1687, 309
   size: 50, 51
   orig: 50, 51
   offset: 0, 0
@@ -32,11 +39,11 @@ panel_brown
   orig: 1153, 1126
   offset: 0, 0
   index: -1
-pause_icon
+pauseIcon
   rotate: false
-  xy: 1687, 296
-  size: 64, 64
-  orig: 64, 64
+  xy: 1358, 187
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: -1
 popup_button
@@ -44,5 +51,12 @@ popup_button
   xy: 1157, 237
   size: 528, 123
   orig: 528, 123
+  offset: 0, 0
+  index: -1
+settingsIcon
+  rotate: false
+  xy: 1687, 259
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: -1

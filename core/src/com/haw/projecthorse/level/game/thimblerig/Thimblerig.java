@@ -30,13 +30,11 @@ import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
  * Richtiges Huetchen finden, unter dem das Pferd versteckt ist
  * @author Fabian Reiber
- * TODO: alle loots sichern -> auskommentieren
- * TODO: über liste aller loots iterieren
- * TODO: pferderasse in if-abfragen und dohint aufrufen
  */
 
 public class Thimblerig extends Level{
@@ -98,7 +96,8 @@ public class Thimblerig extends Level{
 	/**
 	 * Loot-Objekte
 	 */
-	private List<Loot> lootObj;
+	private List<Loot> possibleWinLoots;
+	private List<ThimblerigLoot> justWonLoots;
 	private static final int MINSCORE = 10;
 	private static boolean ISMINSCORED;
 	private static final int MIDSCORE = 20;
@@ -117,6 +116,7 @@ public class Thimblerig extends Level{
 	/**
 	 * Konstruktor
 	 */
+	@SuppressWarnings("unchecked")
 	public Thimblerig(){
 		super();
 		ISPAUSED = false;
@@ -125,8 +125,11 @@ public class Thimblerig extends Level{
 		this.choiceCounter = 0;
 		this.roundFinished = false;
 		this.scoreStr = "Score: ";
-		this.wins = 0;
+		this.wins = 9;
 		this.hatIndexList = new ArrayList<Integer>();
+		
+		this.justWonLoots = (List<ThimblerigLoot>) getThimblerigLoots();
+		System.out.println("justwonlootssize: " + this.justWonLoots.size());
 		
 		this.textFont = AssetManager.getTextFont(FontSize.DREISSIG);
 
@@ -164,7 +167,7 @@ public class Thimblerig extends Level{
 		
 		//eigentliche Spiellogik
 		if(!this.roundFinished && !ISPAUSED){
-			//if(pferderasse == ein stoerrisches pferd) then dohint...
+			//TODO: if(pferderasse == ein stoerrisches pferd) then dohint...
 			doHint(delta);
 			
 			for(int i = 0; i < HAT_NUMBER; i++){
@@ -248,7 +251,10 @@ public class Thimblerig extends Level{
 
 	@Override
 	protected void doDispose() {
-		//this.chest.saveAllLoot();
+		//TODO: abfrage weg, falls nullpointer exception in chest abgefangen wird
+		if(ISMINSCORED || ISMIDSCORED || ISMAXSCORED){
+			this.chest.saveAllLoot();
+		}
 		this.stage.dispose();	
 		this.textFont.dispose();
 		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
@@ -267,8 +273,6 @@ public class Thimblerig extends Level{
 		AssetManager.playMusic("thimblerig", "Little_Bits.mp3");
 		AssetManager.changeMusicVolume("thimblerig", "Little_Bits.mp3", 0.2f);
 		AssetManager.setMusicLooping("thimblerig", "Little_Bits.mp3", true);
-		
-		
 	}
 
 	@Override
@@ -518,28 +522,32 @@ public class Thimblerig extends Level{
 	}
 	
 	private void initLoots(){
-		this.lootObj = new ArrayList<Loot>();
+		this.possibleWinLoots = new ArrayList<Loot>();
 		
-		this.lootObj.add(new ThimblerigLoot("lolli", "kleiner Dauerlutscher"
+		this.possibleWinLoots.add(new ThimblerigLoot("lolli", "kleiner Dauerlutscher"
 				, "noonespillow_Lollipop"));
-		this.lootObj.add(new ThimblerigLoot("suger", "etwas Würfelzucker"
+		this.possibleWinLoots.add(new ThimblerigLoot("suger", "etwas Würfelzucker"
 				, "Sugar_cube"));
-		this.lootObj.add(new ThimblerigLoot("ballon", "leichter Ballon"
+		this.possibleWinLoots.add(new ThimblerigLoot("ballon", "leichter Ballon"
 				, "Balionai"));
-		this.lootObj.add(new ThimblerigLoot("möhre", "gesunde Möhre"
+		this.possibleWinLoots.add(new ThimblerigLoot("möhre", "gesunde Möhre"
 				, "2011-02-15_Cartoon_carrot"));
-		this.lootObj.add(new ThimblerigLoot("miniPferd", "süßes Mini-Pferd"
+		this.possibleWinLoots.add(new ThimblerigLoot("miniPferd", "süßes Mini-Pferd"
 				, "WOOD_HORSE"));
-		this.lootObj.add(new ThimblerigLoot("hufeisen", "schweres Hufeisen"
+		this.possibleWinLoots.add(new ThimblerigLoot("hufeisen", "schweres Hufeisen"
 				, "horseshoe"));
-		this.lootObj.add(new ThimblerigLoot("hut", "glückbringender Hut"
+		this.possibleWinLoots.add(new ThimblerigLoot("hut", "glückbringender Hut"
 				, "liftarn_Green_hat"));
-		this.lootObj.add(new ThimblerigLoot("heu", "kraftbringendes Heu"
+		this.possibleWinLoots.add(new ThimblerigLoot("heu", "kraftbringendes Heu"
 				, "mcol_haystack"));
 		
 		ISMINSCORED = false;
 		ISMIDSCORED = false;
 		ISMAXSCORED = false;
+	}
+	
+	private List<? extends Loot> getThimblerigLoots(){
+		return SaveGameManager.getLoadedGame().getSpecifiedLoot(ThimblerigLoot.class);
 	}
 	
 	/**
@@ -556,8 +564,8 @@ public class Thimblerig extends Level{
 		 */
 		int indexOfLoot = -1;
 		int indexOfHorseLoot = -1;
-		int maxNumberOfLootsMinscore = (this.lootObj.size() / 2) - 1;
-		int maxNumberOfLootsMidscore = (this.lootObj.size() / 2);
+		int maxNumberOfLootsMinscore = (this.possibleWinLoots.size() / 2) - 1;
+		int maxNumberOfLootsMidscore = (this.possibleWinLoots.size() / 2);
 		switch(this.wins){
 		case MINSCORE:
 			if(!ISMINSCORED){
@@ -591,8 +599,6 @@ public class Thimblerig extends Level{
 				ISMAXSCORED = true;
 				indexOfHorseLoot = getHorseIndexMaxscore();
 				indexOfLoot = -2;
-				//neue Pferderasse gewinnen, sofern noch nicht vorhanden
-				//ggf. über Loots
 			}
 			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
 			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
@@ -616,9 +622,8 @@ public class Thimblerig extends Level{
 		 * bereits gewonnen und ein entsprechender Dialog erscheint
 		 */
 		if (indexOfLoot > -1){
-			//this.chest.addLoot(this.lootObj.get(indexOfLoot));
-			System.out.println("inside switch");
-			//loot-dialog anzeigen....
+			this.chest.addLoot(this.possibleWinLoots.get(indexOfLoot));
+			//TODO: loot-dialog anzeigen....
 		}
 		else if(indexOfLoot == -1){
 			final Dialog d = new Dialog("Bei dieser Scoregrenze\n kannst du leider\n"
@@ -641,7 +646,7 @@ public class Thimblerig extends Level{
 		 * mehr gewonnen werden kann
 		 */
 		if(indexOfHorseLoot > -1){
-			//pferderasse holen, abspeichern und loot-dialog anzeigen
+			//TODO: pferderasse holen, abspeichern und loot-dialog anzeigen
 		}
 		else if(indexOfHorseLoot == -1){
 			final Dialog d = new Dialog("Du hast bereits\nalle Pferderassen gewonnen.\n"
@@ -670,9 +675,12 @@ public class Thimblerig extends Level{
 	private int getLootIndexMinscore(int maxNumberOfLootsMinscore){
 		int index = -1;
 		for(int i = 0; i < maxNumberOfLootsMinscore; i++){
-			//if(!"liste der gewonnenen loots".contains(this.lootObj.get(i))) 
-			//then index = i; break;
-			//liste der loots erhalten und schauen ob item enthalten
+			if(this.justWonLoots != null){
+				if(!this.justWonLoots.contains(this.possibleWinLoots.get(i))){
+					index = i;
+					break;
+				}
+			}
 		}
 		return index;
 	}
@@ -688,9 +696,12 @@ public class Thimblerig extends Level{
 			int maxNumberOfLootsMidscore){
 		int index = -1;
 		for(int i = maxNumberOfLootsMinscore; i < maxNumberOfLootsMidscore; i++){
-			//if(!"liste der gewonnenen loots".contains(this.lootObj.get(i))) 
-			//then index = i; break;
-			//liste der loots erhalten und schauen ob item enthalten
+			if(this.justWonLoots != null){
+				if(!this.justWonLoots.contains(this.possibleWinLoots.get(i))){
+					index = i;
+					break;
+				}
+			}
 		}
 		return index;
 	}
@@ -703,8 +714,9 @@ public class Thimblerig extends Level{
 	 */
 	private int getHorseIndexMaxscore(){
 		int index = -1;
-		//ueber Lootliste iterieren und pruefen, ob die naechste Pferderasse
-		//bereits vorhanden.
+		//TODO: ueber Lootliste iterieren und pruefen, ob die naechste Pferderasse
+		//bereits vorhanden. -> sind pferde in einer extra liste? oder muss ueber komplette 
+		//liste iteriert werden?
 		return index;
 	}
 	

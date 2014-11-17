@@ -9,8 +9,7 @@ public class GameNavBar extends NavBar {
 		NavbarPauseButton pauseButton = new NavbarPauseButton();
 		addButton(pauseButton);
 
-		pauseButton = new NavbarPauseButton();
-		addButton(pauseButton);
+		
 	}
 
 }

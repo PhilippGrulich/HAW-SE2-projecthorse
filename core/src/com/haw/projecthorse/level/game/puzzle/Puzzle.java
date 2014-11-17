@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 
@@ -21,7 +22,7 @@ import com.haw.projecthorse.level.Level;
 //einkommentieren zeile 113 in level
 
 public class Puzzle extends Level {
-	
+
 	private static Stage stage;
 	private static Label label;
 
@@ -31,7 +32,8 @@ public class Puzzle extends Level {
 	private static int puzzleWidth;
 	private static int puzzleHeight;
 
-	private int myWidth, myHeight;
+	private static int myWidth;
+	private static int myHeight;
 
 	private static PuzzlePart[][] partArr;
 	private static Image[][] imageArr;
@@ -42,7 +44,7 @@ public class Puzzle extends Level {
 	public Puzzle() {
 
 		super();
-		System.out.println(" "+width+" "+height);
+
 		stage = new Stage(getViewport());
 		InputManager.addInputProcessor(stage);
 
@@ -209,9 +211,7 @@ public class Puzzle extends Level {
 
 	public void addScore() {
 		BitmapFont font;
-		font = new BitmapFont(
-				Gdx.files.internal("pictures/fontButton/font.fnt"));
-
+		font = AssetManager.getTextFont(FontSize.DREISSIG);
 		System.out.println("ccc: " + Counter.getCounter());
 		label = new Label("Anzahl: " + String.valueOf(Counter.getCounter()),
 				new Label.LabelStyle(font, Color.MAGENTA));
@@ -268,11 +268,11 @@ public class Puzzle extends Level {
 		return puzzleHeight;
 	}
 
-	public int getMyWidth() {
+	public static int getMyWidth() {
 		return myWidth;
 	}
 
-	public int getMyHeight() {
+	public static int getMyHeight() {
 		return myHeight;
 	}
 
@@ -291,4 +291,5 @@ public class Puzzle extends Level {
 	public static void setLabelText(String newText) {
 		label.setText(newText);
 	}
+	
 }

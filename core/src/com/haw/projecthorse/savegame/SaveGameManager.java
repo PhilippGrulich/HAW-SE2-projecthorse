@@ -2,6 +2,7 @@ package com.haw.projecthorse.savegame;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ import com.haw.projecthorse.savegame.json.SaveGameImpl;
  */
 
 public abstract class SaveGameManager {
-	private static final String gameDirectory = "assets/json/saved/";
+	private static final String gameDirectory = "saved/";
 	private static final FilenameFilter savedGamesFilter = new FilenameFilter() {
 		
 		@Override
@@ -25,7 +26,7 @@ public abstract class SaveGameManager {
 			return name.endsWith(".game");
 		}
 	};
-	private static Map<Integer, SaveGame> savedGames = null;
+	private static Map<Integer, SaveGame> savedGames = new HashMap<Integer, SaveGame>();
 	private static Integer loadedGameID = null;
 	
 	/**
@@ -56,9 +57,11 @@ public abstract class SaveGameManager {
 	 * Speichert den aktuell geladene Spielstand
 	 */
 	public static void saveLoadedGame() {
-		Json json = new Json();
-		FileHandle scoreFile = Gdx.files.local(gameDirectory).child(loadedGameID + ".game");
-		scoreFile.writeString(json.prettyPrint(getLoadedGame()), false);
+		if (loadedGameID != null) {
+			Json json = new Json();
+			FileHandle scoreFile = Gdx.files.local(gameDirectory).child(loadedGameID + ".game");
+			scoreFile.writeString(json.prettyPrint(getLoadedGame()), false);
+		}
 	}
 	
 	/**
@@ -66,8 +69,7 @@ public abstract class SaveGameManager {
 	 * @return true wenn es einen Spielstand mit der angegebenen gameID gibt, ansonsten false
 	 */
 	public static boolean gameExists(int gameID) {
-		if (savedGames == null) {
-			savedGames = new HashMap<Integer, SaveGame>();
+		if (savedGames.size() == 0) {
 			loadScores();
 		}
 		
@@ -82,6 +84,44 @@ public abstract class SaveGameManager {
 		for (FileHandle file : dir.list(savedGamesFilter)) {
 			score = json.fromJson(SaveGameImpl.class, file);
 			savedGames.put(score.getID(), score);
+		}
+	}
+	
+	/**
+	 * Liefert eine Liste mit (ID, Name)-Paaren, wobei ID die SaveGameID
+	 * ist und Name für den Namen des Pferdes in diesem Spiel steht.
+	 * @return Eine ArrayList mit (ID, Name)-Pairs.
+	 */
+	public static ArrayList<Pair<Integer, String>> getSaveGameList() {
+		ArrayList<Pair<Integer, String>> games = new ArrayList<Pair<Integer, String>>();
+		
+		if (savedGames.size() == 0) {
+			loadScores();
+		}
+		
+		for (Integer id : savedGames.keySet()) {
+			games.add(new Pair<Integer, String>(id, savedGames.get(id).getHorseName()));
+		}
+		
+		return games;
+	}
+	
+	public static class Pair<K, V> {
+		private K key;
+		private V value;
+		
+		public Pair(K key, V value) {
+			super();
+			this.key = key;
+			this.value = value;
+		}
+
+		public K getKey() {
+			return key;
+		}
+
+		public V getValue() {
+			return value;
 		}
 	}
 }

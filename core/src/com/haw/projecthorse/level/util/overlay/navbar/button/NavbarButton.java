@@ -7,7 +7,7 @@ import com.haw.projecthorse.level.util.overlay.navbar.NavBar;
 public abstract class NavbarButton extends OverlayWidgetGroup {
 
 	public NavbarButton() {
-
+			setWidth(60);
 	}
 
 	public NavBar getNavigationBar() {
