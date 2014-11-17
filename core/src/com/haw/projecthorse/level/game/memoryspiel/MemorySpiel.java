@@ -34,7 +34,6 @@ public class MemorySpiel extends Level {
 
 	public MemorySpiel() {
 		manager = new KartenManager();
-		manager.setUpKarten();
 		batcher = this.getSpriteBatch();
 		background = getBackground();
 		stage = new Stage(this.getViewport(), batcher);
@@ -49,32 +48,32 @@ public class MemorySpiel extends Level {
 	protected void initKarten() {
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
-			k.setDrawable(k.getPicture());
+			if(k.getPicture()!=null){
+			k.setDrawable(k.getPicture());}
 			k.toFront();
 			stage.addActor(k);
-			
 		}
 	}
-
 
 	protected int getBackground() {
 		Random rand = new Random();
 		int i = rand.nextInt(5);
 		return i;
 	}
-	
-	protected void updateKarten(){
+
+	protected void updateKarten() {
 		List<Karte> karten = manager.getKarten();
-		for(Karte k : karten){
-			if(k.getState() == State.TEMPORARILY_OPENED){
+		for (Karte k : karten) {
+			if (k.getState() == State.TEMPORARILY_OPENED) {
 				k.setDrawable(k.getPicture());
 			}
 		}
 		manager.checkChanged();
+
 	}
 
 	@Override
-	protected void doRender(float delta) {	
+	protected void doRender(float delta) {
 		updateKarten();
 		stage.draw();
 

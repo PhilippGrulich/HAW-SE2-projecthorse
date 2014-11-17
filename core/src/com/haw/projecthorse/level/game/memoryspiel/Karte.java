@@ -24,25 +24,22 @@ public class Karte extends Image{
 	}
 
 	public Karte(){
-		super(karte);
-		this.state = State.CLOSED;
+		super();
+		
 	}
 	public Karte(Vector2 position) {
 		this();
+		this.state = State.CLOSED;
 		this.position = position;
+		this.setDrawable(Karte.karte);
 		this.setX(getPosition().x);
 		this.setWidth(187);
 		this.setY(getPosition().y);
 		this.setHeight(190);
-		this.addListener(new InputListener(){
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-		 		onClick();
-		 	}
-
-		});
+		this.addListener(karteListener);
 	}
 
-	public void onClick() {
+	public void changed() {
 		if (this.state == (State.CLOSED)) {
 			setState(State.TEMPORARILY_OPENED);
 		}
@@ -63,6 +60,14 @@ public class Karte extends Image{
 	public Vector2 getPosition(){
 		return position;
 	}
+	 
+	 private static InputListener karteListener= new InputListener() {
+	      public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)        {
+	         Karte k = (Karte) event.getRelatedActor();
+	         k.changed();
+	         return true; //or false
+	      }
+	   };
 	 
 	public Drawable getPicture(){
 		return picture;
