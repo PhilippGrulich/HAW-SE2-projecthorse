@@ -1,7 +1,6 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+
 import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,22 +11,14 @@ import com.haw.projecthorse.player.Direction;
 public class GameOperator {
 
 	private GameField gameField;
-	private int maxVisibleLootObjects;
-	private int maxVisibleGameObjects;
 	public static int maxVisibleBackgroundObjects;
 	private Player player;
-	float epsilon;
 	boolean shouldPlayerJump;
-	float tmpPlayerY;
 	private int score;
-	private boolean checked = false;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height) {
 		score = 0;
-		maxVisibleLootObjects = 3;
-		maxVisibleGameObjects = 2;
 		maxVisibleBackgroundObjects = 4;
-		epsilon = 0.01f; // 0.0001f zu klein
 		gameField = new GameField(stage, viewport, width, height);
 		// Reihenfolge der Methodenaufrufe bestimmt die z-Order in der Stage
 		gameField.loadBackgroundObjects();
@@ -36,7 +27,6 @@ public class GameOperator {
 		gameField.initializePlayer();
 		player = gameField.getPlayer();
 		shouldPlayerJump = false;
-		tmpPlayerY = 0;
 
 		// System.out.println in txt umleiten
 		/*
@@ -51,41 +41,34 @@ public class GameOperator {
 	public void update(float delta) {
 
 		if (!(delta == 0)) {
-			gameField.actGameField(delta);
+			// gameField.actGameField(delta);
 
 			updateGameObjects(delta);
 			updateBackgroundObjects(delta);
-			updateLootObjects(delta);
-			checkPlayerConstraints(delta);
+			checkPlayerConstraints();
 			collisionDetection();
+			gameField.actGameField(delta);
 		}
 		gameField.drawGameField();
 
 	}
 
-	private void checkPlayerConstraints(float delta) {
-		// System.out.println("player jump  " + shouldPlayerJump);
-		// Zurück auf Ursprungsposition bewegen
-		if (!isPlayerJumping()) {
-			if (player.getX() > gameField.getPlayersPointOfView()) {
-				player.setX(player.getX() - gameField.getGameSpeed());
-			}
-		} else {
+	private void checkPlayerConstraints() {
+		if (isPlayerJumping()) {
 			handleJump();
 		}
-
 	}
 
 	public void collisionDetection() {
-		int i = 0;
-		for (LootObject l : gameField.getLootObjects()) {
 
+		List<GameObject> objects = gameField.getGameObjects();
+		objects.addAll(gameField.getLootObjects());
+		for (GameObject l : objects) {
 			if (l.getRectangle().overlaps(player.getRectangle())) {
-				gameField.setActorUnvisible(l);
 				score += l.getPoints();
-				i++;
-				/* System.out.println("score: " + score);
-				 System.out.println("i: " + i); */
+				gameField.setActorUnvisible(l);
+				l.setX(-5 - l.getWidth());
+				gameField.setScore(score);
 			}
 		}
 	}
@@ -155,158 +138,40 @@ public class GameOperator {
 		return false;
 	}
 
-	/*
-	 * private void updateGameObjects(float delta){ List<GameObject> objects =
-	 * gameField.getGameObjects(); objects.addAll(gameField.getLootObjects());
-	 * 
-	 * for(GameObject o : objects){ int pos =
-	 * gameField.getRandomActorPosition(o); if(!objects.get(pos).isVisible() &&
-	 * outOfGameField(objects.get(pos)) && gameField.visibleGameObjects <
-	 * maxVisibleGameObjects){ float x =
-	 * gameField.getRandomXForObjectOnTheGround(objects.get(pos)); if(x != -1)
-	 * gameField.setActorVisbile(objects.get(pos), x); } if(o.isVisible() &&
-	 * outOfGameField(o)){ gameField.setActorUnvisible(o); }else {
-	 * o.setX(o.getX() - o.getDuration()); } }
-	 * 
-	 * }
-	 */
 	public void updateGameObjects(float delta) {
+
 		List<GameObject> objects = gameField.getGameObjects();
-		BigDecimal x, width, b_delta;
-		b_delta = new BigDecimal(delta).setScale(4, RoundingMode.HALF_UP);
+		objects.addAll(gameField.getLootObjects());
 
-		// Wenn Objekt ausserhalb d. Spielfelds -> unsichtbar setzen. Sonst
-		// bewegen.
 		for (GameObject o : objects) {
+			if (!o.isVisible() && outOfGameField(o)) {
+				o.setVisible(true);
+				o.setX(gameField.getRandomXForObjectOnTheGround(o));
+			}
 			if (o.isVisible() && outOfGameField(o)) {
-				gameField.setActorUnvisible(o);
-			} else if (o.isVisible()) {
-
-				x = new BigDecimal(o.getX() - o.getDuration()).setScale(4,
-						RoundingMode.HALF_UP);
-				o.setX(x.floatValue());
-
+				o.setVisible(false);
 			}
-		}
-
-		// Pruefen, ob maxPos angepasst werden muss
-		BigDecimal oldPos;
-		for (GameObject o : objects) {
-			oldPos = new BigDecimal(o.getX() + o.getWidth() + o.getDuration()
-					+ o.getDuration() * b_delta.floatValue()).setScale(5,
-					RoundingMode.HALF_UP);
-			if (o.isVisible()
-					&& oldPos.floatValue()
-							- gameField.getObjectsOnGroundMaxPos() < epsilon
-					&& gameField.getObjectsOnGroundMaxPos()
-							- oldPos.floatValue() < epsilon) {
-				x = new BigDecimal(o.getX()).setScale(4, RoundingMode.HALF_UP);
-				width = new BigDecimal(o.getWidth()).setScale(4,
-						RoundingMode.HALF_UP);
-				gameField.setObjectsOnGroundMaxPos(x.floatValue(),
-						width.floatValue());
+			if (o.getX() + o.getWidth() == gameField.getObjectsOnGroundMaxPos()) {
+				gameField.setObjectsOnGroundMaxPos(o.getX() - o.getDuration()
+						* delta, o.getWidth());
 			}
-		}
 
-		// Wenn weniger sichtbare Objekte auf d. Spielfeld als erlaubt -> neue
-		// Objekte setzen,
-		// sofern vorhanden.
-		if (gameField.visibleGameObjects < maxVisibleGameObjects) {
-			while (gameField.visibleGameObjects < maxVisibleGameObjects
-					&& objects.size() - gameField.visibleGameObjects > 0) {
-				int listPos = gameField.getRandomActorPosition(objects.get(0));
-				if (!objects.get(listPos).isVisible()) {
-					gameField.setActorVisbile(objects.get(listPos), gameField
-							.getRandomXForObjectOnTheGround(objects
-									.get(listPos)));
-				}
-
-			}
 		}
 	}
 
 	public void updateBackgroundObjects(float delta) {
+
 		List<BackgroundObject> objects = gameField.getBackgroundObjects();
-		BigDecimal x;
-		// Wenn Objekt ausserhalb d. Spielfelds -> unsichtbar setzen. Sonst
-		// bewegen.
-		for (BackgroundObject o : objects) {
-			if (o.isVisible() && outOfGameField(o)) {
-				gameField.setActorCloudObjectUnvisible(o);
-			} else if (o.isVisible()) {
-				x = new BigDecimal(o.getX() - o.getDuration()).setScale(4,
-						RoundingMode.HALF_UP);
-				o.setX(x.floatValue());
 
+		for (BackgroundObject b : objects) {
+			if (!b.isVisible() && outOfGameField(b)) {
+				b.setVisible(true);
+				b.setPosition(gameField.getCloudsX(b), gameField.getCloudsY(b));
+			}
+			if (b.isVisible() && outOfGameField(b)) {
+				b.setVisible(false);
 			}
 		}
-		// Wenn weniger sichtbare Objekte auf d. Spielfeld als erlaubt -> neue
-		// Objekte setzen,
-		// sofern vorhanden.
-		if (gameField.visibleCloudObjects < maxVisibleBackgroundObjects) {
-			while (gameField.visibleCloudObjects < maxVisibleBackgroundObjects
-					&& objects.size() - gameField.visibleCloudObjects > 0) {
-				int listPos = gameField.getRandomActorPosition(objects.get(0));
-				if (!objects.get(listPos).isVisible()) {
-					gameField.setActorCloudObjectVisible(objects.get(listPos),
-							gameField.getCloudsX(objects.get(listPos)),
-							gameField.getCloudsY(objects.get(listPos)));
-				}
-			}
-		}
-	}
-
-	public void updateLootObjects(float delta) {
-		List<LootObject> objects = gameField.getLootObjects();
-		BigDecimal x, width, b_delta;
-		b_delta = new BigDecimal(delta).setScale(4, RoundingMode.HALF_UP);
-		// Wenn Objekt ausserhalb d. Spielfelds -> unsichtbar setzen. Sonst
-		// bewegen.
-		for (LootObject o : objects) {
-			if (o.isVisible() && outOfGameField(o)) {
-				gameField.setActorUnvisible(o);
-			} else if (o.isVisible()) {
-				x = new BigDecimal(o.getX() - o.getDuration()).setScale(4,
-						RoundingMode.HALF_UP);
-				o.setX(x.floatValue());
-			}
-		}
-
-		// Pruefen, ob maxPos angepasst werden muss
-		BigDecimal oldPos;
-		for (LootObject o : objects) {
-			oldPos = new BigDecimal(o.getX() + o.getWidth() + o.getDuration()
-					+ o.getDuration() * b_delta.floatValue()).setScale(5,
-					RoundingMode.HALF_UP);
-			if (o.isVisible()
-					&& oldPos.floatValue()
-							- gameField.getObjectsOnGroundMaxPos() < epsilon
-					&& gameField.getObjectsOnGroundMaxPos()
-							- oldPos.floatValue() < epsilon) {
-				x = new BigDecimal(o.getX()).setScale(4, RoundingMode.HALF_UP);
-				width = new BigDecimal(o.getWidth()).setScale(4,
-						RoundingMode.HALF_UP);
-				gameField.setObjectsOnGroundMaxPos(x.floatValue(),
-						width.floatValue());
-			}
-		}
-
-		// Wenn weniger sichtbare Objekte auf d. Spielfeld als erlaubt -> neue
-		// Objekte setzen,
-		// sofern vorhanden.
-		if (gameField.visibleLootObjects < maxVisibleLootObjects) {
-			while (gameField.visibleLootObjects < maxVisibleLootObjects
-					&& objects.size() - gameField.visibleLootObjects > 0) {
-				int listPos = gameField.getRandomActorPosition(objects.get(0));
-				if (!objects.get(listPos).isVisible()) {
-					gameField.setActorVisbile(objects.get(listPos), gameField
-							.getRandomXForObjectOnTheGround(objects
-									.get(listPos)));
-				}
-
-			}
-		}
-
 	}
 
 	private boolean outOfGameField(Actor o) {

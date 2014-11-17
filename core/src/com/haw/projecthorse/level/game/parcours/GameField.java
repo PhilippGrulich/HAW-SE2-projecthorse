@@ -1,12 +1,10 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
@@ -43,7 +41,6 @@ public class GameField {
 	public static final float SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP = 5;
 	public int visibleGameObjects = 0;
 	public int visibleLootObjects = 0;
-	private BigDecimal maxPosXForObjectsOnTheGround;
 	private final float SWIPEMOVE = 250;
 	TextureRegion ground;
 	EndlessBackground groundObj;
@@ -51,7 +48,7 @@ public class GameField {
 	public int visibleCloudObjects = 0;
 	private final float SWIPEDURATION = 0.2f;
 	private float lastPosition;
-	private float maxObjects;
+	private Text score;
 
 	public GameField(Stage s, Viewport p, int width, int height) {
 		gameObjects = new ArrayList<GameObject>();
@@ -60,9 +57,6 @@ public class GameField {
 		GameField.width = width;
 		GameField.height = height;
 		lastPosition = GameField.width;
-		
-		maxPosXForObjectsOnTheGround = new BigDecimal(0).setScale(5,
-				RoundingMode.HALF_UP);
 
 		heightInRelationToScreenHeight = (float) GameField.height / 4.0f;
 
@@ -72,9 +66,7 @@ public class GameField {
 		maxDistanceX = 0;
 		minDistanceY = 0;
 		maxDistanceY = 0;
-		gameSpeed = 3;
-		playersPointOfView = 20;
-		maxObjects = 5;
+		gameSpeed = GameField.width / 3;
 
 		stage = s;
 		stage.setViewport(p);
@@ -118,6 +110,8 @@ public class GameField {
 		inputMultiplexer.addProcessor(listener2);
 		
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+
 
 	}
 
@@ -156,10 +150,10 @@ public class GameField {
 		float x2 = GameField.width * 140 / 100;
 		float x3 = GameField.width * 110 / 100;
 		float x4 = GameField.width * 160 / 100;
-		generateCloud("cloud1", x1, y1, 1.3f);
-		generateCloud("cloud2", x2, y2, 0.9f, 100);
-		generateCloud("cloud3", x3, y3, 0.7f, 50);
-		generateCloud("cloud4", x4, y4, 1.3f);
+		generateCloud("cloud1", x1, y1, getGameSpeed() / 4);
+		generateCloud("cloud2", x2, y2, getGameSpeed() / 5, 100);
+		generateCloud("cloud3", x3, y3, getGameSpeed() / 6, 50);
+		generateCloud("cloud4", x4, y4, getGameSpeed() / 4);
 
 		/***** Regenbogen *****/
 		TextureRegion rainbow = AssetManager.getTextureRegion("parcours",
@@ -181,9 +175,15 @@ public class GameField {
 		generateBushs(groundGrassObj.getHeight(), groundGrassObj.getWidth());
 		stage.addActor(rainbowObj);
 
+	    score = new Text(AssetManager.getTextFont(FontSize.VIERZIG), "Punkte: 0", 30, GameField.height - 40);
+		score.setColor(0, 0, 0, 1);
+		stage.addActor(score);
+		
 		for (int i = 0; i < cloudObjects.size(); i++) {
 			stage.addActor(cloudObjects.get(i));
 		}
+		
+
 
 		stage.addActor(groundObj);
 	}
@@ -290,12 +290,13 @@ public class GameField {
 		TextureRegion kiste = AssetManager.getTextureRegion("parcours",
 				"cratetex");
 
-		GameObject kisteObj = new GameObject(kiste, getGameSpeed());
+		GameObject kisteObj = new GameObject(kiste, getGameSpeed(), -10);
 		float[] widthHeight = getRelativeSize(kiste,
 				GameField.height * 15 / 100);
 
 		kisteObj.setHeight(widthHeight[1]);
 		kisteObj.setWidth(widthHeight[0]);
+		kisteObj.applyRactangle();
 		kisteObj.setName("Kiste");
 		kisteObj.setX(-1);
 		kisteObj.setY(getGroundHeight()
@@ -310,28 +311,18 @@ public class GameField {
 
 		gameObjects.add(kisteObj);
 
-		for (int i = 0; i < gameObjects.size(); i++) {
-			stage.addActor(gameObjects.get(i));
-		}
+		stage.addActor(kisteObj);
 	}
 
 	public void initializeLootObjects() {
 		loadKuerbisse("Kuerbis1", false, true, -100, 1);
-
 		loadKuerbisse("Kuerbis2", false, false, -500, 1);
-
 		loadKuerbisse("Kuerbis3", false, false, -900, 1);
-
 		loadKuerbisse("Kuerbis4", false, false, -1300, 1);
-
 		loadKuerbisse("Kuerbis5", false, false, -1700, 1);
-
 		loadKuerbisse("Kuerbis6", false, false, -2100, 1);
-
 		loadKuerbisse("Kuerbis7", false, false, -2500, 1);
-
 		loadKuerbisse("Kuerbis8", false, false, -2900, 1);
-
 	}
 
 	public void loadKuerbisse(String name, boolean flipX, boolean flipY,
@@ -341,6 +332,9 @@ public class GameField {
 		LootObject pumpkinObj = new LootObject(pumpkin, getGameSpeed(), points);
 		float[] newWidthHeight = getRelativeSize(pumpkin, GameField.height / 12);
 
+		
+
+		pumpkinObj.applyRactangle();
 		pumpkinObj.setHeight(newWidthHeight[1]);
 		pumpkinObj.setWidth(newWidthHeight[0]);
 		pumpkinObj.setX(0 + x);
@@ -349,9 +343,8 @@ public class GameField {
 		pumpkinObj.setVisible(false);
 
 		pumpkinObj.setName(name);
-
 		lootObjects.add(pumpkinObj);
-		pumpkinObj.applyRactangle();
+		
 		pumpkinObj.setVisible(false);
 		stage.addActor(pumpkinObj);
 	}
@@ -377,8 +370,8 @@ public class GameField {
 			}
 		}
 
-		maxHeight = maxHeight * 170 / 100;
-		maxWidth = maxWidth * 250 / 100;
+		maxHeight = maxHeight * 250 / 100;
+		maxWidth = maxWidth * 300 / 100;
 
 		player.setJumpHeight(maxHeight);
 		player.setJumpWitdh(maxWidth);
@@ -415,18 +408,17 @@ public class GameField {
 		this.maxDistanceY = maxDistance;
 	}
 	
-/*	public float getRandomXForObjectOnTheGround(Actor o){
-		if(visibleLootObjects + visibleGameObjects < maxObjects){
+	public float getRandomXForObjectOnTheGround(Actor o){
+	
 		float rand = (float) Math.floor(Math.random()
 				* (maxDistanceX - minDistanceX) + minDistanceX);
 		float result = lastPosition + rand;
-		lastPosition = lastPosition + rand + o.getWidth();
-		return result;
-		}
-		return -1;
-	}*/
+		lastPosition = result + o.getWidth();
+		return result; 
 
-	public float getRandomXForObjectOnTheGround(Actor o) {
+	}
+
+/*	public float getRandomXForObjectOnTheGround(Actor o) {
 		float rand = (float) Math.floor(Math.random()
 				* (maxDistanceX - minDistanceX) + minDistanceX);
 
@@ -444,7 +436,7 @@ public class GameField {
 				+ o.getWidth()).setScale(5, RoundingMode.HALF_UP);
 		//System.out.println("maxPos: " + maxPosXForObjectsOnTheGround +  " von: " + o.getName());
 		return b_rand.floatValue();
-	}
+	}*/
 
 	public List<GameObject> getGameObjects() {
 		return gameObjects;
@@ -502,14 +494,18 @@ public class GameField {
 			return -1;
 		}
 	}
+	
+	public void setObjectsOnGroundMaxPos(float x, float width){
+		lastPosition = x + width;
+	}
 
-	public void setObjectsOnGroundMaxPos(float x, float width) {
+/*	public void setObjectsOnGroundMaxPos(float x, float width) {
 		BigDecimal b_x = new BigDecimal(x).setScale(4, RoundingMode.HALF_UP);
 		BigDecimal b_width = new BigDecimal(width).setScale(4,
 				RoundingMode.HALF_UP);
 		maxPosXForObjectsOnTheGround = new BigDecimal(b_x.floatValue()
 				+ b_width.floatValue()).setScale(5, RoundingMode.HALF_UP);
-	}
+	}*/
 
 	/**
 	 * Liefert die neu berechnete Hoehe und Breite einer TextureRegion, wenn
@@ -609,8 +605,12 @@ public class GameField {
 		return heightInRelationToScreenHeight;
 	}
 
-	public float getObjectsOnGroundMaxPos() {
+	/*public float getObjectsOnGroundMaxPos() {
 		return maxPosXForObjectsOnTheGround.floatValue();
+	}*/
+	
+	public float getObjectsOnGroundMaxPos(){
+		return lastPosition;
 	}
 
 	public float getCloudsX(Actor o) {
@@ -638,5 +638,9 @@ public class GameField {
 
 	public Stage getStage(){
 		return stage;
+	}
+	
+	public void setScore(int score){
+		this.score.setText("Punkte: " + score);
 	}
 }

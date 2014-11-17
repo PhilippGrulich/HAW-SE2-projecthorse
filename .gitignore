@@ -38,7 +38,6 @@ Thumbs.db
 .DS_Store
 
 # Eclipse project files
-.classpath
 .project
 
 # Android Studio
@@ -47,7 +46,6 @@ Thumbs.db
 .gradle
 .gradle/*
 *.gradle*
-*.classpath
 *.project
 *.settings/*
 *bin/*
