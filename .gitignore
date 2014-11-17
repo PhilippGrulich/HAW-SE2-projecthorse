@@ -47,7 +47,6 @@ Thumbs.db
 .gradle
 .gradle/*
 *.gradle*
-*.classpath
 *.project
 *.settings/*
 *bin/*
