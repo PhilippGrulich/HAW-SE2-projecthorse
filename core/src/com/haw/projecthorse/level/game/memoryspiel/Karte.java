@@ -31,9 +31,9 @@ public class Karte extends Image{
 		this();
 		this.position = position;
 		this.setX(getPosition().x);
-		this.setWidth(this.getX()+67);
+		this.setWidth(187);
 		this.setY(getPosition().y);
-		this.setHeight(this.getY()+70);
+		this.setHeight(190);
 		this.addListener(new InputListener(){
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 		 		onClick();

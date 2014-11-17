@@ -49,6 +49,7 @@ public class MemorySpiel extends Level {
 	protected void initKarten() {
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
+			k.setDrawable(k.getPicture());
 			k.toFront();
 			stage.addActor(k);
 			
