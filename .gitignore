@@ -38,7 +38,6 @@ Thumbs.db
 .DS_Store
 
 # Eclipse project files
-.classpath
 .project
 
 # Android Studio
