@@ -20,7 +20,7 @@ public abstract class Loot {
 	}
 	
 	/**
-	 * Gibt einen treffenden, kurzen Namen f�r den Loot an.
+	 * Gibt einen treffenden, kurzen Namen für den Loot an.
 	 * @return Der Name.
 	 */
 	public String getName() {
@@ -28,17 +28,28 @@ public abstract class Loot {
 	}
 	
 	/**
-	 * Ein kleines Bild, wie eine Medaille, ein Stern o.�.
+	 * Gibt das {@link LootImage} zur�ck, welches das
+	 * Bild des Loots darstellt. Wird in der Methode {@link #getImage() getImage}
+	 * verwendet.
+	 * @return Das LootImage.
+	 */
+	protected abstract LootImage getLootImage();
+	
+	/**
+	 * Ein kleines Bild, wie eine Medaille, ein Stern o.Ä.
 	 * @return Das Bild des Loots.
 	 */
-	public abstract Drawable getImage();
+	public Drawable getImage() {
+		return getLootImage().getDrawable();
+	}
 	
 	public final Date getAchievedDate() {
 		return achievedDate;
 	}
 
-	/*
+	/**
 	 * Generiert einen HashCode anhand der Instanzvariablen der Implementierung.
+	 * @return Den HashCode des Objekts.
 	 */
 	protected abstract int doHashCode();
 	
@@ -49,9 +60,13 @@ public abstract class Loot {
 						.hashCode());
 	}
 
-	/*
+	/**
 	 * Vergleicht das aktuelle Objekt mit other.
-	 * Die trivialen Pr�fungen m�ssen nicht gemacht werden.
+	 * Die trivialen Prüfungen müssen nicht gemacht werden. Das Objekt
+	 * other kann direkt auf die konkrete Klasse gecastet werden
+	 * 
+	 * @param other Das Objekt mit dem verglichen werden soll.
+	 * @return Ob this und other inhaltsgleich sind.
 	 */
 	protected abstract boolean doEquals(Object other);
 	

@@ -18,7 +18,7 @@ import com.haw.projecthorse.savegame.json.SaveGameImpl;
  */
 
 public abstract class SaveGameManager {
-	private static final String gameDirectory = "assets/json/saved/";
+	private static final String gameDirectory = "saved/";
 	private static final FilenameFilter savedGamesFilter = new FilenameFilter() {
 		
 		@Override
