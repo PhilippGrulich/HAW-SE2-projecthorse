@@ -1,23 +1,23 @@
 package com.haw.projecthorse.level.game.thimblerig;
 
 
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.lootmanager.Loot;
+import com.haw.projecthorse.lootmanager.LootImage;
 
 public class ThimblerigLoot extends Loot{
 	
-	private Drawable image;
+	private LootImage image;
+	
+	// für das Laden per Reflection aus der JSON-Datei
+	public ThimblerigLoot() {}
 	
 	public ThimblerigLoot(String name, String description, String filename){
 		super(name, description);
-		this.image = new TextureRegionDrawable(AssetManager
-				.getTextureRegion("thimblerig", filename));
+		this.image = new LootImage("thimblerig", filename);
 	}
 	
 	@Override
-	public Drawable getImage() {
+	public LootImage getLootImage() {
 		return this.image;
 	}
 
