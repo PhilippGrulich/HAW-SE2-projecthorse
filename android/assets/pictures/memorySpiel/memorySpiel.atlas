@@ -1,76 +1,104 @@
 
 memorySpiel.png
-size: 3824,1287
+size: 2985,2571
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Background0
   rotate: false
-  xy: 2, 2
+  xy: 2, 1286
   size: 727, 1285
   orig: 727, 1285
   offset: 0, 0
   index: -1
 Background1
   rotate: false
-  xy: 731, 5
+  xy: 2, 2
   size: 724, 1282
   orig: 724, 1282
   offset: 0, 0
   index: -1
 Background2
   rotate: false
-  xy: 1457, 5
+  xy: 728, 2
   size: 724, 1282
   orig: 724, 1282
   offset: 0, 0
   index: -1
 Background3
   rotate: false
-  xy: 2183, 5
+  xy: 731, 1289
   size: 724, 1282
   orig: 724, 1282
   offset: 0, 0
   index: -1
 Background4
   rotate: false
-  xy: 2909, 5
+  xy: 1454, 5
   size: 724, 1282
   orig: 724, 1282
   offset: 0, 0
   index: -1
 Foto1
   rotate: false
-  xy: 3635, 1037
-  size: 67, 70
-  orig: 67, 70
+  xy: 2359, 2130
+  size: 626, 441
+  orig: 626, 441
   offset: 0, 0
   index: -1
 Foto2
   rotate: false
-  xy: 3635, 965
-  size: 67, 70
-  orig: 67, 70
+  xy: 1457, 1636
+  size: 900, 935
+  orig: 900, 935
   offset: 0, 0
   index: -1
 Foto3
   rotate: false
-  xy: 3704, 1037
-  size: 67, 70
-  orig: 67, 70
+  xy: 2502, 30
+  size: 300, 400
+  orig: 300, 400
+  offset: 0, 0
+  index: -1
+Foto4
+  rotate: false
+  xy: 2180, 30
+  size: 320, 400
+  orig: 320, 400
+  offset: 0, 0
+  index: -1
+Foto5
+  rotate: false
+  xy: 2359, 1721
+  size: 432, 407
+  orig: 432, 407
+  offset: 0, 0
+  index: -1
+Foto6
+  rotate: false
+  xy: 2180, 834
+  size: 773, 800
+  orig: 773, 800
   offset: 0, 0
   index: -1
 Karte
   rotate: false
-  xy: 3635, 1109
+  xy: 1457, 1456
   size: 189, 178
   orig: 189, 178
   offset: 0, 0
   index: -1
 Karte2
   rotate: false
-  xy: 3635, 893
+  xy: 1457, 1384
   size: 67, 70
   orig: 67, 70
+  offset: 0, 0
+  index: -1
+PlayButton
+  rotate: false
+  xy: 2180, 432
+  size: 640, 400
+  orig: 640, 400
   offset: 0, 0
   index: -1
