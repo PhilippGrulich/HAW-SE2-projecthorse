@@ -1,10 +1,5 @@
 package com.haw.projecthorse.level.game.memoryspiel;
 
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,70 +7,59 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 
-public class Karte extends Image{
+public class Karte extends Image {
 
-	private Vector2 position;
-	private State state;
+	private CardState state;
 	private Drawable picture;
-	public static Drawable karte = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel","Karte"));
-	
-	public enum State {
-		OPEN, CLOSED, TEMPORARILY_OPENED;
+	public static Drawable karte = new TextureRegionDrawable(
+			AssetManager.getTextureRegion("memorySpiel", "Karte"));
+
+	public enum CardState {
+		OPEN, CLOSED, TEMPORARILY_OPENED, TEMPORARILY_CLOSED;
 	}
 
-	public Karte(){
+	public Karte() {
 		super();
-		
+
 	}
-	public Karte(Vector2 position) {
+
+	public Karte(float x, float y) {
 		this();
-		this.state = State.CLOSED;
-		this.position = position;
+		this.state = CardState.CLOSED;
 		this.setDrawable(Karte.karte);
-		this.setX(getPosition().x);
+		this.setX(x);
 		this.setWidth(187);
-		this.setY(getPosition().y);
+		this.setY(y);
 		this.setHeight(190);
-		this.addListener(karteListener);
+		this.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				changed();
+				return true; // or false
+			}
+		});
 	}
 
 	public void changed() {
-		if (this.state == (State.CLOSED)) {
-			setState(State.TEMPORARILY_OPENED);
+		if (this.state == (CardState.CLOSED)) {
+			setState(CardState.TEMPORARILY_OPENED);
 		}
 	}
 
-	public void setState(State state) {
+	public void setState(CardState state) {
 		this.state = state;
 	}
 
-	public State getState() {
+	public CardState getState() {
 		return state;
 	}
-	
-	public void SetPosition(Vector2 position){
-		this.position = position;
-	}
-	
-	public Vector2 getPosition(){
-		return position;
-	}
-	 
-	 private static InputListener karteListener= new InputListener() {
-	      public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)        {
-	         Karte k = (Karte) event.getRelatedActor();
-	         k.changed();
-	         return true; //or false
-	      }
-	   };
-	 
-	public Drawable getPicture(){
+
+	public Drawable getPicture() {
 		return picture;
 	}
-	
-	public void setPicture(Drawable picture1){
+
+	public void setPicture(Drawable picture1) {
 		this.picture = picture1;
 	}
-	
-	
+
 }
