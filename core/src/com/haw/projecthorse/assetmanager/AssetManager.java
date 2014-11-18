@@ -430,22 +430,7 @@ public final class AssetManager {
 	public static TextureRegion getTextureRegion(String levelID, String filename) {
 		AtlasRegion atlasRegion;
 
-		if (!administratedAtlases.containsKey(levelID)) {
-			if (!administratedAtlasesPath.containsKey(levelID)) {
-
-				Gdx.app.error("AssetManager", "TextureAtlas + " + levelID
-						+ " existiert nicht.");
-			} else {
-				assetManager.load(administratedAtlasesPath.get(levelID),
-						TextureAtlas.class);
-				administratedAtlases.put(
-						levelID,
-						new TextureAtlas(
-								Gdx.files.internal(administratedAtlasesPath
-										.get(levelID))));
-				assetManager.finishLoading();
-			}
-		}
+		lookUpForAtlas(levelID);
 
 		try {
 			if (administratedAtlases.get(levelID).findRegion(filename) != null) {
@@ -477,22 +462,8 @@ public final class AssetManager {
 	 * @return m Map<String, TextureRegion> wenn m.size() > 0, sonst null.
 	 */
 	public static Map<String, TextureRegion> getAllTextureRegions(String levelID) {
-		if (!administratedAtlases.containsKey(levelID)) {
-			if (!administratedAtlasesPath.containsKey(levelID)) {
-
-				Gdx.app.error("AssetManager", "TextureAtlas + " + levelID
-						+ " existiert nicht.");
-			} else {
-				assetManager.load(administratedAtlasesPath.get(levelID),
-						TextureAtlas.class);
-				administratedAtlases.put(
-						levelID,
-						new TextureAtlas(
-								Gdx.files.internal(administratedAtlasesPath
-										.get(levelID))));
-				assetManager.finishLoading();
-			}
-		}
+		lookUpForAtlas(levelID);
+		
 		Map<String, TextureRegion> m = new HashMap<String, TextureRegion>();
 		Array<AtlasRegion> a = administratedAtlases.get(levelID).getRegions();
 
@@ -517,6 +488,22 @@ public final class AssetManager {
 	 * @return s String[] wenn s.length > 0, sonst null.
 	 */
 	public static String[] getAllFileNames(String levelID) {
+		lookUpForAtlas(levelID);
+
+		Array<AtlasRegion> a = administratedAtlases.get(levelID).getRegions();
+		String[] s = new String[a.size];
+
+		for (int i = 0; i < s.length; i++) {
+			s[i] = a.get(i).name;
+		}
+
+		if (s.length > 0)
+			return s;
+
+		return null;
+	}
+	
+	private static void lookUpForAtlas(String levelID){
 		if (!administratedAtlases.containsKey(levelID)) {
 			if (!administratedAtlasesPath.containsKey(levelID)) {
 
@@ -533,18 +520,6 @@ public final class AssetManager {
 				assetManager.finishLoading();
 			}
 		}
-
-		Array<AtlasRegion> a = administratedAtlases.get(levelID).getRegions();
-		String[] s = new String[a.size];
-
-		for (int i = 0; i < s.length; i++) {
-			s[i] = a.get(i).name;
-		}
-
-		if (s.length > 0)
-			return s;
-
-		return null;
 	}
 
 	/**
