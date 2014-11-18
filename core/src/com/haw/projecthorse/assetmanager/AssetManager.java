@@ -107,7 +107,7 @@ public final class AssetManager {
 		FileHandle[] files = Gdx.files.internal(path).list();
 		for (FileHandle file : files) {
 			if (file.isDirectory()) {
-				System.out.println("AssetManager.loadAudioPaths: file.name(): "
+				Gdx.app.log("AssetManager","AssetManager.loadAudioPaths: file.name(): "
 						+ file.name() + " is dir");
 				loadAudioPaths(path + FILESEPARATOR + file.name(), file.name(), type);
 			} else {
@@ -153,15 +153,15 @@ public final class AssetManager {
 	 * @param levelID ID des Levels.
 	 */
 	public static void loadSounds(String levelID){
-		System.out.println("loadSounds: " + levelID);
+		Gdx.app.log("AssetManager","loadSounds: " + levelID);
 		ArrayList<String> soundsPaths = administratedSoundPath.get(levelID);
 		if(soundsPaths == null){
-			System.out.println("Sounds fuer levelID: " + levelID + " nicht gefunden.");
+			Gdx.app.log("AssetManager","Sounds fuer levelID: " + levelID + " nicht gefunden.");
 		}else{
 			for(String path : soundsPaths){
-				System.out.println("loadSounds: " + path);
+				Gdx.app.log("AssetManager","loadSounds: " + path);
 				assetManager.load(path, Sound.class);
-				System.out.println("" + path + " geladen? " + assetManager.isLoaded(path));
+				Gdx.app.log("AssetManager","" + path + " geladen? " + assetManager.isLoaded(path));
 			}
 		}
 		assetManager.finishLoading();
@@ -172,15 +172,15 @@ public final class AssetManager {
 	 * @param levelID ID des Levels.
 	 */
 	public static void loadMusic(String levelID){
-		System.out.println("loadMusic: " + levelID);
+		Gdx.app.log("AssetManager","loadMusic: " + levelID);
 		ArrayList<String> musicPaths = administratedMusicPath.get(levelID);
 		if(musicPaths == null){
-			System.out.println("Music fuer levelID: " + levelID + " nicht gefunden.");
+			Gdx.app.log("AssetManager","Music fuer levelID: " + levelID + " nicht gefunden.");
 		}else{
 			for(String path : musicPaths){
-				System.out.println("loadMusic: " + path);
+				Gdx.app.log("AssetManager","loadMusic: " + path);
 				assetManager.load(path, Music.class);
-				System.out.println("" + path + " geladen? " + assetManager.isLoaded(path));
+				Gdx.app.log("AssetManager","" + path + " geladen? " + assetManager.isLoaded(path));
 			}
 		}
 		assetManager.finishLoading();
@@ -398,10 +398,11 @@ public final class AssetManager {
 	 */
 	public static TextureRegion getTextureRegion(String levelID, String filename) {
 		AtlasRegion atlasRegion;
-
+			
 		if(!administratedAtlases.containsKey(levelID)){
 			if(!administratedAtlasesPath.containsKey(levelID)){
-				System.out.println("TextureAtlas + " + levelID + " existiert nicht.");
+				
+				Gdx.app.error("AssetManager","TextureAtlas + " + levelID + " existiert nicht.");
 			}else{
 				assetManager.load(administratedAtlasesPath.get(levelID), TextureAtlas.class);
 				administratedAtlases.put(levelID, new TextureAtlas(
@@ -495,9 +496,9 @@ public final class AssetManager {
 				}
 				bufReadPic.close();
 			} catch (FileNotFoundException e) {
-				System.out.println("License-file not found");
+				Gdx.app.error("AssetManager","License-file not found");
 			} catch (IOException e) {
-				System.out.println("License-file couldn't read");
+				Gdx.app.error("AssetManager","License-file couldn't read");
 			}
 		}
 		stringMap.put(FOLDERNAME_PICTURES, createSeperatedEntries(stringList));
@@ -542,9 +543,9 @@ public final class AssetManager {
 			}
 			bufRead.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("License-file not found");
+			Gdx.app.error("AssetManager","License-file not found");
 		} catch (IOException e) {
-			System.out.println("License-file couldn't read");
+			Gdx.app.error("AssetManager","License-file couldn't read");
 		}
 		return stringList;
 	}
@@ -641,7 +642,7 @@ public final class AssetManager {
 			fWriter.close();
 
 		} catch (IOException e) {
-			System.out.println("Couldn't generate a logfile!");
+			Gdx.app.error("AssetManager","Couldn't generate a logfile!");
 		}
 	}
 
@@ -682,7 +683,7 @@ public final class AssetManager {
 				bWriter.newLine();
 			}
 		} catch (IOException e) {
-			System.out.println("Couldn't write to logfile!");
+			Gdx.app.error("AssetManager","Couldn't write to logfile!");
 		}
 	}
 }
