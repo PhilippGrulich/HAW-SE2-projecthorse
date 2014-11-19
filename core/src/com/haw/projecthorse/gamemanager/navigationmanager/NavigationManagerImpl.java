@@ -3,6 +3,7 @@ package com.haw.projecthorse.gamemanager.navigationmanager;
 import java.util.Stack;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelLoadException;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
@@ -34,7 +35,7 @@ public class NavigationManagerImpl implements NavigationManager {
 
 	@Override
 	public final void navigateToLevel(final String levelID) {
-
+		Gdx.app.log("NavigationManager","NavigateToLevel");
 		try {
 			if (game.getScreen() != null) {
 				InputManager.clear();

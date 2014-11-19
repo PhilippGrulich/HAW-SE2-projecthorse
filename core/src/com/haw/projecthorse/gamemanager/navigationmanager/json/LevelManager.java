@@ -34,8 +34,11 @@ public class LevelManager {
 
 		String jsonText;
 		try {
+			Gdx.app.log("LevelManager", "LadeJSON");
 			jsonText = readGameConfigFile();
+			Gdx.app.log("LevelManager", "JSON TO Object");
 			config = json.fromJson(GameConfigtImpl.class, jsonText);
+			Gdx.app.log("LevelManager", "Fertig");
 		} catch (IOException e) {
 			System.err.println("!!!Die GameConfig.json Datei konnte nicht geladen werden!!! \n Verzeichnis prüfen");
 			e.printStackTrace();
