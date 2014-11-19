@@ -10,11 +10,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -27,6 +31,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Library;
 import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.assetmanager.exceptions.*;
 
@@ -44,7 +49,7 @@ public final class AssetManager {
 	private static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
-
+	private static ExecutorService taskRunner = Executors.newCachedThreadPool();
 	// Mapped mit LevelID auf TextureAtlas - Haelt AtlasObjekte Vorraetig zwecks
 	// Performance
 	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
@@ -64,6 +69,22 @@ public final class AssetManager {
 		setApplicationRoot();
 		loadAtlases(directory_pictures, directory_pictures);
 		loadAudioPaths();
+		
+		
+	}
+	
+	public static void finishLoading(){
+		Gdx.app.log("Asset Manager", "Warte");
+		long startTime = System.currentTimeMillis();
+		try {
+			taskRunner.shutdown();
+			taskRunner.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		Gdx.app.log("Asset Manager", "Musste so lange Warten: "+ (System.currentTimeMillis() - startTime) );	
 	}
 
 	/**
@@ -112,16 +133,20 @@ public final class AssetManager {
 	 * @param type
 	 *            Assets.SOUND oder Assets.MUSIC
 	 */
-	private static void loadAudioPaths(String path, String levelID, Assets type) {
+	private static void loadAudioPaths(final String path, final String levelID, final Assets type) {
+		// Nur ein einfacher kleiner Thread. Da es nicht sehr schlimm ist wenn Audio erst etwas später zur Verfügung steht.
+		Thread t = new Thread(){ public void run() {
 		FileHandle[] files = Gdx.files.internal(path).list();
-		for (FileHandle file : files) {
+		for (final FileHandle file : files) {
+			
 			if (file.isDirectory()) {
 				Gdx.app.log(
 						"AssetManager",
 						"AssetManager.loadAudioPaths: file.name(): "
 								+ file.name() + " is dir");
-				loadAudioPaths(path + FILESEPARATOR + file.name(), file.name(),
-						type);
+				
+					loadAudioPaths(path + FILESEPARATOR + file.name(), file.name(),	type);
+				
 			} else {
 				if (file.name().toLowerCase()
 						.matches(".*(\\.mp3|\\.wav|\\.ogg)$")) {
@@ -130,6 +155,9 @@ public final class AssetManager {
 				}
 			}
 		}
+
+		}};
+		t.start();
 	}
 
 	/**
@@ -206,33 +234,57 @@ public final class AssetManager {
 	}
 
 	/**
-	 * Laedt einmal beim Start der Anwendung alle .atlas-Dateien in den
-	 * Speicher.
+	 * Laedt einmal beim Start der Anwendung alle Pfade der .atlas-Dateien in eine Hashmap.
+	 * Erst beim ersten Nutzen der Hashmap wird der Speicher Reserviert.
+	 * 
+	 * Es wird aus Performancegründen nur die erste Ebenene des pictures Verzeichnisses gescannt.
+	 * Außerdem wurden möglichst wenig Funktionenen des FileHandlers benutzt, da diese oft sehr langsam auf 
+	 * Android Geräten sind.
 	 * 
 	 * @param path
 	 *            Pfad zum Parent-Directory der Bilder.
 	 * @param levelID
 	 *            path Pfad zum Parent-Directory der Bilder.
 	 */
-	private static void loadAtlases(String path, String levelID) {
-		FileHandle[] files = Gdx.files.internal(path).list();
-		for (FileHandle file : files) {
-			if (file.name().matches(".*\\.atlas")) {
-				int startIdx = path.indexOf(FOLDERNAME_PICTURES);
-				String relativeFilePath = path.substring(startIdx,
-						path.length()).replace("\\", "/")
-						+ "/" + file.name();
-				// assets = new
-				// TextureAtlas(Gdx.files.internal(relativeFilePath)); #Changed
-				TextureAtlas atlas = new TextureAtlas(
-						Gdx.files.internal(relativeFilePath));
-				assetManager.load(relativeFilePath, TextureAtlas.class);
-				administratedAtlasesPath.put(levelID, relativeFilePath);
-				administratedAtlases.put(levelID, atlas);
+	private static void loadAtlases(final String path, String levelID) {
+		FileHandle[] dirs = Gdx.files.internal(path).list();
+		
+		for (final FileHandle dir : dirs) {
+			// Erstellen einenes neuen Threads um parallel die unterverzeichnisse zu laden. macht das Sinn?
+			Thread t = new Thread(){
+				public void run() {
+				
+					final String dirName = dir.name();
+					// Nutzung der List Methode für eine Art ForEach um nicht erstmal eine Liste von 
+					// File Handlern erstellen zu müssen.
+					dir.list(new FilenameFilter(){
+						@Override
+						public boolean accept(File arg0, String filename) {
+							if(filename.matches(".*\\.atlas")){
+								int startIdx = path.indexOf(FOLDERNAME_PICTURES);
+								String relativeFilePath = path.replace("\\", "/") +"/"+ dirName
+										+ "/" + filename;
+								
+							
+								// assets = new
+								// TextureAtlas(Gdx.files.internal(relativeFilePath)); #Changed
+								//TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(relativeFilePath));
+								//assetManager.load(relativeFilePath, TextureAtlas.class);
+								administratedAtlasesPath.put(dirName, relativeFilePath);
+								Gdx.app.log("Lade Grafik", "AssetGefunden"+ (System.currentTimeMillis() ) );	
+								//administratedAtlases.put(levelID, atlas);					
+							}
+							return false;
+						}
+						
+					});
+				};
+			};
+		
+			taskRunner.execute(t);	
+				
+				
 
-			} else {
-				loadAtlases(path + FILESEPARATOR + file.name(), file.name());
-			}
 		}
 	}
 
@@ -428,14 +480,15 @@ public final class AssetManager {
 	 *         Fehleranzeige
 	 */
 	public static TextureRegion getTextureRegion(String levelID, String filename) {
-		AtlasRegion atlasRegion;
+		
 
-		lookUpForAtlas(levelID);
+		TextureAtlas atlas = lookUpForAtlas(levelID);
 
+		if(atlas==null)
+			return errorPic;
 		try {
-			if (administratedAtlases.get(levelID).findRegion(filename) != null) {
-				atlasRegion = administratedAtlases.get(levelID).findRegion(
-						filename);
+			AtlasRegion atlasRegion = atlas.findRegion(filename);
+			if (atlasRegion != null) {				
 				Texture page = atlasRegion.getTexture();
 				TextureRegion result = new TextureRegion(page,
 						atlasRegion.getRegionX(), atlasRegion.getRegionY(),
@@ -503,23 +556,38 @@ public final class AssetManager {
 		return null;
 	}
 	
-	private static void lookUpForAtlas(String levelID){
-		if (!administratedAtlases.containsKey(levelID)) {
+	private static TextureAtlas lookUpForAtlas(String levelID){	
+			finishLoading();
 			if (!administratedAtlasesPath.containsKey(levelID)) {
-
 				Gdx.app.error("AssetManager", "TextureAtlas + " + levelID
 						+ " existiert nicht.");
 			} else {
-				assetManager.load(administratedAtlasesPath.get(levelID),
+				
+				
+				boolean isLoaded = assetManager.isLoaded(administratedAtlasesPath.get(levelID),
 						TextureAtlas.class);
-				administratedAtlases.put(
-						levelID,
-						new TextureAtlas(
-								Gdx.files.internal(administratedAtlasesPath
-										.get(levelID))));
-				assetManager.finishLoading();
+				if(isLoaded){ // Grafik ist schon geladen
+					Gdx.app.log("AssetManager", "Lade "+ levelID + " from Cache");
+					return assetManager.get(administratedAtlasesPath.get(levelID),
+							TextureAtlas.class);
+				}else{
+					assetManager.finishLoading(); // es werden alle noch zu ladenen Grafiken geladen
+					if(isLoaded){  
+					
+						Gdx.app.log("AssetManager", "Lade "+ levelID + " from Cache");
+						return assetManager.get(administratedAtlasesPath.get(levelID),
+								TextureAtlas.class);
+					}
+					Gdx.app.log("AssetManager", "Lade "+ levelID + " from File");
+					assetManager.load(administratedAtlasesPath.get(levelID),
+							TextureAtlas.class);				
+					assetManager.finishLoading();
+					return assetManager.get(administratedAtlasesPath.get(levelID),
+							TextureAtlas.class);
+				}				
 			}
-		}
+			return null;
+		
 	}
 
 	/**
