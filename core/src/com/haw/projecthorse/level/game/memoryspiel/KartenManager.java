@@ -123,7 +123,6 @@ public class KartenManager extends Thread {
 	protected void restart() {
 
 		Collections.shuffle(karten);
-		Collections.shuffle(karten);
 
 		karten.get(0).setPicture(picture1);
 		karten.get(1).setPicture(picture1);
