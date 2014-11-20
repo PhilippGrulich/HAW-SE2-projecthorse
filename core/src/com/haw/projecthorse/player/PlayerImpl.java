@@ -41,7 +41,7 @@ public class PlayerImpl extends Player {
 			float frameDuration = (speed == 0) ? 0f : MIN_FRAMEDURATION / speed;
 
 			deltaSum += delta;
-			if (deltaSum >= frameDuration) {
+			while (deltaSum >= frameDuration) {
 				deltaSum -= frameDuration;
 				spriteIndex = ++spriteIndex % SPRITES_PER_ANIMATION;
 
