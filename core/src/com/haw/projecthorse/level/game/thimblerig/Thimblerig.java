@@ -202,7 +202,7 @@ public class Thimblerig extends Level{
 						break;
 					}
 					
-					this.newGame.setVisible(true);
+					overlay.showPopup(newGame);
 					this.roundFinished = true;
 					//springe aus Schleife, wenn Pferd gefunden wurde
 					break;
@@ -226,7 +226,7 @@ public class Thimblerig extends Level{
 						AssetManager.playSound(this.getLevelID(), "jingles_SAX07.ogg");
 						this.labelTryAgain.setVisible(false);
 						this.labelFail.setVisible(true);
-						this.newGame.setVisible(true);
+						overlay.showPopup(newGame);
 						
 						
 						if(this.wins > 0){
@@ -402,13 +402,13 @@ public class Thimblerig extends Level{
 	 */
 	private void initButtons(){
 		this.newGame = new Dialog("Möchtest du eine\nweitere Runde spielen?");
-		this.newGame.setSize(10, 10);
+		
 		this.newGame.addButton("jaa, sehr gerne", new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				 if(!ISPAUSED){
-					 newGame.setVisible(false);
+				
+					 overlay.disposePopup();
 					 pl.setVisible(false);
 					 labelStart.setVisible(true);
 					 labelGood.setVisible(false);
@@ -424,7 +424,7 @@ public class Thimblerig extends Level{
 						 hats[i].setFlinged(false);
 					 }
 					 generateHatNum();	
-				 }
+				
 			}
 			
 		});
@@ -438,8 +438,7 @@ public class Thimblerig extends Level{
 			
 		});
 
-		this.newGame.setPosition(0,  YCORDHAT);
-		this.newGame.setVisible(false);
+		
 	}
 	
 	/**
@@ -450,7 +449,6 @@ public class Thimblerig extends Level{
 		this.stage.addActor(this.bgTree1);
 		this.stage.addActor(this.bgTree2);
 		this.stage.addActor(this.bgWitch);
-		this.stage.addActor(this.newGame);
 		this.stage.addActor(this.bgSpeechBalloon);
 		
 		this.stage.addActor(this.labelStart);
