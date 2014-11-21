@@ -11,6 +11,13 @@ erde-und-sterne
   orig: 720, 1280
   offset: 0, 0
   index: -1
+flatLight09
+  rotate: false
+  xy: 724, 115
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
 germanymap_scaled
   rotate: false
   xy: 724, 277
@@ -20,21 +27,21 @@ germanymap_scaled
   index: -1
 shadedLight24
   rotate: false
-  xy: 724, 195
+  xy: 724, 33
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 shadedLight25
   rotate: false
-  xy: 724, 113
+  xy: 886, 195
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 shadedLight28
   rotate: false
-  xy: 806, 195
+  xy: 968, 195
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
