@@ -30,12 +30,14 @@ public class NavbarSettingsButton extends NavbarButton {
 			};
 
 		});
+		this.setWidth(imageButton.getHeight());
 	}
 
 	private Drawable getDrawable() {
 
 		Drawable drawable = new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "settingsIcon"));
+		
 		return drawable;
 	}
 
