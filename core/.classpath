@@ -5,5 +5,8 @@
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="lib" path="libs/gdx-freetype.jar"/>
 	<classpathentry kind="lib" path="libs/gdx-freetype-natives.jar"/>
+	<classpathentry kind="lib" path="libs/geofire-1.1.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="libs/geofire-1.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/firebase-client-android-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
