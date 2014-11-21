@@ -6,14 +6,14 @@ filter: Nearest,Nearest
 repeat: none
 backIcon
   rotate: false
-  xy: 1157, 1675
-  size: 48, 48
-  orig: 48, 48
+  xy: 930, 579
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 off
   rotate: false
-  xy: 930, 592
+  xy: 930, 526
   size: 50, 51
   orig: 50, 51
   offset: 0, 0
@@ -41,9 +41,9 @@ panel_brown
   index: -1
 pauseIcon
   rotate: false
-  xy: 1358, 1848
-  size: 48, 48
-  orig: 48, 48
+  xy: 1157, 1659
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 popup_button
@@ -55,8 +55,8 @@ popup_button
   index: -1
 settingsIcon
   rotate: false
-  xy: 930, 542
-  size: 48, 48
-  orig: 48, 48
+  xy: 1358, 1832
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1

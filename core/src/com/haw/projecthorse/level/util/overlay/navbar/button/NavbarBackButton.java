@@ -16,7 +16,7 @@ public class NavbarBackButton extends NavbarButton {
 
 	public NavbarBackButton() {
 		ImageButton imageButton = new ImageButton(getDrawable());
-
+		this.setWidth(imageButton.getHeight());
 		this.addActor(imageButton);
 		this.addListener(new InputListener() {
 
