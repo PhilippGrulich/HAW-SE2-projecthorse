@@ -7,6 +7,7 @@ import android.view.Window;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.firebase.client.Firebase;
 import com.haw.projecthorse.gamemanager.CoreGameMain;
 
 
@@ -31,9 +32,9 @@ public class AndroidLauncher extends AndroidApplication {
 			
 			}
 		}
-
+		Firebase.setAndroidContext(getContext());
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new CoreGameMain(), config);
-
+		
 	}
 }
