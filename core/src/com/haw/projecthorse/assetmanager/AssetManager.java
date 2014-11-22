@@ -515,7 +515,7 @@ public final class AssetManager {
 	 * @return m Map<String, TextureRegion> wenn m.size() > 0, sonst null.
 	 */
 	public static Map<String, TextureRegion> getAllTextureRegions(String levelID) {
-		lookUpForAtlas(levelID);
+		administratedAtlases.put(levelID, lookUpForAtlas(levelID));
 		
 		Map<String, TextureRegion> m = new HashMap<String, TextureRegion>();
 		Array<AtlasRegion> a = administratedAtlases.get(levelID).getRegions();
