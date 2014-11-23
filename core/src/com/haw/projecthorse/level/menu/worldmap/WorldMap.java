@@ -63,6 +63,7 @@ public class WorldMap extends Level {
 
 	private State state;
 
+	private Image uiBackground;
 	private ImageButton leftButton, rightButton, flagButton;
 	private ImageButtonStyle flagStyle;
 	private BitmapFont textFont;
@@ -99,6 +100,9 @@ public class WorldMap extends Level {
 		selectedCityIndex = Arrays.asList(cities).indexOf(
 				prefs.getString("lastCity"));
 
+		if (selectedCityIndex == -1)
+			selectedCityIndex = 0;
+		
 		Gdx.app.log(
 				"INFO",
 				"Zuletzt gewählte Stadt hat Index "
@@ -264,6 +268,13 @@ public class WorldMap extends Level {
 	}
 
 	private void createButtons() {
+		uiBackground = new Image(AssetManager.getTextureRegion("ui",
+				"panel_beige"));
+		uiBackground.setHeight(height * 0.3f);
+		uiBackground.setWidth(width * 0.9f);
+		uiBackground.setPosition(width / 2 - uiBackground.getWidth() / 2,
+				height * 0.77f - uiBackground.getHeight() / 2);
+
 		flagButton = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("flaggen",
 						cities[selectedCityIndex])));
@@ -278,11 +289,10 @@ public class WorldMap extends Level {
 				}
 			}
 		});
-		flagButton.setHeight(180 * 1.4f);
-		flagButton.setWidth(280 * 1.4f);
-		flagButton.setPosition(width / 2 - flagButton.getWidth() / 2, height
-				* 0.75f - flagButton.getHeight() / 2);
-		flagButton.toFront();
+		flagButton.setHeight(uiBackground.getHeight() * 0.68f);
+		flagButton.setWidth(uiBackground.getWidth() * 0.5f);
+		flagButton.setPosition(width / 2 - flagButton.getWidth() / 2,
+				uiBackground.getY() + uiBackground.getHeight() * 0.075f);
 
 		InputManager.addInputProcessor(new StageGestureDetector(stage, true));
 		germanyImg.addListener(new SwipeListener() {
@@ -307,18 +317,11 @@ public class WorldMap extends Level {
 
 		flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(
 				textFont, Color.LIGHT_GRAY));
-		// flagLabel.setPosition(width / 2 - flagLabel.getWidth() / 2,
-		// flagButton.getY() + height * 0.05f + flagLabel.getHeight());
-		// flagLabel.toFront();
-		//
-		//
-		// uiStage.addActor(flagLabel);
-		uiStage.addActor(flagButton);
 
 		updateFlag();
 
 		leftButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("worldmap", "shadedLight24")));
+				AssetManager.getTextureRegion("ui", "buttonLeft")));
 		leftButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -333,13 +336,12 @@ public class WorldMap extends Level {
 		leftButton.setHeight(100);
 		leftButton.setWidth(100);
 
-		leftButton.setPosition(flagButton.getX() / 2 - leftButton.getWidth()
-				/ 2, flagButton.getY() + flagButton.getHeight() / 2
+		leftButton.setPosition(flagButton.getX() - leftButton.getWidth() * 1.2f
+				 , uiBackground.getY() + uiBackground.getHeight() / 2
 				- leftButton.getHeight() / 2);
-		leftButton.toFront();
 
 		rightButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("worldmap", "shadedLight25")));
+				AssetManager.getTextureRegion("ui", "buttonRight")));
 		rightButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -356,13 +358,18 @@ public class WorldMap extends Level {
 		rightButton.setWidth(100);
 
 		rightButton.setPosition(
-				width - flagButton.getX() / 2 - rightButton.getWidth() / 2,
-				flagButton.getY() + flagButton.getHeight() / 2
+				flagButton.getX() + flagButton.getWidth() + leftButton.getWidth() * 0.2f,
+				uiBackground.getY() + uiBackground.getHeight() / 2
 						- rightButton.getHeight() / 2);
-		rightButton.toFront();
 
+		uiStage.addActor(uiBackground);
+		uiStage.addActor(flagButton);
 		uiStage.addActor(leftButton);
 		uiStage.addActor(rightButton);
+		uiBackground.toBack();
+		flagButton.toFront();
+		leftButton.toFront();
+		rightButton.toFront();
 
 	}
 
@@ -391,7 +398,7 @@ public class WorldMap extends Level {
 
 			flagLabel.remove();
 			flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(
-					textFont, Color.YELLOW));
+					textFont, Color.MAGENTA));
 			;
 			flagLabel.setPosition(width / 2 - flagLabel.getWidth() / 2,
 					flagButton.getY() + flagButton.getHeight());
@@ -477,12 +484,14 @@ public class WorldMap extends Level {
 			flagButton.setColor(1, 1, 1, 1);
 			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g,
 					flagLabel.getColor().b, 1);
+			uiBackground.setColor(1, 1, 1, 1);
 			break;
 
 		case RUNNING:
 			// Buttons transparent, Flagge ausblenden
 			leftButton.setColor(1, 1, 1, BUTTONALPHA);
 			rightButton.setColor(1, 1, 1, BUTTONALPHA);
+			uiBackground.setColor(1, 1, 1, BUTTONALPHA);
 			flagButton.setColor(1, 1, 1, 0);
 			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g,
 					flagLabel.getColor().b, 0);
@@ -493,6 +502,7 @@ public class WorldMap extends Level {
 			leftButton.setColor(1, 1, 1, 0);
 			rightButton.setColor(1, 1, 1, 0);
 			flagButton.setColor(1, 1, 1, 0);
+			uiBackground.setColor(1, 1, 1, 0);
 			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g,
 					flagLabel.getColor().b, 0);
 			break;
