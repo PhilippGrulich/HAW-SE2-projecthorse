@@ -11,8 +11,11 @@ public class Counter {
 	}
 
 	public static void setCounter(int neucounter) {
-		counter += neucounter;
-		System.out.println("counter: " + counter);
+		if (neucounter == 0) {
+			counter = 0;
+		} else {
+			counter += neucounter;
+		}
 	}
 
 	public static int getCounter() {

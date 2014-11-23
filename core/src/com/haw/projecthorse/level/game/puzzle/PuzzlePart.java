@@ -28,21 +28,24 @@ public class PuzzlePart extends Image {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				/**
+				 * hier ist das Spiel zu Ende
+				 */
 				if (image.getName() == "emptyImage") {
 
 					if (Puzzle.check()) {
-						System.out.println("Fertig");
-						
+												
 						image.setVisible(false);
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
-						Puzzle.win.setVolume(Puzzle.win.play(), 1f);
+						Puzzle.win.setVolume(Puzzle.win.play(), 0.9f);
+						ImageManager.flagbett=true;
+						Counter.setCounter(0);
 						
 					}
 
-				} else {
+				} else {					
 					
-					//Puzzle.swipe.play();
 					Counter.setCounter(1);
 					Puzzle.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
@@ -51,7 +54,7 @@ public class PuzzlePart extends Image {
 					int lokY = (int) image.getY();
 
 					if (checkImage(lokX, lokY)) {
-						Puzzle.swipe.setVolume(Puzzle.swipe.play(), 0.15f);
+						Puzzle.swipe.setVolume(Puzzle.swipe.play(), 0.2f);
 
 						image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
 								.getEmptyImage().getY());
