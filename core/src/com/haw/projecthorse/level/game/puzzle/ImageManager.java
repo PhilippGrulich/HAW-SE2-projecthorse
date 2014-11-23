@@ -51,12 +51,14 @@ public class ImageManager extends Level {
 
 		imagelist = new ArrayList<Image>();
 
-		index = 0;
+		
+		
 
 		bett = Gdx.audio.newMusic(Gdx.files
 				.internal("music/puzzle/bett_pcm.wav"));
 
 		fillImagelist();
+		index = imagelist.size()-1;
 		createButtons();
 		addToStage();
 		addMusic();
@@ -137,15 +139,17 @@ public class ImageManager extends Level {
 		int x = (width - Puzzle.getMyWidth()) / 2; // 90
 		int y = (height - Puzzle.getMyHeight()) / 3
 				+ (height - Puzzle.getMyHeight()) / 2; // 266
-
+		
 		for (Image im : imagelist) {
 
+		
 			im.setWidth(540);
 			im.setHeight(960);
 			im.setPosition(90, 266);
 			addListener(im);
+			im.toFront();
 			stage.addActor(im);
-
+			
 		}
 
 	}
@@ -157,7 +161,6 @@ public class ImageManager extends Level {
 	 * @param button
 	 */
 	private void addListener(final Image im) {
-
 
 		im.addListener(new SwipeListener() {
 
@@ -195,11 +198,12 @@ public class ImageManager extends Level {
 		ok.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				System.out.println("Index: " + index);
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
-				flagbett=false;
+				flagbett = false;
 				bett.dispose();
 				GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
-				
+
 			};
 		});
 
@@ -213,6 +217,7 @@ public class ImageManager extends Level {
 
 	private void changeImage(int delta) {
 		index = (index + delta) % imagelist.size();
+
 		if (index < 0)
 			index = imagelist.size() - 1;
 

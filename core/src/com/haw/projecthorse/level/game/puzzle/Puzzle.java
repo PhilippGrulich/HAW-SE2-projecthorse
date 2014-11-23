@@ -230,7 +230,6 @@ public class Puzzle extends Level {
 	public void addScore() {
 		BitmapFont font;
 		font = AssetManager.getTextFont(FontSize.DREISSIG);
-		System.out.println("ccc: " + Counter.getCounter());
 		label = new Label("Anzahl: " + String.valueOf(Counter.getCounter()),
 				new Label.LabelStyle(font, Color.MAGENTA));
 		label.setBounds(30, 45, 30, 30);
