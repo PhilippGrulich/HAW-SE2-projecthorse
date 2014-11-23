@@ -32,13 +32,17 @@ public class PuzzlePart extends Image {
 
 					if (Puzzle.check()) {
 						System.out.println("Fertig");
+						
 						image.setVisible(false);
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
+						Puzzle.win.setVolume(Puzzle.win.play(), 1f);
+						
 					}
 
 				} else {
-
+					
+					//Puzzle.swipe.play();
 					Counter.setCounter(1);
 					Puzzle.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
@@ -47,6 +51,7 @@ public class PuzzlePart extends Image {
 					int lokY = (int) image.getY();
 
 					if (checkImage(lokX, lokY)) {
+						Puzzle.swipe.setVolume(Puzzle.swipe.play(), 0.15f);
 
 						image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
 								.getEmptyImage().getY());

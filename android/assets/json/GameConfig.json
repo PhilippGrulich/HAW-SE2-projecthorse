@@ -11,12 +11,16 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
+         className:"com.haw.projecthorse.level.game.puzzle.ImageManager",
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
          			   						Berlin,593,668;
          			   						Muenchen,438,108"
          }
+      },
+      {
+      	levelID:"puzzleGame",
+      	className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
       }
 
    ],
@@ -82,7 +86,7 @@
             },
                   {
                title:"Puzzlespiel",
-			   className:"com.haw.projecthorse.level.game.puzzle.Puzzle",
+			   className:"com.haw.projecthorse.level.game.puzzle.ImageManager",
                levelID:"Puzzle"
             }
          ]

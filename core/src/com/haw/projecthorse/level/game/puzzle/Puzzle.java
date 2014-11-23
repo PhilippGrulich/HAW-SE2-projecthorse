@@ -1,10 +1,12 @@
 package com.haw.projecthorse.level.game.puzzle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,6 +17,8 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.util.swipehandler.ControlMode;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 
 //className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
 //className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
@@ -40,15 +44,33 @@ public class Puzzle extends Level {
 
 	private static Image missingImage;
 	private static Image emptyImage;
+	static TextureRegion texture;
+	static Sound swipe;
+	static Sound win;
+	private Music bett;
+	private int SHUFFLE = 2;
 
 	public Puzzle() {
 
 		super();
 
 		stage = new Stage(getViewport());
-		InputManager.addInputProcessor(stage);
+		// InputManager.addInputProcessor(stage);
+		InputManager.addInputProcessor(new StageGestureDetector(stage, false,
+				ControlMode.HORIZONTAL));
 
 		addBackround();
+
+		addMusic();
+		swipe = Gdx.audio.newSound(Gdx.files
+				.internal("sounds/puzzle/swipe.wav"));
+		win = Gdx.audio.newSound(Gdx.files.internal("sounds/puzzle/win.wav"));
+		bett = Gdx.audio.newMusic(Gdx.files
+				.internal("music/puzzle/bett_pcm.wav"));
+		if (!bett.isPlaying()) {
+			bett.setLooping(true);
+			bett.play();
+		}
 
 		row = 3;
 		col = 3;
@@ -70,13 +92,9 @@ public class Puzzle extends Level {
 	}
 
 	private void createImageArr() {
-
-		TextureRegion puzzleTexReg = AssetManager.getTextureRegion("puzzle",
-				"horse");
-
-		TextureRegion[][] puzzleTexRegArrOrigin = puzzleTexReg.split(
-				puzzleTexReg.getRegionWidth() / col,
-				puzzleTexReg.getRegionHeight() / row);
+		TextureRegion[][] puzzleTexRegArrOrigin = texture
+				.split(texture.getRegionWidth() / col,
+						texture.getRegionHeight() / row);
 
 		int zzCol = (int) (Math.random() * (col));
 		int zzRow = (int) (Math.random() * (row));
@@ -85,7 +103,7 @@ public class Puzzle extends Level {
 		imageArr = new Image[row][col];
 
 		int x = (width - myWidth) / 2; // 90
-		int y = (height - myHeight) / 3 + (height - myHeight) / 2; // 266
+		int y = (height - myHeight) / 4 + (height - myHeight) / 2; // 266
 
 		for (int i = 0; i < col; i++) {
 			for (int j = 0; j < row; j++) {
@@ -146,7 +164,7 @@ public class Puzzle extends Level {
 
 	private void shuffle() {
 		int count = 0;
-		while (count < 2) {
+		while (count < SHUFFLE) {
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
 
@@ -228,6 +246,10 @@ public class Puzzle extends Level {
 	@Override
 	protected void doDispose() {
 		stage.dispose();
+		swipe.dispose();
+		bett.dispose();
+		win.dispose();
+
 	}
 
 	@Override
@@ -291,5 +313,12 @@ public class Puzzle extends Level {
 	public static void setLabelText(String newText) {
 		label.setText(newText);
 	}
-	
+
+	private void addMusic() {
+
+		;
+		// bett.play();
+		// swipe.play();
+	}
+
 }
