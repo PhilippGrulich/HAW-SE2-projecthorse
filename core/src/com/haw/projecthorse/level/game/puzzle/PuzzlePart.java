@@ -2,6 +2,7 @@ package com.haw.projecthorse.level.game.puzzle;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PuzzlePart extends Image {
@@ -34,18 +35,21 @@ public class PuzzlePart extends Image {
 				if (image.getName() == "emptyImage") {
 
 					if (Puzzle.check()) {
-												
+
 						image.setVisible(false);
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
 						Puzzle.win.setVolume(Puzzle.win.play(), 0.9f);
-						ImageManager.flagbett=true;
+						ImageManager.flagbett = true;
+
+						Puzzle.setLabelText("Du hast gewonnen!!! \nAnzahl deiner Schritte : "
+								+ String.valueOf(Counter.getCounter())+"\nGehe auf den Pfeil oben");
 						Counter.setCounter(0);
-						
+
 					}
 
-				} else {					
-					
+				} else {
+
 					Counter.setCounter(1);
 					Puzzle.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));

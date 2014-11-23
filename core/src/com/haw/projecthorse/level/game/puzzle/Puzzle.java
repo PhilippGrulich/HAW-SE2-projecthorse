@@ -30,14 +30,8 @@ public class Puzzle extends Level {
 	private static Stage stage;
 	private static Label label;
 
-	private static int row;
-	private static int col;
-
 	private static int puzzleWidth;
 	private static int puzzleHeight;
-
-	private static int myWidth;
-	private static int myHeight;
 
 	private static PuzzlePart[][] partArr;
 	private static Image[][] imageArr;
@@ -49,6 +43,8 @@ public class Puzzle extends Level {
 	static Sound win;
 	private Music bett;
 	private int SHUFFLE = 2;
+	private static int COL = 3;
+	private static int ROW = 3;
 
 	public Puzzle() {
 
@@ -72,14 +68,8 @@ public class Puzzle extends Level {
 			bett.play();
 		}
 
-		row = 3;
-		col = 3;
-
-		myWidth = (width / 4) * 3; // 540
-		myHeight = (height / 4) * 3; // 960
-
-		puzzleWidth = myWidth / col; // 270
-		puzzleHeight = myHeight / row; // 480
+		puzzleWidth = ImageManager.myWidth / COL; // 270
+		puzzleHeight = ImageManager.myHeight / ROW; // 480
 
 		createEmptyImage();
 		createImageArr();
@@ -87,29 +77,31 @@ public class Puzzle extends Level {
 		shuffle();
 		addToStage();
 		addScore();
+
 		stage.addActor(label);
 
 	}
 
+	/**
+	 * splitte das gewählte Bild,
+	 */
 	private void createImageArr() {
 		TextureRegion[][] puzzleTexRegArrOrigin = texture
-				.split(texture.getRegionWidth() / col,
-						texture.getRegionHeight() / row);
+				.split(texture.getRegionWidth() / COL,
+						texture.getRegionHeight() / ROW);
 
-		int zzCol = (int) (Math.random() * (col));
-		int zzRow = (int) (Math.random() * (row));
+		int zzCol = (int) (Math.random() * (COL));
+		int zzRow = (int) (Math.random() * (ROW));
 
-		partArr = new PuzzlePart[row][col];
-		imageArr = new Image[row][col];
+		partArr = new PuzzlePart[ROW][COL];
+		imageArr = new Image[ROW][COL];
 
-		int x = (width - myWidth) / 2; // 90
-		int y = (height - myHeight) / 4 + (height - myHeight) / 2; // 266
+		for (int i = 0; i < COL; i++) {
+			for (int j = 0; j < ROW; j++) {
 
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
-
-				int xPos = (j * puzzleWidth) + x;
-				int yPos = ((col - (2 * i + 1) + i) * puzzleHeight) + y;
+				int xPos = (j * puzzleWidth) + ImageManager.myXPos;
+				int yPos = ((COL - (2 * i + 1) + i) * puzzleHeight)
+						+ ImageManager.myYPos;
 
 				Image im = new Image(puzzleTexRegArrOrigin[i][j]);
 
@@ -139,8 +131,8 @@ public class Puzzle extends Level {
 
 	private void addToStage() {
 
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
+		for (int i = 0; i < COL; i++) {
+			for (int j = 0; j < ROW; j++) {
 
 				Image im = imageArr[i][j];
 				PuzzlePart.addListener(im);
@@ -165,8 +157,8 @@ public class Puzzle extends Level {
 	private void shuffle() {
 		int count = 0;
 		while (count < SHUFFLE) {
-			for (int i = 0; i < row; i++) {
-				for (int j = 0; j < col; j++) {
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
 
 					// PuzzlePart part = partArr[i][j];
 
@@ -191,8 +183,8 @@ public class Puzzle extends Level {
 	}
 
 	public static boolean check() {
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
+		for (int i = 0; i < COL; i++) {
+			for (int j = 0; j < ROW; j++) {
 				PuzzlePart part = partArr[i][j];
 				Image image = part.getImage();
 				if (part.getXPos() != image.getX()
@@ -215,8 +207,8 @@ public class Puzzle extends Level {
 	}
 
 	public static void removeClickListener() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
+		for (int i = 0; i < ROW; i++) {
+			for (int j = 0; j < COL; j++) {
 				partArr[i][j].getImage().clearListeners();
 			}
 		}
@@ -227,6 +219,9 @@ public class Puzzle extends Level {
 		stage.addActor(actor);
 	}
 
+	/**
+	 * Anzahl der Schritte ausgeben
+	 */
 	public void addScore() {
 		BitmapFont font;
 		font = AssetManager.getTextFont(FontSize.DREISSIG);
@@ -287,14 +282,6 @@ public class Puzzle extends Level {
 
 	public static int getPuzzleHeight() {
 		return puzzleHeight;
-	}
-
-	public static int getMyWidth() {
-		return myWidth;
-	}
-
-	public static int getMyHeight() {
-		return myHeight;
 	}
 
 	public static Image getMissingImage() {

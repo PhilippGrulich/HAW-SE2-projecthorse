@@ -38,6 +38,12 @@ public class ImageManager extends Level {
 	static Music bett;
 	static boolean flagbett = true;
 
+	static int myWidth;
+	static int myHeight;
+
+	static int myXPos;
+	static int myYPos;
+
 	public ImageManager() {
 		super();
 
@@ -51,14 +57,17 @@ public class ImageManager extends Level {
 
 		imagelist = new ArrayList<Image>();
 
-		
-		
+		myWidth = (width / 4) * 3; // 540
+		myHeight = (height / 4) * 3; // 960
+
+		myXPos = (width - myWidth) / 2; // 90
+		myYPos = (height - myHeight) / 4 + (height - myHeight) / 2; // 266
 
 		bett = Gdx.audio.newMusic(Gdx.files
 				.internal("music/puzzle/bett_pcm.wav"));
 
 		fillImagelist();
-		index = imagelist.size()-1;
+		index = imagelist.size() - 1;
 		createButtons();
 		addToStage();
 		addMusic();
@@ -136,20 +145,16 @@ public class ImageManager extends Level {
 	 */
 
 	private void addToStage() {
-		int x = (width - Puzzle.getMyWidth()) / 2; // 90
-		int y = (height - Puzzle.getMyHeight()) / 3
-				+ (height - Puzzle.getMyHeight()) / 2; // 266
-		
+
 		for (Image im : imagelist) {
 
-		
-			im.setWidth(540);
-			im.setHeight(960);
-			im.setPosition(90, 266);
+			im.setWidth(myWidth);
+			im.setHeight(myHeight);
+			im.setPosition(myXPos, myYPos);
 			addListener(im);
 			im.toFront();
 			stage.addActor(im);
-			
+
 		}
 
 	}
@@ -198,7 +203,7 @@ public class ImageManager extends Level {
 		ok.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				System.out.println("Index: " + index);
+
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
 				flagbett = false;
 				bett.dispose();
