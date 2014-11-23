@@ -11,7 +11,7 @@
       },
       {
          levelID:"worldmap",
-         className:"com.haw.projecthorse.level.game.puzzle.ImageManager",
+         className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
          			   						Berlin,593,668;
