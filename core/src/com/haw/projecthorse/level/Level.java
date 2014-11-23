@@ -118,6 +118,8 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void render(float delta) {
+		// zu schnell Bug Fix
+		delta = delta%1;
 		paintBackground();
 		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
 		// �bergeben.

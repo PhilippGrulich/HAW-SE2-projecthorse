@@ -128,9 +128,7 @@ public class Thimblerig extends Level{
 		this.wins = 9;
 		this.hatIndexList = new ArrayList<Integer>();
 		
-		this.justWonLoots = (List<ThimblerigLoot>) getThimblerigLoots();
-		System.out.println("justwonlootssize: " + this.justWonLoots.size());
-		
+		this.justWonLoots = (List<ThimblerigLoot>) getThimblerigLoots();		
 		this.textFont = AssetManager.getTextFont(FontSize.DREISSIG);
 
 		/**
@@ -204,7 +202,7 @@ public class Thimblerig extends Level{
 						break;
 					}
 					
-					this.newGame.setVisible(true);
+					overlay.showPopup(newGame);
 					this.roundFinished = true;
 					//springe aus Schleife, wenn Pferd gefunden wurde
 					break;
@@ -228,7 +226,7 @@ public class Thimblerig extends Level{
 						AssetManager.playSound(this.getLevelID(), "jingles_SAX07.ogg");
 						this.labelTryAgain.setVisible(false);
 						this.labelFail.setVisible(true);
-						this.newGame.setVisible(true);
+						overlay.showPopup(newGame);
 						
 						
 						if(this.wins > 0){
@@ -251,10 +249,7 @@ public class Thimblerig extends Level{
 
 	@Override
 	protected void doDispose() {
-		//TODO: abfrage weg, falls nullpointer exception in chest abgefangen wird
-		if(ISMINSCORED || ISMIDSCORED || ISMAXSCORED){
-			this.chest.saveAllLoot();
-		}
+		this.chest.saveAllLoot();
 		this.stage.dispose();	
 		this.textFont.dispose();
 		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
@@ -407,13 +402,13 @@ public class Thimblerig extends Level{
 	 */
 	private void initButtons(){
 		this.newGame = new Dialog("Möchtest du eine\nweitere Runde spielen?");
-		this.newGame.setSize(10, 10);
+		
 		this.newGame.addButton("jaa, sehr gerne", new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				 if(!ISPAUSED){
-					 newGame.setVisible(false);
+				
+					 overlay.disposePopup();
 					 pl.setVisible(false);
 					 labelStart.setVisible(true);
 					 labelGood.setVisible(false);
@@ -429,7 +424,7 @@ public class Thimblerig extends Level{
 						 hats[i].setFlinged(false);
 					 }
 					 generateHatNum();	
-				 }
+				
 			}
 			
 		});
@@ -443,8 +438,7 @@ public class Thimblerig extends Level{
 			
 		});
 
-		this.newGame.setPosition(0,  YCORDHAT);
-		this.newGame.setVisible(false);
+		
 	}
 	
 	/**
@@ -455,7 +449,6 @@ public class Thimblerig extends Level{
 		this.stage.addActor(this.bgTree1);
 		this.stage.addActor(this.bgTree2);
 		this.stage.addActor(this.bgWitch);
-		this.stage.addActor(this.newGame);
 		this.stage.addActor(this.bgSpeechBalloon);
 		
 		this.stage.addActor(this.labelStart);
@@ -546,6 +539,11 @@ public class Thimblerig extends Level{
 		ISMAXSCORED = false;
 	}
 	
+	/**
+	 * ermittelt alle bereits gewonnen Loots aus diesem Spiel die unter dem verwendeten
+	 * Spielstand gesichert sind
+	 * @return Liste aller Thimblerig-Loots
+	 */
 	private List<? extends Loot> getThimblerigLoots(){
 		return SaveGameManager.getLoadedGame().getSpecifiedLoot(ThimblerigLoot.class);
 	}
@@ -565,7 +563,6 @@ public class Thimblerig extends Level{
 		int indexOfLoot = -1;
 		int indexOfHorseLoot = -1;
 		int maxNumberOfLootsMinscore = (this.possibleWinLoots.size() / 2) - 1;
-		int maxNumberOfLootsMidscore = (this.possibleWinLoots.size() / 2);
 		switch(this.wins){
 		case MINSCORE:
 			if(!ISMINSCORED){
@@ -583,8 +580,7 @@ public class Thimblerig extends Level{
 		case MIDSCORE:
 			if(!ISMIDSCORED){
 				ISMIDSCORED = true;
-				indexOfLoot = getLootIndexMidscore(maxNumberOfLootsMinscore, 
-						maxNumberOfLootsMidscore);		
+				indexOfLoot = getLootIndexMidscore(maxNumberOfLootsMinscore);		
 				indexOfHorseLoot = -2;
 			}
 			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
@@ -692,10 +688,9 @@ public class Thimblerig extends Level{
 	 * @return Index des Loots, welches gewonnen wurde. -1, sonst, wenn bereits 
 	 * 			maxNumberOfLootsMaxScore erreicht wurde.
 	 */
-	private int getLootIndexMidscore(int maxNumberOfLootsMinscore, 
-			int maxNumberOfLootsMidscore){
+	private int getLootIndexMidscore(int maxNumberOfLootsMinscore){
 		int index = -1;
-		for(int i = maxNumberOfLootsMinscore; i < maxNumberOfLootsMidscore; i++){
+		for(int i = maxNumberOfLootsMinscore; i < this.possibleWinLoots.size(); i++){
 			if(this.justWonLoots != null){
 				if(!this.justWonLoots.contains(this.possibleWinLoots.get(i))){
 					index = i;

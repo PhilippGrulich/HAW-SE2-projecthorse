@@ -1,34 +1,74 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Array;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.PlayerImpl;
 
-public class Player extends PlayerImpl {
+public class Player extends PlayerImpl{
 
-	private float jumpSpeed;
+	private float player_jumpspeed;
 	private float a, b, c;
-	private float player_jumpspeed = 10;
-	private float player_jumpheight = 150;
-	private float player_jumpwidth = 300;
+	private float player_jumpheight;
+	private float player_jumpwidth;
 	private boolean jumpDirectionRight = true;
 	private Rectangle r;
 	float x, y;
+	private float SWIPEMOVE;
+	private float SWIPEDURATION = 0.2f;
+	float playerHeight, playerWidth, gameWidth, gameHeight;
 
-	public Player() {
+	public float getGameHeight() {
+		return gameHeight;
+	}
+
+	public float getGameWidth() {
+		return gameWidth;
+	}
+
+	public Player(float gameWidth, float gameHeight) {
 		super();
 		toFront();
 		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
+		initSwipeListener();
+		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
+		this.SWIPEMOVE = getGameWidth() * 35 / 100;
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+	}
+
+	public void applyRactangle() {
+		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
+	}
+
+	private void checkIfRectangleIsInitialized(){
+		if(r == null){
+			r = new Rectangle();
+		}
+	}
+
+	@Override
+	public float getHeight(){
+		return playerHeight;
+	}
+
+	public float getJumpSpeed() {
+		return this.player_jumpspeed;
+	}
+
+	private float getLeftSwipePosition() {
+		if (getX() - SWIPEMOVE < 0) {
+			return 0;
+		}
+		return getX() - SWIPEMOVE;
 	}
 
 	/**
@@ -47,10 +87,106 @@ public class Player extends PlayerImpl {
 			v.x = x;
 			v.y = a * (x * x) + b * x + c;
 		}
-
 		return v;
 	}
 
+	public Rectangle getRectangle() {
+		return r;
+	}
+
+	private float getRightSwipePosition() {
+		if (getX() + getWidth() + SWIPEMOVE > getGameWidth()) {
+			return getX() + (getGameWidth() - (getX() + getWidth()));
+		}
+		return getX() + SWIPEMOVE;
+	}
+
+	@Override
+	public float getWidth(){
+		return playerWidth;
+	}
+
+	@Override
+	public float getX() {
+		return x;
+	}
+
+	@Override
+	public float getY() {
+		return y;
+	}
+
+	private void initSwipeListener(){
+		SwipeListener listener = new SwipeListener() {
+
+			@Override
+			public void swiped(SwipeEvent event, Actor actor) {
+				//Vormals Prüfung auf instanceof APlayer
+				if (getDirection() == event.getDirection()) {
+					if (getDirection() == Direction.RIGHT) {
+						addAction(Actions.moveTo(
+								getRightSwipePosition(), getY(),
+								SWIPEDURATION));
+						setJumpDirection(Direction.RIGHT);
+					} else {
+						addAction(Actions.moveTo(getLeftSwipePosition(),
+								getY(), SWIPEDURATION));
+						setJumpDirection(Direction.LEFT);
+					}
+				} else {
+					setAnimationSpeed(0.3f);
+					addAction(new ChangeDirectionAction(event
+							.getDirection()));
+					setJumpDirection(event.getDirection());
+				}
+			}
+		};
+		
+		this.addListener(listener);
+	}
+	private boolean isJumpDirectionRight() {
+		return jumpDirectionRight;
+	}
+
+	@Override
+	public void setHeight(float h){
+		r.height = h;
+		this.playerHeight = h;
+	}
+
+	public void setJumpDirection(Direction d) {
+		if (d == Direction.RIGHT) {
+			setJumpDirectionRight(true);
+		} else {
+			setJumpDirectionRight(false);
+		}
+	}
+
+	private void setJumpDirectionRight(boolean b) {
+		this.jumpDirectionRight = b;
+	}
+
+	public void setJumpHeight(float y) {
+		this.player_jumpheight = y;
+	}
+	
+	public void setJumpSpeed(float duration) {
+		this.player_jumpspeed = duration;
+	}
+
+	public void setJumpWitdh(float x) {
+		this.player_jumpwidth = x;
+	}
+	
+	@Override
+	public void setPosition(float x, float y) {
+		checkIfRectangleIsInitialized();
+		r.x = x;
+		r.y = y;
+		setX(x);
+		setY(y);
+	}
+	
 	/**
 	 * Berechnung der Sprungfunktion in abhängigkeit des aktuellen x und y.
 	 */
@@ -88,77 +224,25 @@ public class Player extends PlayerImpl {
 				* ((x3 * x3) * y2 - (x2 * x2) * y3) + x2 * x3 * y1 * (x2 - x3))
 				/ ((x1 - x2) * (x1 - x3) * (x2 - x3));
 	}
-
-	public void setJumpHeight(float y) {
-		this.player_jumpheight = y;
+	
+	@Override
+	public void setWidth(float w){
+		r.width = w;
+		this.playerWidth = w;
 	}
-
-	public void setJumpWitdh(float x) {
-		this.player_jumpwidth = x;
-	}
-
-	public void setJumpSpeed(float duration) {
-		this.jumpSpeed = duration;
-	}
-
-	public float getJumpSpeed() {
-		return this.jumpSpeed;
-	}
-
-	public void applyRactangle() {
-		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
-	}
-
-	public void setJumpDirection(Direction d) {
-		if (d == Direction.RIGHT) {
-			setJumpDirectionRight(true);
-		} else {
-			setJumpDirectionRight(false);
-		}
-	}
-
-	private void setJumpDirectionRight(boolean b) {
-		this.jumpDirectionRight = b;
-	}
-
-	private boolean isJumpDirectionRight() {
-		return jumpDirectionRight;
-	}
-
+	
 	@Override
 	public void setX(float x) {
+		checkIfRectangleIsInitialized();
 		r.setX(x);
 		this.x = x;
 	}
-
+	
 	@Override
 	public void setY(float y) {
+		checkIfRectangleIsInitialized();
 		r.setY(y);
 		this.y = y;
 	}
-
-	@Override
-	public float getY() {
-		return y;
-	}
-
-	@Override
-	public float getX() {
-		return x;
-	}
-
-	@Override
-	public void setPosition(float x, float y) {
-		setX(x);
-		setY(y);
-	}
-
-	public Rectangle getRectangle() {
-		return r;
-	}
-
-	@Override
-	public void act(float delta) {
-		super.act(delta);
-	}
+	
 }

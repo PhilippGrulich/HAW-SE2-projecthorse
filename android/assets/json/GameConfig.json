@@ -15,7 +15,7 @@
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
          			   						Berlin,593,668;
-         			   						Muenchen,438,108"
+         			   						München,438,108"
          }
       },
       {
@@ -69,8 +69,8 @@
          ]
       },
       {
-         name:"Muenchen",
-         levelID:"Muenchen",
+         name:"München",
+         levelID:"München",
          className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
          			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		

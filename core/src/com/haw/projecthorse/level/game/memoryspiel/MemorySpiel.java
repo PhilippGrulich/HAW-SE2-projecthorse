@@ -12,27 +12,28 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
-
 
 public class MemorySpiel extends Level {
 
 	public enum GameState {
 		READY, RESTART, END;
 	}
-	
+
 	private SpriteBatch batcher;
 	private KartenManager manager;
 	private Stage stage;
-	private int background;
-	private TextureRegion region;
+	private Drawable drawable;
 	private Image backgroundImage;
 	private GameState state;
 	private Label replay;
-	
+	private Karte playButton;
+
 	public MemorySpiel() {
 		manager = new KartenManager();
 		batcher = this.getSpriteBatch();
@@ -41,11 +42,16 @@ public class MemorySpiel extends Level {
 		InputManager.addInputProcessor(stage);
 		replay = createReplayLabel();
 		replay.setPosition(this.width / 3.7f, this.height * 0.85f);
-		backgroundImage = getBackground();
+		drawable = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("memorySpiel", "Background" + getBackground()));
+		backgroundImage = new Image(drawable);
 		backgroundImage.toFront();
+		playButton = createPlayButton();
+		playButton.setVisible(false);
 		enableReplayButton(false);
 		stage.addActor(backgroundImage);
 		stage.addActor(replay);
+		stage.addActor(playButton);
 		initKarten();
 	}
 
@@ -56,43 +62,55 @@ public class MemorySpiel extends Level {
 			stage.addActor(k);
 		}
 	}
-	
-	protected Image getBackground() {
+
+	protected int getBackground() {
 		Random rand = new Random();
 		int i = rand.nextInt(5);
-		region = AssetManager.getTextureRegion("memorySpiel", "Background"
-				+ i);
-		return new Image(region);
+		return i;
 	}
-	
-	protected Label createReplayLabel(){
-		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/city/font.txt"));
+
+	protected Karte createPlayButton() {
+		Karte button = new Karte(this.width / 2.2f , 900);
+		button.setDrawable(new TextureRegionDrawable(AssetManager
+				.getTextureRegion("memorySpiel", "PlayButton")));
+		button.setWidth(250);
+		return button;
+	}
+
+	protected Label createReplayLabel() {
+		BitmapFont font = new BitmapFont(
+				Gdx.files.internal("pictures/city/font.txt"));
 		font.setScale(1f, 1f);
 		font.setColor(Color.WHITE);
-		LabelStyle labelStyle = new LabelStyle(font,Color.WHITE);	
+		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		return new Label("Neue Runde?", labelStyle);
 	}
-	
-	protected void enableReplayButton(boolean b){
+
+	protected void enableReplayButton(boolean b) {
 		replay.setVisible(b);
+		playButton.setVisible(b);
 	}
 
 	protected void updateKarten(float delta) {
 		int i = 0;
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
-			if (k.getState() == CardState.TEMPORARILY_OPENED && manager.canOpen) {
-				k.setDrawable(k.getPicture());
+			if (k.getState() == CardState.TEMPORARILY_OPENED) {
+				if (manager.canOpen) {
+					k.setDrawable(k.getPicture());
+				} else {
+					k.setState(CardState.CLOSED);
+				}
 			}
 			if (k.getState() == CardState.TEMPORARILY_CLOSED) {
 				k.setState(CardState.CLOSED);
 				k.setDrawable(Karte.karte);
 			}
-			if(k.getState() == CardState.OPEN){
+			if (k.getState() == CardState.OPEN) {
 				i++;
 			}
 		}
-		if (i == karten.size()){
+		if (i == karten.size()) {
 			state = GameState.END;
 			enableReplayButton(true);
 			return;
@@ -104,22 +122,21 @@ public class MemorySpiel extends Level {
 	@Override
 	protected void doRender(float delta) {
 		stage.draw();
-		if(state == GameState.READY){
-		updateKarten(delta);
+		if (state == GameState.READY) {
+			updateKarten(delta);
+		} else if (state == GameState.END) {
+			if (playButton.getState() == CardState.TEMPORARILY_OPENED) {
+				restart();
+			}
 		}
-//		else if(state == GameState.END){
-//			drawFont();
-//		}
 	}
 
-	protected Karte drawFont() {
-		Karte replayButton = new Karte(this.width/2 - 67, 900);
-		return replayButton;
-	}
-	
 	protected void restart() {
-		backgroundImage = getBackground();
+		drawable = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("memorySpiel", "Background" + getBackground()));
+		backgroundImage.setDrawable(drawable);
 		manager.restart();
+		playButton.setState(CardState.CLOSED);
 		enableReplayButton(false);
 		state = GameState.READY;
 	}
@@ -158,7 +175,5 @@ public class MemorySpiel extends Level {
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 }

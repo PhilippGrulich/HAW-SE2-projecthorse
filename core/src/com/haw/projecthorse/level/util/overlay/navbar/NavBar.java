@@ -8,10 +8,10 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
 
 /**
- * Eine Navbar ist eine kleine Leiste mit Menü Elementen(Pause Button) die
+ * Eine Navbar ist eine kleine Leiste mit Menï¿½ Elementen(Pause Button) die
  * entweder am oberen oder am unteren Bildschirmrand angezeigt wird. Jeder
- * Navbar können mehrere Menü Elemente (NavBarButton) über die Methode addButton
- * hinzugefügt werden.
+ * Navbar kï¿½nnen mehrere Menï¿½ Elemente (NavBarButton) ï¿½ber die Methode addButton
+ * hinzugefï¿½gt werden.
  * 
  * @author Philipp
  *
@@ -19,7 +19,7 @@ import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
 public class NavBar extends OverlayWidgetGroup {
 
 	private HorizontalGroup horizontalGroup;
-	private final int NAVBAR_HIGH = (int) (this.height * 0.1);
+	private final int NAVBAR_HIGH = (int) (this.height * 0.14);
 	private final int NAVBAR_WITH = (int) (this.width );
 
 	public NavBar() {
@@ -36,8 +36,8 @@ public class NavBar extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Leifert das Parent Overlay Object zurück. Wenn die NavigationBar nicht
-	 * auf einem Overlay liegt wird null zurück gegeben. Daher sollte die Navbar
+	 * Leifert das Parent Overlay Object zurï¿½ck. Wenn die NavigationBar nicht
+	 * auf einem Overlay liegt wird null zurï¿½ck gegeben. Daher sollte die Navbar
 	 * immer auf einem Overlay liegen.
 	 * 
 	 * @return
@@ -59,12 +59,13 @@ public class NavBar extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Fügt ein neuen NavbarButton zur Navbar hinzu.
+	 * Fï¿½gt ein neuen NavbarButton zur Navbar hinzu.
 	 * 
 	 * @param btn
 	 */
 	public void addButton(NavbarButton btn) {
-		float w = btn.getWidth();
+		
+
 		this.horizontalGroup.addActor(btn);
 		this.horizontalGroup.layout();
 

@@ -8,7 +8,7 @@ public class ThimblerigLoot extends Loot{
 	
 	private LootImage image;
 	
-	// für das Laden per Reflection aus der JSON-Datei
+	// fÃ¼r das Laden per Reflection aus der JSON-Datei
 	public ThimblerigLoot() {}
 	
 	public ThimblerigLoot(String name, String description, String filename){

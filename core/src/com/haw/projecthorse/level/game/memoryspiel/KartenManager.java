@@ -20,6 +20,9 @@ public class KartenManager extends Thread {
 	private Drawable picture1;
 	private Drawable picture2;
 	private Drawable picture3;
+	private Drawable picture4;
+	private Drawable picture5;
+	private Drawable picture6;
 
 	public KartenManager() {
 		setUpKarten();
@@ -44,27 +47,39 @@ public class KartenManager extends Thread {
 		karten.add(karte4);
 		karten.add(karte5);
 		karten.add(karte6);
-//		 karten.add(karte7);
-//		 karten.add(karte8);
-//		 karten.add(karte9);
-//		 karten.add(karte10);
-//		 karten.add(karte11);
-//		 karten.add(karte12);
+		karten.add(karte7);
+		karten.add(karte8);
+		karten.add(karte9);
+		karten.add(karte10);
+		karten.add(karte11);
+		karten.add(karte12);
 
 		Collections.shuffle(karten);
 
-		picture1 = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("memorySpiel", "Foto" + 1));
-		picture2 = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("memorySpiel", "Foto" + 2));
-		picture3 = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("memorySpiel", "Foto" + 3));
+		picture1 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 1));
+		picture2 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 2));
+		picture3 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 3));
+		picture4 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 4));
+		picture5 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 5));
+		picture6 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 6));
 		((Karte) karten.get(0)).setPicture(picture1);
 		((Karte) karten.get(1)).setPicture(picture1);
 		((Karte) karten.get(2)).setPicture(picture2);
 		((Karte) karten.get(3)).setPicture(picture2);
 		((Karte) karten.get(4)).setPicture(picture3);
 		((Karte) karten.get(5)).setPicture(picture3);
+		((Karte) karten.get(6)).setPicture(picture4);
+		((Karte) karten.get(7)).setPicture(picture4);
+		((Karte) karten.get(8)).setPicture(picture5);
+		((Karte) karten.get(9)).setPicture(picture5);
+		((Karte) karten.get(10)).setPicture(picture6);
+		((Karte) karten.get(11)).setPicture(picture6);
 
 	}
 
@@ -104,17 +119,36 @@ public class KartenManager extends Thread {
 			}
 		}
 	}
-	
-	protected void restart(){
-		
+
+	protected void restart() {
+
 		Collections.shuffle(karten);
-		
-		((Karte) karten.get(0)).setPicture(picture1);
-		((Karte) karten.get(1)).setPicture(picture1);
-		((Karte) karten.get(2)).setPicture(picture2);
-		((Karte) karten.get(3)).setPicture(picture2);
-		((Karte) karten.get(4)).setPicture(picture3);
-		((Karte) karten.get(5)).setPicture(picture3);
+
+		karten.get(0).setPicture(picture1);
+		karten.get(1).setPicture(picture1);
+		karten.get(2).setPicture(picture2);
+		karten.get(3).setPicture(picture2);
+		karten.get(4).setPicture(picture3);
+		karten.get(5).setPicture(picture3);
+		karten.get(6).setPicture(picture4);
+		karten.get(7).setPicture(picture4);
+		karten.get(8).setPicture(picture5);
+		karten.get(9).setPicture(picture5);
+		karten.get(10).setPicture(picture6);
+		karten.get(11).setPicture(picture6);
+
+		karten.get(0).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(1).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(2).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(3).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(4).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(5).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(6).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(7).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(8).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(9).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(10).setState(CardState.TEMPORARILY_CLOSED);
+		karten.get(11).setState(CardState.TEMPORARILY_CLOSED);
 		
 	}
 

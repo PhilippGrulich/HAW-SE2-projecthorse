@@ -15,7 +15,7 @@ public class NavbarPauseButton extends NavbarButton {
 
 	public NavbarPauseButton() {
 		ImageButton imageButton = new ImageButton(getDrawable());
-
+		this.setWidth(imageButton.getHeight());
 		this.addActor(imageButton);
 		this.addListener(new InputListener() {
 
