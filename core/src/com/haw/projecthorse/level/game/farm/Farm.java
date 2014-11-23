@@ -4,21 +4,26 @@ import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
-import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
-import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
-import com.haw.projecthorse.level.util.swipehandler.SwipeListener.SwipeEvent;
 
 public class Farm extends Level {
 	private PlayGround p;
-
+	private UserModel rootUser;
+	private FireBaseManager f;
+	
+	
 	public Farm() {
 		
+		p = new PlayGround(getViewport(), getSpriteBatch());
+		f = new FireBaseManager(p);
+		rootUser = new UserModel();
+		rootUser.id = getPlayerUUID();
+		rootUser.name = "Philipp";		
+		p.addRootUser(rootUser,f);	
+		f.addUser(rootUser);
+	}
+	
+	private String getPlayerUUID(){
 		Preferences prefs = Gdx.app.getPreferences("Farm");
 		String uuid = prefs.getString("uuid");
 		if(uuid==null || uuid.isEmpty()){
@@ -26,16 +31,7 @@ public class Farm extends Level {
 			prefs.flush();
 			uuid = prefs.getString("uuid");
 		}
-		 p = new PlayGround(getViewport(), getSpriteBatch());
-		final FireBaseManager f =	new FireBaseManager(p);
-		final UserModel u = new UserModel();
-		u.id = uuid;
-		u.name = "Philipp";
-		
-		p.addRootUser(u,f);
-		
-		
-		f.addUser(u);
+		return uuid;
 	}
 
 	@Override
@@ -47,7 +43,7 @@ public class Farm extends Level {
 
 	@Override
 	protected void doDispose() {
-		// TODO Auto-generated method stub
+		f.removeUser(rootUser);
 
 	}
 

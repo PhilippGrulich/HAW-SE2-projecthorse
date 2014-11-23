@@ -38,7 +38,7 @@ public class FireBaseManager {
 			
 			@Override
 			public void onChildAdded(DataSnapshot arg0, String arg1) {
-				System.out.println("Add: " +arg0.getValue());
+				Gdx.app.log("Firebase", "Add");
 				final UserModel userModel = new UserModel();
 				final Map<String, String> newPost = (Map<String, String>)arg0.getValue();
 				userModel.id = (String) newPost.get("id");
@@ -49,20 +49,25 @@ public class FireBaseManager {
 				postRef.child(userModel.id).addValueEventListener(new ValueEventListener() {
 				    @Override
 				    public void onDataChange(DataSnapshot snapshot) {
-				        System.out.println(snapshot.getValue());
-				    	final UserModel userModel = new UserModel();
-						final Map<String, String> newPost = (Map<String, String>)snapshot.getValue();
-						userModel.id = (String) newPost.get("id");
-						userModel.name = (String) newPost.get("name");
-						userModel.x = (String) newPost.get("x");
-						userModel.y = (String) newPost.get("y");
-				        Gdx.app.postRunnable(new Runnable() {
-							@Override
-							public void run() {
-							
-								p.addUser(userModel);
-							}
-						});
+				    	Gdx.app.log("Firebase", "Update");
+				        if(snapshot.getValue()!=null){
+				        	
+							final Map<String, String> newPost = (Map<String, String>)snapshot.getValue();
+							userModel.id = (String) newPost.get("id");
+							userModel.name = (String) newPost.get("name");
+							userModel.x = (String) newPost.get("x");
+							userModel.y = (String) newPost.get("y");
+					        Gdx.app.postRunnable(new Runnable() {
+								@Override
+								public void run() {
+								
+									p.addUser(userModel);
+								}
+							});				        	
+				        }else{
+				        	p.removeUser(userModel);
+				        }
+				    	
 				    }
 				    @Override
 				    public void onCancelled(FirebaseError firebaseError) {
@@ -93,6 +98,13 @@ public class FireBaseManager {
 	
 	public void addUser(UserModel u){
 		postRef.child(u.id).setValue(u);
+	}
+
+
+
+	public void removeUser(UserModel rootUser) {
+		postRef.child(rootUser.id).removeValue();
+		
 	}
 
 
