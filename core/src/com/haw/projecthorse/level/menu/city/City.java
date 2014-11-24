@@ -5,9 +5,6 @@ package com.haw.projecthorse.level.menu.city;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
@@ -33,7 +31,6 @@ public class City extends Level {
 
 	private Stage stage;
 
-	private SpriteBatch batcher = this.getSpriteBatch();
 	private CityObject cityObject;
 	Skin skin = new Skin();
 
@@ -45,7 +42,7 @@ public class City extends Level {
 	@Override
 	protected void doShow() {		
 		
-		stage = new Stage(this.getViewport(), batcher);		
+		stage = new Stage(this.getViewport(), this.getSpriteBatch());		
 		
 		try {			
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
@@ -53,7 +50,7 @@ public class City extends Level {
 			addGameButtons();
 			createCityLabel(cityObject.getCityName());
 		} catch (LevelNotFoundException e1) {
-			Gdx.app.log("CITY", "Für " +getLevelID() + " konnten keine City Informationen geladen werden");
+			Gdx.app.log("CITY", "FÃ¼r " +getLevelID() + " konnten keine City Informationen geladen werden");
 		}		
 		
 		InputManager.addInputProcessor(stage);
@@ -61,36 +58,43 @@ public class City extends Level {
 	}
 
 	private void createCityLabel(String cityName){
-		BitmapFont font = new BitmapFont(Gdx.files.internal("pictures/city/font.txt"));
-		font.setScale(1f, 1f);
-		font.setColor(Color.MAGENTA);
-		LabelStyle labelStyle = new LabelStyle(font,Color.MAGENTA);
-		Label cityLabel = new Label(cityName, labelStyle);
-		cityLabel.setPosition(this.width / 1.6f, this.height * 0.9f);
+		BitmapFont textFont = AssetManager.getHeadlineFont(FontSize.SECHZIG);
+		Label cityLabel = new Label(cityName, new LabelStyle(
+				textFont, Color.MAGENTA));
+		cityLabel.setPosition(this.width * 0.05f / 2, this.height - cityLabel.getHeight());
 		
 		stage.addActor(cityLabel);
 	}
+	
 	private void addBackground(String backgroundImage) {
 		region = AssetManager.getTextureRegion("city",backgroundImage);
 
 		Image background = new Image(region);
-		background.toBack();
+		
+		float scaleFactor = height / background.getHeight();
+		background.setHeight(background.getHeight() * scaleFactor);
+		background.setWidth(background.getWidth() * scaleFactor);
+		
+		float widthDiff = width - background.getWidth();
+		background.setPosition(widthDiff / 2, 0);
+		
 		stage.addActor(background);
+		background.toBack();
 	}
 
 	private void addGameButtons() throws LevelNotFoundException {
 		
-		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("city","Button0"));
+		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("ui","buttonBackground"));
 		
 
 		imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
-
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
+		
+		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);;
 		;
-		imageButtonStyle.font.scale(-0.5f);
-		imageButtonStyle.fontColor = Color.WHITE;
+		
+		imageButtonStyle.fontColor = Color.GRAY;
 
 		GameObject[] games = cityObject.getGames();
 		for (GameObject game : games) {
@@ -111,13 +115,13 @@ public class City extends Level {
 			}
 		});
 		verticalGroup.addActor(imgTextButton);
-		imgTextButton.setWidth(this.width*0.5F);
-		imgTextButton.setHeight(this.height * 0.1F);
-		
-		imgTextButton.setPosition(this.width * 0.25F, lastButtonY);
-		lastButtonY = (int) (lastButtonY - this.height * 0.2F);
-		imgTextButton.toFront();
+//		imgTextButton.setWidth(this.width*0.5F);
+//		imgTextButton.setHeight(this.height * 0.1F);
+//		
+		imgTextButton.setPosition(this.width /2 - imgTextButton.getWidth() /2, lastButtonY);
+		lastButtonY = (int) (lastButtonY - imgTextButton.getHeight());
 		stage.addActor(imgTextButton);
+		imgTextButton.toFront();
 	};
 
 	@Override

@@ -102,7 +102,7 @@ public class WorldMap extends Level {
 
 		if (selectedCityIndex == -1)
 			selectedCityIndex = 0;
-		
+
 		Gdx.app.log(
 				"INFO",
 				"Zuletzt gewählte Stadt hat Index "
@@ -315,14 +315,8 @@ public class WorldMap extends Level {
 
 		});
 
-		try {
-			flagLabel = new Label(GameManagerFactory.getInstance().getCityObject(cities[selectedCityIndex]).getCityName(), new LabelStyle(
-					textFont, Color.LIGHT_GRAY));
-		} catch (LevelNotFoundException e) {
-			flagLabel = new Label("NotFound", new LabelStyle(textFont, Color.LIGHT_GRAY));
-			Gdx.app.log("WARNING", "City name for city " + cities[selectedCityIndex] + " not found!");
-			
-		}
+		flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(
+				textFont, Color.LIGHT_GRAY));
 
 		updateFlag();
 
@@ -342,9 +336,10 @@ public class WorldMap extends Level {
 		leftButton.setHeight(100);
 		leftButton.setWidth(100);
 
-		leftButton.setPosition(flagButton.getX() - leftButton.getWidth() * 1.2f
-				 , uiBackground.getY() + uiBackground.getHeight() / 2
-				- leftButton.getHeight() / 2);
+		leftButton.setPosition(
+				flagButton.getX() - leftButton.getWidth() * 1.2f,
+				uiBackground.getY() + uiBackground.getHeight() / 2
+						- leftButton.getHeight() / 2);
 
 		rightButton = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "buttonRight")));
@@ -363,10 +358,9 @@ public class WorldMap extends Level {
 		rightButton.setHeight(100);
 		rightButton.setWidth(100);
 
-		rightButton.setPosition(
-				flagButton.getX() + flagButton.getWidth() + leftButton.getWidth() * 0.2f,
-				uiBackground.getY() + uiBackground.getHeight() / 2
-						- rightButton.getHeight() / 2);
+		rightButton.setPosition(flagButton.getX() + flagButton.getWidth()
+				+ leftButton.getWidth() * 0.2f, uiBackground.getY()
+				+ uiBackground.getHeight() / 2 - rightButton.getHeight() / 2);
 
 		uiStage.addActor(uiBackground);
 		uiStage.addActor(flagButton);
@@ -403,9 +397,19 @@ public class WorldMap extends Level {
 			flagButton.setName(cities[selectedCityIndex]);
 
 			flagLabel.remove();
-			flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(
-					textFont, Color.MAGENTA));
-			;
+			try {
+				flagLabel = new Label(
+						GameManagerFactory.getInstance()
+								.getCityObject(cities[selectedCityIndex])
+								.getCityName(), new LabelStyle(textFont,
+								Color.MAGENTA));
+			} catch (LevelNotFoundException e) {
+				flagLabel = new Label("NotFound", new LabelStyle(textFont,
+						Color.MAGENTA));
+				Gdx.app.log("WARNING", "City name for city "
+						+ cities[selectedCityIndex] + " not found!");
+			}
+
 			flagLabel.setPosition(width / 2 - flagLabel.getWidth() / 2,
 					flagButton.getY() + flagButton.getHeight());
 			uiStage.addActor(flagLabel);

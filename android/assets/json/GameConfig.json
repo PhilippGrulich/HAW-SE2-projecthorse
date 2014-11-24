@@ -15,7 +15,7 @@
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
          			   						Berlin,593,668;
-         			   						München,438,108"
+         			   						Muenchen,438,108"
          }
       },
       {
@@ -53,7 +53,7 @@
          levelID:"Berlin",
          className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
-         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         			   	backgroundPath:"Brandenburger_Tor"		
          		},
          games:[
                  {
@@ -73,7 +73,7 @@
          levelID:"Muenchen",
          className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
-         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         			   	backgroundPath:"Biergarten"		
          		},
          games:[
                  {
