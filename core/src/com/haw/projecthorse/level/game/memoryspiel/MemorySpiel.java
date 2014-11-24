@@ -3,11 +3,9 @@ package com.haw.projecthorse.level.game.memoryspiel;
 import java.util.List;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.intputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
@@ -78,8 +77,7 @@ public class MemorySpiel extends Level {
 	}
 
 	protected Label createReplayLabel() {
-		BitmapFont font = new BitmapFont(
-				Gdx.files.internal("pictures/city/font.txt"));
+		BitmapFont font = AssetManager.getTextFont(FontSize.VIERZIG);
 		font.setScale(1f, 1f);
 		font.setColor(Color.WHITE);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);

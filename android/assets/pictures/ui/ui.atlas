@@ -46,9 +46,16 @@ buttonRight
   orig: 80, 80
   offset: 0, 0
   index: -1
+buttonStart
+  rotate: false
+  xy: 1321, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
 off
   rotate: false
-  xy: 1403, 31
+  xy: 1485, 31
   size: 50, 51
   orig: 50, 51
   offset: 0, 0
@@ -76,7 +83,7 @@ panel_brown
   index: -1
 pauseIcon
   rotate: false
-  xy: 1321, 2
+  xy: 1977, 198
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -90,7 +97,7 @@ popup_button
   index: -1
 settingsIcon
   rotate: false
-  xy: 1977, 198
+  xy: 1403, 2
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

@@ -31,9 +31,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Library;
 import com.badlogic.gdx.utils.Array;
-import com.haw.projecthorse.assetmanager.exceptions.*;
+import com.haw.projecthorse.assetmanager.exceptions.TextureNotFoundException;
 
 public final class AssetManager {
 
@@ -43,9 +42,11 @@ public final class AssetManager {
 	private static final String FOLDERNAME_SOUNDS = "sounds";
 	private static final String FOLDERNAME_MUSIC = "music";
 	private static final String FOLDERNAME_PICTURES = "pictures";
+	private static final String FOLDERNAME_FONTS = "fonts";
 	private static String directory_sounds;
 	private static String directory_music;
 	private static String directory_pictures;
+	private static String directory_fonts;
 	private static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
@@ -106,6 +107,7 @@ public final class AssetManager {
 		directory_sounds = assetDir + FOLDERNAME_SOUNDS;
 		directory_music = assetDir + FOLDERNAME_MUSIC;
 		directory_pictures = assetDir + FOLDERNAME_PICTURES;
+		directory_fonts = assetDir + FOLDERNAME_FONTS;
 
 	}
 
@@ -316,9 +318,9 @@ public final class AssetManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static BitmapFont getHeadlineFont(FontSize size) {
-		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
-		String relativeFilePath = directory_pictures.substring(startIdx,
-				directory_pictures.length()).replace("\\", "/")
+		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
+		String relativeFilePath = directory_fonts.substring(startIdx,
+				directory_fonts.length()).replace("\\", "/")
 				+ FILESEPARATOR + "headlinefont/GetVoIP Grotesque.ttf";
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
@@ -338,9 +340,9 @@ public final class AssetManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static BitmapFont getTextFont(FontSize size) {
-		int startIdx = directory_pictures.indexOf(FOLDERNAME_PICTURES);
-		String relativeFilePath = directory_pictures.substring(startIdx,
-				directory_pictures.length()).replace("\\", "/")
+		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
+		String relativeFilePath = directory_fonts.substring(startIdx,
+				directory_fonts.length()).replace("\\", "/")
 				+ FILESEPARATOR + "textfont/Grundschrift-Bold.ttf";
 
 		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(

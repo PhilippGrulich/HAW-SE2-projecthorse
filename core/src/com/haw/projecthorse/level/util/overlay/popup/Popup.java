@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 
@@ -141,9 +142,8 @@ public class Popup extends OverlayWidgetGroup {
 	protected Label createLabel(String message) {
 
 		LabelStyle style = new LabelStyle();
-		style.font = new BitmapFont(
-				Gdx.files.internal("pictures/fontButton/font.fnt"));
-		style.font.scale(-0.5f);
+		style.font = AssetManager.getTextFont(FontSize.VIERZIG);
+		style.fontColor = Color.GRAY;
 		Label label = new Label(message, style);
 		label.setWrap(true);
 		label.setAlignment(Align.center);
@@ -180,13 +180,9 @@ public class Popup extends OverlayWidgetGroup {
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
 
-		imageButtonStyle.font = new BitmapFont(
-				Gdx.files.internal("pictures/fontButton/font.fnt"));
-
-		imageButtonStyle.font.scale(-0.5f);
-		new Color();
-		imageButtonStyle.fontColor = Color.valueOf("838796");
-
+		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);
+		imageButtonStyle.fontColor = Color.GRAY;
+		
 		return imageButtonStyle;
 	}
 

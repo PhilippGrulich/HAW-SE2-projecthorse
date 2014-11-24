@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 
 public class SplashScreen implements Screen {
 
@@ -79,8 +80,8 @@ public class SplashScreen implements Screen {
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
-		imageButtonStyle.font.scale(-0.5f);
+		imageButtonStyle.font = new BitmapFont();
+		imageButtonStyle.font.scale(1.3f);
 		imageButtonStyle.fontColor = Color.valueOf("877E6A");
 
 		textContent = new ImageTextButton("Lade... : ", imageButtonStyle);
