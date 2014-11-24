@@ -315,8 +315,14 @@ public class WorldMap extends Level {
 
 		});
 
-		flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(
-				textFont, Color.LIGHT_GRAY));
+		try {
+			flagLabel = new Label(GameManagerFactory.getInstance().getCityObject(cities[selectedCityIndex]).getCityName(), new LabelStyle(
+					textFont, Color.LIGHT_GRAY));
+		} catch (LevelNotFoundException e) {
+			flagLabel = new Label("NotFound", new LabelStyle(textFont, Color.LIGHT_GRAY));
+			Gdx.app.log("WARNING", "City name for city " + cities[selectedCityIndex] + " not found!");
+			
+		}
 
 		updateFlag();
 
