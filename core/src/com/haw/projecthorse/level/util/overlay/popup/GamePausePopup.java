@@ -2,18 +2,14 @@ package com.haw.projecthorse.level.util.overlay.popup;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.settings.Settings;
 
-import static com.haw.projecthorse.gamemanager.settings.Settings.*;
-
 /**
- * Dieses Popup ist speziell f�r die Verwendung in Mini Spielen gedacht. Es
+ * Dieses Popup ist speziell für die Verwendung in Mini Spielen gedacht. Es
  * bietet dem Nutzer zugriff auf die Funktionen: Musik : An/Aus Spiel Verlassen
  * Weiter Spielen
  * 
@@ -21,28 +17,24 @@ import static com.haw.projecthorse.gamemanager.settings.Settings.*;
  *
  */
 public class GamePausePopup extends Popup implements Observer {
-
 	
-
-	private ImageTextButton musicButton;
-	private Settings setting  = GameManagerFactory.getInstance().getSettings();
+	private Settings setting = GameManagerFactory.getInstance().getSettings();
+	private ImageTextButton musicButton;	
 	private ImageTextButton soundButton;
-	
 
 	public GamePausePopup() {
-		
-		
+
 		musicButton = createButton("", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {	
-				
+			public void changed(ChangeEvent event, Actor actor) {
+
 				setting.setMusicState(!setting.getMusicState());
 				event.cancel();
 			}
 
-		});		
-		
+		});
+
 		soundButton = createButton("", new ChangeListener() {
 
 			@Override
@@ -73,27 +65,24 @@ public class GamePausePopup extends Popup implements Observer {
 			}
 
 		});
-		
+
 		setTextes();
-		setting.addObserver(this);	
+		setting.addObserver(this);
 
 	}
-	
-	private void setTextes(){
+
+	private void setTextes() {
 		if (setting.getMusicState())
 			musicButton.setText("Musik Aus");
 		else
-			musicButton.setText("Musik An");		
-	
-		
+			musicButton.setText("Musik An");
+
 		if (setting.getSoundState())
 			soundButton.setText("Sound Aus");
 		else
 			soundButton.setText("Sound An");
 	}
-	
-	
-	
+
 	private ImageTextButton createButton(String label, ChangeListener inputListener) {
 		ImageTextButton btn = super.createButton(label);
 		btn.addListener(inputListener);
@@ -101,11 +90,9 @@ public class GamePausePopup extends Popup implements Observer {
 		return btn;
 	}
 
-
 	@Override
 	public void update(Observable observable, Object data) {
 		setTextes();
-		
 	}
 
 }
