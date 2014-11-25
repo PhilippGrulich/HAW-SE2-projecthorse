@@ -100,9 +100,12 @@ public class WorldMap extends Menu {
 		selectedCityIndex = Arrays.asList(cities).indexOf(
 				prefs.getString("lastCity"));
 
-		if (selectedCityIndex == -1)
+		if (selectedCityIndex == -1) {
 			selectedCityIndex = 0;
-
+			prefs.putString("lastCity", cities[0]);
+			prefs.flush();
+		}
+		
 		Gdx.app.log(
 				"INFO",
 				"Zuletzt gewählte Stadt hat Index "
