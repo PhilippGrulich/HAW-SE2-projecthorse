@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -47,10 +44,9 @@ public final class AssetManager {
 	private static String directory_music;
 	private static String directory_pictures;
 	private static String directory_fonts;
-	private static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
+	public static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
-	private static ExecutorService taskRunner = Executors.newCachedThreadPool();
 	// Mapped mit LevelID auf TextureAtlas - Haelt AtlasObjekte Vorraetig zwecks
 	// Performance
 	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
@@ -69,25 +65,12 @@ public final class AssetManager {
 	public static void initialize() {
 		setApplicationRoot();
 		loadAtlases(directory_pictures, directory_pictures);
-		loadAudioPaths();
-		
+		loadAudioPaths();	
 		
 	}
 	
-	public static void finishLoading(){
-		Gdx.app.log("Asset Manager", "Warte");
-		long startTime = System.currentTimeMillis();
-		try {
-			taskRunner.shutdown();
-			taskRunner.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
-		Gdx.app.log("Asset Manager", "Musste so lange Warten: "+ (System.currentTimeMillis() - startTime) );	
-	}
-
+	
 	/**
 	 * Setzen des root-Verzeichnisses. Wird fuer den Zugriff auf Assets
 	 * benoetigt. Weiterhin werden die Sound, Music und Texture Pfade gesetzt
@@ -137,7 +120,7 @@ public final class AssetManager {
 	 */
 	private static void loadAudioPaths(final String path, final String levelID, final Assets type) {
 		// Nur ein einfacher kleiner Thread. Da es nicht sehr schlimm ist wenn Audio erst etwas später zur Verfügung steht.
-		Thread t = new Thread(){ public void run() {
+		
 		FileHandle[] files = Gdx.files.internal(path).list();
 		for (final FileHandle file : files) {
 			
@@ -157,9 +140,7 @@ public final class AssetManager {
 				}
 			}
 		}
-
-		}};
-		t.start();
+		
 	}
 
 	/**
@@ -276,9 +257,7 @@ public final class AssetManager {
 		
 		for (final FileHandle dir : dirs) {
 			// Erstellen einenes neuen Threads um parallel die unterverzeichnisse zu laden. macht das Sinn?
-			Thread t = new Thread(){
-				public void run() {
-				
+			
 					final String dirName = dir.name();
 					// Nutzung der List Methode für eine Art ForEach um nicht erstmal eine Liste von 
 					// File Handlern erstellen zu müssen.
@@ -304,13 +283,8 @@ public final class AssetManager {
 						
 					});
 				};
-			};
-		
-			taskRunner.execute(t);	
-				
-				
 
-		}
+	
 	}
 
 	// TODO: OLD kann spaeter raus
@@ -529,6 +503,30 @@ public final class AssetManager {
 		}
 		return errorPic;
 	}
+	
+	/**
+	 * Diese Methode läd einen TexturAdlas falls dieser noch nicht geladen wurde.
+	 * Es wird nicht auf die Fertigstellung des Ladens gewartet.
+	 * @param levelID
+	 */
+	public static void loadTexturRegionsAsync(String levelID){
+		if (!administratedAtlasesPath.containsKey(levelID)) {
+			Gdx.app.error("AssetManager", "TextureAtlas + " + levelID
+					+ " existiert nicht.");
+		} else {			
+			
+			boolean isLoaded = assetManager.isLoaded(administratedAtlasesPath.get(levelID),
+					TextureAtlas.class);
+			if(isLoaded){ // Grafik ist schon geladen
+				Gdx.app.log("AssetManager", levelID + " ist schon geladen");
+				
+			}else{								
+				Gdx.app.log("AssetManager", "Lade "+ levelID + " from File");
+				assetManager.load(administratedAtlasesPath.get(levelID),
+						TextureAtlas.class);
+			}				
+		}
+	}
 
 	/**
 	 * Ermittelt alle TextureRegions des TextureAtlas "levelID" und speichert
@@ -582,7 +580,7 @@ public final class AssetManager {
 	}
 	
 	private static TextureAtlas lookUpForAtlas(String levelID){	
-			finishLoading();
+			
 			if (!administratedAtlasesPath.containsKey(levelID)) {
 				Gdx.app.error("AssetManager", "TextureAtlas + " + levelID
 						+ " existiert nicht.");
