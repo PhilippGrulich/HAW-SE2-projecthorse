@@ -1,6 +1,5 @@
 package com.haw.projecthorse.level;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -9,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.audiomanager.AudioManager;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.level.util.overlay.Overlay;
@@ -21,11 +22,11 @@ import com.haw.projecthorse.lootmanager.Chest;
  * 
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
- *         m�ssen stattdessen jeweils doDispose() usw. implementieren
+ *         müssen stattdessen jeweils doDispose() usw. implementieren
  * 
  *         Alle Implementierungen M�SSEN im Konstruktor super() aufrufen!
  * 
- *         Jedes level hat ein Overlay. �ber das Overlay k�nnen Popups unter
+ *         Jedes level hat ein Overlay. über das Overlay können Popups unter
  *         anderm Popups angezeigt werden. *
  * 
  */
@@ -33,7 +34,7 @@ import com.haw.projecthorse.lootmanager.Chest;
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
-	// TODO f�r Release entfernen
+	// TODO für Release entfernen
 	private FPSLogger fpsLogger = new FPSLogger();
 	// ####################################
 
@@ -49,6 +50,8 @@ public abstract class Level implements Screen {
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenWidth();
+	
+	protected AudioManager audioManager;
 
 	public Level() {
 		cam = createCamera();
@@ -80,7 +83,8 @@ public abstract class Level implements Screen {
 	
 
 		chest = new Chest(overlay);
-
+		
+		audioManager = AudioManagerImpl.getInstance();
 	}
 	
 	
@@ -122,7 +126,7 @@ public abstract class Level implements Screen {
 		delta = delta%1;
 		paintBackground();
 		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
-		// �bergeben.
+		// übergeben.
 		// Hierdurch wird sichergestellt das die Interaktionen
 		if (paused) {
 			delta = 0;

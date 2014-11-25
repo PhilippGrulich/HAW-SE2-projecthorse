@@ -16,7 +16,7 @@ public class AudioManagerImpl implements AudioManager{
 	private Settings settings;
 	
 	
-	private AudioManagerImpl instance = new AudioManagerImpl(); 
+	private static AudioManagerImpl instance = new AudioManagerImpl(); 
 	private AudioManagerImpl(){
 		settings = GameManagerFactory.getInstance().getSettings();
 		settings.addObserver(this);
@@ -58,11 +58,15 @@ public class AudioManagerImpl implements AudioManager{
 		return music;
 	}
 	
-	public AudioManager getInstance(){
+	public static AudioManager getInstance(){
 		return instance;
 	}
 	
+	void remove(Music music){
+		musicObjects.remove(music);
+	}
 	
-	
-
+	void remove(Sound sound){
+		soundObjects.remove(sound);
+	}	
 }

@@ -1,124 +1,132 @@
 package com.haw.projecthorse.audiomanager;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.haw.projecthorse.assetmanager.AssetManager;
 
 public class ManagedMusic implements Music{
 
-	private Sound internal;
+	private Music internal;
 	private float desiredVolume;
 	boolean muted;
 	private AudioManagerImpl manager; 
 	
-	// Variablen für Ringpuffer. Dieser wird genutzt um sich die 
-	// zuletzt abgespielten Sound zu merken
-	private long[] lastMusics;
-	private int rbIndex;
-	private final int MAXSIZE = 5;
-
 	public ManagedMusic(String levelId, String name, boolean muted, AudioManagerImpl manager) {
-		internal = AssetManager.getSound(levelId, name);
+		internal = AssetManager.getMusic(levelId, name);
 		this.muted = muted;
 		desiredVolume = 1f;
 		this.manager = manager;
-		
-		lastMusics = new long[MAXSIZE];
-		rbIndex = 0;
-	}
-
-	private long evalMethod(long value){
-		if (value == -1)
-			return value;
-		lastMusics[rbIndex] = value;
-		rbIndex = (rbIndex + 1) % MAXSIZE;
-		return value;
+		setMuted(muted);
 	}
 	
 	void setMuted(boolean state) {
-		if (state == muted)
-			return;
-
 		muted = state;
-		for (long music : lastMusics){
-			if (muted)
-				internal.setVolume(music, 0f);
-			else
-				internal.setVolume(music, desiredVolume);
-		}
+		if (muted)
+			internal.setVolume(0f);
+		else
+			internal.setVolume(desiredVolume);
+		
 	}
 
-	
 	@Override
 	public void play() {
-		// TODO Auto-generated method stub
+		internal.play();
 		
+	}
+	
+	@Override
+	public void stop() {
+		internal.stop();
+
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		internal.pause();
+
 	}
 
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean isPlaying() {
-		// TODO Auto-generated method stub
-		return false;
+		return internal.isPlaying();
 	}
 
 	@Override
 	public void setLooping(boolean isLooping) {
-		// TODO Auto-generated method stub
+		internal.setLooping(isLooping);
 		
 	}
 
 	@Override
 	public boolean isLooping() {
-		// TODO Auto-generated method stub
-		return false;
+		return internal.isLooping();
 	}
 
 	@Override
 	public void setVolume(float volume) {
-		// TODO Auto-generated method stub
+		desiredVolume = volume;
+		if (!muted)
+			internal.setVolume(volume);
 		
 	}
 
 	@Override
 	public float getVolume() {
-		// TODO Auto-generated method stub
-		return 0;
+		return desiredVolume;
 	}
 
 	@Override
 	public void setPan(float pan, float volume) {
-		// TODO Auto-generated method stub
-		
+		desiredVolume = volume;
+		if (muted)
+			internal.setPan(pan, 0f);
+		else
+			internal.setPan(pan, volume);
 	}
 
 	@Override
 	public float getPosition() {
-		// TODO Auto-generated method stub
-		return 0;
+		return internal.getPosition();
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		manager.remove(this);
+		internal.dispose();
 		
 	}
 
 	@Override
 	public void setOnCompletionListener(OnCompletionListener listener) {
-		// TODO Auto-generated method stub
-		
+		internal.setOnCompletionListener(listener);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((internal == null) ? 0 : internal.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ManagedMusic other = (ManagedMusic) obj;
+		if (internal == null) {
+			if (other.internal != null)
+				return false;
+		} else if (!internal.equals(other.internal))
+			return false;
+		return true;
+	}
+	
+	
 
 }

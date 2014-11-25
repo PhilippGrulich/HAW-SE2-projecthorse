@@ -1,7 +1,5 @@
 package com.haw.projecthorse.audiomanager;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.audio.Sound;
 import com.haw.projecthorse.assetmanager.AssetManager;
 
@@ -37,9 +35,6 @@ public class ManagedSound implements Sound {
 	}
 	
 	void setMuted(boolean state) {
-		if (state == muted)
-			return;
-
 		muted = state;
 		for (long sound : lastSounds){
 			if (muted)
@@ -51,14 +46,17 @@ public class ManagedSound implements Sound {
 	
 	@Override
 	public long play() {
-		desiredVolume = 1f;
-		return evalMethod(internal.play(desiredVolume, 1f, 0f));
+		float realVolume;
+		realVolume = muted ? 0f : desiredVolume;
+		return evalMethod(internal.play(realVolume));
 		
 	}
 
 	@Override
 	public long play(float volume) {
-		return evalMethod(internal.play(desiredVolume, 1f, 0f));
+		float realVolume;
+		realVolume = muted ? 0f : desiredVolume;
+		return evalMethod(internal.play(realVolume, 1f, 0f));
 		
 	}
 
@@ -72,12 +70,17 @@ public class ManagedSound implements Sound {
 
 	@Override
 	public long loop() {
-		return evalMethod(internal.loop(desiredVolume, 1f, 0));
+		float realVolume;
+		realVolume = muted ? 0f : desiredVolume;
+		return evalMethod(internal.loop(realVolume));
 	}
 
 	@Override
 	public long loop(float volume) {
-		return evalMethod(internal.loop(volume, 1f, 0));
+		desiredVolume = volume;
+		float realVolume;
+		realVolume = muted ? 0f : desiredVolume;
+		return evalMethod(internal.loop(realVolume));
 	}
 
 	@Override
@@ -108,6 +111,7 @@ public class ManagedSound implements Sound {
 
 	@Override
 	public void dispose() {
+		manager.remove(this);
 		internal.dispose();
 	}
 
@@ -138,9 +142,8 @@ public class ManagedSound implements Sound {
 
 	@Override
 	public void setVolume(long soundId, float volume) {
-		if (muted)
-			internal.setVolume(soundId, 0f);
-		else
+		desiredVolume = volume;
+		if (!muted)
 			internal.setVolume(soundId, volume);
 
 	}
@@ -162,13 +165,8 @@ public class ManagedSound implements Sound {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + MAXSIZE;
-		result = prime * result + Float.floatToIntBits(desiredVolume);
 		result = prime * result
 				+ ((internal == null) ? 0 : internal.hashCode());
-		result = prime * result + Arrays.hashCode(lastSounds);
-		result = prime * result + (muted ? 1231 : 1237);
-		result = prime * result + rbIndex;
 		return result;
 	}
 
@@ -181,21 +179,10 @@ public class ManagedSound implements Sound {
 		if (getClass() != obj.getClass())
 			return false;
 		ManagedSound other = (ManagedSound) obj;
-		if (MAXSIZE != other.MAXSIZE)
-			return false;
-		if (Float.floatToIntBits(desiredVolume) != Float
-				.floatToIntBits(other.desiredVolume))
-			return false;
 		if (internal == null) {
 			if (other.internal != null)
 				return false;
 		} else if (!internal.equals(other.internal))
-			return false;
-		if (!Arrays.equals(lastSounds, other.lastSounds))
-			return false;
-		if (muted != other.muted)
-			return false;
-		if (rbIndex != other.rbIndex)
 			return false;
 		return true;
 	}

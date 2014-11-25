@@ -33,6 +33,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.assetmanager.exceptions.TextureNotFoundException;
+import com.haw.projecthorse.audiomanager.AudioManager;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 
 public final class AssetManager {
 
@@ -63,6 +65,8 @@ public final class AssetManager {
 	// Sinnvoll.
 	private static Map<String, ArrayList<String>> administratedSoundPath;
 	private static Map<String, ArrayList<String>> administratedMusicPath;
+	
+	private static AudioManager audioManager = AudioManagerImpl.getInstance();
 
 	private static TextureRegion errorPic;
 
@@ -286,7 +290,7 @@ public final class AssetManager {
 						@Override
 						public boolean accept(File arg0, String filename) {
 							if(filename.matches(".*\\.atlas")){
-								int startIdx = path.indexOf(FOLDERNAME_PICTURES);
+								//int startIdx = path.indexOf(FOLDERNAME_PICTURES);
 								String relativeFilePath = path.replace("\\", "/") +"/"+ dirName
 										+ "/" + filename;
 								
@@ -406,10 +410,12 @@ public final class AssetManager {
 	 *            Pfad zur Sounddatei
 	 * @param levelID
 	 *            Die ID des Levels
+	 *            
+	 * @deprecated Stattdessen "this.audioManager" aus Level Interface benutzen 
 	 */
+	@Deprecated
 	public static void playSound(String levelID, String name) {
-		assetManager.get(FOLDERNAME_SOUNDS + "/" + levelID + "/" + name,
-				Sound.class).play(soundVolume);
+		audioManager.getSound(levelID, name).play(soundVolume);
 	}
 
 	/**
@@ -418,7 +424,9 @@ public final class AssetManager {
 	 * 
 	 * @param volume
 	 *            Die Lautstärke des Sounds im Bereich [0,1]. 0 ist stumm.
+	  * @deprecated Stattdessen "this.audioManager" aus Level Interface benutzen 
 	 */
+	@Deprecated
 	public static void changeSoundVolume(float volume) {
 		soundVolume = volume;
 	}
@@ -434,12 +442,13 @@ public final class AssetManager {
 	 * @param name
 	 *            Name der Datei ink. relativem Pfad (ohne Oberordner mit Namen
 	 *            "levelID"
+	  * @deprecated Stattdessen "this.audioManager" aus Level Interface benutzen 
 	 */
-	public static void playMusic(String levelID, String name) {
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
-				Music.class).play();
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
-				Music.class).setVolume(musicVolume);
+	@Deprecated
+	public static void playMusic(String levelID, String name) { 
+		Music music = audioManager.getMusic(levelID, name);
+		music.setVolume(musicVolume);
+		music.play();
 	}
 
 	/**
@@ -453,11 +462,12 @@ public final class AssetManager {
 	 *            "levelID"
 	 * @param looping
 	 *            true um Looping zu setzen, sonst false
+	 * @deprecated Stattdessen "this.audioManager" aus Level Interface benutzen 
 	 */
+	@Deprecated
 	public static void setMusicLooping(String levelID, String name,
 			boolean looping) {
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
-				Music.class).setLooping(looping);
+		audioManager.getMusic(levelID, name).setLooping(looping);
 	}
 
 	/**
@@ -468,10 +478,11 @@ public final class AssetManager {
 	 * @param name
 	 *            Name der Datei inkl. relativem Pfad (ohne Oberordner mit Namen
 	 *            "levelID").
+	 * @deprecated Stattdessen "this.audioManager" aus Level Interface benutzen 
 	 */
+	@Deprecated
 	public static void turnMusicOff(String levelID, String name) {
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
-				Music.class).stop();
+		audioManager.getMusic(levelID, name).stop();
 	}
 
 	/**
@@ -485,11 +496,12 @@ public final class AssetManager {
 	 *            "levelID").
 	 * @param volume
 	 *            Float-Wert zwischen [0,1]. 0 ist Stumm, 1 volle Lautstärke.
+	 * @deprecated Stattdessen "this.audioManager" aus Level Interface benutzen 
 	 */
+	@Deprecated
 	public static void changeMusicVolume(String levelID, String name,
 			float volume) {
-		assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
-				Music.class).setVolume(volume);
+		audioManager.getMusic(levelID, name).setVolume(volume);
 		musicVolume = volume;
 	}
 
