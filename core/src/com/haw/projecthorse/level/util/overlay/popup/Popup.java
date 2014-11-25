@@ -143,7 +143,7 @@ public class Popup extends OverlayWidgetGroup {
 
 		LabelStyle style = new LabelStyle();
 		style.font = AssetManager.getTextFont(FontSize.VIERZIG);
-		style.fontColor = Color.LIGHT_GRAY;
+		style.fontColor = Color.GRAY;
 		Label label = new Label(message, style);
 		label.setWrap(true);
 		label.setAlignment(Align.center);
@@ -181,7 +181,7 @@ public class Popup extends OverlayWidgetGroup {
 		imageButtonStyle.up = drawable;
 
 		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);
-		imageButtonStyle.fontColor = Color.LIGHT_GRAY;
+		imageButtonStyle.fontColor = Color.GRAY;
 		
 		return imageButtonStyle;
 	}
