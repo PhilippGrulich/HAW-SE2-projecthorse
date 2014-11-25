@@ -24,12 +24,6 @@ import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
-/**
- * @author Lars MainMenu. Shown when game starts Using a libgdx.stage and tables
- *         within to create an ui-layout
- * 
- */
-
 public class MainMenu extends Level {
 
 	private VerticalGroup table;

@@ -28,10 +28,10 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
  * 
  *         Dies ist ein grundlegendes Popup und alle weiteren Popops k�nnen ein
  *         spezielles Verhalten in Supklassen implementieren. Au�erdem bittet es
- *         Implementierungen f�r Standart-Komponenten.
+ *         Implementierungen für Standart-Komponenten.
  *         (createButton,createLabel) Diese sollten von dem Erbenen Popup
  *         verwendet werden um ein Einheitliches Look and Feel zu erhalten.
- *         Damit alle Popups immer �hnlich aussehen werden in dieser Klasse
+ *         Damit alle Popups immer ähnlich aussehen werden in dieser Klasse
  *         mehrere gennerelle Settings gesetzt. Popups werden immer zental auf
  *         dem Bildschirm dargestellt und haben ein {@link VerticalGroup}
  *         Layout. Des weiteren ist die addActor Methode so �berschrieben das
@@ -110,7 +110,7 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Die addActor Methode wird �berschrieben damit alle Kind Elemente immer
+	 * Die addActor Methode wird überschrieben damit alle Kind Elemente immer
 	 * auf das Vertical Layout gelegt werden.
 	 */
 	@Override
@@ -132,9 +132,9 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Diese Methode erm�glicht das erstellen eines Standart Labels. Dieses
-	 * Label wird zur�ckgegeben und kann weiter Ver�ndert werden. Au�erdem muss
-	 * es noch dem Popup mit AddActor hinzugef�gt werden.
+	 * Diese Methode ermöglicht das erstellen eines Standart Labels. Dieses
+	 * Label wird zurückgegeben und kann weiter Verändert werden. Außerdem muss
+	 * es noch dem Popup mit AddActor hinzugefügt werden.
 	 * 
 	 * @param message
 	 * @return {@link Label}
@@ -143,7 +143,7 @@ public class Popup extends OverlayWidgetGroup {
 
 		LabelStyle style = new LabelStyle();
 		style.font = AssetManager.getTextFont(FontSize.VIERZIG);
-		style.fontColor = Color.GRAY;
+		style.fontColor = Color.LIGHT_GRAY;
 		Label label = new Label(message, style);
 		label.setWrap(true);
 		label.setAlignment(Align.center);
@@ -154,8 +154,8 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Diese Methode erm�glicht das erstellen ein Standart Button. Dieses Button
-	 * wird zur�ckgegeben und kann weiter Ver�ndert werden. Es wird z.b. ein
+	 * Diese Methode ermöglicht das erstellen ein Standart Button. Dieses Button
+	 * wird zurückgegeben und kann weiter Verändert werden. Es wird z.b. ein
 	 * Standart Image gesetzt.
 	 * 
 	 * @param text
@@ -181,7 +181,7 @@ public class Popup extends OverlayWidgetGroup {
 		imageButtonStyle.up = drawable;
 
 		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);
-		imageButtonStyle.fontColor = Color.GRAY;
+		imageButtonStyle.fontColor = Color.LIGHT_GRAY;
 		
 		return imageButtonStyle;
 	}
@@ -200,7 +200,7 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Erstellt den {@link CheckBoxStyle} f�r die MEthode createCheckbox.
+	 * Erstellt den {@link CheckBoxStyle} für die Methode createCheckbox.
 	 * 
 	 * @return {@link CheckBoxStyle}
 	 */
