@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
@@ -29,7 +29,7 @@ import com.haw.projecthorse.player.color.ColorManager;
 import com.haw.projecthorse.player.color.PlayerColor;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
-public class PlayerMenu extends Level {
+public class PlayerMenu extends Menu {
 	private Stage stage;
 	private Player active, player1, player2;
 	private Label label;
@@ -194,7 +194,7 @@ public class PlayerMenu extends Level {
 
 	@Override
 	protected void doDispose() {
-		// Alles speichern, bevor das Menü verlassen wird
+		// Alles speichern, bevor das Menï¿½ verlassen wird
 		SaveGameManager.getLoadedGame().setHorseName(playerName);
 		SaveGameManager.getLoadedGame().setHorseColor(colors.get(index));
 		SaveGameManager.saveLoadedGame();

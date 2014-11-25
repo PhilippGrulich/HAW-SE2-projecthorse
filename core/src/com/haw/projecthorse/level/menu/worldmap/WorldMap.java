@@ -28,12 +28,12 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.PlayerImpl;
 
-public class WorldMap extends Level {
+public class WorldMap extends Menu {
 
 	// Dieses Enum stellt den aktuellen Zustand in der Worldmap dar,
 	// um verschiedene Situationen unterscheiden zu können
