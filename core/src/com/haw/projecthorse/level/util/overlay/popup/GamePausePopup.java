@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
 /**
- * Dieses Popup ist speziell für die Verwendung in Mini Spielen gedacht. Es
+ * Dieses Popup ist speziell fï¿½r die Verwendung in Mini Spielen gedacht. Es
  * bietet dem Nutzer zugriff auf die Funktionen: Musik : An/Aus Spiel Verlassen
  * Weiter Spielen
  * 
@@ -17,11 +17,29 @@ public class GamePausePopup extends Popup {
 
 	public GamePausePopup() {
 
-		String soundState = "Musik An";
+		String musicState = "Musik An";
+		final boolean music = GameManagerFactory.getInstance().getSettings()
+				.getMusicState();
+		if (music)
+			musicState = "Musik Aus";
+		createButton(musicState, new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				GamePausePopup.this.getOverlay().disposePopup();
+				GameManagerFactory.getInstance().getSettings()
+						.setMusicState(!music);
+				event.cancel();
+
+			}
+
+		});
+		
+		String soundState = "Sounds An";
 		final boolean sound = GameManagerFactory.getInstance().getSettings()
 				.getSoundState();
 		if (sound)
-			soundState = "Musik Aus";
+			soundState = "Sounds Aus";
 		createButton(soundState, new ChangeListener() {
 
 			@Override

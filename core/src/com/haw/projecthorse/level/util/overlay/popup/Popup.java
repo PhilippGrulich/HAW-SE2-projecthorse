@@ -42,7 +42,7 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
  */
 public class Popup extends OverlayWidgetGroup {
 
-	protected int popupHeigh = (int) (height / 2.5), popupWidth = width - 100;;
+	protected int popupHeigh = (int) (height / 2.0), popupWidth = width - 100;;
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
 

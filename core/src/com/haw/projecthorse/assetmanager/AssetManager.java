@@ -236,6 +236,29 @@ public final class AssetManager {
 	}
 
 	/**
+	 * Liefert ein LibGDX Sound Objekt. Sollte nur im AudioManager Modul genutzt werden.
+	 * @param levelID
+	 * @param name
+	 * @return
+	 */
+	public static Sound getSound(String levelID, String name){
+		return assetManager.get(FOLDERNAME_SOUNDS + "/" + levelID + "/" + name,
+				Sound.class);
+	}
+	
+	/**
+	 * Liefert ein LibGDX Music Objekt. Sollte nur im AudioManager Modul genutzt werden.
+	 * @param levelID
+	 * @param name
+	 * @return
+	 */
+	public static Music getMusic(String levelID, String name){
+		return assetManager.get(FOLDERNAME_MUSIC + "/" + levelID + "/" + name,
+				Music.class);
+	}
+	
+	
+	/**
 	 * Laedt einmal beim Start der Anwendung alle Pfade der .atlas-Dateien in eine Hashmap.
 	 * Erst beim ersten Nutzen der Hashmap wird der Speicher Reserviert.
 	 * 
