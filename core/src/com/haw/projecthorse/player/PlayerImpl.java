@@ -16,10 +16,11 @@ public class PlayerImpl extends Player {
 
 	private static final int SPRITES_PER_ANIMATION = 4;
 
+	private Race race;
+	
 	private TextureRegion sprite;
 	private float speed = 0f;
 	private int spriteStartX, spriteStartY;
-	private Color colorTint;
 
 	private Direction direction = Direction.RIGHT;
 
@@ -70,8 +71,8 @@ public class PlayerImpl extends Player {
 					break;
 				}
 
-				// Die Position der TextureRegion muss geändert werden ->
-				// nächstes Sprite laden
+				// Die Position der TextureRegion muss geï¿½ndert werden ->
+				// nï¿½chstes Sprite laden
 				sprite.setRegion(spriteStartX + spriteIndex * DEFAULT_WIDTH,
 						spriteStartY + animationIndex * DEFAULT_HEIGHT,
 						DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -82,32 +83,22 @@ public class PlayerImpl extends Player {
 	}
 
 	public PlayerImpl() {
-		this(PlayerColor.WHITE);
+		this(HorseRace.HAFLINGER);
 	}
 	
+	@Deprecated
 	public PlayerImpl(PlayerColor color) {
-		if (color.hasBlackBase()) {
-			black = true;
-			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
-			positions[2] = sprite.getRegionX();
-			positions[3] = sprite.getRegionY();
-			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
-			positions[0] = sprite.getRegionX();
-			positions[1] = sprite.getRegionY();
-		} else {
-			black = false;
-			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
-			positions[0] = sprite.getRegionX();
-			positions[1] = sprite.getRegionY();
-			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
-			positions[2] = sprite.getRegionX();
-			positions[3] = sprite.getRegionY();
-		}
+		this(HorseRace.HAFLINGER);
+	}
+	
+	public PlayerImpl(HorseRace horseRace) {
+		race = new Race(horseRace);
+		
+		sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
 		spriteStartX = sprite.getRegionX();
 		spriteStartY = sprite.getRegionY();
 		sprite.setRegion(spriteStartX, spriteStartY, DEFAULT_WIDTH,
 				DEFAULT_HEIGHT);
-		this.colorTint = color.getColor();
 
 		setBounds(getX(), getY(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		addAction(new AnimationAction());
@@ -128,18 +119,13 @@ public class PlayerImpl extends Player {
 	}
 	
 	@Override
+	@Deprecated
 	public void setPlayerColor(PlayerColor color) {
-		this.colorTint = color.getColor();
-		setColor(color.getColor());
-		
-		if (black != color.hasBlackBase()) {
-			toggleColor();
-		}
 	}
 
 	@Override
 	public void setAnimation(Direction direction, float speed) {
-		// TODO Bei Richtungswechsel Animation ändern
+		// TODO Bei Richtungswechsel Animation Ã¤ndern
 		// if (this.direction != direction){
 		// this.direction != direction
 		//
@@ -174,6 +160,7 @@ public class PlayerImpl extends Player {
 	}
 	
 	// for testing
+	@Deprecated
 	public void toggleColor() {
 		if (black) {
 			spriteStartX = positions[2];
@@ -184,6 +171,26 @@ public class PlayerImpl extends Player {
 			spriteStartY = positions[1];
 			black = true;
 		}
+	}
+
+	@Override
+	public float getObedience() {
+		return race.obedience;
+	}
+
+	@Override
+	public float getIntelligence() {
+		return race.intelligence;
+	}
+
+	@Override
+	public float getAthletic() {
+		return race.athletic;
+	}
+
+	@Override
+	public String getRasse() {
+		return race.name;
 	}
 
 }
