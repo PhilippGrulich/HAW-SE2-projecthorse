@@ -11,11 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.level.util.overlay.Overlay;
-import com.haw.projecthorse.level.util.overlay.navbar.GameNavBar;
-import com.haw.projecthorse.level.util.overlay.navbar.MenuNavBar;
-import com.haw.projecthorse.lootmanager.Chest;
 
 /**
  * @author Lars Level . Abstract baseclass for Level implementations.
@@ -44,8 +40,7 @@ public abstract class Level implements Screen {
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
 	protected Overlay overlay;
-	protected Chest chest;
-
+	
 	protected final int height = GameManagerFactory.getInstance().getSettings()
 			.getVirtualScreenHeight();
 	protected final int width = GameManagerFactory.getInstance().getSettings()
@@ -56,33 +51,14 @@ public abstract class Level implements Screen {
 	public Level() {
 		cam = createCamera();
 		viewport = new FitViewport(width, height, cam);
-		System.out.println(viewport.getTopGutterHeight());
+		
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
 
 		FitViewport overlayViewport = new FitViewport(width, height,
 				createCamera());
-		overlay = new Overlay(overlayViewport, spriteBatch, this);
-
-		String LevelID  = GameManagerFactory.getInstance().getCurrentLevelID();
-		try {
-			GameManagerFactory.getInstance().getCityObject(LevelID);
-			MenuNavBar nav = new MenuNavBar();
-			this.overlay.setNavigationBar(nav);
-		} catch (LevelNotFoundException e) {
-			try {
-				GameManagerFactory.getInstance().getMenuObject(LevelID);
-				MenuNavBar nav = new MenuNavBar();
-				this.overlay.setNavigationBar(nav);
-			} catch (LevelNotFoundException e1) {
-				GameNavBar nav = new GameNavBar();
-				this.overlay.setNavigationBar(nav);
-			}
-			
-		}
-	
-
-		chest = new Chest(overlay);
+		overlay = new Overlay(overlayViewport, spriteBatch, this);	
+		
 		
 		audioManager = AudioManagerImpl.getInstance();
 	}
