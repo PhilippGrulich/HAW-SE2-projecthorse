@@ -1,11 +1,5 @@
 package com.haw.projecthorse.gamemanager;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,11 +11,20 @@ import com.haw.projecthorse.intputmanager.InputManager;
 public class CoreGameMain extends Game {
 
 	private Screen splash;
+	
+	private String[] preloadAssets = new String[]{"ui","menu","notChecked"};
 
-	private void startGame(NavigationManagerImpl nav) {
-		GameManagerImpl gameManager = GameManagerImpl.getInstance();
-		gameManager.setNavigationManager(nav);
-		nav.navigateToMainMenu();
+	private void startGame(final NavigationManagerImpl nav) {
+		
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				if(AssetManager.isLoadingFinished())
+					nav.navigateToMainMenu();
+				else
+					startGame(nav);
+			}
+		});		
 	}
 
 	// Läd alle für das Spiel wichtiegen Assets in einem seperaten Thread
@@ -32,15 +35,22 @@ public class CoreGameMain extends Game {
 				AssetManager.initialize();
 				final NavigationManagerImpl nav = new NavigationManagerImpl(CoreGameMain.this);
 				InputManager.createInstance();
-				AssetManager.finishLoading();
+				GameManagerImpl gameManager = GameManagerImpl.getInstance();
+				gameManager.setNavigationManager(nav);
 				// Call startGame in the Render Thread
 				
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
+						for(int i = 0 ; i<preloadAssets.length;i++){
+							AssetManager.loadTexturRegionsAsync(preloadAssets[i]);
+						}						
+						
 						startGame(nav);
 					}
-				});
+				});		
+				startGame(nav);
+				
 				AssetManager.checkLicenses();
 			}
 		};

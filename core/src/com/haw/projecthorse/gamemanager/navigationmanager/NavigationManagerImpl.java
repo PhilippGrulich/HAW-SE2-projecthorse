@@ -13,11 +13,10 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.LevelManager;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
 
 /**
- * Navigation Manager. Über den NavigationManager wird von einem Level zum
- * Nächsten navigiert. Er Verwaltet den aktuellen Screen.
+ * Navigation Manager. Ã¼ber den NavigationManager wird von einem Level zum
+ * Nï¿½chsten navigiert. Er Verwaltet den aktuellen Screen.
  */
 public class NavigationManagerImpl implements NavigationManager {
 	private Game game;
@@ -28,14 +27,13 @@ public class NavigationManagerImpl implements NavigationManager {
 		this.game = newGame;
 		levelManager = new LevelManager();
 
-	
 		// game.setScreen(new DefaultLevel());
 
 	}
 
 	@Override
 	public final void navigateToLevel(final String levelID) {
-		Gdx.app.log("NavigationManager","NavigateToLevel");
+		Gdx.app.log("NavigationManager", "NavigateToLevel");
 		try {
 			if (game.getScreen() != null) {
 				InputManager.clear();
@@ -46,8 +44,7 @@ public class NavigationManagerImpl implements NavigationManager {
 				levelIDHistory.push(levelID);
 			Screen screen = levelManager.getScreenByLevelID(levelID);
 			game.setScreen(screen);
-			
-			
+
 		} catch (LevelLoadException e) {
 			e.printStackTrace();
 			navigateToLevel("worldmap");
@@ -69,12 +66,11 @@ public class NavigationManagerImpl implements NavigationManager {
 	public final GameObject getGameObject(final String levelID) throws LevelNotFoundException {
 		return levelManager.getGameObject(levelID);
 	}
-	
+
 	@Override
 	public final MenuObject getMenuObject(final String levelID) throws LevelNotFoundException {
 		return levelManager.getMenuObject(levelID);
 	}
-
 
 	@Override
 	public final GameConfig getGameConfig() {
@@ -88,13 +84,13 @@ public class NavigationManagerImpl implements NavigationManager {
 	}
 
 	@Override
-	public String getCurrentLevelID() {		
+	public String getCurrentLevelID() {
 		return levelIDHistory.peek();
 	}
 
 	@Override
 	public void navigateBack() {
-		if ((levelIDHistory.size()>1))
+		if ((levelIDHistory.size() > 1))
 			levelIDHistory.pop();
 		if (!levelIDHistory.isEmpty())
 			navigateToLevel(levelIDHistory.peek());
