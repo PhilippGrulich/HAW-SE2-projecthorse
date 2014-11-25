@@ -12,17 +12,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.assetmanager.FontSize;
 
 public class SplashScreen implements Screen {
 
@@ -35,7 +34,6 @@ public class SplashScreen implements Screen {
 	private VerticalGroup table;
 	private static final int height = 1280;
 	private static final int width = 720;
-	private boolean isActive = true;
 	private ArrayList<String> loadingMessages = new ArrayList<String>(Arrays.asList(new String[] { "Male Pferde an", "Drehe den Wind auf", "Dressiere die Pferde", "Klaue etwas zum Füttern",
 			"Male Landkarte", "Suche den Reisepass", "Züchte Kürbisse", "Stelle Boxen in den Weg"
 
@@ -44,6 +42,7 @@ public class SplashScreen implements Screen {
 	private float timeLeft;
 
 	public SplashScreen() {
+		
 		cam = createCamera();
 		viewport = new FitViewport(width, height, cam);
 
@@ -76,12 +75,17 @@ public class SplashScreen implements Screen {
 
 	private void CreateButton() {
 		Drawable drawable = new TextureRegionDrawable((new TextureRegion(new Texture(Gdx.files.internal("splashscreen/buttonBackground.png")))));
-
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/textfont/Grundschrift-Bold.ttf"));
+		FreeTypeFontParameter frontPara = new FreeTypeFontParameter();
+		frontPara.size = 40;
+		
+		BitmapFont b = gen.generateFont(frontPara);
+		gen.dispose();
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
-		imageButtonStyle.font = new BitmapFont();
-		imageButtonStyle.font.scale(1.3f);
+		imageButtonStyle.font = b;
+		
 		imageButtonStyle.fontColor = Color.valueOf("877E6A");
 
 		textContent = new ImageTextButton("Lade... : ", imageButtonStyle);
@@ -152,7 +156,7 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		isActive = false;
+		
 
 	}
 
