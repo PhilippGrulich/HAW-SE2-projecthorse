@@ -14,7 +14,7 @@ public class SettingsImpl extends Settings {
 	private Preferences prefs;
 
 	// Singleton Umsetzung
-	private static final SettingsImpl settingsInstance = new SettingsImpl();
+	private static SettingsImpl settingsInstance;
 
 	private SettingsImpl() {
 		prefs = Gdx.app.getPreferences("SettingsPrefs");
@@ -26,6 +26,8 @@ public class SettingsImpl extends Settings {
 	 * @return Settings Ein Settings Object nach dem Singleton Pattern.
 	 */
 	public static SettingsImpl getInstance() {
+		if (settingsInstance == null)
+			settingsInstance = new SettingsImpl();
 		return settingsInstance;
 	};
 
@@ -104,6 +106,11 @@ public class SettingsImpl extends Settings {
 		prefs.putBoolean("Accelerometer", state);
 		prefs.flush();
 		notifyObservers();
+	}
+
+	@Override
+	public void dispose() {
+		settingsInstance = null;
 	}
 
 }
