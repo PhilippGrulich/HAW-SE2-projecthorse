@@ -12,7 +12,7 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.LevelManager;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 
 /**
  * Navigation Manager. über den NavigationManager wird von einem Level zum

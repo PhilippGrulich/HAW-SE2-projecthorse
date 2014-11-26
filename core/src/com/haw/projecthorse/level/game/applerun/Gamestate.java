@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 

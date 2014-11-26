@@ -7,7 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManagerImpl;
 import com.haw.projecthorse.gamemanager.splashscreen.SplashScreen;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 
 public class CoreGameMain extends Game {
 

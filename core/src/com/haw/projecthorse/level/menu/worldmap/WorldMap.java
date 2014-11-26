@@ -27,7 +27,7 @@ import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;

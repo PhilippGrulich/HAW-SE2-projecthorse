@@ -1,4 +1,4 @@
-package com.haw.projecthorse.intputmanager;
+package com.haw.projecthorse.inputmanager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * Eine Spezielle lieste welche ihre Elemente über eine Priorität sortiert
+ * Eine Spezielle lieste welche ihre Elemente ï¿½ber eine Prioritï¿½t sortiert
  * @author Philipp
  *
  * @param <E>
