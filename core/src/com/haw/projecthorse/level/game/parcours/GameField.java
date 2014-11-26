@@ -13,7 +13,7 @@ import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.player.Direction;
 
 /**
- * Container-Klasse für GameObjects.
+ * Container-Klasse fï¿½r GameObjects.
  * 
  * @author Francis
  *
@@ -64,17 +64,17 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 				0, 0, false, 0, 0, regions, goi);
 		
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight(), -100,
+				regions.get("cloud_fluffy").getRegionHeight(), -10,
 				getHeight() * 40 / 100, false, generalGameSpeed / 5 , 0, regions,
 				goi);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight() / 3, -100,
+				regions.get("cloud_fluffy").getRegionHeight() / 3, -10,
 				getHeight() * 30 / 100, false, generalGameSpeed / 6, 0, regions,
 				goi);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight() / 2, -100,
+				regions.get("cloud_fluffy").getRegionHeight() / 2, -10,
 				getHeight() * 35 / 100, false, generalGameSpeed / 5.5f, 0, regions,
 				goi);
 
@@ -91,17 +91,17 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 
 		for (int i = 1; i < 9; i++) {
 			addGameObjectWithRelativHeight("Kuerbis" + i,
-					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 100,
+					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
 					-100, getTopOfGroundPosition(), true, generalGameSpeed, 1,
 					regions, goi);
 		}
 
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
-				.getRegionHeight() * 9 / 100, -100, getTopOfGroundPosition(),
+				.getRegionHeight() * 9 / 50, -100, getTopOfGroundPosition(),
 				true, generalGameSpeed, -10, regions, goi);
 
 		scoreInformation = new Text(AssetManager.getTextFont(FontSize.DREISSIG),
-				"Punkte: 0", 10, getHeight() * 50 / 100);
+				"Punkte: 0", 10, getHeight() * 50 / 60);
 		scoreInformation.setColor(0, 0, 0, 1);
 		stage.addActor(scoreInformation);
 		
@@ -215,13 +215,13 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	}
 
 	public void initPlayer(GameObjectInitializer goi) {
-		player.setHeight(getHeight() / 10);
+		player.setHeight(getHeight() /3);
 		com.haw.projecthorse.player.Player p = new com.haw.projecthorse.player.PlayerImpl();
 		player.setWidth(goi.calcRelativeWidth(p.getHeight(), p.getWidth(),
-				getHeight() / 10));
+				getHeight() / 3));
 		player.setPosition(20, getTopOfGroundPosition());
 
-		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
+		// Sprunghï¿½he u. Sprungweite auf 5% ï¿½ber maximale Hï¿½he von Hindernissen
 		// setzen
 		float maxHeight = 0;
 		float maxWidth = 0;
