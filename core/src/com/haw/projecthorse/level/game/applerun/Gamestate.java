@@ -284,6 +284,7 @@ public class Gamestate {
 	}
 
 	public void playerHitByBranch() {
+		Gdx.input.vibrate(200);
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
 
