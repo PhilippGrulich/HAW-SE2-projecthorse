@@ -1,6 +1,7 @@
 package com.haw.projecthorse.level;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
@@ -40,30 +41,42 @@ public abstract class Level implements Screen {
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
 	protected Overlay overlay;
-	
-	protected final int height = GameManagerFactory.getInstance().getSettings()
-			.getVirtualScreenHeight();
-	protected final int width = GameManagerFactory.getInstance().getSettings()
-			.getVirtualScreenWidth();
-	
+
+	protected  int height;
+	protected  int width;
+
 	protected AudioManager audioManager;
+	private FitViewport overlayViewport;
 
 	public Level() {
-		cam = createCamera();
-		viewport = new FitViewport(width, height, cam);
-		
-		spriteBatch = new SpriteBatch();
-		spriteBatch.setProjectionMatrix(cam.combined);
+		this(Orientation.Portrait);
+	}
 
-		FitViewport overlayViewport = new FitViewport(width, height,
-				createCamera());
-		overlay = new Overlay(overlayViewport, spriteBatch, this);	
-		
-		
+	/**
+	 * Mittels diesem Konsturcktor kann eine {@link Orientation} übergeben
+	 * werden. 
+	 * @param orientation
+	 */
+	public Level(Orientation orientation) {
+		GameManagerFactory.getInstance().getPlatform().SetOrientation(orientation);
+		height = GameManagerFactory.getInstance().getSettings().getVirtualScreenHeight();
+		width = GameManagerFactory.getInstance().getSettings().getVirtualScreenWidth();
+	
+		createViewport();
 		audioManager = AudioManagerImpl.getInstance();
 	}
+
+
+	public void createViewport() {
+		cam = createCamera();
+		viewport = new FitViewport(width, height, cam);
+		spriteBatch = new SpriteBatch();
+		spriteBatch.setProjectionMatrix(cam.combined);
 	
-	
+
+		overlayViewport = new FitViewport(width, height, createCamera());
+		overlay = new Overlay(overlayViewport, spriteBatch, this);
+	}
 
 	/**
 	 * Erstellt eine OrthographicCamera diese wird f�r die jeweiliegen Viewports
@@ -81,8 +94,7 @@ public abstract class Level implements Screen {
 
 	public final void setLevelID(String newID) {
 		if (levelID != null) {
-			System.out.println("ACHTUNG Level id: " + levelID
-					+ " umbenannt in: " + newID);
+			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
 		}
 
 		levelID = newID;
@@ -99,7 +111,7 @@ public abstract class Level implements Screen {
 	@Override
 	public final void render(float delta) {
 		// zu schnell Bug Fix
-		delta = delta%1;
+		delta = delta % 1;
 		paintBackground();
 		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
 		// übergeben.
@@ -139,8 +151,12 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void resize(int width, int height) {
-		this.getViewport().update(width, height, true);
-		doResize(width, height);
+		
+			this.getViewport().update(width, height, true);
+			this.overlayViewport.update(width, height, true);
+			doResize(width, height);
+		
+		
 	}
 
 	protected abstract void doShow();

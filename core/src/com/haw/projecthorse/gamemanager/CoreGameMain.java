@@ -8,12 +8,25 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManagerImpl;
 import com.haw.projecthorse.gamemanager.splashscreen.SplashScreen;
 import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.platform.DefaultPlatform;
+import com.haw.projecthorse.platform.Platform;
 
 public class CoreGameMain extends Game {
 
 	private Screen splash;
 	
 	private String[] preloadAssets = new String[]{"ui","menu","notChecked"};
+
+	private GameManagerImpl gameManager;
+	
+	public CoreGameMain(){
+		this(new DefaultPlatform());		 
+	}
+	
+	public CoreGameMain(Platform nativ){
+		 gameManager = GameManagerImpl.getInstance();
+		 gameManager.setPlatform(nativ);
+	}
 
 	private void startGame(final NavigationManagerImpl nav) {
 		
@@ -36,7 +49,7 @@ public class CoreGameMain extends Game {
 				AssetManager.initialize();
 				final NavigationManagerImpl nav = new NavigationManagerImpl(CoreGameMain.this);
 				InputManager.createInstance();
-				GameManagerImpl gameManager = GameManagerImpl.getInstance();
+			
 				gameManager.setNavigationManager(nav);
 				// Call startGame in the Render Thread
 				

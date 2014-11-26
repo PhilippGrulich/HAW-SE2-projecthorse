@@ -2,7 +2,10 @@ package com.haw.projecthorse.gamemanager.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.Input.Peripheral;
+import com.haw.projecthorse.gamemanager.GameManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
 public class SettingsImpl extends Settings {
 
@@ -78,12 +81,23 @@ public class SettingsImpl extends Settings {
 
 	@Override
 	public int getVirtualScreenWidth() {
-		return VIRTUALWIDTH;
+		if(GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait)
+			return VIRTUALWIDTH;
+		else
+			return VIRTUALHIGHT;
+		
 	}
 
+	
+	/**
+	 * Wenn Sich die Orientation gedreht hat ändert sich ändert sich auch die Höhe
+	 */
 	@Override
 	public int getVirtualScreenHeight() {
-		return VIRTUALHIGHT;
+		if(GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait)
+			return VIRTUALHIGHT;
+		else
+			return VIRTUALWIDTH;
 	}
 
 	@Override
