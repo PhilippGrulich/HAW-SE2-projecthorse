@@ -2,6 +2,7 @@ package com.haw.projecthorse.gamemanager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Screen;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManagerImpl;
@@ -63,6 +64,27 @@ public class CoreGameMain extends Game {
 		splash = new SplashScreen();
 		this.setScreen(splash);
 		loadGame();
+		
+		Gdx.app.addLifecycleListener(new LifecycleListener() {
+			
+			@Override
+			public void resume() {
+				Gdx.app.log("LifecycleListener", "resume");
+				
+			}
+			
+			@Override
+			public void pause() {
+				Gdx.app.log("LifecycleListener", "pause");
+				
+			}
+			
+			@Override
+			public void dispose() {
+				Gdx.app.log("LifecycleListener", "dispose");
+				AssetManager.disposeAll();
+			}
+		});
 	}
 
 }
