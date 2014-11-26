@@ -5,9 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Screen;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManagerImpl;
 import com.haw.projecthorse.gamemanager.splashscreen.SplashScreen;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.platform.DefaultPlatform;
 import com.haw.projecthorse.platform.Platform;
 
@@ -95,6 +96,8 @@ public class CoreGameMain extends Game {
 			@Override
 			public void dispose() {
 				Gdx.app.log("LifecycleListener", "dispose");
+				GameManagerFactory.getInstance().getSettings().dispose();
+				AudioManagerImpl.getInstance().dispose();
 				AssetManager.disposeAll();
 			}
 		});

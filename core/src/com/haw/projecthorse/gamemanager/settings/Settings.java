@@ -2,13 +2,15 @@ package com.haw.projecthorse.gamemanager.settings;
 
 import java.util.Observable;
 
+import com.badlogic.gdx.utils.Disposable;
+
 /**
  * Die Klasse Settings stellt gerätespezifische Informationen bereit und
  * speichert zudem Einstellungen des Users. Die Klasse selbst nutzt das
  * Singleton Pattern. Sie ist darüberhinaus Observable, um andere Klassen über
  * Veränderungen der Einstellungen benachrichtigen zu können.
  */
-public abstract class Settings extends Observable {
+public abstract class Settings extends Observable implements Disposable {
 
 	// Umsetzung Singleton
 	protected Settings() {

@@ -21,7 +21,6 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
  *         müssen stattdessen jeweils doDispose() usw. implementieren
  * 
- *         Alle Implementierungen M�SSEN im Konstruktor super() aufrufen!
  * 
  *         Jedes level hat ein Overlay. über das Overlay können Popups unter
  *         anderm Popups angezeigt werden. *
@@ -143,6 +142,7 @@ public abstract class Level implements Screen {
 	public final void dispose() {
 		spriteBatch.dispose();
 		overlay.dispose();
+		audioManager = null;
 		doDispose();
 
 	}

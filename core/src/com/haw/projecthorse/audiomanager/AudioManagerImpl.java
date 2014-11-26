@@ -70,5 +70,10 @@ public class AudioManagerImpl implements AudioManager{
 	
 	void remove(Sound sound){
 		soundObjects.remove(sound);
+	}
+
+	@Override
+	public void dispose() {
+		instance = null;
 	}	
 }
