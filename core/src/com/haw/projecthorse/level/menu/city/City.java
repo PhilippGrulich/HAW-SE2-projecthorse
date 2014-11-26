@@ -25,9 +25,9 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.menu.Menu;
 
-public class City extends Level {
+public class City extends Menu {
 
 	private Stage stage;
 

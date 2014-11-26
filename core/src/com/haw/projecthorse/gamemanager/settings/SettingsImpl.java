@@ -3,16 +3,16 @@ package com.haw.projecthorse.gamemanager.settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-public class SettingsImpl implements Settings {
+public class SettingsImpl extends Settings {
 	
-	// Konstanten für virtuelle Bildschirmgröße 
+	// Konstanten fÃ¼r virtuelle BildschirmgrÃ¶ÃŸe 
 	private static final int VIRTUALHIGHT = 1280; 
 	private static final int VIRTUALWIDTH = 720; 
 
 	
 	// Objekt zum Laden und Speichern von Einstellungen
 	private Preferences prefs;
-	
+		
 	// Singleton Umsetzung
 	private static final SettingsImpl settingsInstance = new SettingsImpl();
 	
@@ -39,9 +39,32 @@ public class SettingsImpl implements Settings {
 
 	@Override
 	public void setSoundState(boolean state) {
+		if (prefs.contains("SoundState"))
+			if (prefs.getBoolean("SoundState") != state)
+				setChanged();
 		prefs.putBoolean("SoundState", state);
 		prefs.flush();
+		notifyObservers();
 	}
+	
+	@Override
+	public boolean getMusicState() {
+		if (!prefs.contains("MusicState")) {
+			setMusicState(true);
+		}
+		return prefs.getBoolean("MusicState");
+	}
+
+	@Override
+	public void setMusicState(boolean state) {
+		if (prefs.contains("MusicState"))
+			if (prefs.getBoolean("MusicState") != state)
+				setChanged();
+		prefs.putBoolean("MusicState", state);
+		prefs.flush();
+		notifyObservers();
+	}
+
 
 	@Override
 	public int getScreenWidth() {
@@ -63,5 +86,7 @@ public class SettingsImpl implements Settings {
 	public int getVirtualScreenHeight() {
 		return VIRTUALHIGHT;
 	}
+
+		
 
 }

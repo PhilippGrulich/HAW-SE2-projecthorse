@@ -9,10 +9,10 @@ import com.haw.projecthorse.level.util.overlay.navbar.NavBar;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 
 /**
- * Die Overlay Stage liegt immer über jedem Level. 
+ * Die Overlay Stage liegt immer Ã¼ber jedem Level. 
  * So wird der Inhalt dieser Stage immer vor dem eigentlichen Level Content angezeigt.
  * Ein Overlay kann eine Navigationsleiste und ein Popup enthalten. 
- * Außerdem muss dem Overlay eine Referenz auf das Level übergeben werden damit z.B. ein Popup auch mit diesem Interagieren kann. 
+ * AuÃŸerdem muss dem Overlay eine Referenz auf das Level Ã¼bergeben werden damit z.B. ein Popup auch mit diesem Interagieren kann. 
  * 
  * @author Philipp
  * 
@@ -41,7 +41,7 @@ public class Overlay extends Stage {
 	}
 
 	/**
-	 * Liefert die Referenz auf das Level über welchem das Overlay liegt
+	 * Liefert die Referenz auf das Level Ã¼ber welchem das Overlay liegt
 	 * @return
 	 */
 	public Level getLevel(){
@@ -49,7 +49,7 @@ public class Overlay extends Stage {
 	}
 	
 	/**
-	 * Zeigt ein neues Popup und lässt das Lavel Pausieren.
+	 * Zeigt ein neues Popup und lÃ¤sst das Lavel Pausieren.
 	 * @param Popup
 	 */
 	public void showPopup(Popup p) {
@@ -58,7 +58,7 @@ public class Overlay extends Stage {
 	}
 
 	/**
-	 * Lässt alle Popups verschwinden.
+	 * LÃ¤sst alle Popups verschwinden.
 	 */
 	public void disposePopup() {
 		this.clear();
