@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.Race;
+import com.haw.projecthorse.savegame.SaveGameManager;
+import com.haw.projecthorse.savegame.json.SaveGame;
 
 public class PlayerImpl extends Player {
 	private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;
@@ -81,14 +85,22 @@ public class PlayerImpl extends Player {
 			return false;
 		}
 	}
+	private static HorseRace getSaveGameRace() {
+		SaveGame game = SaveGameManager.getLoadedGame();
+		if (game == null) {
+			return HorseRace.HAFLINGER;
+		} else {
+			return game.getHorseRace();
+		}
+	}
 
 	public PlayerImpl() {
-		this(HorseRace.HAFLINGER);
+		this(getSaveGameRace());
 	}
 	
 	@Deprecated
 	public PlayerImpl(PlayerColor color) {
-		this(HorseRace.HAFLINGER);
+		this(getSaveGameRace());
 	}
 	
 	public PlayerImpl(HorseRace horseRace) {
@@ -175,22 +187,22 @@ public class PlayerImpl extends Player {
 
 	@Override
 	public float getObedience() {
-		return race.obedience;
+		return race.obedience();
 	}
 
 	@Override
 	public float getIntelligence() {
-		return race.intelligence;
+		return race.intelligence();
 	}
 
 	@Override
 	public float getAthletic() {
-		return race.athletic;
+		return race.athletic();
 	}
 
 	@Override
 	public String getRasse() {
-		return race.name;
+		return race.name();
 	}
 
 }
