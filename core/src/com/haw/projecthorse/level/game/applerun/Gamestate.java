@@ -1,9 +1,7 @@
 package com.haw.projecthorse.level.game.applerun;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -19,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.player.ChangeDirectionAction;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
@@ -43,13 +41,13 @@ public class Gamestate {
 	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
-													// nächsten entity spawn
+													// nÃ¤chsten entity spawn
 	private final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
 													// spawns
 	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate with -1 for first spawn = instant)
 
 	private int branch_spawn_chance = 20; // 20%:: Prozent Chance, das statt einem Apfel ein Ast spawnt
-	private int current_falling_entities = 0; // Um unnötige abfragen wahrend doRender zu vermeiden wird hier laufend die anzahl
+	private int current_falling_entities = 0; // Um unnÃ¶tige abfragen wahrend doRender zu vermeiden wird hier laufend die anzahl
 												// mitgeschrieben.
 
 	private EntityGroup fallingEntities; // Falling entities
@@ -84,7 +82,8 @@ public class Gamestate {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
 		horse.scaleBy(0.5F);
-		horse.setAnimation(Direction.RIGHT, 0.4f);
+		horse.setAnimationSpeed(0.4f);
+		horse.addAction(new AnimationAction(Direction.RIGHT));
 		// stage.addActor(horse); //Done inside constructor
 		stage.addListener(new InputListener() {
 			@Override
@@ -114,17 +113,18 @@ public class Gamestate {
 			x = breite - horse.getWidth();
 		} // Nicht rechts rauslaufen
 			// Bewegungsrichtung ermitteln
-		ChangeDirectionAction directionAction = null;
+		AnimationAction animationAction = null;
 		distance = horse.getX() - x; // Positiv = move rechts
 		if (distance > 0) { // Move right
-			directionAction = new ChangeDirectionAction(Direction.RIGHT);
+			animationAction = new AnimationAction(Direction.RIGHT);
 		} else {
-			directionAction = new ChangeDirectionAction(Direction.LEFT);
+			animationAction = new AnimationAction(Direction.LEFT);
 		}
 
 		moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
-		horse.addAction(directionAction);
+//		horse.addAction(PlayerAnimationAction.StopAnimationAction);
+		horse.addAction(animationAction);
 		horse.addAction(move);
 	}
 

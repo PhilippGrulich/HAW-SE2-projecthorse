@@ -10,10 +10,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
 
 /**
- * Container-Klasse für GameObjects.
+ * Container-Klasse fÃ¼r GameObjects.
  * 
  * @author Francis
  *
@@ -221,7 +222,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 				getHeight() / 10));
 		player.setPosition(20, getTopOfGroundPosition());
 
-		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
+		// SprunghÃ¶he u. Sprungweite auf 5% Ã¼ber maximale HÃ¶he von Hindernissen
 		// setzen
 		float maxHeight = 0;
 		float maxWidth = 0;
@@ -244,7 +245,8 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		player.setJumpSpeed(15);
 		player.setupJumpFunction();
 		player.setName("Player");
-		player.setAnimation(Direction.RIGHT, 0.3f);
+		player.setAnimationSpeed(0.3f);
+		player.addAction(new AnimationAction(Direction.RIGHT));
 		stage.addActor(player);
 	}
 }

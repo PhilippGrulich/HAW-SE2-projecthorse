@@ -19,10 +19,10 @@ import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
-import com.haw.projecthorse.player.ChangeDirectionAction;
-import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class PlayerMenu extends Menu {
@@ -58,23 +58,31 @@ public class PlayerMenu extends Menu {
 			inActive = player1;
 		}
 
-		if (!right) {
-			inActive.addAction(new ChangeDirectionAction(Direction.LEFT));
-			active.addAction(new ChangeDirectionAction(Direction.LEFT));
-		}
-
 		inActive.setPosition((right ? invisiblePositionX : width
 				- invisiblePositionX), playerPositionY);
 		inActive.setAnimationSpeed(0.3f);
-		inActive.addAction(Actions.sequence(
-				Actions.moveTo(playerPositionX, playerPositionY, DURATION),
-				new ChangeDirectionAction(Direction.RIGHT)));
-
 		active.setAnimationSpeed(0.6f);
-		active.addAction(Actions.sequence(
-				Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION),
-				new ChangeDirectionAction(Direction.RIGHT)));
 
+		if (right) {
+			inActive.addAction(Actions.sequence(
+					Actions.moveTo(playerPositionX, playerPositionY, DURATION),
+					new AnimationAction(Direction.RIGHT)));
+			active.addAction(Actions.sequence(
+					Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION),
+					new AnimationAction(Direction.RIGHT)));
+		} else {
+			inActive.clearActions();
+			active.clearActions();
+			inActive.addAction(Actions.sequence(
+					Actions.parallel(new AnimationAction(Direction.LEFT, DURATION),
+					Actions.moveTo(playerPositionX, playerPositionY, DURATION)),
+					new AnimationAction(Direction.RIGHT)));
+			active.addAction(Actions.sequence(
+					Actions.parallel(new AnimationAction(Direction.LEFT, DURATION),
+					Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION)),
+					new AnimationAction(Direction.RIGHT)));
+		}
+		
 		active = inActive;
 	}
 
@@ -125,6 +133,7 @@ public class PlayerMenu extends Menu {
 
 		player1.setPosition(playerPositionX, playerPositionY);
 		player1.setAnimationSpeed(0.3f);
+		player1.addAction(new AnimationAction(Direction.RIGHT));
 		player1.addListener(new SwipeListener() {
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
@@ -142,6 +151,8 @@ public class PlayerMenu extends Menu {
 		player2 = new PlayerImpl();
 		player2.setScale(3);
 		player2.setPosition(invisiblePositionX, playerPositionY);
+		player2.setAnimationSpeed(0.3f);
+		player2.addAction(new AnimationAction(Direction.RIGHT));
 		stage.addActor(player2);
 	}
 

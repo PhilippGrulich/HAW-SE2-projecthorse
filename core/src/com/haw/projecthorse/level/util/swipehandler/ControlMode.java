@@ -1,9 +1,9 @@
 package com.haw.projecthorse.level.util.swipehandler;
 
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
 
 /**
- * Enum für die unterschiedlichen Kontroll-Modi der Swipe Gesten.
+ * Enum fï¿½r die unterschiedlichen Kontroll-Modi der Swipe Gesten.
  * Siehe auch {@link Direction}
  * 
  * HORIZONTAL: Nur Rechts und Links wird unterschieden.
