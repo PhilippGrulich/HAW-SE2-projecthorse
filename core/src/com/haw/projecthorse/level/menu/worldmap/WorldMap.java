@@ -31,6 +31,9 @@ import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.uielements.ButtonOwnImage;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.player.PlayerImpl;
 
 public class WorldMap extends Menu {
@@ -278,7 +281,7 @@ public class WorldMap extends Menu {
 		uiBackground.setPosition(width / 2 - uiBackground.getWidth() / 2,
 				height * 0.77f - uiBackground.getHeight() / 2);
 
-		flagButton = new ImageButton(new TextureRegionDrawable(
+		flagButton = new ButtonOwnImage(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("flaggen",
 						cities[selectedCityIndex])));
 		flagButton.addListener(new ChangeListener() {
@@ -323,8 +326,7 @@ public class WorldMap extends Menu {
 
 		updateFlag();
 
-		leftButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "buttonLeft")));
+		leftButton = new ButtonSmall(ButtonType.LEFT);
 		leftButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -344,8 +346,7 @@ public class WorldMap extends Menu {
 				uiBackground.getY() + uiBackground.getHeight() / 2
 						- leftButton.getHeight() / 2);
 
-		rightButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "buttonRight")));
+		rightButton = new ButtonSmall(ButtonType.RIGHT);
 		rightButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

@@ -1,25 +1,21 @@
 package com.haw.projecthorse.level.menu.mainmenu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
+import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.actions.Direction;
@@ -87,30 +83,12 @@ public class MainMenu extends Menu {
 
 	}
 
-	private ImageTextButtonStyle createButtonImageStyle() {
-		Drawable drawable = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("menu", "buttonBackground"));
-
-		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
-		imageButtonStyle.down = drawable;
-		imageButtonStyle.up = drawable;
-		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);
-		imageButtonStyle.fontColor = Color.GRAY;
-
-		return imageButtonStyle;
-
-	}
-
 	private void initButtons() {
 
-		ImageTextButtonStyle style = createButtonImageStyle();
-
-		buttonSpiel1 = new ImageTextButton("Spielstand 1", style);
-		buttonSpiel1.setRound(true);
-		buttonSpiel2 = new ImageTextButton("Spielstand 2", style);
-		buttonSpiel3 = new ImageTextButton(/* "Spielstand 3" */"Player Menu",
-				style);
-		buttonCredits = new ImageTextButton("Credits", style);
+		buttonSpiel1 = new ButtonLarge("Spielstand 1", ButtonLarge.ButtonColor.LIGHT_BROWN);
+		buttonSpiel2 = new ButtonLarge("Spielstand 2", ButtonLarge.ButtonColor.LIGHT_BROWN);
+		buttonSpiel3 = new ButtonLarge(/* "Spielstand 3" */"Player Menu", ButtonLarge.ButtonColor.LIGHT_BROWN);
+		buttonCredits = new ButtonLarge("Credits", ButtonLarge.ButtonColor.LIGHT_BROWN);
 
 		table.addActor(buttonSpiel1);
 		table.addActor(buttonSpiel2);

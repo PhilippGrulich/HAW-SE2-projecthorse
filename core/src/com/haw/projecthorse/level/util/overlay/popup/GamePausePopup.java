@@ -2,11 +2,13 @@ package com.haw.projecthorse.level.util.overlay.popup;
 
 import java.util.Observable;
 import java.util.Observer;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.settings.Settings;
+import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 
 /**
  * Dieses Popup ist speziell für die Verwendung in Mini Spielen gedacht. Es
@@ -84,7 +86,7 @@ public class GamePausePopup extends Popup implements Observer {
 	}
 
 	private ImageTextButton createButton(String label, ChangeListener inputListener) {
-		ImageTextButton btn = super.createButton(label);
+		ImageTextButton btn = new ButtonLarge(label, inputListener);
 		btn.addListener(inputListener);
 		this.addActor(btn);
 		return btn;

@@ -5,21 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.Overlay;
-import com.haw.projecthorse.level.util.overlay.navbar.NavBar;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
 public class NavbarBackButton extends NavbarButton {
 
 	
 	private Overlay overlay;
 	public NavbarBackButton() {
-		ImageButton imageButton = new ImageButton(getDrawable());
+		ImageButton imageButton = new ButtonSmall(ButtonSmall.ButtonType.BACK);
 		this.setWidth(imageButton.getHeight());
 		this.addActor(imageButton);
 		this.addListener(new InputListener() {
@@ -69,12 +65,4 @@ public class NavbarBackButton extends NavbarButton {
 	private void init(){
 		this.overlay = this.getNavigationBar().getOverlay();
 	}
-	
-	private Drawable getDrawable() {
-
-		Drawable drawable = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "backIcon"));
-		return drawable;
-	}
-
 }
