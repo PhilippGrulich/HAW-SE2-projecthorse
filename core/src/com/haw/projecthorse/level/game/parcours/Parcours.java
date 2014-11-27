@@ -18,7 +18,7 @@ public class Parcours extends Level{
 	//private static GameOperator gameOperator;
 	
 	public Parcours(){
-		gameOperator = new GameOperator(new Stage(), this.getViewport(), this.width, this.height);
+		gameOperator = new GameOperator(new Stage(), this.getViewport(), this.width, this.height, this.chest);
 		
 	}
 
