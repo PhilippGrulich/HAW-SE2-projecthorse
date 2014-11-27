@@ -2,17 +2,32 @@ package com.haw.projecthorse.gamemanager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Screen;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManagerImpl;
 import com.haw.projecthorse.gamemanager.splashscreen.SplashScreen;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.platform.DefaultPlatform;
+import com.haw.projecthorse.platform.Platform;
 
 public class CoreGameMain extends Game {
 
 	private Screen splash;
 	
 	private String[] preloadAssets = new String[]{"ui","menu","notChecked"};
+
+	private GameManagerImpl gameManager;
+	
+	public CoreGameMain(){
+		this(new DefaultPlatform());		 
+	}
+	
+	public CoreGameMain(Platform nativ){
+		 gameManager = GameManagerImpl.getInstance();
+		 gameManager.setPlatform(nativ);
+	}
 
 	private void startGame(final NavigationManagerImpl nav) {
 		
@@ -35,7 +50,7 @@ public class CoreGameMain extends Game {
 				AssetManager.initialize();
 				final NavigationManagerImpl nav = new NavigationManagerImpl(CoreGameMain.this);
 				InputManager.createInstance();
-				GameManagerImpl gameManager = GameManagerImpl.getInstance();
+			
 				gameManager.setNavigationManager(nav);
 				// Call startGame in the Render Thread
 				
@@ -63,6 +78,29 @@ public class CoreGameMain extends Game {
 		splash = new SplashScreen();
 		this.setScreen(splash);
 		loadGame();
+		
+		Gdx.app.addLifecycleListener(new LifecycleListener() {
+			
+			@Override
+			public void resume() {
+				Gdx.app.log("LifecycleListener", "resume");
+				
+			}
+			
+			@Override
+			public void pause() {
+				Gdx.app.log("LifecycleListener", "pause");
+				
+			}
+			
+			@Override
+			public void dispose() {
+				Gdx.app.log("LifecycleListener", "dispose");
+				GameManagerFactory.getInstance().getSettings().dispose();
+				AudioManagerImpl.getInstance().dispose();
+				AssetManager.disposeAll();
+			}
+		});
 	}
 
 }

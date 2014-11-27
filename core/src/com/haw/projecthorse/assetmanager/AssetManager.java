@@ -45,15 +45,15 @@ public final class AssetManager {
 	private static String directory_music;
 	private static String directory_pictures;
 	private static String directory_fonts;
-	public static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
+	public static com.badlogic.gdx.assets.AssetManager assetManager ;
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
 	// Mapped mit LevelID auf TextureAtlas - Haelt AtlasObjekte Vorraetig zwecks
 	// Performance
-	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
+	private static Map<String, TextureAtlas> administratedAtlases;
 	// Mapped mit LevelID auf Pfade von Atlas Objekten im Falle von Verlust
 	// eines Atlas bei dispose (Performance)
-	private static Map<String, String> administratedAtlasesPath = new HashMap<String, String>();
+	private static Map<String, String> administratedAtlasesPath ;
 	// Mapped mit LevelID auf Pfade von Sound / Music sofern 1 Mal vorher darauf
 	// zugegriffen wurde.
 	// da laden aller Sounds / Music am Anfang, wie bei Atlas Dateien, nicht
@@ -61,11 +61,15 @@ public final class AssetManager {
 	private static Map<String, ArrayList<String>> administratedSoundPath;
 	private static Map<String, ArrayList<String>> administratedMusicPath;
 	
-	private static AudioManager audioManager = AudioManagerImpl.getInstance();
+	private static AudioManager audioManager;
 
 	private static TextureRegion errorPic;
 
 	public static void initialize() {
+		assetManager = new com.badlogic.gdx.assets.AssetManager();
+		administratedAtlases = new HashMap<String, TextureAtlas>();
+		administratedAtlasesPath = new HashMap<String, String>();
+		audioManager= AudioManagerImpl.getInstance();
 		setApplicationRoot();
 		loadAtlases(directory_pictures, directory_pictures);
 		loadAudioPaths();
@@ -346,6 +350,8 @@ public final class AssetManager {
 	 */
 	public static void disposeAll() {
 		assetManager.dispose();
+		assetManager.clear();
+		audioManager = null;
 	}
 
 	/**

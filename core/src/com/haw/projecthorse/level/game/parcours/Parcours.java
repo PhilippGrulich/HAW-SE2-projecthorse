@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level.game.parcours;
 
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.haw.projecthorse.level.game.Game;
 
@@ -14,7 +15,10 @@ public class Parcours extends Game{
 	//private static GameOperator gameOperator;
 	
 	public Parcours(){
-		gameOperator = new GameOperator(new Stage(), this.getViewport(), this.width, this.height);
+	
+		super(Orientation.Landscape);
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
+
 		
 	}
 

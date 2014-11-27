@@ -32,8 +32,11 @@ public class AndroidLauncher extends AndroidApplication {
 			}
 		}
 
+		AndroidPlatform platform = new AndroidPlatform(this);
+		
+		
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new CoreGameMain(), config);
+		initialize(new CoreGameMain(platform), config);
 
 	}
 }

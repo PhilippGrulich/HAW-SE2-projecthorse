@@ -26,6 +26,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 
 	public void collisionDetection() {
 		List<GameObject> objects = gameField.getGameObjects();
+		
 		for (GameObject l : objects) {
 			if (l.isCollidable()) {
 				if (((CollidableGameObject) l).getRectangle().overlaps(

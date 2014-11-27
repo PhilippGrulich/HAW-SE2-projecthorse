@@ -9,9 +9,11 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.gamemanager.settings.Settings;
 import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
+import com.haw.projecthorse.platform.Platform;
 
 final class GameManagerImpl implements GameManager {
 	private NavigationManager navigationManager;
+	private Platform platform;
 	private static GameManagerImpl instance;
 
 	private GameManagerImpl(){
@@ -56,7 +58,7 @@ final class GameManagerImpl implements GameManager {
 	}
 
 	/**
-	 * Liefert das CityObject zurück falls die LevelID existiert. Wenn nicht
+	 * Liefert das CityObject zurï¿½ck falls die LevelID existiert. Wenn nicht
 	 * wird eine LevelNotFoundException geworfen.
 	 * 
 	 * @param levelID
@@ -70,7 +72,7 @@ final class GameManagerImpl implements GameManager {
 	}
 
 	/**
-	 * Liefert das GameObject zurück falls die LevelID existiert. Wenn nicht
+	 * Liefert das GameObject zurï¿½ck falls die LevelID existiert. Wenn nicht
 	 * wird eine LevelNotFoundException geworfen.
 	 * 
 	 * @param levelID
@@ -84,7 +86,7 @@ final class GameManagerImpl implements GameManager {
 	}
 	
 	/**
-	 * Liefert das MenuObject zurück falls die LevelID existiert. Wenn nicht
+	 * Liefert das MenuObject zurï¿½ck falls die LevelID existiert. Wenn nicht
 	 * wird eine LevelNotFoundException geworfen.
 	 * 
 	 * @param levelID
@@ -106,7 +108,7 @@ final class GameManagerImpl implements GameManager {
 	 */
 	@Override
 	public Object getScoreManager() {
-		// TODO Spielstand muss zurück gegeben werden.
+		// TODO Spielstand muss zurï¿½ck gegeben werden.
 		return null;
 	}
 
@@ -133,6 +135,15 @@ final class GameManagerImpl implements GameManager {
 	public void navigateBack() {
 		navigationManager.navigateBack();
 		
+	}
+	
+	void setPlatform(Platform platform){
+		this.platform = platform;
+	}
+
+	@Override
+	public Platform getPlatform() {		
+		return platform;
 	}
 
 

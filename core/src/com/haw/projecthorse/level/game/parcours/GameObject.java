@@ -10,6 +10,16 @@ public class GameObject extends Actor{
 	private float duration;
 	private int points;
 	private boolean collidable;
+	private boolean loot;
+	
+	
+	public boolean isLoot() {
+		return loot;
+	}
+
+	public void setLoot(boolean loot) {
+		this.loot = loot;
+	}
 	
 	@Override
 	public void act(float delta){

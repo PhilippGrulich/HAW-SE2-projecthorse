@@ -73,14 +73,14 @@ public class GamePausePopup extends Popup implements Observer {
 
 	private void setTextes() {
 		if (setting.getMusicState())
-			musicButton.setText("Musik Aus");
+			musicButton.setText("Musik ist AN");
 		else
-			musicButton.setText("Musik An");
+			musicButton.setText("Musik ist AUS");
 
 		if (setting.getSoundState())
-			soundButton.setText("Sound Aus");
+			soundButton.setText("Sound ist AN");
 		else
-			soundButton.setText("Sound An");
+			soundButton.setText("Sound ist AUS");
 	}
 
 	private ImageTextButton createButton(String label, ChangeListener inputListener) {

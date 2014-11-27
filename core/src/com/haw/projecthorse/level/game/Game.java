@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level.game;
 
+import com.badlogic.gdx.Input.Orientation;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.util.overlay.navbar.GameNavBar;
 import com.haw.projecthorse.lootmanager.Chest;
@@ -16,6 +17,13 @@ public abstract class Game extends Level {
 	protected Chest chest;
 
 	public Game() {
+		GameNavBar nav = new GameNavBar();
+		this.overlay.setNavigationBar(nav);
+		chest = new Chest(overlay);
+	}
+
+	public Game(Orientation orientation) {
+		super(orientation);
 		GameNavBar nav = new GameNavBar();
 		this.overlay.setNavigationBar(nav);
 		chest = new Chest(overlay);

@@ -2,6 +2,7 @@ package com.haw.projecthorse.level.util.overlay.popup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 
@@ -42,15 +44,27 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
  */
 public class Popup extends OverlayWidgetGroup {
 
-	protected int popupHeigh = (int) (height / 2.0), popupWidth = width - 100;;
+	protected int popupHeigh = (int) (height / 2.0), popupWidth = width - 100;
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
 
 	public Popup() {
 
-		content.setHeight(popupHeigh);
-		content.setWidth(popupWidth);
-		content.setX(50);
+		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Landscape) {
+			popupHeigh = height - 100;
+			popupWidth = width/2;
+			content.setHeight(popupHeigh);
+			content.setWidth(popupWidth);
+			content.setX(popupWidth/2);
+		} else {
+			popupHeigh = (int) (height / 2.0);
+			popupWidth = width - 100;
+			content.setHeight(popupHeigh);
+			content.setWidth(popupWidth);
+			content.setX(50);
+		}
+
+		
 		this.setHeight(height);
 		this.setWidth(width);
 		// Setzen eines neuen KeyDown Listener um Back Keys abzufangen. So wird
@@ -92,16 +106,14 @@ public class Popup extends OverlayWidgetGroup {
 	 */
 	private void createBackgroundImage() {
 
-		Image backgroundImage = new Image(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "panel_beige")));
+		Image backgroundImage = new Image(new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "panel_beige")));
 		backgroundImage.setHeight(popupHeigh);
 		backgroundImage.setWidth(popupWidth);
 
 		backgroundImage.setY((height / 2) - popupHeigh / 2);
 		backgroundImage.addListener(new InputListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				event.cancel();
 				return true;
 			}
@@ -173,8 +185,7 @@ public class Popup extends OverlayWidgetGroup {
 	 * @return {@link ImageTextButtonStyle}
 	 */
 	private ImageTextButtonStyle getImageButtonStyle() {
-		Drawable drawable = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "popup_button"));
+		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "popup_button"));
 
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
@@ -182,7 +193,7 @@ public class Popup extends OverlayWidgetGroup {
 
 		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);
 		imageButtonStyle.fontColor = Color.GRAY;
-		
+
 		return imageButtonStyle;
 	}
 
@@ -205,16 +216,13 @@ public class Popup extends OverlayWidgetGroup {
 	 * @return {@link CheckBoxStyle}
 	 */
 	private CheckBoxStyle createCheckboxStyle() {
-		Drawable on = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"ui", "on"));
+		Drawable on = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "on"));
 
-		Drawable off = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"ui", "off"));
+		Drawable off = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "off"));
 		CheckBoxStyle style = new CheckBoxStyle();
 		style.checkboxOn = on;
 		style.checkboxOff = off;
-		style.font = new BitmapFont(
-				Gdx.files.internal("pictures/fontButton/font.fnt"));
+		style.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
 		return style;
 	}
 

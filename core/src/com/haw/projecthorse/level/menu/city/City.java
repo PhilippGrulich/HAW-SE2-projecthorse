@@ -24,7 +24,7 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 
 public class City extends Menu {

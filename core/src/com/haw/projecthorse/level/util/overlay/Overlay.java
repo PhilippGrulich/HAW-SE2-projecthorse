@@ -3,7 +3,7 @@ package com.haw.projecthorse.level.util.overlay;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.util.overlay.navbar.NavBar;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
