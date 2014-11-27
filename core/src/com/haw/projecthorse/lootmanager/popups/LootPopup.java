@@ -27,7 +27,7 @@ public class LootPopup extends Popup {
 //		label.layout();
 		addActor(label);
 
-		LootDisplay button = new LootDisplay(loots, (int)(popupHeigh / 2.5),
+		LootDisplay button = new LootDisplay(loots, (int)(popupHeight / 2.5),
 				popupWidth - 80);
 		addActor(button);
 		
@@ -49,8 +49,8 @@ public class LootPopup extends Popup {
 		private float imageX, imageY, imageWidth, imageHeight;
 		private Drawable currentImage = null;
 		private boolean refreshed; // zeigt an, ob sich der Index vom Image
-									// geändert hat und somit die Daten dafür
-									// neu berechnet werden müssen
+									// geï¿½ndert hat und somit die Daten dafï¿½r
+									// neu berechnet werden mï¿½ssen
 
 		public LootDisplay(ArrayList<Loot> loots, int lootHeight, int lootWidth) {
 			// Instanzvariable instazieren
