@@ -64,6 +64,8 @@ public final class AssetManager {
 	private static AudioManager audioManager;
 
 	private static TextureRegion errorPic;
+	
+	private static BitmapFont[] textFonts, headlineFonts;
 
 	public static void initialize() {
 		assetManager = new com.badlogic.gdx.assets.AssetManager();
@@ -73,7 +75,6 @@ public final class AssetManager {
 		setApplicationRoot();
 		loadAtlases(directory_pictures, directory_pictures);
 		loadAudioPaths();
-
 	}
 
 	/**
@@ -316,14 +317,19 @@ public final class AssetManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static BitmapFont getHeadlineFont(FontSize size) {
+		if (headlineFonts == null){
+			headlineFonts = new BitmapFont[FontSize.values().length];
+		}
+		
+		if (headlineFonts[size.ordinal()] == null) {
 		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
 		String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "headlinefont/GetVoIP Grotesque.ttf";
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
-		BitmapFont b = generator.generateFont(size.getVal());
+		headlineFonts[size.ordinal()] = generator.generateFont(size.getVal());
 		generator.dispose();
-		assetManager.finishLoading();
-		return b;
+		}
+		return headlineFonts[size.ordinal()];
 	}
 
 	/**
@@ -335,14 +341,20 @@ public final class AssetManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static BitmapFont getTextFont(FontSize size) {
+		if (textFonts == null){
+			textFonts = new BitmapFont[FontSize.values().length];
+		}
+		
+		if (textFonts[size.ordinal()] == null) {
 		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
 		String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "textfont/Grundschrift-Bold.ttf";
 
 		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
-		BitmapFont b = gen.generateFont(size.getVal());
+		textFonts[size.ordinal()] = gen.generateFont(size.getVal());
 		gen.dispose();
-		assetManager.finishLoading();
-		return b;
+		}
+		
+		return textFonts[size.ordinal()];
 	}
 
 	/**
