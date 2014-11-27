@@ -5,15 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
 
 /**
- * Container-Klasse f�r GameObjects.
+ * Container-Klasse für GameObjects.
  * 
  * @author Francis
  *
@@ -31,13 +34,18 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private Text scoreInformation;
 	private int score;
 	private float grass_ground_height;
+	private GameOverPopup popup;
+	private boolean gameOverState;
 
 	public GameField(Stage s, Viewport p, int w, int h) {
 		stage = s;
 		width = w;
 		height = h;
+		popup = new GameOverPopup();
 		SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP = 5;
 		score = 0;
+		gameOverState = false;
+		
 		gameObjects = new ArrayList<GameObject>();
 		generalGameSpeed = getWidth() / 3;
 		loadTextureRegions(new GameObjectInitializer());
@@ -45,47 +53,61 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		initPlayer(new GameObjectInitializer());
 	}
 
+	public boolean isGameOverState() {
+		return gameOverState;
+	}
+
+	public void setGameOverState(boolean gameOverState) {
+		this.gameOverState = gameOverState;
+	}
+
+	public void showPopup(GameState g) {
+		stage.addActor(popup.getPopup(g));
+	}
+
 	public void actGameField(float delta) {
 		stage.act(delta);
 	}
 
 	public void loadTextureRegions(IGameObjectInitializerFuerGameObjectLogic goi) {
-		HashMap<String, TextureRegion> regions = (HashMap) AssetManager
-				.getAllTextureRegions("parcours");
+		HashMap<String, TextureRegion> regions = ((HashMap<String, TextureRegion>) AssetManager
+				.getAllTextureRegions("parcours"));
 
 		// groundHeight setzen vor Objekten die auf dem "Boden" stehen.
 		TextureRegion r = regions.get("crosssection_long");
+		
 		EndlessBackground endlessBackground = new EndlessBackground(
 				(int) stage.getWidth(), r, generalGameSpeed);
 		endlessBackground.setName("crosssection_long");
 		groundHeight = r.getRegionHeight();
 
 		addGameObjectFixedWidthHeight("Hintergrund", getWidth(), getHeight(),
-				0, 0, false, 0, 0, regions, goi, false);
+				0, 0, false, 0, 0, regions, goi, false, false);
 		
+		TextureRegion cloud = regions.get("cloud_fluffy");
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight(), -10,
+				cloud.getRegionHeight(), getWidth() - cloud.getRegionWidth(),
 				getHeight() * 40 / 100, false, generalGameSpeed / 5 , 0, regions,
-				goi, false);
+				goi, false, true);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight() / 3, -10,
+				cloud.getRegionHeight() / 3, getWidth() - cloud.getRegionWidth(),
 				getHeight() * 30 / 100, false, generalGameSpeed / 6, 0, regions,
-				goi, false);
+				goi, false, true);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight() / 2, -10,
+				cloud.getRegionHeight() / 2, getWidth() - cloud.getRegionWidth(),
 				getHeight() * 35 / 100, false, generalGameSpeed / 5.5f, 0, regions,
-				goi, false);
+				goi, false, true);
 
 		addGameObjectWithRelativHeight("rainbow", regions.get("rainbow")
 				.getRegionHeight(), 50, getTopOfGroundPosition(), false, 0, 0,
-				regions, goi, false);
+				regions, goi, false, false);
 
 		grass_ground_height = getTopOfGroundPosition()
 				+ (getTopOfGroundPosition() * 160 / 100);
 		addGameObjectFixedWidthHeight("grass_ground", getWidth(),
-				grass_ground_height, 0, 0, false, 0, 0, regions, goi, false);
+				grass_ground_height, 0, 0, false, 0, 0, regions, goi, false, false);
 
 		addBushs(goi, regions);
 
@@ -93,16 +115,17 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 			addGameObjectWithRelativHeight("Kuerbis" + i,
 					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
 					-100, getTopOfGroundPosition(), true, generalGameSpeed, 1,
-					regions, goi, false);
+					regions, goi, false, true);
 		}
 
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
 				.getRegionHeight() * 9 / 50, -100, getTopOfGroundPosition(),
-				true, generalGameSpeed, -10, regions, goi, false);
+				true, generalGameSpeed, -10, regions, goi, false, true);
 
 		scoreInformation = new Text(AssetManager.getTextFont(FontSize.DREISSIG),
 				"Punkte: 0", 10, getHeight() * 50 / 60);
 		scoreInformation.setColor(0, 0, 0, 1);
+		scoreInformation.setName("Score");
 		stage.addActor(scoreInformation);
 		
 		stage.addActor(endlessBackground);
@@ -112,11 +135,11 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private void addGameObjectWithRelativHeight(String name,
 			float desiredHeight, float x, float y, boolean collidable,
 			float speed, int points, HashMap<String, TextureRegion> regions,
-			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot) {
+			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot, boolean isMoveable) {
 		GameObject o = goi.initGameObject(regions.get(name), name, points,
 				desiredHeight, goi.calcRelativeWidth(regions.get(name)
 						.getRegionHeight(), regions.get(name).getRegionWidth(),
-						desiredHeight), speed, x, y, collidable,isLoot);
+						desiredHeight), speed, x, y, collidable,isLoot, isMoveable);
 
 		gameObjects.add(o);
 		stage.addActor(o);
@@ -125,9 +148,9 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private void addGameObjectFixedWidthHeight(String name, float width,
 			float height, float x, float y, boolean collidable, float speed,
 			int points, HashMap<String, TextureRegion> regions,
-			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot) {
+			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot, boolean isMoveable) {
 		GameObject o = goi.initGameObject(regions.get(name), name, points,
-				height, width, speed, x, y, collidable, isLoot);
+				height, width, speed, x, y, collidable, isLoot, isMoveable);
 
 		gameObjects.add(o);
 		stage.addActor(o);
@@ -164,7 +187,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 			GameObject a = goi.initGameObject(
 					regions.get("bush" + possibleBushs[randomBush]), "bush"
 							+ possibleBushs[randomBush], 0, bushHeight,
-					bushWidth, 0, x, randomPosY, false, false);
+					bushWidth, 0, x, randomPosY, false, false, false);
 
 			x = x + bushWidth;
 			gameObjects.add(a);
@@ -220,8 +243,8 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		player.setWidth(goi.calcRelativeWidth(p.getHeight(), p.getWidth(),
 				getHeight() / 3));
 		player.setPosition(20, getTopOfGroundPosition());
-
-		// Sprungh�he u. Sprungweite auf 5% �ber maximale H�he von Hindernissen
+		player.setName("Player");
+		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
 		// setzen
 		float maxHeight = 0;
 		float maxWidth = 0;
@@ -244,7 +267,8 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		player.setJumpSpeed(15);
 		player.setupJumpFunction();
 		player.setName("Player");
-		player.setAnimation(Direction.RIGHT, 0.3f);
+		player.setAnimationSpeed(0.3f);
+		player.addAction(new AnimationAction(Direction.RIGHT));
 		stage.addActor(player);
 	}
 
@@ -253,4 +277,42 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean isButtonYesPressed(GameState g) {
+		return popup.isButtonYesPressed(g);
+	}
+
+	@Override
+	public boolean isButtonNoPressed(GameState g) {
+		return popup.isButtonNoPressed(g);
+	}
+
+	@Override
+	public void restart(){
+		score = 0;
+		scoreInformation.setText("Punkte: 0");
+		gameOverState = false;
+		getGameObjects().clear();
+		loadTextureRegions(new GameObjectInitializer());
+		initPlayer(new GameObjectInitializer());
+	}
+
+	@Override
+	public void clear() {
+		stage.clear();
+		gameObjects.clear();
+}
+
+	@Override
+	public void removePopup() {
+		for(Actor a : stage.getActors()){
+			System.out.println(a.getX());
+			if(a.getName().equals("Popup")){
+				a.remove();
+			}
+		}
+		
+	};
+
 }

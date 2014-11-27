@@ -14,9 +14,9 @@ import com.haw.projecthorse.level.Level;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
-import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.color.PlayerColor;
 
 /**
@@ -84,7 +84,7 @@ public class MovementTest extends Level {
 					player.changeAnimationSpeed(0.1f);
 				} else {
 					player.setAnimationSpeed(0.3f);
-					player.addAction(new ChangeDirectionAction(event.getDirection()));
+					player.addAction(new AnimationAction(event.getDirection()));
 				}
 			}
 		}; 
@@ -140,7 +140,6 @@ public class MovementTest extends Level {
 				}
 				
 				PlayerImpl p = (PlayerImpl) a;
-				p.toggleColor();
 				black = !black;
 				return true;
 			}

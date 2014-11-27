@@ -3,7 +3,7 @@ package com.haw.projecthorse.level.util.swipehandler;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
 
 public abstract class SwipeListener implements EventListener {
 
@@ -21,7 +21,7 @@ public abstract class SwipeListener implements EventListener {
 	/**
 	 * Verarbeitet das SwipeEvent
 	 * @param event Das SwipeEvent, welches auch die Richtung beinhaltet.
-	 * @param actor Das Ziel des SwipeEvent. Das ist der Actor, dem dieser Listener hinzugefügt wurde.
+	 * @param actor Das Ziel des SwipeEvent. Das ist der Actor, dem dieser Listener hinzugefï¿½gt wurde.
 	 */
 	public abstract void swiped(SwipeEvent event, Actor actor);
 

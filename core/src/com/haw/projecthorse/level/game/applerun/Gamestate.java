@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
-import com.haw.projecthorse.player.ChangeDirectionAction;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.actions.Direction;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
@@ -49,7 +49,7 @@ public class Gamestate {
 	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
-													// n�chsten entity spawn
+													// nächsten entity spawn
 	private final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
 													// spawns
 	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate
@@ -95,7 +95,8 @@ public class Gamestate {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
 		horse.scaleBy(0.5F);
-		horse.setAnimation(Direction.RIGHT, 0.4f);
+		horse.setAnimationSpeed(0.4f);
+		horse.addAction(new AnimationAction(Direction.RIGHT));
 		// stage.addActor(horse); //Done inside constructor
 		stage.addListener(new InputListener() {
 			@Override
@@ -127,17 +128,17 @@ public class Gamestate {
 			x = breite - horse.getWidth();
 		} // Nicht rechts rauslaufen
 			// Bewegungsrichtung ermitteln
-		ChangeDirectionAction directionAction = null;
+		AnimationAction animationAction = null;
 		distance = horse.getX() - x; // Positiv = move rechts
 		if (distance > 0) { // Move right
-			directionAction = new ChangeDirectionAction(Direction.RIGHT);
+			animationAction = new AnimationAction(Direction.RIGHT);
 		} else {
-			directionAction = new ChangeDirectionAction(Direction.LEFT);
+			animationAction = new AnimationAction(Direction.LEFT);
 		}
 
 		moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
-		horse.addAction(directionAction);
+		horse.addAction(animationAction);
 		horse.addAction(move);
 	}
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
 
 public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameObjectLogicFuerGameInputListener {
 
@@ -120,15 +120,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 	}
 
 	public void update(float delta) {
-
-		if (!(delta == 0)) {
-			// gameField.actGameField(delta);
-
-			updateGameObjects(delta);
-			checkPlayerConstraints();
-			collisionDetection();
-			gameField.actGameField(delta);
-		}
+		updateGameObjects(delta);
+		checkPlayerConstraints();
+		collisionDetection();
+		gameField.actGameField(delta);
 		gameField.drawGameField();
 
 	}

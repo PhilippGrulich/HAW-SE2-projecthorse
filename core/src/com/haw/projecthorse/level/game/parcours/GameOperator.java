@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.lootmanager.Chest;
@@ -16,15 +16,22 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private IGameFieldFuerGameOperator gameField;
 	private Chest chest;
 	private boolean saved = false;
+	private boolean paused = false;
+	private boolean gameEndReached;
+	private GameState gameStatus = GameState.START;
+	private Parcours main;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
-			Chest chest) {
-		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport, width, height);
+			Chest chest, Parcours p) {
+		main = p;
+		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport,
+				width, height);
 		logic = new GameObjectLogic(width,
 				(IGameFieldFuerGameObjectLogic) gameField);
 		setInputProcessor();
-		//getEarnedLoot();
+		// getEarnedLoot();
 		this.chest = chest;
+
 	}
 
 	// Bereits gewonnene Loot aus Chest holen und in Spieler packen.
@@ -53,27 +60,56 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
 	@Override
 	public void update(float delta) {
-		logic.update(delta);
-		 //verifyGameState();
+		if (delta != 0 && !paused &&  gameStatus != GameState.END) {
+			logic.update(delta);
+			verifyGameState(delta);
+		} else if (gameEndReached  &&  gameStatus != GameState.END) {
+			if (gameField.isButtonYesPressed(gameStatus)) {
+				gameEndReached = false;
+				gameField.restart();
+				gameField.removePopup();
+				this.gameStatus = GameState.START;
+				this.setPause(false);
+			} else if (gameField.isButtonNoPressed(gameStatus)) {
+				System.out.println("NO");
+				gameEndReached = false;
+				this.setPause(false);
+				gameField.clear();
+				this.gameStatus = GameState.END;
+				main.doDispose();
+				
+			}
+			gameField.drawGameField();
+		} else if(gameStatus != GameState.END) {
+			
+		}
+
 		// TODO logic.success -> popup, stats, loot, restart?
 	}
 
 	// Score von GameField erfragen u. bei Niederlage Spiel beenden.
-	// Dann prüfen ob Loot gewonnen -> wenn ja, Erfolgsmeldung u. in Chest
+	// Dann prÃ¼fen ob Loot gewonnen -> wenn ja, Erfolgsmeldung u. in Chest
 	// legen.
-	private void verifyGameState() {
-		if (!saved) {
-			if (gameField.getScore() >= 1) {
-				for (Loot l : gameField.getLoot()) {
-					if (l.getAvailableAtScore() <= 10) {
-						chest.addLoot(l.getLootInChest());
-						chest.saveAllLoot();
-						//chest.showAllLoot();
-						saved = true;
-					}
-				}
-			}
+	private void verifyGameState(float delta) {
+		if (gameField.getScore() >= 10) {
+			gameField.showPopup(GameState.WON);
+			gameEndReached = true;
+			gameStatus = GameState.WON;
+			this.pause();
+		} else if (gameField.getScore() < 0) {
+			gameField.showPopup(GameState.LOST);
+			gameStatus = GameState.LOST;
+			gameEndReached = true;
+			this.pause();
 		}
+	}
+
+	public void setPause(boolean p) {
+		paused = p;
+	}
+
+	public void pause() {
+		paused = true;
 	}
 
 }

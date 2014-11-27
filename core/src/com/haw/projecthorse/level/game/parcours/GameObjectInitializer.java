@@ -22,7 +22,7 @@ public class GameObjectInitializer implements IGameObjectInitializerFuerGameObje
 	@Override
 	public GameObject initGameObject(TextureRegion r, String name, int points,
 			float height, float width, float duration, float x, float y,
-			boolean collidable, boolean isLoot) {
+			boolean collidable, boolean isLoot, boolean isMoveable) {
 		
 		GameObject o;
 		if(collidable){
@@ -38,6 +38,7 @@ public class GameObjectInitializer implements IGameObjectInitializerFuerGameObje
 			o.setHeight(height);
 			o.setWidth(width);
 			o.setLoot(isLoot);
+			o.setMoveable(isMoveable);
 			return o;
 		} else {
 			if(isLoot){
@@ -51,6 +52,7 @@ public class GameObjectInitializer implements IGameObjectInitializerFuerGameObje
 				o.setHeight(height);
 				o.setWidth(width);
 				o.setLoot(isLoot);
+				o.setMoveable(isMoveable);
 				return o;
 			}
 		    o = new GameObject();
@@ -64,6 +66,7 @@ public class GameObjectInitializer implements IGameObjectInitializerFuerGameObje
 			o.setHeight(height);
 			o.setWidth(width);
 			o.setLoot(isLoot);
+			o.setMoveable(isMoveable);
 			return o;
 		}
 	}
