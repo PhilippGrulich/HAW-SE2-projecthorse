@@ -17,14 +17,14 @@ public class Parcours extends Game{
 	public Parcours(){
 	
 		super(Orientation.Landscape);
-		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest, this);
 
 		
 	}
 
 	@Override
 	protected void doDispose() {
-		// TODO Auto-generated method stub
+		gameOperator = null;
 		
 	}
 
@@ -36,13 +36,14 @@ public class Parcours extends Game{
 
 	@Override
 	protected void doPause() {
-		// TODO Auto-generated method stub
+		gameOperator.pause();
 		
 	}
 
 	@Override
 	protected void doRender(float delta) {
-		gameOperator.update(delta);
+		if(gameOperator != null)
+			gameOperator.update(delta);
 		
 	}
 
@@ -54,7 +55,7 @@ public class Parcours extends Game{
 
 	@Override
 	protected void doResume() {
-		// TODO Auto-generated method stub
+		gameOperator.setPause(false);
 		
 	}
 	
@@ -63,9 +64,5 @@ public class Parcours extends Game{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/*public static GameOperator getGameOperator(){
-		return gameOperator;
-	}*/
 
 }

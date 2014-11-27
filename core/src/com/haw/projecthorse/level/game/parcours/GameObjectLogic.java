@@ -120,15 +120,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 	}
 
 	public void update(float delta) {
-
-		if (!(delta == 0)) {
-			// gameField.actGameField(delta);
-
-			updateGameObjects(delta);
-			checkPlayerConstraints();
-			collisionDetection();
-			gameField.actGameField(delta);
-		}
+		updateGameObjects(delta);
+		checkPlayerConstraints();
+		collisionDetection();
+		gameField.actGameField(delta);
 		gameField.drawGameField();
 
 	}
