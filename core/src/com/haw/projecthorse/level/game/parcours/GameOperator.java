@@ -19,7 +19,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
 			Chest chest) {
-		gameField = new GameField(stage, viewport, width, height);
+		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport, width, height);
 		logic = new GameObjectLogic(width,
 				(IGameFieldFuerGameObjectLogic) gameField);
 		setInputProcessor();
