@@ -58,8 +58,7 @@ public class Puzzle extends Game {
 		addBackround();
 
 		addMusic();
-		swipe = Gdx.audio.newSound(Gdx.files
-				.internal("sounds/puzzle/swipe.wav"));
+		swipe = audioManager.getSound("puzzle","swipe.wav");
 		win = Gdx.audio.newSound(Gdx.files.internal("sounds/puzzle/win.wav"));
 		bett = Gdx.audio.newMusic(Gdx.files
 				.internal("music/puzzle/bett_pcm.wav"));

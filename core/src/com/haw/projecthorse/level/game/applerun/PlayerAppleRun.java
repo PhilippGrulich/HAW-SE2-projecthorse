@@ -1,7 +1,10 @@
 package com.haw.projecthorse.level.game.applerun;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
+import com.haw.projecthorse.audiomanager.AudioManager;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.player.PlayerImpl;
 
 public class PlayerAppleRun extends PlayerImpl implements Collidable {
@@ -11,21 +14,29 @@ public class PlayerAppleRun extends PlayerImpl implements Collidable {
 	private final float HITBOX_WIDTH_REDUCTION = 48;
 	private final float HITBOX_LEFT_ADDITION = HITBOX_WIDTH_REDUCTION/3.0f; //Additional px from left
 	private final float HITBOX_RIGHT_SUB = HITBOX_WIDTH_REDUCTION/3.0f*2.0f;
+	private Sound chewSound, hitSound;
 	
 	public PlayerAppleRun(Gamestate gamestate) {
 		this.gamestate = gamestate;
+		AudioManager audioManager = AudioManagerImpl.getInstance();
+		chewSound = audioManager.getSound("AppleRun", "chew.mp3");
+		hitSound = audioManager.getSound("AppleRun", "hit.mp3");
 	}
 
 	private void fireHitByEntity(Entity entity) {
 		// If hit by apple
 		// Add score
+		if (entity instanceof Apple){
+			// ??? //gamestate.addScore();
+			chewSound.play();
+		}
+
+
 		
-
-
-		// ??? //gamestate.addScore();
 		
 		// If hit by branch - -score
 		if(entity instanceof Branch){
+			hitSound.play();
 			gamestate.playerHitByBranch();
 		}
 
