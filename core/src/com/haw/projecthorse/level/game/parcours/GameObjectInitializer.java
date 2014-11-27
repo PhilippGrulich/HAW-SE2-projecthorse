@@ -6,39 +6,54 @@ import com.badlogic.gdx.math.Rectangle;
 public class GameObjectInitializer implements IGameObjectInitializerFuerGameObjectLogic{
 
 	@Override
-	public float calcRelativeHeight(float regionHeight, float regionWidth,
+	public float calcRelativeWidth(float regionHeight, float regionWidth,
 			float desiredWidth) {
 		
-		return desiredWidth * (regionHeight / regionWidth);
+		return desiredWidth * (regionWidth / regionHeight);
 	}
 
 	@Override
-	public float calcRelativeWidth(float regionHeight, float regionWidth,
+	public float calcRelativeHeight(float regionHeight, float regionWidth,
 			float desiredHeight) {
 		
-		return desiredHeight * (regionWidth / regionHeight);
+		return desiredHeight * (regionHeight / regionWidth);
 	}
 
 	@Override
 	public GameObject initGameObject(TextureRegion r, String name, int points,
 			float height, float width, float duration, float x, float y,
-			boolean collidable) {
+			boolean collidable, boolean isLoot) {
 		
+		GameObject o;
 		if(collidable){
-			CollidableGameObject o = new CollidableGameObject();
+			o = new CollidableGameObject();
 			o.setTextureRegion(r);
 			o.setName(name);
 			o.setPoints(points);
 			o.setCollidable(collidable);
-			o.setRectangle(new Rectangle());
+			((CollidableGameObject)o).setRectangle(new Rectangle());
 			o.setX(x);
 			o.setY(y);
 			o.setDuration(duration);
 			o.setHeight(height);
 			o.setWidth(width);
+			o.setLoot(isLoot);
 			return o;
 		} else {
-			GameObject o = new CollidableGameObject();
+			if(isLoot){
+			    o = new Loot(points, name);
+				o.setTextureRegion(r);
+				o.setName(name);
+				o.setCollidable(collidable);
+				o.setX(x);
+				o.setY(y);
+				o.setDuration(duration);
+				o.setHeight(height);
+				o.setWidth(width);
+				o.setLoot(isLoot);
+				return o;
+			}
+		    o = new GameObject();
 			o.setTextureRegion(r);
 			o.setName(name);
 			o.setPoints(points);
@@ -48,6 +63,7 @@ public class GameObjectInitializer implements IGameObjectInitializerFuerGameObje
 			o.setDuration(duration);
 			o.setHeight(height);
 			o.setWidth(width);
+			o.setLoot(isLoot);
 			return o;
 		}
 	}

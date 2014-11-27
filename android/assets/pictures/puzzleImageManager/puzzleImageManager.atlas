@@ -1,6 +1,6 @@
 
 puzzleImageManager.png
-size: 1577,1282
+size: 2214,1282
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -11,23 +11,17 @@ horse
   orig: 853, 1280
   offset: 0, 0
   index: -1
-horse3
-  rotate: false
-  xy: 857, 295
-  size: 720, 987
-  orig: 720, 987
-  offset: 0, 0
-  index: -1
-
-puzzleImageManager2.png
-size: 637,1089
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 horse2
   rotate: false
-  xy: 2, 2
+  xy: 857, 195
   size: 635, 1087
   orig: 635, 1087
+  offset: 0, 0
+  index: -1
+horse3
+  rotate: false
+  xy: 1494, 295
+  size: 720, 987
+  orig: 720, 987
   offset: 0, 0
   index: -1

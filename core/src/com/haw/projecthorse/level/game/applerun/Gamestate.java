@@ -3,7 +3,6 @@ package com.haw.projecthorse.level.game.applerun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -18,7 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 
@@ -26,39 +26,50 @@ import com.haw.projecthorse.player.Direction;
 
 public class Gamestate {
 
-	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for debugging / drawing collision rectangles
-	//TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
-	
+	private ShapeRenderer shapeRenderer = new ShapeRenderer(); // Used for
+																// debugging /
+																// drawing
+																// collision
+																// rectangles
+	// TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
+
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
-	int roll; //Temp var
-	int breite; //Temp var
-	float scaleX; //Temp var 
-	float distance;//Temp var 
-	float moveToDuration;//Temp var 
-	
-	private final float TOTAL_GAME_TIME_SECONDS = 90; //Total run time of the game. 
-	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; //Time to play left
+	int roll; // Temp var
+	int breite; // Temp var
+	float scaleX; // Temp var
+	float distance;// Temp var
+	float moveToDuration;// Temp var
+
+	private final float TOTAL_GAME_TIME_SECONDS = 90; // Total run time of the
+														// game.
+	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; // Time to play
+																// left
 	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5; //
-	
+
 	private final int MAX_FALLING_ENTITIES = 5;
 
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
-													// nächsten entity spawn
+													// nï¿½chsten entity spawn
 	private final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
 													// spawns
-	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate with -1 for first spawn = instant)
+	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate
+									// with -1 for first spawn = instant)
 
-	private int branch_spawn_chance = 20; // 20%:: Prozent Chance, das statt einem Apfel ein Ast spawnt
-	private int current_falling_entities = 0; // Um unnötige abfragen wahrend doRender zu vermeiden wird hier laufend die anzahl
+	private int branch_spawn_chance = 20; // 20%:: Prozent Chance, das statt
+											// einem Apfel ein Ast spawnt
+	private int current_falling_entities = 0; // Um unnÃ¶tige abfragen wahrend
+												// doRender zu vermeiden wird
+												// hier laufend die anzahl
 												// mitgeschrieben.
 
 	private EntityGroup fallingEntities; // Falling entities
-	private Stage stage;// = new Stage(this.getViewport(), this.getSpriteBatch());
+	private Stage stage;// = new Stage(this.getViewport(),
+						// this.getSpriteBatch());
 	private Group backgroundGraphics; // Stuff not interacting with player.
 	private PlayerAppleRun horse;
 
-	private TimeBar timeBar; //Init in background
-	
+	private TimeBar timeBar; // Init in background
+
 	private int width;
 	private int height;
 
@@ -92,17 +103,19 @@ public class Gamestate {
 				moveHorseTo(x);
 				return true;
 			}
-			
-			//Fires if the mouse is dragged - following a touchDown event
+
+			// Fires if the mouse is dragged - following a touchDown event
 			@Override
-			public void touchDragged(InputEvent event, float x, float y, int pointer){
+			public void touchDragged(InputEvent event, float x, float y, int pointer) {
 				moveHorseTo(x);
 			}
 		});
 	}
 
 	private void moveHorseTo(float x) {
-		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des Pferdes bewegen
+		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des
+																// Pferdes
+																// bewegen
 		horse.clearActions(); // Alte bewegungen etc. entfernen
 
 		if (x < 0) {
@@ -132,7 +145,8 @@ public class Gamestate {
 		if (distance < 0) {
 			distance = distance * -1;
 		} // Absolute
-		return 1.0f / MOVEMENT_PER_SECOND * distance; // Calculate running speeed
+		return 1.0f / MOVEMENT_PER_SECOND * distance; // Calculate running
+														// speeed
 	}
 
 	// Spawning new Apples / Falling stuff
@@ -152,7 +166,7 @@ public class Gamestate {
 					// Increment current_falling_entities
 					current_falling_entities++;
 					fallingEntities.addActor(GameObjectFactory.getBranch());
-					
+
 				} else {
 					// Spawn an apple
 					// increment current_falling_entities
@@ -164,7 +178,8 @@ public class Gamestate {
 	}
 
 	public void removeFallingEntity(Entity entity) {
-		// TODO check if entity is really inside this group. Otherwise maxing out available slots for new entities
+		// TODO check if entity is really inside this group. Otherwise maxing
+		// out available slots for new entities
 		fallingEntities.removeActor(entity);
 		GameObjectFactory.giveBackEntity(entity);
 		current_falling_entities--;
@@ -183,10 +198,32 @@ public class Gamestate {
 		stage.draw();
 		horse.act(delta);
 		spawnEntities(delta);
-		//drawCollisionRectangles(delta);
+		// drawCollisionRectangles(delta);
 		collisionDetection(); // Todo evtl. inside Entity-Objecten
 		removeDroppedDownEntities();
 		updateTimer(delta);
+
+		updateAccelometer();
+
+	}
+
+	private void updateAccelometer() {
+		// nur wenn das Accelerometer activiert ist wird es auch genutzt
+		if (GameManagerFactory.getInstance().getSettings().getAccelerometerState()) {
+			float adjustedX = (Gdx.input.getAccelerometerX());
+			float horseWith = ((horse.getWidth() * horse.getScaleX()) / 2);
+			float horseX = horse.getX();
+			if (adjustedX > -2f && adjustedX < 2f) {
+				adjustedX = 0f;
+			} else {
+				if (adjustedX > 2f)
+					adjustedX = (float) (Math.pow(adjustedX, 2));
+				else
+					adjustedX = (float) (Math.pow(adjustedX, 2)) * -1;
+				moveHorseTo((float) (horseX + horseWith - adjustedX));
+
+			}
+		}
 	}
 
 	private void removeDroppedDownEntities() {
@@ -199,16 +236,18 @@ public class Gamestate {
 		}
 	}
 
-	private void updateTimer(float delta){
+	private void updateTimer(float delta) {
 		timeLeftSeconds -= delta;
-		if(timeLeftSeconds < 0){
-			//TODO end this game
+		if (timeLeftSeconds < 0) {
+			// TODO end this game
 		}
-		//updateTimeBar Scale
-		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; //Time left as ratio. (Between 0.0 and 1.0)
+		// updateTimeBar Scale
+		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; // Time left as
+															// ratio. (Between
+															// 0.0 and 1.0)
 		timeBar.setScaleX(scaleX);
 	}
-	
+
 	private void drawCollisionRectangles(float delta) {
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.CYAN);
@@ -226,25 +265,26 @@ public class Gamestate {
 
 		TextureRegion tree = AssetManager.getTextureRegion("appleRun", "tree");
 		TextureRegion ground = AssetManager.getTextureRegion("appleRun", "ground");
-		
+
 		Image treeImage = new Image(tree);
 		treeImage.setY(144);
 		timeBar = new TimeBar();
 		timeBar.setX(32);
 		timeBar.setY(32);
-		
+
 		backgroundGraphics.addActor(treeImage);
 		backgroundGraphics.addActor(new Image(ground));
 
 		backgroundGraphics.addActor(timeBar);
 	}
 
-	public void dispose(){
+	public void dispose() {
 		GameObjectFactory.dispose();
-		//atlas.dispose(); //Removed due to AssetManager-Management
+		// atlas.dispose(); //Removed due to AssetManager-Management
 	}
-	
+
 	public void playerHitByBranch() {
+		Gdx.input.vibrate(200);
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
 

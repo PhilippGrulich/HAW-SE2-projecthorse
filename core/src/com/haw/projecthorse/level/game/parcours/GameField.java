@@ -13,12 +13,12 @@ import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.player.Direction;
 
 /**
- * Container-Klasse für GameObjects.
+ * Container-Klasse fï¿½r GameObjects.
  * 
  * @author Francis
  *
  */
-public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFuerGameObjectLogic, IGameFieldFuerGameOperator{
+public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFuerGameObjectLogic{
 
 	private Stage stage;
 	private int width;
@@ -31,15 +31,8 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private Text scoreInformation;
 	private int score;
 	private float grass_ground_height;
-	private List<Loot> loot;
-	private boolean gameAlive = true;
-
-	public List<Loot> getLoot() {
-		return loot;
-	}
 
 	public GameField(Stage s, Viewport p, int w, int h) {
-		s.setViewport(p);
 		stage = s;
 		width = w;
 		height = h;
@@ -47,7 +40,6 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		score = 0;
 		gameObjects = new ArrayList<GameObject>();
 		generalGameSpeed = getWidth() / 3;
-		loot = new ArrayList<Loot>();
 		loadTextureRegions(new GameObjectInitializer());
 		player = new Player(getWidth(), getHeight());
 		initPlayer(new GameObjectInitializer());
@@ -58,10 +50,9 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	}
 
 	public void loadTextureRegions(IGameObjectInitializerFuerGameObjectLogic goi) {
-		HashMap<String, TextureRegion> regions = (HashMap<String, TextureRegion>) AssetManager
+		HashMap<String, TextureRegion> regions = (HashMap) AssetManager
 				.getAllTextureRegions("parcours");
 
-		//********************Hintergrundobjekte erzeugen****************************//
 		// groundHeight setzen vor Objekten die auf dem "Boden" stehen.
 		TextureRegion r = regions.get("crosssection_long");
 		EndlessBackground endlessBackground = new EndlessBackground(
@@ -70,59 +61,47 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		groundHeight = r.getRegionHeight();
 
 		addGameObjectFixedWidthHeight("Hintergrund", getWidth(), getHeight(),
-				0, 0, false, 0, 0, regions, goi, false);
+				0, 0, false, 0, 0, regions, goi);
 		
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight(), -100,
-				getHeight() * 82 / 100, false, generalGameSpeed / 5 , 0, regions,
-				goi, false);
+				regions.get("cloud_fluffy").getRegionHeight(), -10,
+				getHeight() * 40 / 100, false, generalGameSpeed / 5 , 0, regions,
+				goi);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight() / 3, -100,
-				getHeight() * 76 / 100, false, generalGameSpeed / 6, 0, regions,
-				goi, false);
+				regions.get("cloud_fluffy").getRegionHeight() / 3, -10,
+				getHeight() * 30 / 100, false, generalGameSpeed / 6, 0, regions,
+				goi);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
-				regions.get("cloud_fluffy").getRegionHeight() / 2, -100,
-				getHeight() * 70 / 100, false, generalGameSpeed / 5.5f, 0, regions,
-				goi, false);
+				regions.get("cloud_fluffy").getRegionHeight() / 2, -10,
+				getHeight() * 35 / 100, false, generalGameSpeed / 5.5f, 0, regions,
+				goi);
 
 		addGameObjectWithRelativHeight("rainbow", regions.get("rainbow")
-				.getRegionHeight(), 62, getTopOfGroundPosition(), false, 0, 0,
-				regions, goi, false);
+				.getRegionHeight(), 50, getTopOfGroundPosition(), false, 0, 0,
+				regions, goi);
 
 		grass_ground_height = getTopOfGroundPosition()
 				+ (getTopOfGroundPosition() * 160 / 100);
 		addGameObjectFixedWidthHeight("grass_ground", getWidth(),
-				grass_ground_height, 0, 0, false, 0, 0, regions, goi, false);
+				grass_ground_height, 0, 0, false, 0, 0, regions, goi);
 
 		addBushs(goi, regions);
 
-		//**************Punktestand verändernde Objekte erzeugen*************//
-		//Kürbisse
 		for (int i = 1; i < 9; i++) {
 			addGameObjectWithRelativHeight("Kuerbis" + i,
-					getPercentOfHeight(5),
+					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
 					-100, getTopOfGroundPosition(), true, generalGameSpeed, 1,
-					regions, goi, false);
+					regions, goi);
 		}
 
-		//Hindernisse
-		addGameObjectWithRelativHeight("cratetex", getPercentOfHeight(9) , -100, getTopOfGroundPosition(),
-				true, generalGameSpeed, -10, regions, goi, false);
-		
-		addGameObjectWithRelativHeight("dirt_mountain_dirt_cap", getPercentOfHeight(9), -100, getTopOfGroundPosition() - 15,
-				true, generalGameSpeed, -10, regions, goi, false);
+		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
+				.getRegionHeight() * 9 / 50, -100, getTopOfGroundPosition(),
+				true, generalGameSpeed, -10, regions, goi);
 
-		//**********************Loot-Objekte erzeugen*******************************//
-		addGameObjectWithRelativHeight("dirt_mountain_dirt_cap", regions.get("dirt_mountain_dirt_cap")
-				.getRegionHeight() * 9 / 100, -100, getTopOfGroundPosition(),
-				false, 0, 1, regions, goi, true);
-		//*************************************************************************//
-		//Punktestand erzeugen
 		scoreInformation = new Text(AssetManager.getTextFont(FontSize.DREISSIG),
-				"Punkte: 0", 10, getHeight());
-		scoreInformation.setY(scoreInformation.getY() - scoreInformation.getHeight());
+				"Punkte: 0", 10, getHeight() * 50 / 60);
 		scoreInformation.setColor(0, 0, 0, 1);
 		stage.addActor(scoreInformation);
 		
@@ -133,48 +112,25 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private void addGameObjectWithRelativHeight(String name,
 			float desiredHeight, float x, float y, boolean collidable,
 			float speed, int points, HashMap<String, TextureRegion> regions,
-			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot) {
+			IGameObjectInitializerFuerGameObjectLogic goi) {
+		GameObject o = goi.initGameObject(regions.get(name), name, points,
+				desiredHeight, goi.calcRelativeWidth(regions.get(name)
+						.getRegionHeight(), regions.get(name).getRegionWidth(),
+						desiredHeight), speed, x, y, collidable);
 
-		GameObject o;
-		if(isLoot){
-			
-			 o = goi.initGameObject(regions.get(name), name, points,
-						desiredHeight, goi.calcRelativeWidth(regions.get(name)
-								.getRegionHeight(), regions.get(name).getRegionWidth(),
-								desiredHeight), speed, x, y, collidable, isLoot);
-			 System.out.println("collid: " + o.getName());
-			loot.add((Loot) o);
-		}else{
-			 o =  goi.initGameObject(regions.get(name), name, points,
-						desiredHeight, goi.calcRelativeWidth(regions.get(name)
-								.getRegionHeight(), regions.get(name).getRegionWidth(),
-								desiredHeight), speed, x, y, collidable, isLoot);
-			gameObjects.add(o);
-		}
-		
+		gameObjects.add(o);
 		stage.addActor(o);
 	}
 
 	private void addGameObjectFixedWidthHeight(String name, float width,
 			float height, float x, float y, boolean collidable, float speed,
 			int points, HashMap<String, TextureRegion> regions,
-			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot) {
-		
-		GameObject o;
-		if(isLoot){
-			 o = goi.initGameObject(regions.get(name), name, points,
-					height, width, speed, x, y, collidable, isLoot);
-			loot.add((Loot) o);
-		}else{
-			 o = goi.initGameObject(regions.get(name), name, points,
-					height, width, speed, x, y, collidable, isLoot);
-			gameObjects.add(o);
-		}
+			IGameObjectInitializerFuerGameObjectLogic goi) {
+		GameObject o = goi.initGameObject(regions.get(name), name, points,
+				height, width, speed, x, y, collidable);
+
+		gameObjects.add(o);
 		stage.addActor(o);
-	}
-	
-	private float getPercentOfHeight(float f){
-		return getHeight() * f / 100;
 	}
 
 	private void addBushs(IGameObjectInitializerFuerGameObjectLogic goi,
@@ -208,7 +164,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 			GameObject a = goi.initGameObject(
 					regions.get("bush" + possibleBushs[randomBush]), "bush"
 							+ possibleBushs[randomBush], 0, bushHeight,
-					bushWidth, 0, x, randomPosY, false, false);
+					bushWidth, 0, x, randomPosY, false);
 
 			x = x + bushWidth;
 			gameObjects.add(a);
@@ -259,16 +215,13 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	}
 
 	public void initPlayer(GameObjectInitializer goi) {
+		player.setHeight(getHeight() /3);
 		com.haw.projecthorse.player.Player p = new com.haw.projecthorse.player.PlayerImpl();
-		float h = p.getHeight();
-		float w = p.getWidth();
-		float nh = getHeight() * 15 / 100;
-		player.setHeight(nh);
-		player.setWidth(goi.calcRelativeWidth(h, w,
-				nh));
+		player.setWidth(goi.calcRelativeWidth(p.getHeight(), p.getWidth(),
+				getHeight() / 3));
 		player.setPosition(20, getTopOfGroundPosition());
 
-		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
+		// Sprunghï¿½he u. Sprungweite auf 5% ï¿½ber maximale Hï¿½he von Hindernissen
 		// setzen
 		float maxHeight = 0;
 		float maxWidth = 0;

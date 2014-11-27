@@ -25,23 +25,9 @@ germanymap_scaled
   orig: 720, 1005
   offset: 0, 0
   index: -1
-shadedLight24
-  rotate: false
-  xy: 724, 33
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
-shadedLight25
-  rotate: false
-  xy: 886, 195
-  size: 80, 80
-  orig: 80, 80
-  offset: 0, 0
-  index: -1
 shadedLight28
   rotate: false
-  xy: 968, 195
+  xy: 724, 33
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

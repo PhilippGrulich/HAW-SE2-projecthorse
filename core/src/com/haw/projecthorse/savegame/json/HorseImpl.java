@@ -1,11 +1,13 @@
 package com.haw.projecthorse.savegame.json;
 
-import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.player.race.HorseRace;
 
 public class HorseImpl implements Horse {
 	private String name = "";
-	private PlayerColor color = PlayerColor.BLACK;
+	private HorseRace race = HorseRace.HAFLINGER;
 
+	public HorseImpl() { }
+	
 	@Override
 	public String getName() {
 		return name;
@@ -17,12 +19,12 @@ public class HorseImpl implements Horse {
 	}
 
 	@Override
-	public PlayerColor getColor() {
-		return color;
+	public HorseRace getRace() {
+		return race;
 	}
 
 	@Override
-	public void setColor(PlayerColor color) {
-		this.color = color;
+	public void setRace(HorseRace race) {
+		this.race = race;
 	}
 }

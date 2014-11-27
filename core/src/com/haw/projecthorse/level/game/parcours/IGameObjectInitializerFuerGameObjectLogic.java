@@ -37,7 +37,7 @@ public interface IGameObjectInitializerFuerGameObjectLogic {
 
 	 * @post Ein initialisertes GameObject wenn alle preconditions erfüllt sind, sonst null.
 	 */
-	public GameObject initGameObject(TextureRegion r, String name, int points, float height, float width, float duration, float x, float y, boolean collidable);
+	public GameObject initGameObject(TextureRegion r, String name, int points, float height, float width, float duration, float x, float y, boolean collidable, boolean loot);
 	
 	
 }

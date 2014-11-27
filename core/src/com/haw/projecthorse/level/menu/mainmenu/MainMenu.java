@@ -3,7 +3,6 @@ package com.haw.projecthorse.level.menu.mainmenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -15,41 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
-/**
- * @author Lars MainMenu. Shown when game starts Using a libgdx.stage and tables
- *         within to create an ui-layout
- * 
- */
+public class MainMenu extends Menu {
 
-public class MainMenu extends Level {
-
-	private VerticalGroup table;// = new Table();
+	private VerticalGroup table;
 
 	private Stage stage;
-
-//	private TextButtonStyle buttonStyle; // Defines style how buttons appear
-//
-//
-//	private TextureRegion upRegion; // Aussehen des buttons wenn nicht
-//									// gedr?ckt;
-//	private TextureRegion downRegion; // Aussehen des buttons wenn nicht
-//										// gedr?ckt;
-//
-//	private AtlasRegion backgroundTexture;
-//	private Image background;
-//
-//	private BitmapFont buttonFont = new BitmapFont(); // Standard 15pt Arial
-//														// Font. (inside
-//														// libgdx.jar file)
 
 	private ImageTextButton buttonCredits;
 	private ImageTextButton buttonSpiel1;
@@ -85,27 +64,18 @@ public class MainMenu extends Level {
 
 	private void addBackground() {
 		
-//		atlas = AssetManager.load("menu", false, false, true);
-
 		EndlessBackground background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "sky"), 30);
-		background.toBack();
 		stage.addActor(background);
-
+		
 		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "second_grass"), 0);
-		background.toBack();
 		stage.addActor(background);
 
 		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "first_grass"), 0);
-		background.toBack();
 		stage.addActor(background);
 
 		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "ground"), 0);
-		background.toBack();
-
 		stage.addActor(background);
-
-		// background = new Image(backgroundTexture);
-		// background.toBack();
+		
 
 	}
 
@@ -115,9 +85,8 @@ public class MainMenu extends Level {
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
 		imageButtonStyle.up = drawable;
-		imageButtonStyle.font = new BitmapFont(Gdx.files.internal("pictures/fontButton/font.fnt"));
-		imageButtonStyle.font.scale(-0.5f);		
-		imageButtonStyle.fontColor = Color.valueOf("877E6A");
+		imageButtonStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);		
+		imageButtonStyle.fontColor = Color.GRAY;
 		
 		return imageButtonStyle;
 
@@ -133,15 +102,15 @@ public class MainMenu extends Level {
 		buttonSpiel3 = new ImageTextButton(/* "Spielstand 3" */"Player Menu", style);
 		buttonCredits = new ImageTextButton("Credits", style);
 
-		buttonSpiel1.toFront();
-		buttonSpiel2.toFront();
-		buttonSpiel3.toFront();
-		buttonCredits.toFront();
-
 		table.addActor(buttonSpiel1);
 		table.addActor(buttonSpiel2);
 		table.addActor(buttonSpiel3);
 		table.addActor(buttonCredits);
+		
+		buttonSpiel1.toFront();
+		buttonSpiel2.toFront();
+		buttonSpiel3.toFront();
+		buttonCredits.toFront();
 
 	}
 
@@ -191,16 +160,12 @@ public class MainMenu extends Level {
 
 		stage.act(delta);
 		stage.draw();
-		//Table.drawDebug(stage); // show debug lines
 
 	}
 
 	@Override
 	public void doDispose() {
 		stage.dispose();
-
-		// atlas.dispose(); <- sollte nicht mehr gebraucht werden
-
 	}
 
 	@Override

@@ -90,9 +90,9 @@ kuerbis6.png FILE OK!
 CC-by ENTRY OK!
 grass.png FILE OK!
 CC-by ENTRY OK!
-Grundschrift-Bold.ttf FILE OK!
+Grundschrift-Bold.ttf NOT EXISTS!
 CC-by ENTRY OK!
-GetVoIP Grotesque.ttf FILE OK!
+GetVoIP Grotesque.ttf NOT EXISTS!
 CC-by ENTRY OK!
 logo.png NOT EXISTS!
 selfmade ENTRY OK!

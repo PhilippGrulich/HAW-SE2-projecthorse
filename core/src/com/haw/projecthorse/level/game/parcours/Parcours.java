@@ -1,24 +1,24 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import java.util.Map;
-
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.game.Game;
 
 /**
  * 
  * @author Francis
  *
  */
-public class Parcours extends Level{
+public class Parcours extends Game{
 	
 	private IGameOperatorFuerParcours gameOperator;
 	//private static GameOperator gameOperator;
 	
 	public Parcours(){
-		gameOperator = new GameOperator(new Stage(), this.getViewport(), this.width, this.height, this.chest);
+	
+		super(Orientation.Landscape);
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
+
 		
 	}
 

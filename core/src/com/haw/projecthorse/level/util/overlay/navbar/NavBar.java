@@ -1,8 +1,8 @@
 package com.haw.projecthorse.level.util.overlay.navbar;
 
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
@@ -19,15 +19,22 @@ import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
 public class NavBar extends OverlayWidgetGroup {
 
 	private HorizontalGroup horizontalGroup;
-	private final int NAVBAR_HIGH = (int) (this.height * 0.14);
-	private final int NAVBAR_WITH = (int) (this.width );
+	private final int NAVBAR_HIGH;
+	private final int NAVBAR_WITH;
 
 	public NavBar() {
-
-		horizontalGroup = new HorizontalGroup();
+		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Landscape) {
+			NAVBAR_HIGH = (int) (this.height * 0.25);
+			NAVBAR_WITH = (int) (this.width);
+		} else {
+			NAVBAR_HIGH = (int) (this.height * 0.14);
+			NAVBAR_WITH = (int) (this.width);
+		}
 		
+		horizontalGroup = new HorizontalGroup();
+
 		horizontalGroup.reverse();
-		horizontalGroup.space((float) (this.width*0.005));
+		horizontalGroup.space((float) (this.width * 0.005));
 		horizontalGroup.setHeight(NAVBAR_HIGH);
 		horizontalGroup.setWidth(NAVBAR_WITH);
 		setToTop();
@@ -64,7 +71,6 @@ public class NavBar extends OverlayWidgetGroup {
 	 * @param btn
 	 */
 	public void addButton(NavbarButton btn) {
-		
 
 		this.horizontalGroup.addActor(btn);
 		this.horizontalGroup.layout();

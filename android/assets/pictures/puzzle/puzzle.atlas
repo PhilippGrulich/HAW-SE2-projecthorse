@@ -1,40 +1,34 @@
 
 puzzle.png
-size: 1900,1282
+size: 2755,1282
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bilderrahmen-pferd
   rotate: false
-  xy: 1180, 2
+  xy: 857, 2
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
+horse
+  rotate: false
+  xy: 2, 2
+  size: 853, 1280
+  orig: 853, 1280
+  offset: 0, 0
+  index: -1
 horse2
   rotate: false
-  xy: 543, 195
+  xy: 1579, 195
   size: 635, 1087
   orig: 635, 1087
   offset: 0, 0
   index: -1
 horse3
   rotate: false
-  xy: 2, 429
+  xy: 2216, 429
   size: 539, 853
   orig: 539, 853
-  offset: 0, 0
-  index: -1
-
-puzzle2.png
-size: 855,1282
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-horse
-  rotate: false
-  xy: 2, 2
-  size: 853, 1280
-  orig: 853, 1280
   offset: 0, 0
   index: -1

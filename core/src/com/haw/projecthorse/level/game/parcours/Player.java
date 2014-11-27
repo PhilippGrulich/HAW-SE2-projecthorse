@@ -1,5 +1,8 @@
 package com.haw.projecthorse.level.game.parcours;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,10 +20,15 @@ public class Player extends PlayerImpl{
 	private float player_jumpwidth;
 	private boolean jumpDirectionRight = true;
 	private Rectangle r;
-	float x, y;
+	private float x, y;
 	private float SWIPEMOVE;
 	private float SWIPEDURATION = 0.2f;
-	float playerHeight, playerWidth, gameWidth, gameHeight;
+	private float playerHeight, playerWidth, gameWidth, gameHeight;
+	private List<Loot> earnedLoot;
+
+	public List<Loot> getEarnedLoot() {
+		return earnedLoot;
+	}
 
 	public float getGameHeight() {
 		return gameHeight;
@@ -38,6 +46,7 @@ public class Player extends PlayerImpl{
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.SWIPEMOVE = getGameWidth() * 35 / 100;
+		earnedLoot = new ArrayList<Loot>();
 	}
 	
 	@Override
@@ -183,8 +192,11 @@ public class Player extends PlayerImpl{
 		checkIfRectangleIsInitialized();
 		r.x = x;
 		r.y = y;
-		setX(x);
-		setY(y);
+		this.x = x;
+		this.y = y;
+		for(Loot l : earnedLoot){
+			l.setPosition(x, y);
+		}
 	}
 	
 	/**
@@ -230,19 +242,4 @@ public class Player extends PlayerImpl{
 		r.width = w;
 		this.playerWidth = w;
 	}
-	
-	@Override
-	public void setX(float x) {
-		checkIfRectangleIsInitialized();
-		r.setX(x);
-		this.x = x;
-	}
-	
-	@Override
-	public void setY(float y) {
-		checkIfRectangleIsInitialized();
-		r.setY(y);
-		this.y = y;
-	}
-	
 }
