@@ -12,7 +12,8 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
-import com.haw.projecthorse.player.Direction;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
 
 /**
  * Container-Klasse für GameObjects.
@@ -266,7 +267,8 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		player.setJumpSpeed(15);
 		player.setupJumpFunction();
 		player.setName("Player");
-		player.setAnimation(Direction.RIGHT, 0.3f);
+		player.setAnimationSpeed(0.3f);
+		player.addAction(new AnimationAction(Direction.RIGHT));
 		stage.addActor(player);
 	}
 

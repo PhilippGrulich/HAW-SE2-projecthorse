@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
-import com.haw.projecthorse.player.ChangeDirectionAction;
-import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.actions.AnimationAction;
 
-public class Player extends PlayerImpl{
+public class Player extends PlayerImpl {
 
 	private float player_jumpspeed;
 	private float a, b, c;
@@ -48,7 +48,7 @@ public class Player extends PlayerImpl{
 		this.SWIPEMOVE = getGameWidth() * 35 / 100;
 		earnedLoot = new ArrayList<Loot>();
 	}
-	
+
 	@Override
 	public void act(float delta) {
 		super.act(delta);
@@ -58,14 +58,14 @@ public class Player extends PlayerImpl{
 		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
 
-	private void checkIfRectangleIsInitialized(){
-		if(r == null){
+	private void checkIfRectangleIsInitialized() {
+		if (r == null) {
 			r = new Rectangle();
 		}
 	}
 
 	@Override
-	public float getHeight(){
+	public float getHeight() {
 		return playerHeight;
 	}
 
@@ -111,7 +111,7 @@ public class Player extends PlayerImpl{
 	}
 
 	@Override
-	public float getWidth(){
+	public float getWidth() {
 		return playerWidth;
 	}
 
@@ -125,17 +125,16 @@ public class Player extends PlayerImpl{
 		return y;
 	}
 
-	private void initSwipeListener(){
+	private void initSwipeListener() {
 		SwipeListener listener = new SwipeListener() {
 
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
-				//Vormals Prüfung auf instanceof APlayer
+				// Vormals Prüfung auf instanceof APlayer
 				if (getDirection() == event.getDirection()) {
 					if (getDirection() == Direction.RIGHT) {
-						addAction(Actions.moveTo(
-								getRightSwipePosition(), getY(),
-								SWIPEDURATION));
+						addAction(Actions.moveTo(getRightSwipePosition(),
+								getY(), SWIPEDURATION));
 						setJumpDirection(Direction.RIGHT);
 					} else {
 						addAction(Actions.moveTo(getLeftSwipePosition(),
@@ -144,21 +143,22 @@ public class Player extends PlayerImpl{
 					}
 				} else {
 					setAnimationSpeed(0.3f);
-					addAction(new ChangeDirectionAction(event
-							.getDirection()));
+					clearActions();
+					addAction(new AnimationAction(event.getDirection()));
 					setJumpDirection(event.getDirection());
 				}
 			}
 		};
-		
+
 		this.addListener(listener);
 	}
+
 	private boolean isJumpDirectionRight() {
 		return jumpDirectionRight;
 	}
 
 	@Override
-	public void setHeight(float h){
+	public void setHeight(float h) {
 		r.height = h;
 		this.playerHeight = h;
 	}
@@ -178,7 +178,7 @@ public class Player extends PlayerImpl{
 	public void setJumpHeight(float y) {
 		this.player_jumpheight = y;
 	}
-	
+
 	public void setJumpSpeed(float duration) {
 		this.player_jumpspeed = duration;
 	}
@@ -186,7 +186,7 @@ public class Player extends PlayerImpl{
 	public void setJumpWitdh(float x) {
 		this.player_jumpwidth = x;
 	}
-	
+
 	@Override
 	public void setPosition(float x, float y) {
 		checkIfRectangleIsInitialized();
@@ -196,7 +196,7 @@ public class Player extends PlayerImpl{
 		this.y = y;
 		for(Loot l : earnedLoot){
 			l.setPosition(x, y);
-		}
+	}
 	}
 	
 	/**
@@ -236,9 +236,9 @@ public class Player extends PlayerImpl{
 				* ((x3 * x3) * y2 - (x2 * x2) * y3) + x2 * x3 * y1 * (x2 - x3))
 				/ ((x1 - x2) * (x1 - x3) * (x2 - x3));
 	}
-	
+
 	@Override
-	public void setWidth(float w){
+	public void setWidth(float w) {
 		r.width = w;
 		this.playerWidth = w;
 	}
