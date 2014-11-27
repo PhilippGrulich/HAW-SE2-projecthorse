@@ -54,7 +54,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	@Override
 	public void update(float delta) {
 		logic.update(delta);
-		 verifyGameState();
+		 //verifyGameState();
 		// TODO logic.success -> popup, stats, loot, restart?
 	}
 
