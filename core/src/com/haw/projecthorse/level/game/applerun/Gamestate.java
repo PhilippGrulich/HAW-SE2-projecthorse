@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level.game.applerun;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,8 +19,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
-import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.actions.Direction;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
