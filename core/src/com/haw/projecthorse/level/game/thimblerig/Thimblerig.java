@@ -26,7 +26,7 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 import com.haw.projecthorse.lootmanager.Loot;
@@ -39,7 +39,7 @@ import com.haw.projecthorse.savegame.SaveGameManager;
  * @author Fabian Reiber
  */
 
-public class Thimblerig extends Level{
+public class Thimblerig extends Game{
 
 	private Stage stage;
 	private static boolean ISPAUSED;

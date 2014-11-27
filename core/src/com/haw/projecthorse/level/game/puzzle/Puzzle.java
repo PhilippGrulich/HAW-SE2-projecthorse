@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 
@@ -25,7 +25,7 @@ import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 //in assets/json/GameConfig.json Zeile 15 wieder ersetzen
 //einkommentieren zeile 113 in level
 
-public class Puzzle extends Level {
+public class Puzzle extends Game {
 
 	private static Stage stage;
 	private static Label label;

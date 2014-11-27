@@ -14,11 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
 
-public class MemorySpiel extends Level {
+public class MemorySpiel extends Game {
 
 	public enum GameState {
 		READY, RESTART, END;

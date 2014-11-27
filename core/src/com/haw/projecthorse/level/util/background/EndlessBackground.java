@@ -15,7 +15,7 @@ public class EndlessBackground extends Actor {
 	 * @param stageWidth
 	 *            Die Breite der Stage
 	 * @param backgroundImage
-	 *            Das Bild für den Hintergrund.
+	 *            Das Bild fÃ¼r den Hintergrund.
 	 * @param duration
 	 *            Die Dauer (in Sekunden), wie schnell das Bild von links nach
 	 *            rechts laufen soll.
@@ -48,7 +48,7 @@ public class EndlessBackground extends Actor {
 
 		while (pos < stageWidth) {
 			batch.draw(img, pos, 0);
-			pos += img.getRegionWidth();
+			pos += img.getRegionWidth()-10;
 		}
 	}
 }

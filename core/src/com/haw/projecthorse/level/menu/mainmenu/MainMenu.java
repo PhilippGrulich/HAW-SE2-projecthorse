@@ -16,21 +16,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
-/**
- * @author Lars MainMenu. Shown when game starts Using a libgdx.stage and tables
- *         within to create an ui-layout
- * 
- */
-
-public class MainMenu extends Level {
+public class MainMenu extends Menu {
 
 	private VerticalGroup table;
 

@@ -1,8 +1,8 @@
-package com.haw.projecthorse.player;
+package com.haw.projecthorse.player.race;
 
 public class Race {
-	protected float obedience, intelligence, athletic;
-	protected String name;
+	private float obedience, intelligence, athletic;
+	private String name;
 
 	public Race(HorseRace type) {
 		switch (type) {
@@ -34,5 +34,21 @@ public class Race {
 			name = "Shetti";
 			break;
 		}
+	}
+
+	public float obedience() {
+		return obedience;
+	}
+
+	public float intelligence() {
+		return intelligence;
+	}
+
+	public float athletic() {
+		return athletic;
+	}
+
+	public String name() {
+		return name;
 	}
 }

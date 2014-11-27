@@ -4,6 +4,7 @@ import java.util.Observer;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Der AudioManager ist für die Verwaltung von Sounds (Audioeffekten)
@@ -11,7 +12,7 @@ import com.badlogic.gdx.audio.Sound;
  * Einstellungen zur App weiten Lautstärke. Er ist Observer, um das Settings Objekt 
  * beobachten zu können. 
  */
-public interface AudioManager extends Observer{
+public interface AudioManager extends Observer, Disposable{
 
 	/**
 	 *  Spielt einen Sound in der gewünschten Lautstärke ab und gibt eine

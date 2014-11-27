@@ -6,10 +6,11 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.GameConfig;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.gamemanager.settings.Settings;
+import com.haw.projecthorse.platform.Platform;
 
 /**
- * Der GameManager ist ein Singelton und für die Kommunikation zwischen den einzelnen Modulen 
- * zuständig.
+ * Der GameManager ist ein Singelton und fï¿½r die Kommunikation zwischen den einzelnen Modulen 
+ * zustï¿½ndig.
  * Die Konfiguration wird aus der GameConfig.json geladen.
  */
 public interface GameManager {
@@ -42,12 +43,12 @@ public interface GameManager {
 	void navigateToMainMenu();
 	
 	/** 
-	 * Liefert das GameConfig Object zurück. Über dieses Object können Informationen über das Spiel abgefragt werden.
+	 * Liefert das GameConfig Object zurï¿½ck. ï¿½ber dieses Object kï¿½nnen Informationen ï¿½ber das Spiel abgefragt werden.
 	 */
 	GameConfig getGameConfig();
 	
 	/** 
-	 * Liefert das CityObject zurück falls die LevelID existiert.
+	 * Liefert das CityObject zurï¿½ck falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
 	 * @return {@link CityObjectImpl}
@@ -56,7 +57,7 @@ public interface GameManager {
 	CityObject getCityObject(String levelID) throws LevelNotFoundException;
 
 	/** 
-	 * Liefert das GameObject zurück falls die LevelID existiert.
+	 * Liefert das GameObject zurï¿½ck falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
 	 * @return {@link GameObjecttImpl}
@@ -65,7 +66,7 @@ public interface GameManager {
 	GameObject getGameObject(final String levelID) throws LevelNotFoundException;
 	
 	/** 
-	 * Liefert das MenuObject zurück falls die LevelID existiert.
+	 * Liefert das MenuObject zurï¿½ck falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
 	 * @return {@link MenuObject}
@@ -87,11 +88,16 @@ public interface GameManager {
 	Settings getSettings();
 	
 	/**
-	 * Liefert die aktuelle LevelID zurück
+	 * Liefert die aktuelle LevelID zurÃ¼ck
 	 * @return
 	 */
 	String getCurrentLevelID();
 
+	/**
+	 * Liefert die Implementierung des Platform Interfaces zurÃ¼ck.
+	 * @return
+	 */
+	Platform getPlatform();
 
 	
 }

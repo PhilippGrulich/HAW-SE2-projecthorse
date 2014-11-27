@@ -1,7 +1,5 @@
 package com.haw.projecthorse.level.menu.playermenu;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
@@ -15,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
@@ -25,21 +23,16 @@ import com.haw.projecthorse.player.ChangeDirectionAction;
 import com.haw.projecthorse.player.Direction;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
-import com.haw.projecthorse.player.color.ColorManager;
-import com.haw.projecthorse.player.color.PlayerColor;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
-public class PlayerMenu extends Level {
+public class PlayerMenu extends Menu {
 	private Stage stage;
 	private Player active, player1, player2;
 	private Label label;
-	private int index = 0;
 	private float playerPositionX, playerPositionY = 120, invisiblePositionX;
 	private String playerName;
 //	private TextureAtlas atlas, buttonAtlas;
 
-	private List<PlayerColor> colors;
-	private int max;
 	private final int DURATION = 2;
 
 	private void updateNameLabel() {
@@ -49,13 +42,10 @@ public class PlayerMenu extends Level {
 	}
 
 	private void incIndex() {
-		index = ++index % max;
 		updatePlayer(true);
 	}
 
 	private void decIndex() {
-		if (--index < 0)
-			index = max - 1;
 		updatePlayer(false);
 	}
 
@@ -75,7 +65,6 @@ public class PlayerMenu extends Level {
 
 		inActive.setPosition((right ? invisiblePositionX : width
 				- invisiblePositionX), playerPositionY);
-		inActive.setPlayerColor(colors.get(index));
 		inActive.setAnimationSpeed(0.3f);
 		inActive.addAction(Actions.sequence(
 				Actions.moveTo(playerPositionX, playerPositionY, DURATION),
@@ -128,7 +117,7 @@ public class PlayerMenu extends Level {
 	}
 
 	private void createPlayers() {
-		player1 = new PlayerImpl(colors.get(index));
+		player1 = new PlayerImpl();
 		player1.setScale(3);
 
 		playerPositionX = (width - 3 * player1.getWidth()) / 2;
@@ -194,9 +183,8 @@ public class PlayerMenu extends Level {
 
 	@Override
 	protected void doDispose() {
-		// Alles speichern, bevor das Menü verlassen wird
+		// Alles speichern, bevor das Menï¿½ verlassen wird
 		SaveGameManager.getLoadedGame().setHorseName(playerName);
-		SaveGameManager.getLoadedGame().setHorseColor(colors.get(index));
 		SaveGameManager.saveLoadedGame();
 	}
 
@@ -208,20 +196,10 @@ public class PlayerMenu extends Level {
 	@Override
 	protected void doShow() {
 		SaveGameManager.loadSavedGame(1); // TODO: zum testen
-		colors = ColorManager.getColorManager().getPossibleColors();
-		max = colors.size();
 
 		playerName = SaveGameManager.getLoadedGame().getHorseName();
 		if (playerName.length() == 0) {
 			playerName = "Name deines Pferdes";
-		}
-
-		PlayerColor c = SaveGameManager.getLoadedGame().getHorseColor();
-		for (int i = colors.size() - 1; i >= 0; i--) {
-			if (colors.get(i).equals(c)) {
-				index = i;
-				break;
-			}
 		}
 
 		stage = new Stage(getViewport(), getSpriteBatch());
