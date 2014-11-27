@@ -327,7 +327,6 @@ public final class AssetManager {
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
 		headlineFonts[size.ordinal()] = generator.generateFont(size.getVal());
-		generator.dispose();
 		}
 		return headlineFonts[size.ordinal()];
 	}
