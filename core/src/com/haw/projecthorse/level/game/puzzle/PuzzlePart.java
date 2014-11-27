@@ -39,10 +39,10 @@ public class PuzzlePart extends Image {
 						image.setVisible(false);
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
-						Puzzle.win.setVolume(Puzzle.win.play(), 0.9f);
-						ImageManager.flagbett = true;
+						ImageManager.win.play(0.9f);
+					//	ImageManager.flagbett = true;
 
-						Puzzle.setLabelText("Du hast gewonnen!!! \nAnzahl deiner Schritte : "
+						ImageManager.setLabelText("Du hast gewonnen!!! \nAnzahl deiner Schritte : "
 								+ String.valueOf(Counter.getCounter())+"\nGehe auf den Pfeil oben");
 						Counter.setCounter(0);
 
@@ -51,15 +51,15 @@ public class PuzzlePart extends Image {
 				} else {
 
 					Counter.setCounter(1);
-					Puzzle.setLabelText("Anzahl: "
+					ImageManager.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
 
 					int lokX = (int) image.getX();
 					int lokY = (int) image.getY();
 
 					if (checkImage(lokX, lokY)) {
-						Puzzle.swipe.setVolume(Puzzle.swipe.play(), 0.2f);
-
+						//ImageManager.swipe.setVolume(, 0.2f);
+						ImageManager.swipe.play(0.5f);
 						image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
 								.getEmptyImage().getY());
 

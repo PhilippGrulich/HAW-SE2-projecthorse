@@ -6,19 +6,23 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
-import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
@@ -27,15 +31,20 @@ import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 
 public class ImageManager extends Game {
 
-	private static Stage stage;
+	private static Stage firststage;
+	private static Stage secondstage;
 
 	private int index;
+	private static Label label;
 
 	private List<Image> imagelist;
 	private Map<String, TextureRegion> regionsmap;
 
-	static Music bett;
-	static boolean flagbett = true;
+	private Music musik;
+	// static boolean flagbett = true;
+
+	static Sound swipe;
+	static Sound win;
 
 	static int myWidth;
 	static int myHeight;
@@ -44,11 +53,12 @@ public class ImageManager extends Game {
 	static int myYPos;
 
 	public ImageManager() {
+
 		super();
 
-		stage = new Stage(getViewport());
-		InputManager.addInputProcessor(new StageGestureDetector(stage, false,
-				ControlMode.HORIZONTAL));
+		firststage = new Stage(getViewport());
+		InputManager.addInputProcessor(new StageGestureDetector(firststage,
+				false, ControlMode.HORIZONTAL));
 
 		addBackround();
 
@@ -60,29 +70,53 @@ public class ImageManager extends Game {
 		myHeight = (height / 4) * 3; // 960
 
 		myXPos = (width - myWidth) / 2; // 90
-		myYPos = (height - myHeight) / 4 + (height - myHeight) / 2; // 266
+		myYPos = (height - myHeight) / 5 + (height - myHeight) / 2; //
+		
+		
+		AssetManager.loadSounds("puzzle");
+		AssetManager.loadMusic("puzzle");
+		addMusic("bett_pcm.wav", true);
 
-		bett = Gdx.audio.newMusic(Gdx.files
-				.internal("music/puzzle/bett_pcm.wav"));
-
+		swipe = audioManager.getSound("puzzle", "swipe.wav");
+		win = audioManager.getSound("puzzle", "win.wav");
+		//swipe.play(0.9f);
+		//win.play(0.5f);
 		fillImagelist();
 		index = imagelist.size() - 1;
 		createButtons();
 		addToStage();
-		addMusic();
+		
+
+		// puzzle stage
+		secondstage = new Stage(getViewport());
+		InputManager.addInputProcessor(secondstage);
+		
+		addScore();
+
+		//
 
 	}
 
-	private void addMusic() {
+	// private void addMusic() {
+	//
+	// // AssetManager.loadMusic("puzzle");
+	// // AssetManager.playMusic("puzzle", "bett.wav");
+	// // AssetManager.playMusic("imagemanager", "bett");
+	// bett.setLooping(true);
+	// if (flagbett) {
+	//
+	// bett.play();
+	// }
+	//
+	// }
 
-		// AssetManager.loadMusic("puzzle");
-		// AssetManager.playMusic("puzzle", "bett.wav");
-		// AssetManager.playMusic("imagemanager", "bett");
-		bett.setLooping(true);
-		if (flagbett) {
+	public void addScore() {
+		BitmapFont font;
+		font = AssetManager.getTextFont(FontSize.VIERZIG);
+		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
+		label.setBounds(30, 45, 30, 30);
 
-			bett.play();
-		}
+		addToStage(secondstage, label);
 
 	}
 
@@ -131,9 +165,9 @@ public class ImageManager extends Game {
 
 		addListener(button_next, button_ok, button_prev);
 
-		stage.addActor(button_next);
-		stage.addActor(button_prev);
-		stage.addActor(button_ok);
+		firststage.addActor(button_next);
+		firststage.addActor(button_prev);
+		firststage.addActor(button_ok);
 	}
 
 	/**
@@ -152,7 +186,7 @@ public class ImageManager extends Game {
 			im.setPosition(myXPos, myYPos);
 			addListener(im);
 			im.toFront();
-			stage.addActor(im);
+			firststage.addActor(im);
 
 		}
 
@@ -204,9 +238,11 @@ public class ImageManager extends Game {
 			public void clicked(InputEvent event, float x, float y) {
 
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
-				flagbett = false;
-				bett.dispose();
-				GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
+				// flagbett = false;
+				// bett.dispose();
+
+				new Puzzle();
+				// firststage.dispose();
 
 			};
 		});
@@ -235,19 +271,30 @@ public class ImageManager extends Game {
 		horse.toBack();
 		horse.setName("backround");
 
-		stage.addActor(horse);
+		firststage.addActor(horse);
 
+	}
+
+	public static void addToStage(Stage stage, Actor actor) {
+		stage.addActor(actor);
 	}
 
 	@Override
 	protected void doRender(float delta) {
-		stage.act();
-		stage.draw();
+
+		firststage.act();
+		firststage.draw();
+
+		secondstage.act();
+		secondstage.draw();
 	}
 
 	@Override
 	protected void doDispose() {
-		stage.dispose();
+
+		firststage.dispose();
+		secondstage.dispose();
+		musik.dispose();
 
 	}
 
@@ -280,4 +327,21 @@ public class ImageManager extends Game {
 		// TODO Auto-generated method stub
 
 	}
+
+	public static Stage getSecondstage() {
+		return secondstage;
+	}
+
+	public static void setLabelText(String newText) {
+		label.setText(newText);
+	}
+
+	private void addMusic(String name, boolean loop) {
+
+		musik = audioManager.getMusic("puzzle", name);
+		// musik.play();
+		// musik.setLooping(loop);
+
+	}
+
 }
