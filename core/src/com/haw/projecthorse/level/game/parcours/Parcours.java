@@ -15,8 +15,10 @@ public class Parcours extends Game{
 	//private static GameOperator gameOperator;
 	
 	public Parcours(){
+	
 		super(Orientation.Landscape);
-		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height);
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
+
 		
 	}
 
