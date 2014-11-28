@@ -6,6 +6,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,8 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 import com.haw.projecthorse.lootmanager.Loot;
@@ -37,11 +39,19 @@ import com.haw.projecthorse.savegame.SaveGameManager;
  * @author Fabian Reiber
  */
 
-public class Thimblerig extends Level{
+public class Thimblerig extends Game{
 
 	private Stage stage;
 	private static boolean ISPAUSED;
 	
+	/**
+	 * Musik und Sound Objekte
+	 */
+	private Music bgMusic;
+	private Sound firstSax;
+	private Sound secondSax;
+	private Sound thirdSax;
+	private Sound horseNeighing;
 	/**
 	 * Hut- und Logik-Objekte
 	 */
@@ -187,14 +197,14 @@ public class Thimblerig extends Level{
 					 */
 					switch(this.choiceCounter){
 					case 0:
-						AssetManager.playSound(this.getLevelID(), "jingles_SAX10.ogg");
+						this.firstSax.play(0.4f);
 						this.labelGood.setVisible(true);					
 						this.wins++;
 						this.labelWin.setText(this.scoreStr + this.wins);
 						checkPrize();
 						break;
 					case 1:
-						AssetManager.playSound(this.getLevelID(), "jingles_SAX10.ogg");
+						this.firstSax.play(0.4f);
 						this.labelTryAgain.setVisible(false);
 						this.labelOk.setVisible(true);
 						break;
@@ -212,7 +222,7 @@ public class Thimblerig extends Level{
 				else if(this.hats[i].isFlinged() && !this.hats[i].isChoosed()
 						&& !this.hatIndexList.contains(i)){
 					
-					AssetManager.playSound(this.getLevelID(), "jingles_SAX04.ogg");
+					this.secondSax.play(0.4f);
 					Action moveTo = Actions.moveTo(this.hats[i].getX(), 
 							this.hats[i].getY() + 80);
 					this.hats[i].addAction(moveTo);
@@ -223,7 +233,7 @@ public class Thimblerig extends Level{
 					 * einen runtergezaehlt und Runde beendet. Weniger als 0 geht aber nicht
 					 */
 					if(this.choiceCounter == 2){
-						AssetManager.playSound(this.getLevelID(), "jingles_SAX07.ogg");
+						this.thirdSax.play(0.4f);
 						this.labelTryAgain.setVisible(false);
 						this.labelFail.setVisible(true);
 						overlay.showPopup(newGame);
@@ -252,7 +262,7 @@ public class Thimblerig extends Level{
 		this.chest.saveAllLoot();
 		this.stage.dispose();	
 		this.textFont.dispose();
-		AssetManager.turnMusicOff("thimblerig", "Little_Bits.mp3");
+		this.bgMusic.stop();
 	}
 
 	@Override
@@ -263,11 +273,15 @@ public class Thimblerig extends Level{
 	@Override
 	protected void doShow() {
 		AssetManager.loadSounds("thimblerig");
-		AssetManager.changeSoundVolume(0.4f);
 		AssetManager.loadMusic("thimblerig");
-		AssetManager.playMusic("thimblerig", "Little_Bits.mp3");
-		AssetManager.changeMusicVolume("thimblerig", "Little_Bits.mp3", 0.2f);
-		AssetManager.setMusicLooping("thimblerig", "Little_Bits.mp3", true);
+		this.bgMusic = this.audioManager.getMusic("thimblerig", "Little_Bits.mp3");
+		this.bgMusic.setLooping(true);
+		this.bgMusic.play();
+		this.bgMusic.setVolume(0.2f);
+		this.firstSax = this.audioManager.getSound(this.getLevelID(), "jingles_SAX10.ogg");
+		this.secondSax = this.audioManager.getSound(this.getLevelID(), "jingles_SAX04.ogg");
+		this.thirdSax = this.audioManager.getSound(this.getLevelID(), "jingles_SAX07.ogg");
+		this.horseNeighing = this.audioManager.getSound("thimblerig", "Wiehern.ogg");
 	}
 
 	@Override
@@ -764,7 +778,7 @@ public class Thimblerig extends Level{
 		}
 		else if(this.jiggleCounter == Math.round(this.jiggleVal * 0.96f)){
 			this.hats[this.rightNum].setRotation(0f);
-			AssetManager.playSound("thimblerig", "Wiehern.ogg");
+			this.horseNeighing.play(0.4f);
 		}
 		else if(this.jiggleCounter == Math.round(this.jiggleVal * 0.94f)){
 			this.hats[this.rightNum].setRotation(10f);

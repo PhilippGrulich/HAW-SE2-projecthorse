@@ -10,6 +10,7 @@ public class CollidableGameObject extends GameObject {
 	private float y, height;
 	private boolean collidable;
 	
+
 	private void checkIfRectangleIsInitialized(){
 		if(r == null){
 			r = new Rectangle();

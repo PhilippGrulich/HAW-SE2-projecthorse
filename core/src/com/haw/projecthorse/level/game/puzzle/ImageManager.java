@@ -1,120 +1,300 @@
 package com.haw.projecthorse.level.game.puzzle;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.audiomanager.AudioManager;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
+import com.haw.projecthorse.level.util.swipehandler.ControlMode;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 
-public class ImageManager extends Level {
+public class ImageManager extends Game {
 
-	private static Stage stage;
+	private static Stage firststage;
+	private static Stage secondstage;
 
 	private int index;
+	private static Label label;
 
 	private List<Image> imagelist;
+	private Map<String, TextureRegion> regionsmap;
+
+	private Music musik;
+	// static boolean flagbett = true;
+
+	static Sound swipe;
+	static Sound win;
+
+	static int myWidth;
+	static int myHeight;
+
+	static int myXPos;
+	static int myYPos;
 
 	public ImageManager() {
+
 		super();
 
-		stage = new Stage(getViewport());
-		InputManager.addInputProcessor(stage);
+		firststage = new Stage(getViewport());
+		InputManager.addInputProcessor(new StageGestureDetector(firststage,
+				false, ControlMode.HORIZONTAL));
+
+		addBackround();
+
+		regionsmap = AssetManager.getAllTextureRegions("puzzleImageManager");
 
 		imagelist = new ArrayList<Image>();
 
-		index = 0;
+		myWidth = (width / 4) * 3; // 540
+		myHeight = (height / 4) * 3; // 960
+
+		myXPos = (width - myWidth) / 2; // 90
+		myYPos = (height - myHeight) / 5 + (height - myHeight) / 2; //
+		
+		
+		AssetManager.loadSounds("puzzle");
+		AssetManager.loadMusic("puzzle");
+		addMusic("bett_pcm.wav", true);
+
+		swipe = audioManager.getSound("puzzle", "swipe.wav");
+		win = audioManager.getSound("puzzle", "win.wav");
+		//swipe.play(0.9f);
+		//win.play(0.5f);
 		fillImagelist();
-		createArrowButtons();
-		//addToStage(String buttonname);
+		index = imagelist.size() - 1;
+		createButtons();
+		addToStage();
+		
+
+		// puzzle stage
+		secondstage = new Stage(getViewport());
+		InputManager.addInputProcessor(secondstage);
+		
+		addScore();
+
+		//
 
 	}
+
+	// private void addMusic() {
+	//
+	// // AssetManager.loadMusic("puzzle");
+	// // AssetManager.playMusic("puzzle", "bett.wav");
+	// // AssetManager.playMusic("imagemanager", "bett");
+	// bett.setLooping(true);
+	// if (flagbett) {
+	//
+	// bett.play();
+	// }
+	//
+	// }
+
+	public void addScore() {
+		BitmapFont font;
+		font = AssetManager.getTextFont(FontSize.VIERZIG);
+		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
+		label.setBounds(30, 45, 30, 30);
+
+		addToStage(secondstage, label);
+
+	}
+
 	/**
-	 * speichert alle Bilder aus asset/pictures/puzzle in die imagelist
+	 * speichert alle Bilder aus asset/pictures/puzzleImageManager in die
+	 * imagelist
 	 */
 
 	private void fillImagelist() {
-		imagelist.add(new Image(AssetManager
-				.getTextureRegion("puzzle", "horse")));
-		imagelist.add(new Image(AssetManager.getTextureRegion("puzzle",
-				"horse2")));
-		imagelist.add(new Image(AssetManager.getTextureRegion("puzzle",
-				"horse3")));
+
+		for (String str : regionsmap.keySet()) {
+			Image im = new Image(regionsmap.get(str));
+			im.setName(str);
+			imagelist.add(im);
+		}
 	}
 
-	private void createArrowButtons() {
+	private void createButtons() {
 		ImageButton button_next = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("selfmade", "button_next")));
 		ImageButton button_prev = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("selfmade", "button_prev")));
+
+		Drawable button_img = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("menu", "buttonBackground"));
+		TextButton button_ok = new TextButton("OK",
+				new TextButton.TextButtonStyle(button_img, button_img,
+						button_img, AssetManager.getTextFont(FontSize.VIERZIG)));
+
 		button_next.setHeight(100);
 		button_next.setWidth(100);
+
 		button_prev.setHeight(100);
 		button_prev.setWidth(100);
+
+		button_ok.setHeight(100);
+		button_ok.setWidth(300);
+
 		button_next.setPosition(width - button_next.getWidth(), height / 2);
 		button_prev.setPosition(0, height / 2);
+		button_ok.setPosition((width - button_ok.getWidth()) / 2, 10);
+
 		button_next.setName("next");
 		button_prev.setName("prev");
-		addListener(button_prev);
-		addListener(button_next);
-		stage.addActor(button_next);
-		stage.addActor(button_prev);
+		button_prev.setName("ok");
+
+		addListener(button_next, button_ok, button_prev);
+
+		firststage.addActor(button_next);
+		firststage.addActor(button_prev);
+		firststage.addActor(button_ok);
 	}
+
 	/**
-	 * fügt alle Puzzlebilder an der Position(90,22) mit der Größe(540,960) in die Stage, keine Buttons
+	 * fÃ¼gt alle Puzzlebilder an der Position(90,22) mit der GrÃ¶ÃŸe(540,960) in
+	 * die Stage, keine Buttons
+	 * 
 	 * @param buttonname
 	 */
 
-	private void addToStage(String buttonname) {
-		int x = (width - Puzzle.getMyWidth()) / 2; // 90
-		int y = (height - Puzzle.getMyHeight()) / 3
-				+ (height - Puzzle.getMyHeight()) / 2; // 266
+	private void addToStage() {
 
 		for (Image im : imagelist) {
 
-			im.setWidth(540);
-			im.setHeight(960);
-			im.setPosition(90, 266);
-			
-			stage.addActor(im);
+			im.setWidth(myWidth);
+			im.setHeight(myHeight);
+			im.setPosition(myXPos, myYPos);
+			addListener(im);
+			im.toFront();
+			firststage.addActor(im);
 
 		}
 
 	}
-/**
- * Listener für pre-und next-Button, damit man die einzelne Bilder aussuchen kann
- * @param button
- */
-	private void addListener(final ImageButton button) {
 
-		button.addListener(new ClickListener() {
+	/**
+	 * Listener fÃ¼r pre-und next-Button, damit man die einzelne Bilder aussuchen
+	 * kann
+	 * 
+	 * @param button
+	 */
+	private void addListener(final Image im) {
+
+		im.addListener(new SwipeListener() {
 
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-
-				addToStage(button.getName());
-
+			public void swiped(SwipeEvent event, Actor actor) {
+				switch (event.getDirection()) {
+				case LEFT:
+					changeImage(1);
+					break;
+				case RIGHT:
+					changeImage(-1);
+					break;
+				default:
+					break;
+				}
 			}
 		});
 	}
 
+	/**
+	 * Listener fÃ¼r pre-und next-Button, damit man die einzelne Bilder aussuchen
+	 * kann
+	 * 
+	 * @param button
+	 */
+	private void addListener(ImageButton next, TextButton ok, ImageButton prev) {
+
+		next.addListener(new ClickListener() {
+
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				changeImage(1);
+			}
+		});
+		ok.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+
+				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
+				// flagbett = false;
+				// bett.dispose();
+
+				new Puzzle();
+				// firststage.dispose();
+
+			};
+		});
+
+		prev.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				changeImage(-1);
+			};
+		});
+	}
+
+	private void changeImage(int delta) {
+		index = (index + delta) % imagelist.size();
+
+		if (index < 0)
+			index = imagelist.size() - 1;
+
+		imagelist.get(index).toFront();
+	}
+
+	private void addBackround() {
+
+		Image horse = new Image(AssetManager.getTextureRegion("puzzle",
+				"bilderrahmen-pferd"));
+		horse.toBack();
+		horse.setName("backround");
+
+		firststage.addActor(horse);
+
+	}
+
+	public static void addToStage(Stage stage, Actor actor) {
+		stage.addActor(actor);
+	}
+
 	@Override
 	protected void doRender(float delta) {
-		stage.act();
-		stage.draw();
+
+		firststage.act();
+		firststage.draw();
+
+		secondstage.act();
+		secondstage.draw();
 	}
 
 	@Override
 	protected void doDispose() {
-		stage.dispose();
+
+		firststage.dispose();
+		secondstage.dispose();
+		musik.dispose();
 
 	}
 
@@ -147,4 +327,21 @@ public class ImageManager extends Level {
 		// TODO Auto-generated method stub
 
 	}
+
+	public static Stage getSecondstage() {
+		return secondstage;
+	}
+
+	public static void setLabelText(String newText) {
+		label.setText(newText);
+	}
+
+	private void addMusic(String name, boolean loop) {
+
+		musik = audioManager.getMusic("puzzle", name);
+		// musik.play();
+		// musik.setLooping(loop);
+
+	}
+
 }

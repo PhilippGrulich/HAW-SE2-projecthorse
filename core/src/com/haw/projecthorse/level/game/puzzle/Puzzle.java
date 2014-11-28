@@ -1,10 +1,12 @@
 package com.haw.projecthorse.level.game.puzzle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,85 +15,67 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
+import com.haw.projecthorse.level.util.swipehandler.ControlMode;
+import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 
 //className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
 //className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
 //in assets/json/GameConfig.json Zeile 15 wieder ersetzen
 //einkommentieren zeile 113 in level
 
-public class Puzzle extends Level {
-
-	private static Stage stage;
-	private static Label label;
-
-	private static int row;
-	private static int col;
+public class Puzzle {
 
 	private static int puzzleWidth;
 	private static int puzzleHeight;
-
-	private static int myWidth;
-	private static int myHeight;
 
 	private static PuzzlePart[][] partArr;
 	private static Image[][] imageArr;
 
 	private static Image missingImage;
 	private static Image emptyImage;
+	static TextureRegion texture;
+	
+	private int SHUFFLE = 2;
+	private static int COL = 3;
+	private static int ROW = 3;
 
 	public Puzzle() {
 
-		super();
-
-		stage = new Stage(getViewport());
-		InputManager.addInputProcessor(stage);
-
-		addBackround();
-
-		row = 3;
-		col = 3;
-
-		myWidth = (width / 4) * 3; // 540
-		myHeight = (height / 4) * 3; // 960
-
-		puzzleWidth = myWidth / col; // 270
-		puzzleHeight = myHeight / row; // 480
+		puzzleWidth = ImageManager.myWidth / COL; // 270
+		puzzleHeight = ImageManager.myHeight / ROW; // 480
 
 		createEmptyImage();
 		createImageArr();
 
-		shuffle();
-		addToStage();
-		addScore();
-		stage.addActor(label);
+		ImageManager.setLabelText("Anzahl: "
+				+ String.valueOf(Counter.getCounter()));
 
+		shuffle();
+		addPuzzlePartsToStage();
 	}
 
+	/**
+	 * splitte das gewählte Bild,
+	 */
 	private void createImageArr() {
+		TextureRegion[][] puzzleTexRegArrOrigin = texture
+				.split(texture.getRegionWidth() / COL,
+						texture.getRegionHeight() / ROW);
 
-		TextureRegion puzzleTexReg = AssetManager.getTextureRegion("puzzle",
-				"horse");
+		int zzCol = (int) (Math.random() * (COL));
+		int zzRow = (int) (Math.random() * (ROW));
 
-		TextureRegion[][] puzzleTexRegArrOrigin = puzzleTexReg.split(
-				puzzleTexReg.getRegionWidth() / col,
-				puzzleTexReg.getRegionHeight() / row);
+		partArr = new PuzzlePart[ROW][COL];
+		imageArr = new Image[ROW][COL];
 
-		int zzCol = (int) (Math.random() * (col));
-		int zzRow = (int) (Math.random() * (row));
+		for (int i = 0; i < COL; i++) {
+			for (int j = 0; j < ROW; j++) {
 
-		partArr = new PuzzlePart[row][col];
-		imageArr = new Image[row][col];
-
-		int x = (width - myWidth) / 2; // 90
-		int y = (height - myHeight) / 3 + (height - myHeight) / 2; // 266
-
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
-
-				int xPos = (j * puzzleWidth) + x;
-				int yPos = ((col - (2 * i + 1) + i) * puzzleHeight) + y;
+				int xPos = (j * puzzleWidth) + ImageManager.myXPos;
+				int yPos = ((COL - (2 * i + 1) + i) * puzzleHeight)
+						+ ImageManager.myYPos;
 
 				Image im = new Image(puzzleTexRegArrOrigin[i][j]);
 
@@ -103,7 +87,8 @@ public class Puzzle extends Level {
 					missingImage.setVisible(false);
 					missingImage.setPosition(xPos, yPos);
 
-					stage.addActor(missingImage);
+					ImageManager.addToStage(ImageManager.getSecondstage(),
+							missingImage);
 
 					emptyImage.setPosition(xPos, yPos);
 
@@ -119,41 +104,28 @@ public class Puzzle extends Level {
 		}
 	}
 
-	private void addToStage() {
+	private void addPuzzlePartsToStage() {
 
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
+		for (int i = 0; i < COL; i++) {
+			for (int j = 0; j < ROW; j++) {
 
 				Image im = imageArr[i][j];
 				PuzzlePart.addListener(im);
 
-				stage.addActor(im);
+				// secondstage.addActor(im);
+				ImageManager.addToStage(ImageManager.getSecondstage(), im);
 
 			}
 		}
 	}
 
-	private void addBackround() {
-
-		Image horse = new Image(AssetManager.getTextureRegion("puzzle",
-				"bilderrahmen-pferd"));
-		horse.toBack();
-		horse.setName("backround");
-
-		stage.addActor(horse);
-
-	}
-
 	private void shuffle() {
 		int count = 0;
-		while (count < 2) {
-			for (int i = 0; i < row; i++) {
-				for (int j = 0; j < col; j++) {
+		while (count < SHUFFLE) {
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
 
-					// PuzzlePart part = partArr[i][j];
-
-					// int xKoor = part.getXPos();
-					// int yKoor = part.getYPos();
+					
 					Image im = imageArr[i][j];
 					int xKoor = (int) im.getX();
 					int yKoor = (int) im.getY();
@@ -173,8 +145,8 @@ public class Puzzle extends Level {
 	}
 
 	public static boolean check() {
-		for (int i = 0; i < col; i++) {
-			for (int j = 0; j < row; j++) {
+		for (int i = 0; i < COL; i++) {
+			for (int j = 0; j < ROW; j++) {
 				PuzzlePart part = partArr[i][j];
 				Image image = part.getImage();
 				if (part.getXPos() != image.getX()
@@ -197,67 +169,11 @@ public class Puzzle extends Level {
 	}
 
 	public static void removeClickListener() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
+		for (int i = 0; i < ROW; i++) {
+			for (int j = 0; j < COL; j++) {
 				partArr[i][j].getImage().clearListeners();
 			}
 		}
-
-	}
-
-	public static void addToStage(Actor actor) {
-		stage.addActor(actor);
-	}
-
-	public void addScore() {
-		BitmapFont font;
-		font = AssetManager.getTextFont(FontSize.DREISSIG);
-		System.out.println("ccc: " + Counter.getCounter());
-		label = new Label("Anzahl: " + String.valueOf(Counter.getCounter()),
-				new Label.LabelStyle(font, Color.MAGENTA));
-		label.setBounds(30, 45, 30, 30);
-
-	}
-
-	@Override
-	protected void doRender(float delta) {
-		stage.act();
-		stage.draw();
-	}
-
-	@Override
-	protected void doDispose() {
-		stage.dispose();
-	}
-
-	@Override
-	protected void doResize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doShow() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doHide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doPause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doResume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static int getPuzzleWidth() {
@@ -268,14 +184,6 @@ public class Puzzle extends Level {
 		return puzzleHeight;
 	}
 
-	public static int getMyWidth() {
-		return myWidth;
-	}
-
-	public static int getMyHeight() {
-		return myHeight;
-	}
-
 	public static Image getMissingImage() {
 		return missingImage;
 	}
@@ -283,13 +191,7 @@ public class Puzzle extends Level {
 	public static Image getEmptyImage() {
 		return emptyImage;
 	}
+	// falls ich zurück zur bilderauswahl möchte
+	// GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
 
-	public Label getLabel() {
-		return label;
-	}
-
-	public static void setLabelText(String newText) {
-		label.setText(newText);
-	}
-	
 }

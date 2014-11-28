@@ -3,149 +3,92 @@ package com.haw.projecthorse.player;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.Race;
+import com.haw.projecthorse.savegame.SaveGameManager;
+import com.haw.projecthorse.savegame.json.SaveGame;
 
 public class PlayerImpl extends Player {
 	private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;
 
 	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
 	// desto schneller
-	private static final float MIN_FRAMEDURATION = 0.05f;
 
-	private static final int SPRITES_PER_ANIMATION = 4;
+	private static HorseRace getSaveGameRace() {
+		SaveGame game = SaveGameManager.getLoadedGame();
+		if (game == null) {
+			return HorseRace.HAFLINGER;
+		} else {
+			return game.getHorseRace();
+		}
+	}
 
 	private TextureRegion sprite;
-	private float speed = 0f;
+	private float speed = 0;
 	private int spriteStartX, spriteStartY;
-	private Color colorTint;
 
 	private Direction direction = Direction.RIGHT;
 
 	private boolean flipX = false;
-	
-	private int[] positions = new int[4];
-	private boolean black = false;
-
-	private class AnimationAction extends Action {
-		private int spriteIndex = 0, animationIndex = 0;
-		private float deltaSum = 0;
-
-		@Override
-		public boolean act(float delta) {
-			if (speed == 0) {
-				return false;
-			}
-
-			float frameDuration = (speed == 0) ? 0f : MIN_FRAMEDURATION / speed;
-
-			deltaSum += delta;
-			while (deltaSum >= frameDuration) {
-				deltaSum -= frameDuration;
-				spriteIndex = ++spriteIndex % SPRITES_PER_ANIMATION;
-
-				flipX = false;
-				switch (direction) {
-				case LEFT:
-					flipX = true;
-				case RIGHT:
-					animationIndex = 0;
-					break;
-				case UPLEFT:
-					flipX = true;
-				case UPRIGHT:
-					animationIndex = 1;
-					break;
-				case DOWNLEFT:
-					flipX = true;
-				case DOWNRIGHT:
-					animationIndex = 2;
-					break;
-				case UP:
-					animationIndex = 3;
-					break;
-				case DOWN:
-					animationIndex = 4;
-					break;
-				}
-
-				// Die Position der TextureRegion muss geändert werden ->
-				// nächstes Sprite laden
-				sprite.setRegion(spriteStartX + spriteIndex * DEFAULT_WIDTH,
-						spriteStartY + animationIndex * DEFAULT_HEIGHT,
-						DEFAULT_WIDTH, DEFAULT_HEIGHT);
-			}
-
-			return false;
-		}
-	}
 
 	public PlayerImpl() {
-		this(PlayerColor.WHITE);
+		this(getSaveGameRace());
 	}
-	
+
+	@Deprecated
 	public PlayerImpl(PlayerColor color) {
-		if (color.hasBlackBase()) {
-			black = true;
-			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
-			positions[2] = sprite.getRegionX();
-			positions[3] = sprite.getRegionY();
-			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
-			positions[0] = sprite.getRegionX();
-			positions[1] = sprite.getRegionY();
-		} else {
-			black = false;
-			sprite = AssetManager.getTextureRegion("notChecked", "black_sprites");
-			positions[0] = sprite.getRegionX();
-			positions[1] = sprite.getRegionY();
-			sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
-			positions[2] = sprite.getRegionX();
-			positions[3] = sprite.getRegionY();
-		}
+		this(getSaveGameRace());
+	}
+
+	public PlayerImpl(HorseRace horseRace) {
+		race = new Race(horseRace);
+
+		sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
 		spriteStartX = sprite.getRegionX();
 		spriteStartY = sprite.getRegionY();
 		sprite.setRegion(spriteStartX, spriteStartY, DEFAULT_WIDTH,
 				DEFAULT_HEIGHT);
-		this.colorTint = color.getColor();
 
 		setBounds(getX(), getY(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		addAction(new AnimationAction());
+	}
+	
+	public void chageDirection(Direction newDirection) {
+		direction = newDirection;
+	}
+
+	public void changeSprite(Direction direction, int newSpriteX, int newSpriteY, boolean flipX) {
+		sprite.setRegion(spriteStartX + newSpriteX * DEFAULT_WIDTH,
+				spriteStartY + newSpriteY * DEFAULT_HEIGHT, DEFAULT_WIDTH,
+				DEFAULT_HEIGHT);
+		this.flipX = flipX;
+		this.direction = direction;
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
 	}
 
 	@Override
 	public void draw(Batch batch, float alpha) {
 		Color batchColor = batch.getColor();
-	
+
 		batch.setColor(getColor().mul(1, 1, 1, alpha));
 		batch.draw(sprite.getTexture(), getX(), getY(), getOriginX(),
 				getOriginY(), getWidth(), getHeight(), getScaleX(),
 				getScaleY(), getRotation(), sprite.getRegionX(),
 				sprite.getRegionY(), sprite.getRegionWidth(),
 				sprite.getRegionHeight(), flipX, false);
-		
+
 		batch.setColor(batchColor);
-	}
-	
-	@Override
-	public void setPlayerColor(PlayerColor color) {
-		this.colorTint = color.getColor();
-		setColor(color.getColor());
-		
-		if (black != color.hasBlackBase()) {
-			toggleColor();
-		}
 	}
 
 	@Override
-	public void setAnimation(Direction direction, float speed) {
-		// TODO Bei Richtungswechsel Animation ändern
-		// if (this.direction != direction){
-		// this.direction != direction
-		//
-		// }
-		this.speed = speed;
-		this.direction = direction;
+	@Deprecated
+	public void setPlayerColor(PlayerColor color) {
 	}
 
 	@Override
@@ -172,18 +115,4 @@ public class PlayerImpl extends Player {
 	public Direction getDirection() {
 		return direction;
 	}
-	
-	// for testing
-	public void toggleColor() {
-		if (black) {
-			spriteStartX = positions[2];
-			spriteStartY = positions[3];
-			black = false;
-		} else {
-			spriteStartX = positions[0];
-			spriteStartY = positions[1];
-			black = true;
-		}
-	}
-
 }

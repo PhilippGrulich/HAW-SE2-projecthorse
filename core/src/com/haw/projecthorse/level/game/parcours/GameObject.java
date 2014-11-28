@@ -10,6 +10,25 @@ public class GameObject extends Actor{
 	private float duration;
 	private int points;
 	private boolean collidable;
+	private boolean loot;
+	private boolean isMoveable;
+	
+	
+	public boolean isMoveable() {
+		return isMoveable;
+	}
+
+	public void setMoveable(boolean isMoveable) {
+		this.isMoveable = isMoveable;
+	}
+
+	public boolean isLoot() {
+		return loot;
+	}
+
+	public void setLoot(boolean loot) {
+		this.loot = loot;
+	}
 	
 	@Override
 	public void act(float delta){

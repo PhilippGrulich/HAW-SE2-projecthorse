@@ -1,6 +1,6 @@
 package com.haw.projecthorse.savegame.json;
 
-import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.player.race.HorseRace;
 
 public interface Horse {
 	/**
@@ -17,15 +17,15 @@ public interface Horse {
 	void setName(String name);
 
 	/**
-	 * @return Die Farbe des Pferdes
+	 * @return Die Rasse des Pferdes
 	 */
-	PlayerColor getColor();
+	HorseRace getRace();
 
 	/**
-	 * Ändert die Farbe des Pferdes.
+	 * Ã„ndert die Rasse des Pferdes.
 	 * 
-	 * @param color
-	 *            Die neue Farbe.
+	 * @param race
+	 *            Die neue Rasse.
 	 */
-	void setColor(PlayerColor color);
+	void setRace(HorseRace race);
 }

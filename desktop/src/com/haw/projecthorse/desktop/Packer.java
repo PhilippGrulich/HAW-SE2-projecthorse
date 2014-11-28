@@ -35,8 +35,8 @@ public class Packer {
 		String outputFile = "";
 		String[] content = dir.list();
 		Settings settings = new Settings();
-		settings.maxWidth = 2048;
-		settings.maxHeight = 2048;
+		settings.maxWidth = 4096;
+		settings.maxHeight = 4096;
 		settings.pot = false;
 
 		for (int i = 0; i < content.length; i++) {

@@ -1,30 +1,28 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import java.util.Map;
-
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.level.game.Game;
 
 /**
  * 
  * @author Francis
  *
  */
-public class Parcours extends Level{
+public class Parcours extends Game{
 	
 	private IGameOperatorFuerParcours gameOperator;
-	//private static GameOperator gameOperator;
 	
 	public Parcours(){
-		gameOperator = new GameOperator(new Stage(), this.getViewport(), this.width, this.height);
+		super(Orientation.Landscape);
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
+
 		
 	}
 
 	@Override
 	protected void doDispose() {
-		// TODO Auto-generated method stub
+		//gameOperator = null;
 		
 	}
 
@@ -36,13 +34,14 @@ public class Parcours extends Level{
 
 	@Override
 	protected void doPause() {
-		// TODO Auto-generated method stub
+		gameOperator.pause();
 		
 	}
 
 	@Override
 	protected void doRender(float delta) {
-		gameOperator.update(delta);
+		if(gameOperator != null)
+			gameOperator.update(delta);
 		
 	}
 
@@ -54,7 +53,7 @@ public class Parcours extends Level{
 
 	@Override
 	protected void doResume() {
-		// TODO Auto-generated method stub
+		gameOperator.setPause(false);
 		
 	}
 	
@@ -63,9 +62,5 @@ public class Parcours extends Level{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/*public static GameOperator getGameOperator(){
-		return gameOperator;
-	}*/
 
 }

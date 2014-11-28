@@ -3,7 +3,7 @@ package com.haw.projecthorse.lootmanager;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.haw.projecthorse.intputmanager.InputManager;
+import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;

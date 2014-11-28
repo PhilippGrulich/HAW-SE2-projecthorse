@@ -1,47 +1,91 @@
 package com.haw.projecthorse.gamemanager.settings;
 
+import java.util.Observable;
+
+import com.badlogic.gdx.utils.Disposable;
+
 /**
- * Die Klasse Settings stellt gerätespezifische Informationen bereit und speichert zudem Einstellungen
- * des Users. Die Klasse selbst nutzt das Singleton Pattern.
+ * Die Klasse Settings stellt gerÃ¤tespezifische Informationen bereit und
+ * speichert zudem Einstellungen des Users. Die Klasse selbst nutzt das
+ * Singleton Pattern. Sie ist darÃ¼berhinaus Observable, um andere Klassen Ã¼ber
+ * VerÃ¤nderungen der Einstellungen benachrichtigen zu kÃ¶nnen.
  */
+public abstract class Settings extends Observable implements Disposable {
 
+	// Umsetzung Singleton
+	protected Settings() {
+	}
 
-public interface Settings {
-					
 	/**
-	 * Gibt Auskunft über den aktuellen Ton Status.
+	 * Gibt Auskunft Ã¼ber den aktuellen Sound Ton Status.
+	 * 
 	 * @return boolean Ton an (true) oder aus (false).
 	 */
-	public boolean getSoundState();
-	
+	public abstract boolean getSoundState();
+
 	/**
-	 * Verändert den aktuellen Ton Status.
-	 * @param state Ton an (true) oder aus (false).
+	 * VerÃ¤ndert den aktuellen Sound Ton Status.
+	 * 
+	 * @param state
+	 *            Ton an (true) oder aus (false).
 	 */
-	public void setSoundState(boolean state);
-	
+	public abstract void setSoundState(boolean state);
+
 	/**
-	 * Gibt die reale Breite des Spielbildschirms bzw. des Fensters zurück.
+	 * Gibt Auskunft Ã¼ber den aktuellen Musik Ton Status.
+	 * 
+	 * @return boolean Ton an (true) oder aus (false).
+	 */
+	public abstract boolean getMusicState();
+
+	/**
+	 * VerÃ¤ndert den aktuellen Musik Ton Status.
+	 * 
+	 * @param state
+	 *            Ton an (true) oder aus (false).
+	 */
+	public abstract void setMusicState(boolean state);
+
+	/**
+	 * Gibt die reale Breite des Spielbildschirms bzw. des Fensters zurÃ¼ck.
+	 * 
 	 * @return int Breite in Pixeln.
 	 */
-	public int getScreenWidth();
-	
+	public abstract int getScreenWidth();
+
 	/**
-	 * Gibt die reale Höhe des Spielbildschirms bzw. des Fensters zurück.
-	 * @return int Höhe in Pixeln.
+	 * Gibt die reale HÃ¶he des Spielbildschirms bzw. des Fensters zurÃ¼ck.
+	 * 
+	 * @return int HÃ¶he in Pixeln.
 	 */
-	public int getScreenHeight();
-	
+	public abstract int getScreenHeight();
+
 	/**
-	 * Gibt die virtuelle Breite des Spielbildschirms bzw. des Fensters zurück.
+	 * Gibt die virtuelle Breite des Spielbildschirms bzw. des Fensters zurÃ¼ck.
+	 * 
 	 * @return int Breite in Pixeln.
 	 */
-	public int getVirtualScreenWidth();
-	
+	public abstract int getVirtualScreenWidth();
+
 	/**
-	 * Gibt die virtuelle Höhe des Spielbildschirms bzw. des Fensters zurück.
-	 * @return int Höhe in Pixeln.
+	 * Gibt die virtuelle HÃ¶he des Spielbildschirms bzw. des Fensters zurÃ¼ck.
+	 * 
+	 * @return int HÃ¶he in Pixeln.
 	 */
-	public int getVirtualScreenHeight();
-	
+	public abstract int getVirtualScreenHeight();
+
+	/**
+	 * Gibt an ob das Accelerometer activiert ist.
+	 * 
+	 * @return {@link Boolean}.
+	 */
+	public abstract boolean getAccelerometerState();
+
+	/**
+	 * setzt den Accelerometer status.
+	 * 
+	 * @return {@link Boolean}.
+	 */
+	public abstract void setAccelerometerState(boolean state);
+
 }

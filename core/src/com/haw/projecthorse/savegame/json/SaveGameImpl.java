@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.haw.projecthorse.lootmanager.Loot;
-import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.player.race.HorseRace;
 
 public class SaveGameImpl implements SaveGame {
 	private int ID = -1, ep = 0;
@@ -13,8 +13,6 @@ public class SaveGameImpl implements SaveGame {
 	private ArrayList<Loot> lootCollection = new ArrayList<Loot>();
 
 	public SaveGameImpl() {
-		lootCollection.add(PlayerColor.BLACK);
-		lootCollection.add(PlayerColor.WHITE);
 	}
 	
 	public SaveGameImpl(int ID) {
@@ -48,13 +46,13 @@ public class SaveGameImpl implements SaveGame {
 	}
 
 	@Override
-	public PlayerColor getHorseColor() {
-		return horse.getColor();
+	public HorseRace getHorseRace() {
+		return horse.getRace();
 	}
 
 	@Override
-	public void setHorseColor(PlayerColor color) {
-		horse.setColor(color);
+	public void setHorseRace(HorseRace race) {
+		horse.setRace(race);
 	}
 
 	@Override

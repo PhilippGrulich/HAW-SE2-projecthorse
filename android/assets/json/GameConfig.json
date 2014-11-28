@@ -15,8 +15,12 @@
          parameter:{
          			   	cityCoordinates:"Hamburg,329,786;
          			   						Berlin,593,668;
-         			   						München,438,108"
+         			   						Muenchen,438,108"
          }
+      },
+      {
+      	levelID:"puzzleGame",
+      	className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
       }
 
    ],
@@ -49,7 +53,7 @@
          levelID:"Berlin",
          className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
-         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         			   	backgroundPath:"Brandenburger_Tor"		
          		},
          games:[
                  {
@@ -66,10 +70,10 @@
       },
       {
          name:"München",
-         levelID:"München",
+         levelID:"Muenchen",
          className:"com.haw.projecthorse.level.menu.city.City",
          parameter:{
-         			   	backgroundPath:"Sankt-Michaelis-Kirche_Hamburg"		
+         			   	backgroundPath:"Biergarten"		
          		},
          games:[
                  {
@@ -82,7 +86,7 @@
             },
                   {
                title:"Puzzlespiel",
-			   className:"com.haw.projecthorse.level.game.puzzle.Puzzle",
+			   className:"com.haw.projecthorse.level.game.puzzle.ImageManager",
                levelID:"Puzzle"
             }
          ]

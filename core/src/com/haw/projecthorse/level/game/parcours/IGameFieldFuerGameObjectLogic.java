@@ -21,6 +21,8 @@ public interface IGameFieldFuerGameObjectLogic {
 	void drawGameField();
 
 	Stage getStage();
+	
+	List<ParcoursLoot> getLoot();
 
 
 }
