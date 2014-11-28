@@ -1,7 +1,9 @@
 package com.haw.projecthorse.level.game.applerun;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.game.Game;
 
 /**
@@ -12,9 +14,15 @@ import com.haw.projecthorse.level.game.Game;
 
 public class AppleRun extends Game {
 	private Gamestate gamestate;
+	private Music music;
 
 	public AppleRun() {
+		AssetManager.loadMusic("AppleRun");
+		AssetManager.loadSounds("AppleRun");
+		music = audioManager.getMusic("AppleRun", "musicloop.mp3");
+		music.setLooping(true);
 		gamestate = new Gamestate(this.getViewport(), this.getSpriteBatch(), width, height);
+		music.play();
 	}
 
 	@Override
@@ -26,6 +34,7 @@ public class AppleRun extends Game {
 
 	@Override
 	protected void doDispose() {
+		music.stop();
 		gamestate.dispose();
 	}
 

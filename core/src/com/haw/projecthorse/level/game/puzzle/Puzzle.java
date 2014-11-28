@@ -25,10 +25,7 @@ import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 //in assets/json/GameConfig.json Zeile 15 wieder ersetzen
 //einkommentieren zeile 113 in level
 
-public class Puzzle extends Game {
-
-	private static Stage stage;
-	private static Label label;
+public class Puzzle {
 
 	private static int puzzleWidth;
 	private static int puzzleHeight;
@@ -39,34 +36,12 @@ public class Puzzle extends Game {
 	private static Image missingImage;
 	private static Image emptyImage;
 	static TextureRegion texture;
-	static Sound swipe;
-	static Sound win;
-	private Music bett;
+	
 	private int SHUFFLE = 2;
 	private static int COL = 3;
 	private static int ROW = 3;
 
 	public Puzzle() {
-
-		super();
-
-		stage = new Stage(getViewport());
-		// InputManager.addInputProcessor(stage);
-		InputManager.addInputProcessor(new StageGestureDetector(stage, false,
-				ControlMode.HORIZONTAL));
-
-		addBackround();
-
-		addMusic();
-		swipe = Gdx.audio.newSound(Gdx.files
-				.internal("sounds/puzzle/swipe.wav"));
-		win = Gdx.audio.newSound(Gdx.files.internal("sounds/puzzle/win.wav"));
-		bett = Gdx.audio.newMusic(Gdx.files
-				.internal("music/puzzle/bett_pcm.wav"));
-		if (!bett.isPlaying()) {
-			bett.setLooping(true);
-			bett.play();
-		}
 
 		puzzleWidth = ImageManager.myWidth / COL; // 270
 		puzzleHeight = ImageManager.myHeight / ROW; // 480
@@ -74,12 +49,11 @@ public class Puzzle extends Game {
 		createEmptyImage();
 		createImageArr();
 
+		ImageManager.setLabelText("Anzahl: "
+				+ String.valueOf(Counter.getCounter()));
+
 		shuffle();
-		addToStage();
-		addScore();
-
-		stage.addActor(label);
-
+		addPuzzlePartsToStage();
 	}
 
 	/**
@@ -113,7 +87,8 @@ public class Puzzle extends Game {
 					missingImage.setVisible(false);
 					missingImage.setPosition(xPos, yPos);
 
-					stage.addActor(missingImage);
+					ImageManager.addToStage(ImageManager.getSecondstage(),
+							missingImage);
 
 					emptyImage.setPosition(xPos, yPos);
 
@@ -129,7 +104,7 @@ public class Puzzle extends Game {
 		}
 	}
 
-	private void addToStage() {
+	private void addPuzzlePartsToStage() {
 
 		for (int i = 0; i < COL; i++) {
 			for (int j = 0; j < ROW; j++) {
@@ -137,21 +112,11 @@ public class Puzzle extends Game {
 				Image im = imageArr[i][j];
 				PuzzlePart.addListener(im);
 
-				stage.addActor(im);
+				// secondstage.addActor(im);
+				ImageManager.addToStage(ImageManager.getSecondstage(), im);
 
 			}
 		}
-	}
-
-	private void addBackround() {
-
-		Image horse = new Image(AssetManager.getTextureRegion("puzzle",
-				"bilderrahmen-pferd"));
-		horse.toBack();
-		horse.setName("backround");
-
-		stage.addActor(horse);
-
 	}
 
 	private void shuffle() {
@@ -160,10 +125,7 @@ public class Puzzle extends Game {
 			for (int i = 0; i < ROW; i++) {
 				for (int j = 0; j < COL; j++) {
 
-					// PuzzlePart part = partArr[i][j];
-
-					// int xKoor = part.getXPos();
-					// int yKoor = part.getYPos();
+					
 					Image im = imageArr[i][j];
 					int xKoor = (int) im.getX();
 					int yKoor = (int) im.getY();
@@ -212,68 +174,6 @@ public class Puzzle extends Game {
 				partArr[i][j].getImage().clearListeners();
 			}
 		}
-
-	}
-
-	public static void addToStage(Actor actor) {
-		stage.addActor(actor);
-	}
-
-	/**
-	 * Anzahl der Schritte ausgeben
-	 */
-	public void addScore() {
-		BitmapFont font;
-		font = AssetManager.getTextFont(FontSize.DREISSIG);
-		label = new Label("Anzahl: " + String.valueOf(Counter.getCounter()),
-				new Label.LabelStyle(font, Color.MAGENTA));
-		label.setBounds(30, 45, 30, 30);
-
-	}
-
-	@Override
-	protected void doRender(float delta) {
-		stage.act();
-		stage.draw();
-	}
-
-	@Override
-	protected void doDispose() {
-		stage.dispose();
-		swipe.dispose();
-		bett.dispose();
-		win.dispose();
-
-	}
-
-	@Override
-	protected void doResize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doShow() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doHide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doPause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doResume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static int getPuzzleWidth() {
@@ -291,20 +191,7 @@ public class Puzzle extends Game {
 	public static Image getEmptyImage() {
 		return emptyImage;
 	}
-
-	public Label getLabel() {
-		return label;
-	}
-
-	public static void setLabelText(String newText) {
-		label.setText(newText);
-	}
-
-	private void addMusic() {
-
-		;
-		// bett.play();
-		// swipe.play();
-	}
+	// falls ich zurück zur bilderauswahl möchte
+	// GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
 
 }
