@@ -22,7 +22,7 @@ public interface IGameFieldFuerGameObjectLogic {
 
 	Stage getStage();
 	
-	List<Loot> getLoot();
+	List<ParcoursLoot> getLoot();
 
 
 }

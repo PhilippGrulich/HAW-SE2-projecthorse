@@ -24,11 +24,6 @@ public class Player extends PlayerImpl {
 	private float SWIPEMOVE;
 	private float SWIPEDURATION = 0.2f;
 	private float playerHeight, playerWidth, gameWidth, gameHeight;
-	private List<Loot> earnedLoot;
-
-	public List<Loot> getEarnedLoot() {
-		return earnedLoot;
-	}
 
 	public float getGameHeight() {
 		return gameHeight;
@@ -46,7 +41,6 @@ public class Player extends PlayerImpl {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.SWIPEMOVE = getGameWidth() * 35 / 100;
-		earnedLoot = new ArrayList<Loot>();
 	}
 
 	@Override
@@ -81,7 +75,7 @@ public class Player extends PlayerImpl {
 	}
 
 	/**
-	 * Berechnung von nächstem Punkt (x,y) des Spielersprunges
+	 * Berechnung von nï¿½chstem Punkt (x,y) des Spielersprunges
 	 */
 	public Vector2 getNextJumpPosition() {
 		Vector2 v = new Vector2();
@@ -130,7 +124,7 @@ public class Player extends PlayerImpl {
 
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
-				// Vormals Prüfung auf instanceof APlayer
+				// Vormals Prï¿½fung auf instanceof APlayer
 				if (getDirection() == event.getDirection()) {
 					if (getDirection() == Direction.RIGHT) {
 						addAction(Actions.moveTo(getRightSwipePosition(),
@@ -194,13 +188,11 @@ public class Player extends PlayerImpl {
 		r.y = y;
 		this.x = x;
 		this.y = y;
-		for(Loot l : earnedLoot){
-			l.setPosition(x, y);
-	}
+		
 	}
 	
 	/**
-	 * Berechnung der Sprungfunktion in abhängigkeit des aktuellen x und y.
+	 * Berechnung der Sprungfunktion in abhï¿½ngigkeit des aktuellen x und y.
 	 */
 	public void setupJumpFunction() {
 		float x1 = 0;

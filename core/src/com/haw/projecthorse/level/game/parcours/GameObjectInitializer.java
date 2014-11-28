@@ -41,20 +41,6 @@ public class GameObjectInitializer implements IGameObjectInitializerFuerGameObje
 			o.setMoveable(isMoveable);
 			return o;
 		} else {
-			if(isLoot){
-			    o = new Loot(points, name);
-				o.setTextureRegion(r);
-				o.setName(name);
-				o.setCollidable(collidable);
-				o.setX(x);
-				o.setY(y);
-				o.setDuration(duration);
-				o.setHeight(height);
-				o.setWidth(width);
-				o.setLoot(isLoot);
-				o.setMoveable(isMoveable);
-				return o;
-			}
 		    o = new GameObject();
 			o.setTextureRegion(r);
 			o.setName(name);

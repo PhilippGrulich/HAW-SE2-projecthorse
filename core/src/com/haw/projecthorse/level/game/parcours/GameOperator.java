@@ -1,5 +1,7 @@
 package com.haw.projecthorse.level.game.parcours;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
@@ -10,6 +12,8 @@ import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.lootmanager.Chest;
+import com.haw.projecthorse.level.game.parcours.ParcoursLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
@@ -30,12 +34,15 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		setInputProcessor();
 		// getEarnedLoot();
 		this.chest = chest;
-
+		showEarnedLoot();
 	}
 
-	// Bereits gewonnene Loot aus Chest holen und in Spieler packen.
-	private void getEarnedLoot() {
-
+	
+	private void showEarnedLoot() {
+		List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+		if(allreadyWon.size() > 0){
+			chest.showAllLoot();
+		}
 	}
 
 	@Override
@@ -90,9 +97,20 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	// legen.
 	private void verifyGameState(float delta) {
 		if (gameField.getScore() >= 10) {
+			
 			gameField.showPopup(GameState.WON);
 			gameEndReached = true;
 			gameStatus = GameState.WON;
+			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+			for(ParcoursLoot l : gameField.getLoot()){
+				System.out.println("gewonnen: " + allreadyWon.size() + " " + allreadyWon.contains(l));
+				
+				if(l.getAvailableAtScore() <= gameField.getScore() && !allreadyWon.contains(l)){
+					chest.addLoot(l);
+					chest.saveAllLoot();
+				}
+			}
+			
 			this.pause();
 		} else if (gameField.getScore() < 0) {
 			gameField.showPopup(GameState.LOST);
@@ -108,6 +126,15 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
 	public void pause() {
 		paused = true;
+	}
+	
+	/**
+	 * ermittelt alle bereits gewonnen Loots aus diesem Spiel die unter dem verwendeten
+	 * Spielstand gesichert sind
+	 * @return Liste aller Thimblerig-Loots
+	 */
+	private List<? extends ParcoursLoot> getLoots(){
+		return SaveGameManager.getLoadedGame().getSpecifiedLoot(com.haw.projecthorse.level.game.parcours.ParcoursLoot.class);
 	}
 
 }

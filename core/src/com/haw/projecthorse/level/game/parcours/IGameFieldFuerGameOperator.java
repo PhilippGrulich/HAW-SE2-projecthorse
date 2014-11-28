@@ -9,7 +9,7 @@ public interface IGameFieldFuerGameOperator {
 	
 	Player getPlayer();
 	
-	List<Loot> getLoot();
+	List<ParcoursLoot> getLoot();
 	
 	Stage getStage();
 	

@@ -14,7 +14,6 @@ public class Parcours extends Game{
 	private IGameOperatorFuerParcours gameOperator;
 	
 	public Parcours(){
-	
 		super(Orientation.Landscape);
 		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
 

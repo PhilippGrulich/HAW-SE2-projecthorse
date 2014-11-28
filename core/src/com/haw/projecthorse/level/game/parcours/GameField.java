@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
+import com.haw.projecthorse.level.game.parcours.ParcoursLoot;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
@@ -27,6 +28,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private int width;
 	private int height;
 	private List<GameObject> gameObjects;
+	private List<ParcoursLoot> loot;
 	private Player player;
 	private float SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP;
 	private float groundHeight; // init wenn ground geladen
@@ -47,6 +49,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		gameOverState = false;
 		
 		gameObjects = new ArrayList<GameObject>();
+		loot = new ArrayList<ParcoursLoot>();
 		generalGameSpeed = getWidth() / 3;
 		loadTextureRegions(new GameObjectInitializer());
 		player = new Player(getWidth(), getHeight());
@@ -72,7 +75,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	public void loadTextureRegions(IGameObjectInitializerFuerGameObjectLogic goi) {
 		HashMap<String, TextureRegion> regions = ((HashMap<String, TextureRegion>) AssetManager
 				.getAllTextureRegions("parcours"));
-
+		
 		// groundHeight setzen vor Objekten die auf dem "Boden" stehen.
 		TextureRegion r = regions.get("crosssection_long");
 		
@@ -121,7 +124,9 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
 				.getRegionHeight() * 9 / 50, -100, getTopOfGroundPosition(),
 				true, generalGameSpeed, -10, regions, goi, false, true);
-
+		
+		initLoot(regions);
+		
 		scoreInformation = new Text(AssetManager.getTextFont(FontSize.DREISSIG),
 				"Punkte: 0", 10, getHeight() * 50 / 60);
 		scoreInformation.setColor(0, 0, 0, 1);
@@ -130,6 +135,13 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		
 		stage.addActor(endlessBackground);
 
+	}
+
+	private void initLoot(HashMap<String, TextureRegion> regions) {
+		System.out.println("Lade Loot");
+		TextureRegion r = regions.get("carrot");
+		ParcoursLoot carrot = new ParcoursLoot(10, "carrot", "Eine leckere Möhre für dein Pferd.");
+		loot.add(carrot);
 	}
 
 	private void addGameObjectWithRelativHeight(String name,
@@ -273,9 +285,9 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	}
 
 	@Override
-	public List<Loot> getLoot() {
+	public List<ParcoursLoot> getLoot() {
 		// TODO Auto-generated method stub
-		return null;
+		return loot;
 	}
 
 	@Override
