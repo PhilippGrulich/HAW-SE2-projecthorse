@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
@@ -19,11 +20,9 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private boolean paused = false;
 	private boolean gameEndReached;
 	private GameState gameStatus = GameState.START;
-	private Parcours main;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
-			Chest chest, Parcours p) {
-		main = p;
+			Chest chest) {
 		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport,
 				width, height);
 		logic = new GameObjectLogic(width,
@@ -71,12 +70,11 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				this.gameStatus = GameState.START;
 				this.setPause(false);
 			} else if (gameField.isButtonNoPressed(gameStatus)) {
-				System.out.println("NO");
 				gameEndReached = false;
 				this.setPause(false);
 				gameField.clear();
 				this.gameStatus = GameState.END;
-				main.doDispose();
+				GameManagerFactory.getInstance().navigateBack();
 				
 			}
 			gameField.drawGameField();

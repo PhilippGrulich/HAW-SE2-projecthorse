@@ -12,19 +12,18 @@ import com.haw.projecthorse.level.game.Game;
 public class Parcours extends Game{
 	
 	private IGameOperatorFuerParcours gameOperator;
-	//private static GameOperator gameOperator;
 	
 	public Parcours(){
 	
 		super(Orientation.Landscape);
-		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest, this);
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
 
 		
 	}
 
 	@Override
 	protected void doDispose() {
-		gameOperator = null;
+		//gameOperator = null;
 		
 	}
 
