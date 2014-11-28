@@ -34,6 +34,7 @@ public class AppleRun extends Game {
 
 	@Override
 	protected void doDispose() {
+		music.stop();
 		gamestate.dispose();
 	}
 
