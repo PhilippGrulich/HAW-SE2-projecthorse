@@ -175,8 +175,11 @@ public class Thimblerig extends Game{
 		
 		//eigentliche Spiellogik
 		if(!this.roundFinished && !ISPAUSED){
-			//TODO: if(pferderasse == ein stoerrisches pferd) then dohint...
-			doHint(delta);
+			//es gibt nur Hinweise fuer die Spieler_innen, wenn das Pferd
+			//etwas ungehorsam ist
+			if(this.pl.getObedience() <= 0.5f){
+				doHint(delta);
+			}
 			
 			for(int i = 0; i < HAT_NUMBER; i++){
 				if(this.hats[i].isFlinged() && this.hats[i].isChoosed()){
@@ -633,6 +636,7 @@ public class Thimblerig extends Game{
 		 */
 		if (indexOfLoot > -1){
 			this.chest.addLoot(this.possibleWinLoots.get(indexOfLoot));
+			//this.chest.addLootAndShowAchievment(this.possibleWinLoots.get(indexOfLoot));
 			//TODO: loot-dialog anzeigen....
 		}
 		else if(indexOfLoot == -1){
@@ -738,6 +742,21 @@ public class Thimblerig extends Game{
 	}
 	
 	/**
+	 * Abhaengig von der Pferderasse gibt es einen Hinweis an den/die Spieler/in.
+	 * Dieser sieht so aus, dass der Hut, unter dem das Pferd versteckt ist, einmal
+	 * kurz wackelt.
+	 * @param delta
+	 */
+	private void doHint(float delta){
+		if(this.jiggleCounter <= 0){
+			JIGGLECOUNTERFLAG = false;
+			generateJiggleCounter(delta);
+		}
+		this.jiggleCounter--;
+		rotateHats();
+	}
+	
+	/**
 	 * generiert einen Faktor um den jiggleCounter in Abhaengigkeit des delta's
 	 * zu berechnen. Der Faktor liegt zwischen JIGGLETIMEMIN und JIGGLETIMEMAX. 
 	 * Der Faktor kann auch als Zeitspanne in Sekunden gesehen werden. Nach Ablauf
@@ -752,21 +771,6 @@ public class Thimblerig extends Game{
 			this.jiggleVal = this.jiggleCounter;
 			JIGGLECOUNTERFLAG = true;
 		}
-	}
-	
-	/**
-	 * Abhaengig von der Pferderasse gibt es einen Hinweis an den/die Spieler/in.
-	 * Dieser sieht so aus, dass der Hut, unter dem das Pferd versteckt ist, einmal
-	 * kurz wackelt.
-	 * @param delta
-	 */
-	private void doHint(float delta){
-		if(this.jiggleCounter <= 0){
-			JIGGLECOUNTERFLAG = false;
-			generateJiggleCounter(delta);
-		}
-		this.jiggleCounter--;
-		rotateHats();
 	}
 	
 	/**
