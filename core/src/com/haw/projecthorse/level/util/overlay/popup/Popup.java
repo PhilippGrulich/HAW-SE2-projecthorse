@@ -96,6 +96,8 @@ public class Popup extends OverlayWidgetGroup {
 		contentGroup.space(10);
 		contentGroup.setHeight(popupHeight);
 		contentGroup.setWidth(popupWidth);
+		contentGroup.align(Align.center);
+	
 		content.addActor(contentGroup);
 	}
 
@@ -157,7 +159,7 @@ public class Popup extends OverlayWidgetGroup {
 		Label label = new Label(message, style);
 		label.setWrap(true);
 		label.setAlignment(Align.center);
-
+		
 		label.setWidth(popupWidth);
 
 		return label;
