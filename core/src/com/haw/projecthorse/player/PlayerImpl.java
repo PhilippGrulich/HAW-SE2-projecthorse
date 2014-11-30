@@ -1,5 +1,7 @@
 package com.haw.projecthorse.player;
 
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,24 +19,14 @@ public class PlayerImpl extends Player {
 	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
 	// desto schneller
 	
-	private static String imgFolder = "temp";
-
-	private static HorseRace getSaveGameRace() {
-		SaveGame game = SaveGameManager.getLoadedGame();
-		if (game == null) {
-			return HorseRace.HAFLINGER;
-		} else {
-			return game.getHorseRace();
-		}
-	}
-
-	private TextureRegion sprite;
+	private String imgFolder = "temp";
+	private Map<String, TextureRegion> spriteMap = AssetManager.getAllTextureRegions(imgFolder);
+	private TextureRegion activeSprite;
 	private float speed = 0;
 //	private int spriteStartX, spriteStartY;
-
 	private Direction direction = Direction.RIGHT;
-
 	private boolean flipX = false;
+
 
 	public PlayerImpl() {
 		this(getSaveGameRace());
@@ -44,14 +36,23 @@ public class PlayerImpl extends Player {
 	public PlayerImpl(PlayerColor color) {
 		this(getSaveGameRace());
 	}
+	
+	private static HorseRace getSaveGameRace() {
+		SaveGame game = SaveGameManager.getLoadedGame();
+		if (game == null) {
+			return HorseRace.HAFLINGER;
+		} else {
+			return game.getHorseRace();
+		}
+	}
 
 	public PlayerImpl(HorseRace horseRace) {
-		race = new Race(horseRace);
-
-		sprite = AssetManager.getTextureRegion(imgFolder, "left-1");
+		race = new Race(horseRace);		
+		activeSprite = spriteMap.get("left-1");
+	
 		flipX = true;
 		
-		setBounds(getX(), getY(), sprite.getRegionWidth(), sprite.getRegionHeight());
+		setBounds(getX(), getY(), activeSprite.getRegionWidth(), activeSprite.getRegionHeight());
 	}
 	
 	public void chageDirection(Direction newDirection) {
@@ -59,7 +60,7 @@ public class PlayerImpl extends Player {
 	}
 
 	public void changeSprite(String spriteName, Direction direction, boolean flipX) {
-		sprite = AssetManager.getTextureRegion(imgFolder, spriteName);
+		activeSprite = spriteMap.get(spriteName);
 		this.flipX = flipX;
 		this.direction = direction;
 	}
@@ -74,11 +75,11 @@ public class PlayerImpl extends Player {
 		Color batchColor = batch.getColor();
 
 		batch.setColor(getColor().mul(1, 1, 1, alpha));
-		batch.draw(sprite.getTexture(), getX(), getY(), getOriginX(),
+		batch.draw(activeSprite.getTexture(), getX(), getY(), getOriginX(),
 				getOriginY(), getWidth(), getHeight(), getScaleX(),
-				getScaleY(), getRotation(), sprite.getRegionX(),
-				sprite.getRegionY(), sprite.getRegionWidth(),
-				sprite.getRegionHeight(), flipX, false);
+				getScaleY(), getRotation(), activeSprite.getRegionX(),
+				activeSprite.getRegionY(), activeSprite.getRegionWidth(),
+				activeSprite.getRegionHeight(), flipX, false);
 
 		batch.setColor(batchColor);
 	}
