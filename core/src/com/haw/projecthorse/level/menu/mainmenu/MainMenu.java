@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,10 +33,10 @@ public class MainMenu extends Menu {
 
 	private ImageTextButton[] buttonsSpiel;
 	private ImageTextButton buttonCredits;
+	
+	private Music music;
 
 	private Player player;
-
-	// private TextureAtlas atlas;
 
 	public MainMenu() {
 		float moveToDuration = width / 5 / 30;
@@ -62,6 +63,16 @@ public class MainMenu extends Menu {
 				moveToDuration), new AnimationAction(Direction.LEFT, moveToDuration));
 		
 		player.addAction(Actions.forever(Actions.sequence(toRight, toLeft)));
+		
+		AssetManager.loadMusic("mainMenu");
+		AssetManager.loadSounds("worldmap");
+		
+		music = audioManager.getMusic("mainMenu", "belotti.mp3");
+		
+		if (!music.isPlaying()) {
+			music.setLooping(true);
+			music.play();
+		}
 	}
 
 	private void addBackground() {
