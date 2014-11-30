@@ -9,6 +9,7 @@ import com.haw.projecthorse.player.race.HorseRace;
 
 public class SaveGameImpl implements SaveGame {
 	private int ID = -1, ep = 0;
+	private String name;
 	private Horse horse = new HorseImpl();
 	private ArrayList<Loot> lootCollection = new ArrayList<Loot>();
 
@@ -31,13 +32,13 @@ public class SaveGameImpl implements SaveGame {
 	}
 
 	@Override
-	public String getHorseName() {
-		return horse.getName();
+	public String getPlayerName() {
+		return name;
 	}
 	
 	@Override
-	public void setHorseName(String name) {
-		horse.setName(name);
+	public void setPlayerName(String name) {
+		this.name = name;
 	}
 
 	@Override

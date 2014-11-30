@@ -24,17 +24,17 @@ public interface SaveGame {
 	void addEP(int toAdd);
 
 	/**
-	 * @return name of the horse in this score
+	 * @return Den Namen des Kindes für diesen Spielstand
 	 */
-	String getHorseName();
+	String getPlayerName();
 
 	/**
-	 * �ndert den Namen des Pferdes
+	 * Ändert den Namen des Kindes für diesen Spielstand
 	 * 
 	 * @param names
 	 *            Der neue Name.
 	 */
-	void setHorseName(String name);
+	void setPlayerName(String name);
 
 	/**
 	 * @return Die Rasse des Pferdes
