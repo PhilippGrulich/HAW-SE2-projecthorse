@@ -34,6 +34,8 @@ public class SaveGameImpl implements SaveGame {
 
 	@Override
 	public String getPlayerName() {
+		if (name == null)
+			return "NoName";
 		return name;
 	}
 	
