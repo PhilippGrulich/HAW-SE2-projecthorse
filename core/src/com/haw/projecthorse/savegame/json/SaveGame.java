@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.haw.projecthorse.lootmanager.Loot;
+import com.haw.projecthorse.lootmanager.Lootable;
 import com.haw.projecthorse.player.race.HorseRace;
 
 public interface SaveGame {
@@ -63,7 +64,7 @@ public interface SaveGame {
 	 * @param loots
 	 *            Liste der gesammelte Gegenst�nde
 	 */
-	void addCollectedLootList(Collection<Loot> loots);
+	void addCollectedLootList(Collection<Lootable> loots);
 
 	/**
 	 * Erstellt eine Liste von gesammelten Gegest�nden eines bestimmten Typs.
