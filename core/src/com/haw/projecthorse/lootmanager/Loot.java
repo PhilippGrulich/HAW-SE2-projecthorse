@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-public abstract class Loot {
+public abstract class Loot implements Lootable {
 	private String description = null, name = null;
-	Date achievedDate = null;
+	private Date achievedDate = null;
 	
 	public Loot() {}
 	
@@ -15,36 +15,37 @@ public abstract class Loot {
 		this.description = description;
 	}
 	
+	@Override
 	public String getDescription() {
 		return description;
 	}
 	
-	/**
-	 * Gibt einen treffenden, kurzen Namen für den Loot an.
-	 * @return Der Name.
-	 */
+	@Override
 	public String getName() {
 		return name;
 	}
 	
 	/**
-	 * Gibt das {@link LootImage} zur�ck, welches das
+	 * Gibt das {@link LootImage} zurück, welches das
 	 * Bild des Loots darstellt. Wird in der Methode {@link #getImage() getImage}
 	 * verwendet.
 	 * @return Das LootImage.
 	 */
 	protected abstract LootImage getLootImage();
 	
-	/**
-	 * Ein kleines Bild, wie eine Medaille, ein Stern o.Ä.
-	 * @return Das Bild des Loots.
-	 */
+	@Override
 	public Drawable getImage() {
 		return getLootImage().getDrawable();
 	}
 	
-	public final Date getAchievedDate() {
+	@Override
+	public Date getAchievedDate() {
 		return achievedDate;
+	}
+	
+	@Override
+	public void setAchievedDate(Date date) {
+		achievedDate = date;
 	}
 
 	/**
