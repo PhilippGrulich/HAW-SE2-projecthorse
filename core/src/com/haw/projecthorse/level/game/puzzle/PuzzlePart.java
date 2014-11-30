@@ -40,7 +40,7 @@ public class PuzzlePart extends Image {
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
 						ImageManager.win.play(0.9f);
-					//	ImageManager.flagbett = true;
+					
 
 						ImageManager.setLabelText("Du hast gewonnen!!! \nAnzahl deiner Schritte : "
 								+ String.valueOf(Counter.getCounter())+"\nGehe auf den Pfeil oben");
@@ -58,8 +58,8 @@ public class PuzzlePart extends Image {
 					int lokY = (int) image.getY();
 
 					if (checkImage(lokX, lokY)) {
-						//ImageManager.swipe.setVolume(, 0.2f);
-						ImageManager.swipe.play(0.5f);
+						
+						ImageManager.swipe.play();
 						image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
 								.getEmptyImage().getY());
 
