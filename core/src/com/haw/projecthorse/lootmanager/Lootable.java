@@ -33,6 +33,11 @@ public interface Lootable {
 	public Date getAchievedDate();
 
 	/**
+	 * Setzt den Zeitpunkt des Erhalts der Beute auf das übergebene Datum.
+	 */
+	public void setAchievedDate(Date date);
+
+	/**
 	 * Gibt eine kurze Beschreibung der Beute an.
 	 * 
 	 * @return Beschreibung der Beute.

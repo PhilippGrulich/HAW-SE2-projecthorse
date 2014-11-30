@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public abstract class Loot implements Lootable {
 	private String description = null, name = null;
-	Date achievedDate = null;
+	private Date achievedDate = null;
 	
 	public Loot() {}
 	
@@ -41,6 +41,11 @@ public abstract class Loot implements Lootable {
 	@Override
 	public Date getAchievedDate() {
 		return achievedDate;
+	}
+	
+	@Override
+	public void setAchievedDate(Date date) {
+		achievedDate = date;
 	}
 
 	/**
