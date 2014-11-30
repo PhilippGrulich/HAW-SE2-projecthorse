@@ -18,10 +18,6 @@
          			   						Muenchen,438,108"
          }
       },
-      {
-      	levelID:"puzzleGame",
-      	className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
-      }
 
    ],
    cities:[
