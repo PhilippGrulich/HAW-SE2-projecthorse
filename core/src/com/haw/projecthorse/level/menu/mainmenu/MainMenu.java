@@ -133,12 +133,12 @@ public class MainMenu extends Menu {
 	}
 	
 	private void addButtonSpielListener(ImageTextButton button ,int saveGameID) {
-		button.addListener(new SavegameButtonListener(saveGameID));
+		button.addListener(new SavegameButtonListener(saveGameID,overlay));
 	}
 
 	private void setupEventListeners() {
 		buttonCredits.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				System.out.println("buttonCredits pressed");
 				loadCredits();
 			}
@@ -146,7 +146,7 @@ public class MainMenu extends Menu {
 		});
 	}
 
-	private void initStage(Viewport viewport, Batch batch) {
+	private void initStage(final Viewport viewport, final Batch batch) {
 		stage = new Stage(viewport, batch);
 		InputManager.addInputProcessor(stage); // Now Stage is processing inputs
 	}
@@ -162,7 +162,7 @@ public class MainMenu extends Menu {
 	}
 	
 	@Override
-	public void doRender(float delta) {
+	public void doRender(final float delta) {
 
 		stage.act(delta);
 		stage.draw();
