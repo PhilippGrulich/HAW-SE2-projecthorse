@@ -50,8 +50,8 @@ public class MainMenu extends Menu {
 		stage.addActor(table);
 
 		player = new PlayerImpl();
-		player.setPosition(0, 0.14f * height);
-		player.scaleBy(0.5F);
+		player.setPosition(0, 0.13f * height);
+//		player.scaleBy(0.5F);
 
 		player.setAnimationSpeed(0.4f);
 		stage.addActor(player);
