@@ -44,19 +44,20 @@ import com.haw.projecthorse.level.util.uielements.ButtonLarge;
  */
 public class Popup extends OverlayWidgetGroup {
 
-	protected int popupHeight = (int) (height / 2.0), popupWidth = width - 100;
+	protected int popupHeight = (int) 0, popupWidth;
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
+	private Image backgroundImage;
 	public Popup() {
 
 		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Landscape) {
-			popupHeight = height - 100;
+			popupHeight = 0;
 			popupWidth = width/2;
 			content.setHeight(popupHeight);
 			content.setWidth(popupWidth);
 			content.setX(popupWidth/2);
 		} else {
-			popupHeight = (int) (height / 2.0);
+			popupHeight = 0;
 			popupWidth = width - 100;
 			content.setHeight(popupHeight);
 			content.setWidth(popupWidth);
@@ -92,7 +93,7 @@ public class Popup extends OverlayWidgetGroup {
 	 */
 	private void createContentGroup() {
 		contentGroup = new VerticalGroup();
-		contentGroup.setY((height / 2) - popupHeight / 2 - 60);
+		
 		contentGroup.space(10);
 		contentGroup.setHeight(popupHeight);
 		contentGroup.setWidth(popupWidth);
@@ -106,11 +107,11 @@ public class Popup extends OverlayWidgetGroup {
 	 */
 	private void createBackgroundImage() {
 
-		Image backgroundImage = new Image(new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "panel_beige")));
-		backgroundImage.setHeight(popupHeight);
+		backgroundImage = new Image(new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "panel_beige")));
+		
 		backgroundImage.setWidth(popupWidth);
-
-		backgroundImage.setY((height / 2) - popupHeight / 2);
+//		backgroundImage.setHeight(popupHeight);	
+//		backgroundImage.setY((height / 2) - popupHeight / 2);
 		backgroundImage.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -127,7 +128,14 @@ public class Popup extends OverlayWidgetGroup {
 	 */
 	@Override
 	public void addActor(Actor actor) {
+		
 		contentGroup.addActor(actor);
+		// Höhe des Popups wird erweitert = höhe + actorHöhe + Spacing
+		popupHeight += actor.getHeight()+10;
+		contentGroup.setY(((height / 2) - popupHeight / 2)+80);
+		contentGroup.setHeight(popupHeight);
+		backgroundImage.setHeight(popupHeight+100);	
+		backgroundImage.setY(((height / 2) - popupHeight / 2)+40);
 	}
 
 	/**
