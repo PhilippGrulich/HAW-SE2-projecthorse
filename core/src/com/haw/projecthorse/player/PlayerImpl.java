@@ -1,5 +1,7 @@
 package com.haw.projecthorse.player;
 
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,11 +14,30 @@ import com.haw.projecthorse.savegame.SaveGameManager;
 import com.haw.projecthorse.savegame.json.SaveGame;
 
 public class PlayerImpl extends Player {
-	private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;
+//	private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;
 
 	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
 	// desto schneller
+	
+	private String imgFolder = "temp";
+	private Map<String, TextureRegion> spriteMap = AssetManager.getAllTextureRegions(imgFolder);
+	private TextureRegion activeSprite;
+	private float speed = 0;
+//	private int spriteStartX, spriteStartY;
+	private Direction direction = Direction.RIGHT;
+	private boolean flipX = false;
 
+
+	public PlayerImpl() {
+		this(getSaveGameRace());
+		this.scaleBy(-0.12f);
+	}
+
+	@Deprecated
+	public PlayerImpl(PlayerColor color) {
+		this(getSaveGameRace());
+	}
+	
 	private static HorseRace getSaveGameRace() {
 		SaveGame game = SaveGameManager.getLoadedGame();
 		if (game == null) {
@@ -26,43 +47,21 @@ public class PlayerImpl extends Player {
 		}
 	}
 
-	private TextureRegion sprite;
-	private float speed = 0;
-	private int spriteStartX, spriteStartY;
-
-	private Direction direction = Direction.RIGHT;
-
-	private boolean flipX = false;
-
-	public PlayerImpl() {
-		this(getSaveGameRace());
-	}
-
-	@Deprecated
-	public PlayerImpl(PlayerColor color) {
-		this(getSaveGameRace());
-	}
-
 	public PlayerImpl(HorseRace horseRace) {
-		race = new Race(horseRace);
-
-		sprite = AssetManager.getTextureRegion("notChecked", "white_sprites");
-		spriteStartX = sprite.getRegionX();
-		spriteStartY = sprite.getRegionY();
-		sprite.setRegion(spriteStartX, spriteStartY, DEFAULT_WIDTH,
-				DEFAULT_HEIGHT);
-
-		setBounds(getX(), getY(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		race = new Race(horseRace);		
+		activeSprite = spriteMap.get("left-1");
+	
+		flipX = true;
+		
+		setBounds(getX(), getY(), activeSprite.getRegionWidth(), activeSprite.getRegionHeight());
 	}
 	
 	public void chageDirection(Direction newDirection) {
 		direction = newDirection;
 	}
 
-	public void changeSprite(Direction direction, int newSpriteX, int newSpriteY, boolean flipX) {
-		sprite.setRegion(spriteStartX + newSpriteX * DEFAULT_WIDTH,
-				spriteStartY + newSpriteY * DEFAULT_HEIGHT, DEFAULT_WIDTH,
-				DEFAULT_HEIGHT);
+	public void changeSprite(String spriteName, Direction direction, boolean flipX) {
+		activeSprite = spriteMap.get(spriteName);
 		this.flipX = flipX;
 		this.direction = direction;
 	}
@@ -77,11 +76,11 @@ public class PlayerImpl extends Player {
 		Color batchColor = batch.getColor();
 
 		batch.setColor(getColor().mul(1, 1, 1, alpha));
-		batch.draw(sprite.getTexture(), getX(), getY(), getOriginX(),
+		batch.draw(activeSprite.getTexture(), getX(), getY(), getOriginX(),
 				getOriginY(), getWidth(), getHeight(), getScaleX(),
-				getScaleY(), getRotation(), sprite.getRegionX(),
-				sprite.getRegionY(), sprite.getRegionWidth(),
-				sprite.getRegionHeight(), flipX, false);
+				getScaleY(), getRotation(), activeSprite.getRegionX(),
+				activeSprite.getRegionY(), activeSprite.getRegionWidth(),
+				activeSprite.getRegionHeight(), flipX, false);
 
 		batch.setColor(batchColor);
 	}

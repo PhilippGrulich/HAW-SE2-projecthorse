@@ -195,7 +195,7 @@ public class PlayerMenu extends Menu {
 	@Override
 	protected void doDispose() {
 		// Alles speichern, bevor das Men� verlassen wird
-		SaveGameManager.getLoadedGame().setHorseName(playerName);
+		SaveGameManager.getLoadedGame().setPlayerName(playerName);
 		SaveGameManager.saveLoadedGame();
 	}
 
@@ -208,7 +208,7 @@ public class PlayerMenu extends Menu {
 	protected void doShow() {
 		SaveGameManager.loadSavedGame(1); // TODO: zum testen
 
-		playerName = SaveGameManager.getLoadedGame().getHorseName();
+		playerName = SaveGameManager.getLoadedGame().getPlayerName();
 		if (playerName.length() == 0) {
 			playerName = "Name deines Pferdes";
 		}

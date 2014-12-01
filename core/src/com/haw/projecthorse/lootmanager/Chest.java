@@ -11,18 +11,18 @@ import com.haw.projecthorse.lootmanager.popups.LootPopup;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class Chest {
-	private ArrayList<Loot> content = null;
+	private ArrayList<Lootable> content = null;
 	private Overlay overlay;
 
 	public Chest(Overlay overlay) {
 		this.overlay = overlay;
 	}
 
-	public void addLoot(Loot loot) {
+	public void addLoot(Lootable loot) {
 		if (content == null) {
-			content = new ArrayList<Loot>();
+			content = new ArrayList<Lootable>();
 		}
-		loot.achievedDate = new Date();
+		loot.setAchievedDate(new Date());
 		content.add(loot);
 	}
 

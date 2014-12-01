@@ -1,27 +1,73 @@
 
 puzzleImageManager.png
-size: 2214,1282
+size: 1459,1282
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-horse
+horse1
   rotate: false
   xy: 2, 2
-  size: 853, 1280
-  orig: 853, 1280
-  offset: 0, 0
-  index: -1
-horse2
-  rotate: false
-  xy: 857, 195
-  size: 635, 1087
-  orig: 635, 1087
+  size: 729, 1280
+  orig: 729, 1280
   offset: 0, 0
   index: -1
 horse3
   rotate: false
-  xy: 1494, 295
-  size: 720, 987
-  orig: 720, 987
+  xy: 733, 4
+  size: 726, 1278
+  orig: 726, 1278
+  offset: 0, 0
+  index: -1
+
+puzzleImageManager2.png
+size: 1445,1282
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+horse6
+  rotate: false
+  xy: 726, 2
+  size: 719, 1280
+  orig: 719, 1280
+  offset: 0, 0
+  index: -1
+horse7
+  rotate: false
+  xy: 2, 2
+  size: 722, 1280
+  orig: 722, 1280
+  offset: 0, 0
+  index: -1
+
+puzzleImageManager3.png
+size: 1410,1282
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+horse4
+  rotate: false
+  xy: 2, 27
+  size: 718, 1255
+  orig: 718, 1255
+  offset: 0, 0
+  index: -1
+horse5
+  rotate: false
+  xy: 722, 2
+  size: 688, 1280
+  orig: 688, 1280
+  offset: 0, 0
+  index: -1
+
+puzzleImageManager4.png
+size: 637,1089
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+horse2
+  rotate: false
+  xy: 2, 2
+  size: 635, 1087
+  orig: 635, 1087
   offset: 0, 0
   index: -1

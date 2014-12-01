@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.menu.city;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -33,6 +34,20 @@ public class City extends Menu {
 	private int lastButtonY = (int)(this.height - this.height * 0.35F);
 	private VerticalGroup verticalGroup = new VerticalGroup();
 
+	private Music music;
+	
+	public City(){
+		AssetManager.loadMusic("mainMenu");
+		AssetManager.loadSounds("city");
+		
+		music = audioManager.getMusic("mainMenu", "belotti.mp3");
+		
+		if (!music.isPlaying()) {
+			music.setLooping(true);
+			music.play();
+		}
+	}
+	
 	@Override
 	protected void doShow() {		
 		
@@ -109,6 +124,7 @@ public class City extends Menu {
 
 	@Override
 	protected void doDispose() {
+		music.pause();
 		stage.dispose();
 	}
 

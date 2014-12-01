@@ -2,9 +2,6 @@ package com.haw.projecthorse.player.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.DelegateAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
-import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
@@ -51,7 +48,7 @@ public class AnimationAction extends Action {
 	};*/
 
 	private static final float MIN_FRAMEDURATION = 0.05f;
-	private static final int SPRITES_PER_ANIMATION = 4;
+	private static final int SPRITES_PER_ANIMATION = 6;
 
 	private int spriteIndex, animationIndex;
 	private float deltaSum, duration, time;
@@ -130,36 +127,37 @@ public class AnimationAction extends Action {
 
 		deltaSum += delta;
 		if (deltaSum >= frameDuration) {
+			String spriteName = "";
 			deltaSum %= frameDuration;
 			spriteIndex = ++spriteIndex % SPRITES_PER_ANIMATION;
 
 			switch (direction) {
-			case LEFT:
-				flipX = true;
 			case RIGHT:
-				animationIndex = 0;
-				break;
-			case UPLEFT:
 				flipX = true;
+			case LEFT:
+				spriteName = "left";
+				break;
 			case UPRIGHT:
-				animationIndex = 1;
-				break;
-			case DOWNLEFT:
 				flipX = true;
+			case UPLEFT:
+				spriteName = "upleft";
+				break;
 			case DOWNRIGHT:
-				animationIndex = 2;
+				flipX = true;
+			case DOWNLEFT:
+				spriteName = "downleft";
 				break;
 			case UP:
-				animationIndex = 3;
+				spriteName = "up";
 				break;
 			case DOWN:
-				animationIndex = 4;
+				spriteName = "down";
 				break;
 			}
 
 			// TODO: Die Position der TextureRegion muss geändert werden ->
 			// nächstes Sprite laden
-			p.changeSprite(direction, spriteIndex, animationIndex, flipX);
+			p.changeSprite(spriteName + "-" + (spriteIndex + 1), direction, flipX);
 		}
 
 		return false;

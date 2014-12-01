@@ -263,8 +263,7 @@ public class Thimblerig extends Game{
 	@Override
 	protected void doDispose() {
 		this.chest.saveAllLoot();
-		this.stage.dispose();	
-		this.textFont.dispose();
+		this.stage.dispose();
 		this.bgMusic.stop();
 	}
 

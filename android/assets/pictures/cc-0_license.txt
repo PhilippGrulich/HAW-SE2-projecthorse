@@ -36,3 +36,10 @@ parcours;cloud_fluffy_2.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-
 parcours;dirt_mountaint_dirt_cap_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;grass_ground.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;Hintergrund.png;CC-0;Francis
+puzzle;horse1.jpg;CC-0;Kaz;http://pixabay.com/de/pferd-pony-palomino-kopf-gesicht-317036/
+puzzle;horse2.png;CC-0;Motorbiene;http://pixabay.com/de/esel-pony-lasttier-arbeitstier-140360/
+puzzle;horse3.jpg;CC-0;Kapa65;http://pixabay.com/de/pferde-schwarzw%C3%A4lder-kaltblut-385769/
+puzzle;horse4.jpg;CC-0;violetta;http://pixabay.com/de/fohlen-pferd-auge-braun-sch%C3%B6ne-143974/
+puzzle;horse5.jpg;CC-0;guilaine;http://pixabay.com/de/tiere-fohlen-pferd-358788/
+puzzle;horse6.jpg;CC-0;Noel_Asadin;http://pixabay.com/de/fohlen-pferd-jungtier-tier-228696/
+puzzle;horse7.jpg;CC-0;wawax;http://pixabay.com/de/pferd-hengst-stute-ride-wallach-75389/

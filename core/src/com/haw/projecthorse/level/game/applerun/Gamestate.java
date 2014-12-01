@@ -94,7 +94,7 @@ public class Gamestate {
 	private void initHorse() {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
-		horse.scaleBy(0.5F);
+		horse.scaleBy(0.2F);
 		horse.setAnimationSpeed(0.4f);
 		horse.addAction(new AnimationAction(Direction.RIGHT));
 		// stage.addActor(horse); //Done inside constructor
@@ -214,10 +214,10 @@ public class Gamestate {
 			float adjustedX = (Gdx.input.getAccelerometerX());
 			float horseWith = ((horse.getWidth() * horse.getScaleX()) / 2);
 			float horseX = horse.getX();
-			if (adjustedX > -2f && adjustedX < 2f) {
+			if (adjustedX > -1.5f && adjustedX < 1.5f) {
 				adjustedX = 0f;
 			} else {
-				if (adjustedX > 2f)
+				if (adjustedX >= 0f)
 					adjustedX = (float) (Math.pow(adjustedX, 2));
 				else
 					adjustedX = (float) (Math.pow(adjustedX, 2)) * -1;
