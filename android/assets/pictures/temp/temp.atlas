@@ -1,215 +1,215 @@
 
 temp.png
-size: 3870,516
+size: 1548,1290
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 down-1
   rotate: false
-  xy: 2, 260
+  xy: 2, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 down-2
   rotate: false
-  xy: 2, 2
+  xy: 2, 776
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 down-3
   rotate: false
-  xy: 260, 260
+  xy: 260, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 down-4
   rotate: false
-  xy: 260, 2
+  xy: 2, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 down-5
   rotate: false
-  xy: 518, 260
+  xy: 260, 776
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 down-6
   rotate: false
-  xy: 518, 2
+  xy: 518, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 downleft-1
   rotate: false
-  xy: 776, 260
+  xy: 2, 260
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 downleft-2
   rotate: false
-  xy: 776, 2
+  xy: 260, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 downleft-3
   rotate: false
-  xy: 1034, 260
+  xy: 518, 776
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 downleft-4
   rotate: false
-  xy: 1034, 2
+  xy: 776, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 downleft-5
   rotate: false
-  xy: 1292, 260
+  xy: 2, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 downleft-6
   rotate: false
-  xy: 1292, 2
+  xy: 260, 260
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 left-1
   rotate: false
-  xy: 1550, 260
+  xy: 518, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 left-2
   rotate: false
-  xy: 1550, 2
+  xy: 776, 776
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 left-3
   rotate: false
-  xy: 1808, 260
+  xy: 1034, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 left-4
   rotate: false
-  xy: 1808, 2
+  xy: 260, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 left-5
   rotate: false
-  xy: 2066, 260
+  xy: 518, 260
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 left-6
   rotate: false
-  xy: 2066, 2
+  xy: 776, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 up-1
   rotate: false
-  xy: 2324, 260
+  xy: 1034, 776
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 up-2
   rotate: false
-  xy: 2324, 2
+  xy: 1292, 1034
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 up-3
   rotate: false
-  xy: 2582, 260
+  xy: 518, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 up-4
   rotate: false
-  xy: 2582, 2
+  xy: 776, 260
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 up-5
   rotate: false
-  xy: 2840, 260
+  xy: 1034, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 up-6
   rotate: false
-  xy: 2840, 2
+  xy: 1292, 776
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 upleft-1
   rotate: false
-  xy: 3098, 260
+  xy: 776, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 upleft-2
   rotate: false
-  xy: 3098, 2
+  xy: 1034, 260
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 upleft-3
   rotate: false
-  xy: 3356, 260
+  xy: 1292, 518
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 upleft-4
   rotate: false
-  xy: 3614, 260
+  xy: 1034, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 upleft-5
   rotate: false
-  xy: 3356, 2
+  xy: 1292, 260
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 upleft-6
   rotate: false
-  xy: 3614, 2
+  xy: 1292, 2
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

@@ -1,6 +1,6 @@
 
 city.png
-size: 2391,1442
+size: 1691,1442
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -11,17 +11,23 @@ Biergarten
   orig: 894, 1440
   offset: 0, 0
   index: -1
-Brandenburger_Tor
-  rotate: false
-  xy: 1693, 259
-  size: 698, 1183
-  orig: 698, 1183
-  offset: 0, 0
-  index: -1
 Sankt-Michaelis-Kirche_Hamburg
   rotate: false
   xy: 898, 162
   size: 793, 1280
   orig: 793, 1280
+  offset: 0, 0
+  index: -1
+
+city2.png
+size: 700,1185
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Brandenburger_Tor
+  rotate: false
+  xy: 2, 2
+  size: 698, 1183
+  orig: 698, 1183
   offset: 0, 0
   index: -1
