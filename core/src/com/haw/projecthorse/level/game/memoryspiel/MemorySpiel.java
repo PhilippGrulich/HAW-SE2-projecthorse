@@ -3,6 +3,9 @@ package com.haw.projecthorse.level.game.memoryspiel;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,12 +35,15 @@ public class MemorySpiel extends Level {
 	private GameState state;
 	private Label replay;
 	private Karte playButton;
+	private Music music;
 
 	public MemorySpiel() {
 		manager = new KartenManager();
 		batcher = this.getSpriteBatch();
 		state = GameState.READY;
 		stage = new Stage(this.getViewport(), batcher);
+		music = Gdx.audio.newMusic(Gdx.files.internal("memorySpiel/Happy Ukulele.mp3"));
+		music.play();
 		InputManager.addInputProcessor(stage);
 		replay = createReplayLabel();
 		replay.setPosition(this.width / 3.7f, this.height * 0.85f);
