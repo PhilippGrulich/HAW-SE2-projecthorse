@@ -7,6 +7,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
@@ -24,11 +26,14 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private boolean paused = false;
 	private boolean gameEndReached;
 	private GameState gameStatus = GameState.START;
+	GestureDetector listener;
+	private InputMultiplexer inputMultiplexer;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
-			Chest chest) {
+			Chest chest, AudioManager audioManager) {
+		AssetManager.loadMusic("parcours");;
 		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport,
-				width, height);
+				width, height, audioManager);
 		logic = new GameObjectLogic(width,
 				(IGameFieldFuerGameObjectLogic) gameField);
 		setInputProcessor();
@@ -52,16 +57,17 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	}
 
 	public void setInputProcessor() {
-		GestureDetector listener = new GestureDetector(new GameInputListener(
+		listener = new GestureDetector(new GameInputListener(
 				(IGameObjectLogicFuerGameInputListener) logic,
 				(IGameFieldFuerGameInputListener) gameField));
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(Gdx.input.getInputProcessor());
 		inputMultiplexer.addProcessor(new StageGestureDetector(gameField
 				.getStage(), true, ControlMode.HORIZONTAL));
 		inputMultiplexer.addProcessor(listener);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
 	}
 
 	@Override
@@ -69,11 +75,14 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		if (delta != 0 && !paused &&  gameStatus != GameState.END) {
 			logic.update(delta);
 			verifyGameState(delta);
-		} else if (gameEndReached  &&  gameStatus != GameState.END) {
+		} else {
 			if (gameField.isButtonYesPressed(gameStatus)) {
+				inputMultiplexer.addProcessor(listener);
+				Gdx.input.setInputProcessor(inputMultiplexer);
 				gameEndReached = false;
 				gameField.restart();
 				gameField.removePopup();
+				gameField.playGallop();
 				this.gameStatus = GameState.START;
 				this.setPause(false);
 			} else if (gameField.isButtonNoPressed(gameStatus)) {
@@ -81,12 +90,10 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				this.setPause(false);
 				gameField.clear();
 				this.gameStatus = GameState.END;
+				gameField.stopGallop();
 				GameManagerFactory.getInstance().navigateBack();
-				
 			}
 			gameField.drawGameField();
-		} else if(gameStatus != GameState.END) {
-			
 		}
 
 		// TODO logic.success -> popup, stats, loot, restart?
@@ -97,14 +104,14 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	// legen.
 	private void verifyGameState(float delta) {
 		if (gameField.getScore() >= 10) {
-			
+			inputMultiplexer.removeProcessor(listener);
+			Gdx.input.setInputProcessor(inputMultiplexer);
+			gameField.pauseGallop();
 			gameField.showPopup(GameState.WON);
 			gameEndReached = true;
 			gameStatus = GameState.WON;
 			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
 			for(ParcoursLoot l : gameField.getLoot()){
-				System.out.println("gewonnen: " + allreadyWon.size() + " " + allreadyWon.contains(l));
-				
 				if(l.getAvailableAtScore() <= gameField.getScore() && !allreadyWon.contains(l)){
 					chest.addLoot(l);
 					chest.saveAllLoot();
@@ -113,6 +120,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			
 			this.pause();
 		} else if (gameField.getScore() < 0) {
+			gameField.pauseGallop();
 			gameField.showPopup(GameState.LOST);
 			gameStatus = GameState.LOST;
 			gameEndReached = true;
@@ -121,10 +129,13 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	}
 
 	public void setPause(boolean p) {
+		if(!p)
+			gameField.playGallop();
 		paused = p;
 	}
 
 	public void pause() {
+		gameField.pauseGallop();
 		paused = true;
 	}
 	
@@ -135,6 +146,10 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	 */
 	private List<? extends ParcoursLoot> getLoots(){
 		return SaveGameManager.getLoadedGame().getSpecifiedLoot(com.haw.projecthorse.level.game.parcours.ParcoursLoot.class);
+	}
+	
+	public void dispose(){
+		gameField.dispose();
 	}
 
 }

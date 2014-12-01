@@ -23,6 +23,14 @@ public interface IGameFieldFuerGameObjectLogic {
 	Stage getStage();
 	
 	List<ParcoursLoot> getLoot();
+	
+	public void playGallop();
+	
+	public void pauseGallop();
+	
+	public void stopGallop();
+	
+	public void eat();
 
 
 }

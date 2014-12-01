@@ -1,0 +1,27 @@
+{
+lootCollection: [
+	{
+		class: com.haw.projecthorse.player.color.PlayerColor
+	},
+	{
+		class: com.haw.projecthorse.player.color.PlayerColor,
+		name: Weiss,
+		description: "Die Farbe 'Weiss' für dein Pferd",
+		black: false
+	},
+	{
+		class: com.haw.projecthorse.level.game.parcours.Loot$LootInChest,
+		achievedDate: {12.2.12},
+		name: "null",
+		image: {
+			level: "parcours",
+			fileName: "null"
+		},
+		description: "null"
+	}
+],
+ID: 1,
+horse: {
+	class: com.haw.projecthorse.savegame.json.HorseImpl
+}
+}

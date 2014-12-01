@@ -38,9 +38,14 @@ public class Player extends PlayerImpl {
 		toFront();
 		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
 		initSwipeListener();
+		
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
-		this.SWIPEMOVE = getGameWidth() * 35 / 100;
+		this.SWIPEMOVE = (getGameWidth() * 15 / 100) + athletic();
+	}
+	
+	private float athletic(){
+		return getAthletic()*5;
 	}
 
 	@Override
@@ -174,7 +179,7 @@ public class Player extends PlayerImpl {
 	}
 
 	public void setJumpSpeed(float duration) {
-		this.player_jumpspeed = duration;
+		this.player_jumpspeed = duration+athletic();
 	}
 
 	public void setJumpWitdh(float x) {

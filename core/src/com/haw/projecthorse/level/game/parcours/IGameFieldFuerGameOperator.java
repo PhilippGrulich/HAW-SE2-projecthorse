@@ -28,4 +28,12 @@ public interface IGameFieldFuerGameOperator {
 	void clear();
 
 	void removePopup();
+	
+	public void playGallop();
+	
+	public void pauseGallop();
+	
+	public void stopGallop();
+
+	void dispose();
 }
