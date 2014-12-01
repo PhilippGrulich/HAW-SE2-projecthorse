@@ -223,7 +223,6 @@ public class Puzzle {
 		back.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				ImageManager.musikpos = ImageManager.getMusik().getPosition();
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			};
 		});

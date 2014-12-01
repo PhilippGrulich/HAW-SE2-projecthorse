@@ -39,10 +39,10 @@ public abstract class Level implements Screen {
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
-	protected Overlay overlay;
+	protected static Overlay overlay;
 
-	protected  int height;
-	protected  int width;
+	protected int height;
+	protected int width;
 
 	protected AudioManager audioManager;
 	private FitViewport overlayViewport;
@@ -53,25 +53,27 @@ public abstract class Level implements Screen {
 
 	/**
 	 * Mittels diesem Konsturcktor kann eine {@link Orientation} übergeben
-	 * werden. 
+	 * werden.
+	 * 
 	 * @param orientation
 	 */
 	public Level(Orientation orientation) {
-		GameManagerFactory.getInstance().getPlatform().SetOrientation(orientation);
-		height = GameManagerFactory.getInstance().getSettings().getVirtualScreenHeight();
-		width = GameManagerFactory.getInstance().getSettings().getVirtualScreenWidth();
-	
+		GameManagerFactory.getInstance().getPlatform()
+				.SetOrientation(orientation);
+		height = GameManagerFactory.getInstance().getSettings()
+				.getVirtualScreenHeight();
+		width = GameManagerFactory.getInstance().getSettings()
+				.getVirtualScreenWidth();
+
 		createViewport();
 		audioManager = AudioManagerImpl.getInstance();
 	}
-
 
 	public void createViewport() {
 		cam = createCamera();
 		viewport = new FitViewport(width, height, cam);
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(cam.combined);
-	
 
 		overlayViewport = new FitViewport(width, height, createCamera());
 		overlay = new Overlay(overlayViewport, spriteBatch, this);
@@ -93,7 +95,8 @@ public abstract class Level implements Screen {
 
 	public final void setLevelID(String newID) {
 		if (levelID != null) {
-			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
+			System.out.println("ACHTUNG Level id: " + levelID
+					+ " umbenannt in: " + newID);
 		}
 
 		levelID = newID;
@@ -151,12 +154,11 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void resize(int width, int height) {
-		
-			this.getViewport().update(width, height, true);
-			this.overlayViewport.update(width, height, true);
-			doResize(width, height);
-		
-		
+
+		this.getViewport().update(width, height, true);
+		this.overlayViewport.update(width, height, true);
+		doResize(width, height);
+
 	}
 
 	protected abstract void doShow();

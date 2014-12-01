@@ -30,6 +30,8 @@ import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.level.util.uielements.ButtonOwnTextImage;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
+import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 
 public class ImageManager extends Game {
 
@@ -52,8 +54,6 @@ public class ImageManager extends Game {
 
 	static int myXPos;
 	static int myYPos;
-
-	static float musikpos;
 
 	public ImageManager() {
 
@@ -359,4 +359,7 @@ public class ImageManager extends Game {
 		return musik;
 	}
 
+	public static Overlay getOverlay() {
+		return overlay;
+	}
 }
