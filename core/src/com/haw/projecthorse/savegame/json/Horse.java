@@ -4,19 +4,6 @@ import com.haw.projecthorse.player.race.HorseRace;
 
 public interface Horse {
 	/**
-	 * @return Name des Pferdes
-	 */
-	String getName();
-
-	/**
-	 * Setzt den Namen
-	 * 
-	 * @param name
-	 *            Der neue Name.
-	 */
-	void setName(String name);
-
-	/**
 	 * @return Die Rasse des Pferdes
 	 */
 	HorseRace getRace();

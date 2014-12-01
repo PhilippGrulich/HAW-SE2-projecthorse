@@ -2,7 +2,6 @@ package com.haw.projecthorse.savegame;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,16 +39,17 @@ public abstract class SaveGameManager {
 	}
 	
 	/**
-	 * Lädt einen gespeicherten Spielstand und setzt ihn als "geladen"
+	 * Lï¿½dt einen gespeicherten Spielstand und setzt ihn als "geladen"
 	 * @param gameID ID des zu ladenen Spielstands
 	 * @return Der geladene Spielstand
 	 */
 	public static SaveGame loadSavedGame(int gameID) {
+		loadedGameID = gameID;
+		
 		if (!gameExists(gameID)) {
 			savedGames.put(gameID, new SaveGameImpl(gameID));
+			saveLoadedGame();
 		}
-		
-		loadedGameID = gameID;
 		return getLoadedGame();
 	}
 	
@@ -89,39 +89,20 @@ public abstract class SaveGameManager {
 	
 	/**
 	 * Liefert eine Liste mit (ID, Name)-Paaren, wobei ID die SaveGameID
-	 * ist und Name für den Namen des Pferdes in diesem Spiel steht.
-	 * @return Eine ArrayList mit (ID, Name)-Pairs.
+	 * ist und Name fï¿½r den Namen des Pferdes in diesem Spiel steht.
+	 * @return Eine Map der SpielstÃ¤nde als (ID, Name des Kindes)-Paare .
 	 */
-	public static ArrayList<Pair<Integer, String>> getSaveGameList() {
-		ArrayList<Pair<Integer, String>> games = new ArrayList<Pair<Integer, String>>();
-		
+	public static Map<Integer, String> getSaveGameList() {		
 		if (savedGames.size() == 0) {
 			loadScores();
 		}
 		
+		HashMap<Integer, String> games = new HashMap<Integer, String>();
+		
 		for (Integer id : savedGames.keySet()) {
-			games.add(new Pair<Integer, String>(id, savedGames.get(id).getHorseName()));
+			games.put(id, savedGames.get(id).getPlayerName());
 		}
 		
 		return games;
-	}
-	
-	public static class Pair<K, V> {
-		private K key;
-		private V value;
-		
-		public Pair(K key, V value) {
-			super();
-			this.key = key;
-			this.value = value;
-		}
-
-		public K getKey() {
-			return key;
-		}
-
-		public V getValue() {
-			return value;
-		}
 	}
 }

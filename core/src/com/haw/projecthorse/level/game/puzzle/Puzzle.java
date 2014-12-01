@@ -10,11 +10,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
@@ -36,7 +43,7 @@ public class Puzzle {
 	private static Image missingImage;
 	private static Image emptyImage;
 	static TextureRegion texture;
-	
+
 	private int SHUFFLE = 2;
 	private static int COL = 3;
 	private static int ROW = 3;
@@ -46,6 +53,7 @@ public class Puzzle {
 		puzzleWidth = ImageManager.myWidth / COL; // 270
 		puzzleHeight = ImageManager.myHeight / ROW; // 480
 
+		createButtons();
 		createEmptyImage();
 		createImageArr();
 
@@ -112,7 +120,6 @@ public class Puzzle {
 				Image im = imageArr[i][j];
 				PuzzlePart.addListener(im);
 
-				// secondstage.addActor(im);
 				ImageManager.addToStage(ImageManager.getSecondstage(), im);
 
 			}
@@ -125,7 +132,6 @@ public class Puzzle {
 			for (int i = 0; i < ROW; i++) {
 				for (int j = 0; j < COL; j++) {
 
-					
 					Image im = imageArr[i][j];
 					int xKoor = (int) im.getX();
 					int yKoor = (int) im.getY();
@@ -191,7 +197,37 @@ public class Puzzle {
 	public static Image getEmptyImage() {
 		return emptyImage;
 	}
+
 	// falls ich zurück zur bilderauswahl möchte
 	// GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
+	private void createButtons() {
+		ImageButton button_back = new ImageButton(new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "backIcon")));
+
+		button_back.setHeight(95);
+		button_back.setWidth(95);
+
+		button_back.setPosition(
+				ImageManager.getMyXPos() + ImageManager.getMyWidth()
+						, ImageManager.getMyYPos()
+						+ ImageManager.getMyHeight()
+						- (button_back.getHeight()));
+		// button_back.setPosition(0, 0);
+		addListener(button_back);
+
+		ImageManager.addToStage(ImageManager.getSecondstage(), button_back);
+
+	}
+
+	private void addListener(final ImageButton back) {
+
+		back.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				GameManagerFactory.getInstance().navigateToLevel("Puzzlespiel");
+			};
+		});
+
+	}
 
 }
