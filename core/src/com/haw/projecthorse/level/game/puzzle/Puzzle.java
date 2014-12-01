@@ -209,9 +209,8 @@ public class Puzzle {
 
 		button_back.setPosition(
 				ImageManager.getMyXPos() + ImageManager.getMyWidth()
-						, ImageManager.getMyYPos()
-						+ ImageManager.getMyHeight()
-						- (button_back.getHeight()));
+						- button_back.getWidth(), ImageManager.getMyYPos()
+						+ ImageManager.getMyHeight());
 		// button_back.setPosition(0, 0);
 		addListener(button_back);
 
@@ -224,7 +223,8 @@ public class Puzzle {
 		back.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				GameManagerFactory.getInstance().navigateToLevel("Puzzlespiel");
+				ImageManager.musikpos = ImageManager.getMusik().getPosition();
+				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			};
 		});
 

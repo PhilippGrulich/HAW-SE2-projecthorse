@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -26,6 +27,9 @@ import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.uielements.ButtonOwnTextImage;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 
 public class ImageManager extends Game {
 
@@ -38,7 +42,7 @@ public class ImageManager extends Game {
 	private List<Image> imagelist;
 	private Map<String, TextureRegion> regionsmap;
 
-	private Music musik;
+	private static Music musik;
 
 	static Sound swipe;
 	static Sound win;
@@ -49,6 +53,8 @@ public class ImageManager extends Game {
 	static int myXPos;
 	static int myYPos;
 
+	static float musikpos;
+
 	public ImageManager() {
 
 		super();
@@ -58,6 +64,8 @@ public class ImageManager extends Game {
 				false, ControlMode.HORIZONTAL));
 
 		addBackround();
+
+		new PuzzlePlayer();
 
 		regionsmap = AssetManager.getAllTextureRegions("puzzleImageManager");
 
@@ -117,31 +125,27 @@ public class ImageManager extends Game {
 	}
 
 	private void createButtons() {
-		ImageButton button_next = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "buttonRight")));
-		ImageButton button_prev = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "buttonLeft")));
+		ButtonSmall button_next = new ButtonSmall(ButtonType.RIGHT);
+		ButtonSmall button_prev = new ButtonSmall(ButtonType.LEFT);
 
 		Drawable button_img = new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "panel_brown"));
-		TextButton button_ok = new TextButton("OK",
-				new TextButton.TextButtonStyle(button_img, button_img,
-						button_img, AssetManager.getTextFont(FontSize.VIERZIG)));
+		ButtonOwnTextImage button_ok = new ButtonOwnTextImage("OK",
 
-		button_next.setHeight(100);
-		button_next.setWidth(100);
+				new ImageTextButton.ImageTextButtonStyle(
+						new TextButton.TextButtonStyle(button_img, button_img,
+								button_img,
+								AssetManager.getTextFont(FontSize.VIERZIG))));
 
-		button_prev.setHeight(100);
-		button_prev.setWidth(100);
+		button_ok.setHeight(80);
+		button_ok.setWidth(300);
 
-		button_ok.setHeight(85);
-		button_ok.setWidth(85);
+		button_next.setPosition(width - button_next.getWidth() - 5, height / 2);
+		button_prev.setPosition(5, height / 2);
 
-		button_next.setPosition(width - button_next.getWidth()+10, height / 2);
-		button_prev.setPosition(0-10, height / 2);
-		//button_ok.setPosition((width - button_ok.getWidth()) / 2, 10);
-		button_ok.setPosition(width - button_ok.getWidth(), height-(button_ok.getHeight()*2.2f));
-		
+		button_ok.setPosition(myXPos + myWidth / 2 - button_ok.getWidth() / 2,
+				myYPos + myHeight + 5);
+
 		button_next.setName("next");
 		button_prev.setName("prev");
 		button_prev.setName("ok");
@@ -207,8 +211,8 @@ public class ImageManager extends Game {
 	 * 
 	 * @param button
 	 */
-	private void addListener(final ImageButton next, final TextButton ok,
-			final ImageButton prev) {
+	private void addListener(final ImageButton next,
+			final ButtonOwnTextImage button_ok, final ImageButton prev) {
 
 		next.addListener(new ClickListener() {
 
@@ -217,15 +221,15 @@ public class ImageManager extends Game {
 				changeImage(1);
 			}
 		});
-		ok.addListener(new ClickListener() {
+		button_ok.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
 				next.setVisible(false);
 				prev.setVisible(false);
-				ok.setVisible(false);
-				ok.removeListener(this);
+				button_ok.setVisible(false);
+				button_ok.removeListener(this);
 				new Puzzle();
 				// firststage.dispose();
 
@@ -276,7 +280,7 @@ public class ImageManager extends Game {
 
 	@Override
 	protected void doDispose() {
-		musik.stop();
+		musik.pause();
 		// win.dispose();
 		// swipe.dispose();
 		firststage.dispose();
@@ -325,6 +329,7 @@ public class ImageManager extends Game {
 	private void addMusic(String musicname, boolean loop) {
 
 		musik = audioManager.getMusic("puzzle", musicname);
+		// musik.setPosition(musikpos);
 		musik.play();
 		musik.setLooping(loop);
 
@@ -345,6 +350,13 @@ public class ImageManager extends Game {
 	public static int getMyYPos() {
 		return myYPos;
 	}
-	
+
+	public static Stage getFirststage() {
+		return firststage;
+	}
+
+	public static Music getMusik() {
+		return musik;
+	}
 
 }
