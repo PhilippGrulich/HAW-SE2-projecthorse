@@ -1,7 +1,9 @@
 package com.haw.projecthorse.level.game.parcours;
 
 import com.badlogic.gdx.Input.Orientation;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.game.Game;
 
 /**
@@ -12,17 +14,16 @@ import com.haw.projecthorse.level.game.Game;
 public class Parcours extends Game{
 	
 	private IGameOperatorFuerParcours gameOperator;
+
 	
 	public Parcours(){
 		super(Orientation.Landscape);
-		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest);
-
-		
+		gameOperator = new GameOperator(new Stage(this.getViewport(),this.getSpriteBatch()), this.getViewport(), this.width, this.height, chest, this.audioManager);
 	}
 
 	@Override
 	protected void doDispose() {
-		//gameOperator = null;
+		gameOperator.dispose();
 		
 	}
 
@@ -54,7 +55,6 @@ public class Parcours extends Game{
 	@Override
 	protected void doResume() {
 		gameOperator.setPause(false);
-		
 	}
 	
 	@Override

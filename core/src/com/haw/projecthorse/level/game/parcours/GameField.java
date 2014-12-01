@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.game.parcours.ParcoursLoot;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
@@ -38,8 +41,18 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 	private float grass_ground_height;
 	private GameOverPopup popup;
 	private boolean gameOverState;
+	private AudioManager audioManager;
+	private Music gallop;
+	private Sound eat;
 
-	public GameField(Stage s, Viewport p, int w, int h) {
+	public GameField(Stage s, Viewport p, int w, int h, AudioManager a) {
+		audioManager = a;
+		AssetManager.loadMusic("parcours");
+		AssetManager.loadSounds("parcours");
+		gallop = this.audioManager.getMusic("parcours", "gallop.wav");
+		gallop.setLooping(true);
+		gallop.setVolume(0.3f);
+		eat = this.audioManager.getSound("parcours", "eat.wav");
 		stage = s;
 		width = w;
 		height = h;
@@ -47,7 +60,6 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP = 5;
 		score = 0;
 		gameOverState = false;
-		
 		gameObjects = new ArrayList<GameObject>();
 		loot = new ArrayList<ParcoursLoot>();
 		generalGameSpeed = getWidth() / 3;
@@ -80,7 +92,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		TextureRegion r = regions.get("crosssection_long");
 		
 		EndlessBackground endlessBackground = new EndlessBackground(
-				(int) stage.getWidth(), r, generalGameSpeed);
+				(int) stage.getWidth(), r, r.getRegionWidth() / generalGameSpeed);
 		endlessBackground.setName("crosssection_long");
 		groundHeight = r.getRegionHeight();
 
@@ -117,12 +129,12 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		for (int i = 1; i < 9; i++) {
 			addGameObjectWithRelativHeight("Kuerbis" + i,
 					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
-					-100, getTopOfGroundPosition(), true, generalGameSpeed, 1,
+					-1000, getTopOfGroundPosition(), true, generalGameSpeed, 1,
 					regions, goi, false, true);
 		}
 
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
-				.getRegionHeight() * 9 / 50, -100, getTopOfGroundPosition(),
+				.getRegionHeight() * 9 / 50, -1000, getTopOfGroundPosition(),
 				true, generalGameSpeed, -10, regions, goi, false, true);
 		
 		initLoot(regions);
@@ -326,5 +338,27 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		}
 		
 	};
+	
+	public void playGallop(){
+		this.gallop.play();
+	}
+	
+	public void pauseGallop(){
+		this.gallop.pause();
+	}
+	
+	public void stopGallop(){
+		this.gallop.stop();
+	}
+	
+	public void eat(){
+		this.eat.play();
+	}
+
+	@Override
+	public void dispose() {
+		stage.clear();
+		stage.dispose();
+	}
 
 }

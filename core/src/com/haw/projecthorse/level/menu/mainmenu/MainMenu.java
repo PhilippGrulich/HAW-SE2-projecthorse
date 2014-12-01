@@ -1,6 +1,10 @@
 package com.haw.projecthorse.level.menu.mainmenu;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,15 +15,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
-import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class MainMenu extends Menu {
 
@@ -27,14 +31,12 @@ public class MainMenu extends Menu {
 
 	private Stage stage;
 
+	private ImageTextButton[] buttonsSpiel;
 	private ImageTextButton buttonCredits;
-	private ImageTextButton buttonSpiel1;
-	private ImageTextButton buttonSpiel2;
-	private ImageTextButton buttonSpiel3;
+	
+	private Music music;
 
 	private Player player;
-
-	// private TextureAtlas atlas;
 
 	public MainMenu() {
 		float moveToDuration = width / 5 / 30;
@@ -49,8 +51,8 @@ public class MainMenu extends Menu {
 		stage.addActor(table);
 
 		player = new PlayerImpl();
-		player.setPosition(0, 0.14f * height);
-		player.scaleBy(0.5F);
+		player.setPosition(0, 0.13f * height);
+//		player.scaleBy(0.5F);
 
 		player.setAnimationSpeed(0.4f);
 		stage.addActor(player);
@@ -61,6 +63,16 @@ public class MainMenu extends Menu {
 				moveToDuration), new AnimationAction(Direction.LEFT, moveToDuration));
 		
 		player.addAction(Actions.forever(Actions.sequence(toRight, toLeft)));
+		
+		AssetManager.loadMusic("mainMenu");
+		AssetManager.loadSounds("worldmap");
+		
+		music = audioManager.getMusic("mainMenu", "belotti.mp3");
+		
+		if (!music.isPlaying()) {
+			music.setLooping(true);
+			music.play();
+		}
 	}
 
 	private void addBackground() {
@@ -84,20 +96,32 @@ public class MainMenu extends Menu {
 	}
 
 	private void initButtons() {
-
-		buttonSpiel1 = new ButtonLarge("Spielstand 1", ButtonLarge.ButtonColor.LIGHT_BROWN);
-		buttonSpiel2 = new ButtonLarge("Spielstand 2", ButtonLarge.ButtonColor.LIGHT_BROWN);
-		buttonSpiel3 = new ButtonLarge(/* "Spielstand 3" */"Player Menu", ButtonLarge.ButtonColor.LIGHT_BROWN);
+		buttonsSpiel = new ImageTextButton[3];
+		Map<Integer, String> games = SaveGameManager.getSaveGameList();
+		Iterator<Integer> gamesIterator = games.keySet().iterator();
+		ImageTextButton buttonSpiel;
+		String buttonText;
+		int gameID = 0;
+		
+		for (int i = 0; i < 3; i++) {
+			if (gamesIterator.hasNext()) {
+				gameID = gamesIterator.next();
+				buttonText = games.get(gameID);
+			} else {
+				gameID = (games.containsKey(i)) ? 2*i : i; 
+				buttonText = "Spielstand " + (i+1);
+			}
+			
+			buttonSpiel = new ButtonLarge(buttonText, ButtonLarge.ButtonColor.LIGHT_BROWN);
+			table.addActor(buttonSpiel);
+			buttonSpiel.toFront();
+			addButtonSpielListener(buttonSpiel, gameID);
+			buttonsSpiel[i] = buttonSpiel;
+		}
+		
+		// der Credits-Button
 		buttonCredits = new ButtonLarge("Credits", ButtonLarge.ButtonColor.LIGHT_BROWN);
-
-		table.addActor(buttonSpiel1);
-		table.addActor(buttonSpiel2);
-		table.addActor(buttonSpiel3);
 		table.addActor(buttonCredits);
-
-		buttonSpiel1.toFront();
-		buttonSpiel2.toFront();
-		buttonSpiel3.toFront();
 		buttonCredits.toFront();
 
 	}
@@ -107,20 +131,14 @@ public class MainMenu extends Menu {
 
 		Gdx.app.log("DEBUG", "CreditScreen not yet implemented - Todo");
 	}
+	
+	private void addButtonSpielListener(ImageTextButton button ,int saveGameID) {
+		button.addListener(new SavegameButtonListener(saveGameID,overlay));
+	}
 
 	private void setupEventListeners() {
-		buttonSpiel1.addListener(new SavegameButtonListener(1));
-		buttonSpiel2.addListener(new SavegameButtonListener(2));
-		// buttonSpiel3.addListener(new SavegameButtonListener(3));
-
-		buttonSpiel3.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				GameManagerFactory.getInstance().navigateToLevel("playerMenu");
-			}
-		});
 		buttonCredits.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				System.out.println("buttonCredits pressed");
 				loadCredits();
 			}
@@ -128,7 +146,7 @@ public class MainMenu extends Menu {
 		});
 	}
 
-	private void initStage(Viewport viewport, Batch batch) {
+	private void initStage(final Viewport viewport, final Batch batch) {
 		stage = new Stage(viewport, batch);
 		InputManager.addInputProcessor(stage); // Now Stage is processing inputs
 	}
@@ -142,9 +160,9 @@ public class MainMenu extends Menu {
 		System.out.println(table.getHeight());
 		System.out.println(table.getY());
 	}
-
+	
 	@Override
-	public void doRender(float delta) {
+	public void doRender(final float delta) {
 
 		stage.act(delta);
 		stage.draw();

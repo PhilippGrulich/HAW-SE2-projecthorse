@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.player.actions.Direction;
 
 public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameObjectLogicFuerGameInputListener {
 
 	private float freePosition;
-	IGameFieldFuerGameObjectLogic gameField;
+	private IGameFieldFuerGameObjectLogic gameField;
 	private boolean shouldPlayerJump;
 
 	public GameObjectLogic(float initialFreePosition, IGameFieldFuerGameObjectLogic g) {
@@ -33,7 +34,13 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 						gameField.getPlayer().getRectangle())) {
 					l.setVisible(false);
 					l.setX(-5 - l.getWidth());
-					gameField.addToScore(l.getPoints());;
+					if(l.getPoints() > 0){
+						gameField.eat();
+						gameField.addToScore(l.getPoints() + (int)Math.ceil(l.getPoints()*gameField.getPlayer().getIntelligence()));
+					}else {
+						gameField.addToScore(l.getPoints());
+					}
+					
 				}
 			}
 		}
@@ -116,6 +123,11 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 	}
 
 	public void setPlayerJump(boolean a) {
+		if(a){
+			gameField.pauseGallop();
+		}else{
+			gameField.playGallop();
+		}
 		this.shouldPlayerJump = a;
 	}
 

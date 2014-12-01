@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -76,6 +77,8 @@ public class WorldMap extends Menu {
 											// deaktiviert
 
 	private final float MAXZOOM = 0.3f; // Maximaler Kamera Zoom
+	
+	private Music music;
 
 	public WorldMap() throws LevelNotFoundException {
 		super();
@@ -134,6 +137,16 @@ public class WorldMap extends Menu {
 		createButtons();
 		createCityPoints();
 		initAnimation();
+		
+		AssetManager.loadMusic("mainMenu");
+		AssetManager.loadSounds("worldmap");
+		
+		music = audioManager.getMusic("mainMenu", "belotti.mp3");
+		
+		if (!music.isPlaying()) {
+			music.setLooping(true);
+			music.play();
+		}
 	}
 
 	// Erstellt eine Startanimation die einmalig abgearbeitet wird

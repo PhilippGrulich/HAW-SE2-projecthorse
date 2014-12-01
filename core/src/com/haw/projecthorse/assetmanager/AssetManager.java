@@ -363,6 +363,8 @@ public final class AssetManager {
 		assetManager.dispose();
 		assetManager.clear();
 		audioManager = null;
+		textFonts = null;
+		headlineFonts = null;
 	}
 
 	/**

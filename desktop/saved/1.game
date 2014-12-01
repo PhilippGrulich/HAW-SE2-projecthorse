@@ -52,8 +52,8 @@ lootCollection: [
 	}
 ],
 ID: 1,
+name: Lisa,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
-	name: "Name deines Pferdes"
 }
 }

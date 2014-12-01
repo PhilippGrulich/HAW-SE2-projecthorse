@@ -8,4 +8,6 @@ public interface IGameOperatorFuerParcours {
 
 	void setPause(boolean b);
 
+	void dispose();
+
 }
