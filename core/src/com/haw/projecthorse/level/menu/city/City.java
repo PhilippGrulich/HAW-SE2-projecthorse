@@ -124,7 +124,7 @@ public class City extends Menu {
 
 	@Override
 	protected void doDispose() {
-		music.stop();
+		music.pause();
 		stage.dispose();
 	}
 
