@@ -1,11 +1,10 @@
 package com.haw.projecthorse.level.game.applerun;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.level.game.Game;
 
 /**
  * @author Lars: Stage und Input listener auslagern in die Level.abstract?
@@ -13,11 +12,17 @@ import com.haw.projecthorse.level.Level;
  * 
  */
 
-public class AppleRun extends Level {
+public class AppleRun extends Game {
 	private Gamestate gamestate;
+	private Music music;
 
 	public AppleRun() {
+		AssetManager.loadMusic("AppleRun");
+		AssetManager.loadSounds("AppleRun");
+		music = audioManager.getMusic("AppleRun", "musicloop.mp3");
+		music.setLooping(true);
 		gamestate = new Gamestate(this.getViewport(), this.getSpriteBatch(), width, height);
+		music.play();
 	}
 
 	@Override
@@ -29,6 +34,7 @@ public class AppleRun extends Level {
 
 	@Override
 	protected void doDispose() {
+		music.stop();
 		gamestate.dispose();
 	}
 

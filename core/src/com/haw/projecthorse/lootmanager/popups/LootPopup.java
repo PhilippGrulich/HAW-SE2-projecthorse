@@ -14,11 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
-import com.haw.projecthorse.lootmanager.Loot;
+import com.haw.projecthorse.lootmanager.Lootable;
 
 public class LootPopup extends Popup {
 
-	public LootPopup(ArrayList<Loot> loots) {
+	public LootPopup(ArrayList<Lootable> loots) {
 		super();
 
 		Label label = createLabel("Deine gesammelten Gegenstaende");
@@ -27,7 +27,7 @@ public class LootPopup extends Popup {
 //		label.layout();
 		addActor(label);
 
-		LootDisplay button = new LootDisplay(loots, (int)(popupHeigh / 2.5),
+		LootDisplay button = new LootDisplay(loots, (int)(popupHeight / 2.5),
 				popupWidth - 80);
 		addActor(button);
 		
@@ -44,17 +44,17 @@ public class LootPopup extends Popup {
 	}
 
 	private class LootDisplay extends Group {
-		private ArrayList<Loot> lootList;
+		private ArrayList<Lootable> lootList;
 		private int i, max;
 		private float imageX, imageY, imageWidth, imageHeight;
 		private Drawable currentImage = null;
 		private boolean refreshed; // zeigt an, ob sich der Index vom Image
-									// geändert hat und somit die Daten dafür
-									// neu berechnet werden müssen
+									// geï¿½ndert hat und somit die Daten dafï¿½r
+									// neu berechnet werden mï¿½ssen
 
-		public LootDisplay(ArrayList<Loot> loots, int lootHeight, int lootWidth) {
+		public LootDisplay(ArrayList<Lootable> loots, int lootHeight, int lootWidth) {
 			// Instanzvariable instazieren
-			lootList = new ArrayList<Loot>(loots);
+			lootList = new ArrayList<Lootable>(loots);
 			i = 0;
 			max = lootList.size();
 			refreshed = false;

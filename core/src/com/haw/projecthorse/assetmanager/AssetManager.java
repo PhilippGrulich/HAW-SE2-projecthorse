@@ -45,15 +45,15 @@ public final class AssetManager {
 	private static String directory_music;
 	private static String directory_pictures;
 	private static String directory_fonts;
-	public static com.badlogic.gdx.assets.AssetManager assetManager = new com.badlogic.gdx.assets.AssetManager();
+	public static com.badlogic.gdx.assets.AssetManager assetManager ;
 	private static float soundVolume = 1;
 	private static float musicVolume = 1;
 	// Mapped mit LevelID auf TextureAtlas - Haelt AtlasObjekte Vorraetig zwecks
 	// Performance
-	private static Map<String, TextureAtlas> administratedAtlases = new HashMap<String, TextureAtlas>();
+	private static Map<String, TextureAtlas> administratedAtlases;
 	// Mapped mit LevelID auf Pfade von Atlas Objekten im Falle von Verlust
 	// eines Atlas bei dispose (Performance)
-	private static Map<String, String> administratedAtlasesPath = new HashMap<String, String>();
+	private static Map<String, String> administratedAtlasesPath ;
 	// Mapped mit LevelID auf Pfade von Sound / Music sofern 1 Mal vorher darauf
 	// zugegriffen wurde.
 	// da laden aller Sounds / Music am Anfang, wie bei Atlas Dateien, nicht
@@ -61,15 +61,20 @@ public final class AssetManager {
 	private static Map<String, ArrayList<String>> administratedSoundPath;
 	private static Map<String, ArrayList<String>> administratedMusicPath;
 	
-	private static AudioManager audioManager = AudioManagerImpl.getInstance();
+	private static AudioManager audioManager;
 
 	private static TextureRegion errorPic;
+	
+	private static BitmapFont[] textFonts, headlineFonts;
 
 	public static void initialize() {
+		assetManager = new com.badlogic.gdx.assets.AssetManager();
+		administratedAtlases = new HashMap<String, TextureAtlas>();
+		administratedAtlasesPath = new HashMap<String, String>();
+		audioManager= AudioManagerImpl.getInstance();
 		setApplicationRoot();
 		loadAtlases(directory_pictures, directory_pictures);
 		loadAudioPaths();
-
 	}
 
 	/**
@@ -312,14 +317,18 @@ public final class AssetManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static BitmapFont getHeadlineFont(FontSize size) {
+		if (headlineFonts == null){
+			headlineFonts = new BitmapFont[FontSize.values().length];
+		}
+		
+		if (headlineFonts[size.ordinal()] == null) {
 		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
 		String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "headlinefont/GetVoIP Grotesque.ttf";
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
-		BitmapFont b = generator.generateFont(size.getVal());
-		generator.dispose();
-		assetManager.finishLoading();
-		return b;
+		headlineFonts[size.ordinal()] = generator.generateFont(size.getVal());
+		}
+		return headlineFonts[size.ordinal()];
 	}
 
 	/**
@@ -331,14 +340,20 @@ public final class AssetManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static BitmapFont getTextFont(FontSize size) {
+		if (textFonts == null){
+			textFonts = new BitmapFont[FontSize.values().length];
+		}
+		
+		if (textFonts[size.ordinal()] == null) {
 		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
 		String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "textfont/Grundschrift-Bold.ttf";
 
 		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
-		BitmapFont b = gen.generateFont(size.getVal());
+		textFonts[size.ordinal()] = gen.generateFont(size.getVal());
 		gen.dispose();
-		assetManager.finishLoading();
-		return b;
+		}
+		
+		return textFonts[size.ordinal()];
 	}
 
 	/**
@@ -346,6 +361,10 @@ public final class AssetManager {
 	 */
 	public static void disposeAll() {
 		assetManager.dispose();
+		assetManager.clear();
+		audioManager = null;
+		textFonts = null;
+		headlineFonts = null;
 	}
 
 	/**

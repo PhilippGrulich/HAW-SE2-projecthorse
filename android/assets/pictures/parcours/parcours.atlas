@@ -1,167 +1,194 @@
 
 parcours.png
-size: 3793,1249
+size: 2037,2045
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Hintergrund
   rotate: false
-  xy: 2, 481
+  xy: 2, 971
   size: 1024, 768
   orig: 1024, 768
   offset: 0, 0
   index: -1
-Kuerbis1
+HuerdeClean
   rotate: false
-  xy: 2404, 604
-  size: 406, 339
-  orig: 406, 339
-  offset: 0, 0
-  index: -1
-Kuerbis2
-  rotate: false
-  xy: 3364, 583
-  size: 429, 360
-  orig: 429, 360
+  xy: 596, 33
+  size: 280, 452
+  orig: 280, 452
   offset: 0, 0
   index: -1
 Kuerbis3
   rotate: false
-  xy: 2009, 602
+  xy: 2, 3
   size: 393, 341
   orig: 393, 341
   offset: 0, 0
   index: -1
-Kuerbis4
-  rotate: false
-  xy: 2602, 217
-  size: 367, 385
-  orig: 367, 385
-  offset: 0, 0
-  index: -1
 Kuerbis5
   rotate: false
-  xy: 2812, 608
+  xy: 1628, 191
   size: 409, 335
   orig: 409, 335
   offset: 0, 0
   index: -1
 Kuerbis6
   rotate: false
-  xy: 2971, 230
+  xy: 878, 2
   size: 391, 376
   orig: 391, 376
   offset: 0, 0
   index: -1
 Kuerbis7
   rotate: false
-  xy: 3364, 230
+  xy: 1628, 528
   size: 409, 351
   orig: 409, 351
   offset: 0, 0
   index: -1
-Kuerbis8
-  rotate: false
-  xy: 2202, 212
-  size: 398, 388
-  orig: 398, 388
-  offset: 0, 0
-  index: -1
 birdhouse1
   rotate: false
-  xy: 3708, 1025
+  xy: 795, 745
   size: 64, 224
   orig: 64, 224
   offset: 0, 0
   index: -1
 bush1
   rotate: false
-  xy: 2009, 1162
+  xy: 1377, 1652
   size: 108, 87
   orig: 108, 87
   offset: 0, 0
   index: -1
 bush2
   rotate: false
-  xy: 893, 6
+  xy: 596, 664
   size: 199, 79
   orig: 199, 79
   offset: 0, 0
   index: -1
 bush3
   rotate: false
-  xy: 2976, 124
+  xy: 1271, 274
   size: 287, 104
   orig: 287, 104
   offset: 0, 0
   index: -1
 cliff_cover
   rotate: false
-  xy: 273, 87
-  size: 765, 392
-  orig: 765, 392
-  offset: 0, 0
-  index: 3
-cliff_cover
-  rotate: false
-  xy: 1028, 599
+  xy: 1028, 881
   size: 979, 650
   orig: 979, 650
   offset: 0, 0
   index: 1
+cliff_cover
+  rotate: false
+  xy: 861, 487
+  size: 765, 392
+  orig: 765, 392
+  offset: 0, 0
+  index: 3
 cloud_fluffy
   rotate: false
-  xy: 2627, 76
+  xy: 1028, 1600
   size: 347, 139
   orig: 347, 139
   offset: 0, 0
   index: 2
 cratetex
   rotate: false
-  xy: 1094, 5
+  xy: 2, 346
   size: 592, 592
   orig: 592, 592
   offset: 0, 0
   index: -1
 crosssection_long
   rotate: false
-  xy: 100, 8
+  xy: 2, 940
   size: 791, 29
   orig: 791, 29
   offset: 0, 0
   index: -1
-dirt_mountain_dirt_cap
-  rotate: false
-  xy: 2, 39
-  size: 269, 440
-  orig: 269, 440
-  offset: 0, 0
-  index: 1
 grass
   rotate: false
-  xy: 1688, 85
+  xy: 1508, 1533
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 grass_ground
   rotate: false
-  xy: 2202, 945
+  xy: 2, 1741
   size: 1504, 304
   orig: 1504, 304
   offset: 0, 0
   index: -1
-rainbow
+ground
   rotate: false
-  xy: 2202, 2
-  size: 423, 208
-  orig: 423, 208
+  xy: 878, 380
+  size: 720, 105
+  orig: 720, 105
   offset: 0, 0
   index: -1
 wildmushrooms1
   rotate: false
-  xy: 2, 7
+  xy: 1377, 1620
   size: 96, 30
   orig: 96, 30
+  offset: 0, 0
+  index: -1
+
+parcours2.png
+size: 1208,890
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Kuerbis1
+  rotate: false
+  xy: 433, 551
+  size: 406, 339
+  orig: 406, 339
+  offset: 0, 0
+  index: -1
+Kuerbis2
+  rotate: false
+  xy: 2, 530
+  size: 429, 360
+  orig: 429, 360
+  offset: 0, 0
+  index: -1
+Kuerbis4
+  rotate: false
+  xy: 841, 505
+  size: 367, 385
+  orig: 367, 385
+  offset: 0, 0
+  index: -1
+Kuerbis8
+  rotate: false
+  xy: 2, 140
+  size: 398, 388
+  orig: 398, 388
+  offset: 0, 0
+  index: -1
+carrot
+  rotate: false
+  xy: 433, 212
+  size: 400, 337
+  orig: 400, 337
+  offset: 0, 0
+  index: -1
+dirt_mountain_dirt_cap
+  rotate: false
+  xy: 835, 63
+  size: 269, 440
+  orig: 269, 440
+  offset: 0, 0
+  index: 1
+rainbow
+  rotate: false
+  xy: 402, 2
+  size: 423, 208
+  orig: 423, 208
   offset: 0, 0
   index: -1

@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.haw.projecthorse.lootmanager.Loot;
-import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.lootmanager.Lootable;
+import com.haw.projecthorse.player.race.HorseRace;
 
 public interface SaveGame {
 	/**
@@ -24,33 +25,33 @@ public interface SaveGame {
 	void addEP(int toAdd);
 
 	/**
-	 * @return name of the horse in this score
+	 * @return Den Namen des Kindes fÃ¼r diesen Spielstand
 	 */
-	String getHorseName();
+	String getPlayerName();
 
 	/**
-	 * Ändert den Namen des Pferdes
+	 * Ã„ndert den Namen des Kindes fÃ¼r diesen Spielstand
 	 * 
 	 * @param names
 	 *            Der neue Name.
 	 */
-	void setHorseName(String name);
+	void setPlayerName(String name);
 
 	/**
-	 * @return Die Farbe des Pferdes
+	 * @return Die Rasse des Pferdes
 	 */
-	PlayerColor getHorseColor();
+	HorseRace getHorseRace();
 
 	/**
-	 * Ändert die Farbe des Pferdes.
+	 * Ã„ndert die Rasse des Pferdes.
 	 * 
-	 * @param color
-	 *            Die neue Farbe.
+	 * @param race
+	 *            Die neue Rasse.
 	 */
-	void setHorseColor(PlayerColor color);
+	void setHorseRace(HorseRace race);
 
 	/**
-	 * Fügt ein gesammelten Gegenstand dem Spieler hinzu
+	 * Fï¿½gt ein gesammelten Gegenstand dem Spieler hinzu
 	 * 
 	 * @param loot
 	 *            Der gesammelte Gegenstand
@@ -58,20 +59,20 @@ public interface SaveGame {
 	void addCollectedLoot(Loot loot);
 	
 	/**
-	 * Fügt eine Liste von gesammelten Gegenständen dem Spieler hinzu
+	 * Fï¿½gt eine Liste von gesammelten Gegenstï¿½nden dem Spieler hinzu
 	 * 
 	 * @param loots
-	 *            Liste der gesammelte Gegenstände
+	 *            Liste der gesammelte Gegenstï¿½nde
 	 */
-	void addCollectedLootList(Collection<Loot> loots);
+	void addCollectedLootList(Collection<Lootable> loots);
 
 	/**
-	 * Erstellt eine Liste von gesammelten Gegeständen eines bestimmten Typs.
+	 * Erstellt eine Liste von gesammelten Gegestï¿½nden eines bestimmten Typs.
 	 * 
 	 * @param c
-	 *            Die Klasse der Lootobjekte, die zurück kommen sollen.
+	 *            Die Klasse der Lootobjekte, die zurï¿½ck kommen sollen.
 	 *            
-	 * @return Die Liste von Gegenständen.
+	 * @return Die Liste von Gegenstï¿½nden.
 	 */
 	<T extends Loot> List<T> getSpecifiedLoot(Class<T> c);
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,13 +28,16 @@ import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoundException;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.uielements.ButtonOwnImage;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.player.PlayerImpl;
 
-public class WorldMap extends Level {
+public class WorldMap extends Menu {
 
 	// Dieses Enum stellt den aktuellen Zustand in der Worldmap dar,
 	// um verschiedene Situationen unterscheiden zu können
@@ -73,6 +77,8 @@ public class WorldMap extends Level {
 											// deaktiviert
 
 	private final float MAXZOOM = 0.3f; // Maximaler Kamera Zoom
+	
+	private Music music;
 
 	public WorldMap() throws LevelNotFoundException {
 		super();
@@ -100,9 +106,12 @@ public class WorldMap extends Level {
 		selectedCityIndex = Arrays.asList(cities).indexOf(
 				prefs.getString("lastCity"));
 
-		if (selectedCityIndex == -1)
+		if (selectedCityIndex == -1) {
 			selectedCityIndex = 0;
-
+			prefs.putString("lastCity", cities[0]);
+			prefs.flush();
+		}
+		
 		Gdx.app.log(
 				"INFO",
 				"Zuletzt gewählte Stadt hat Index "
@@ -128,6 +137,16 @@ public class WorldMap extends Level {
 		createButtons();
 		createCityPoints();
 		initAnimation();
+		
+		AssetManager.loadMusic("mainMenu");
+		AssetManager.loadSounds("worldmap");
+		
+		music = audioManager.getMusic("mainMenu", "belotti.mp3");
+		
+		if (!music.isPlaying()) {
+			music.setLooping(true);
+			music.play();
+		}
 	}
 
 	// Erstellt eine Startanimation die einmalig abgearbeitet wird
@@ -275,7 +294,7 @@ public class WorldMap extends Level {
 		uiBackground.setPosition(width / 2 - uiBackground.getWidth() / 2,
 				height * 0.77f - uiBackground.getHeight() / 2);
 
-		flagButton = new ImageButton(new TextureRegionDrawable(
+		flagButton = new ButtonOwnImage(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("flaggen",
 						cities[selectedCityIndex])));
 		flagButton.addListener(new ChangeListener() {
@@ -320,8 +339,7 @@ public class WorldMap extends Level {
 
 		updateFlag();
 
-		leftButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "buttonLeft")));
+		leftButton = new ButtonSmall(ButtonType.LEFT);
 		leftButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -341,8 +359,7 @@ public class WorldMap extends Level {
 				uiBackground.getY() + uiBackground.getHeight() / 2
 						- leftButton.getHeight() / 2);
 
-		rightButton = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", "buttonRight")));
+		rightButton = new ButtonSmall(ButtonType.RIGHT);
 		rightButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

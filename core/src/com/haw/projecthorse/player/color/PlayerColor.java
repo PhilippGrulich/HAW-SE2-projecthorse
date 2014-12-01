@@ -16,6 +16,7 @@ import com.haw.projecthorse.lootmanager.LootImage;
  * @author Oliver
  * 
  */
+@Deprecated
 public class PlayerColor extends Loot {
 	static final PlayerColor[] DEFINED_COLORS = new PlayerColor[] {
 			new PlayerColor(),

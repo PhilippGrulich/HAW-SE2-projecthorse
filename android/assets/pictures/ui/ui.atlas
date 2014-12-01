@@ -1,103 +1,103 @@
 
 ui.png
-size: 2083,1128
+size: 1465,1896
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 backIcon
   rotate: false
-  xy: 1157, 2
+  xy: 930, 410
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 buttonApply
   rotate: false
-  xy: 1895, 280
+  xy: 1157, 1643
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 buttonBackground
   rotate: false
-  xy: 1157, 209
+  xy: 930, 617
   size: 535, 151
   orig: 535, 151
   offset: 0, 0
   index: -1
 buttonCancel
   rotate: false
-  xy: 1239, 2
+  xy: 1358, 1816
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 buttonLeft
   rotate: false
-  xy: 1895, 198
+  xy: 930, 328
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 buttonRight
   rotate: false
-  xy: 1977, 280
+  xy: 1012, 410
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 buttonStart
   rotate: false
-  xy: 1321, 2
+  xy: 1157, 1561
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 off
   rotate: false
-  xy: 1485, 31
+  xy: 930, 275
   size: 50, 51
   orig: 50, 51
   offset: 0, 0
   index: -1
 on
   rotate: false
-  xy: 1694, 189
+  xy: 1157, 1725
   size: 199, 171
   orig: 199, 171
   offset: 0, 0
   index: -1
 panel_beige
   rotate: false
-  xy: 1157, 362
+  xy: 2, 2
   size: 926, 766
   orig: 926, 766
   offset: 0, 0
   index: -1
 panel_brown
   rotate: false
-  xy: 2, 2
+  xy: 2, 770
   size: 1153, 1126
   orig: 1153, 1126
   offset: 0, 0
   index: -1
 pauseIcon
   rotate: false
-  xy: 1977, 198
+  xy: 1239, 1643
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 popup_button
   rotate: false
-  xy: 1157, 84
+  xy: 930, 492
   size: 528, 123
   orig: 528, 123
   offset: 0, 0
   index: -1
 settingsIcon
   rotate: false
-  xy: 1403, 2
+  xy: 1358, 1734
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

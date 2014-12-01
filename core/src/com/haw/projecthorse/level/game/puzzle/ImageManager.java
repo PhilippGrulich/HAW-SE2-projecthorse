@@ -4,39 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
-import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.uielements.ButtonOwnTextImage;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
+import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 
-public class ImageManager extends Level {
+public class ImageManager extends Game {
 
-	private static Stage stage;
+	private static Stage firststage;
+	private static Stage secondstage;
 
 	private int index;
+	private static Label label;
 
 	private List<Image> imagelist;
 	private Map<String, TextureRegion> regionsmap;
 
-	static Music bett;
-	static boolean flagbett = true;
+	private static Music musik;
+
+	static Sound swipe;
+	static Sound win;
 
 	static int myWidth;
 	static int myHeight;
@@ -45,13 +56,16 @@ public class ImageManager extends Level {
 	static int myYPos;
 
 	public ImageManager() {
+
 		super();
 
-		stage = new Stage(getViewport());
-		InputManager.addInputProcessor(new StageGestureDetector(stage, false,
-				ControlMode.HORIZONTAL));
+		firststage = new Stage(getViewport());
+		InputManager.addInputProcessor(new StageGestureDetector(firststage,
+				false, ControlMode.HORIZONTAL));
 
 		addBackround();
+
+		new PuzzlePlayer();
 
 		regionsmap = AssetManager.getAllTextureRegions("puzzleImageManager");
 
@@ -61,29 +75,38 @@ public class ImageManager extends Level {
 		myHeight = (height / 4) * 3; // 960
 
 		myXPos = (width - myWidth) / 2; // 90
-		myYPos = (height - myHeight) / 4 + (height - myHeight) / 2; // 266
+		myYPos = (height - myHeight) / 5 + (height - myHeight) / 2; // 224
 
-		bett = Gdx.audio.newMusic(Gdx.files
-				.internal("music/puzzle/bett_pcm.wav"));
+		System.out.println("meine koor: " + myXPos + myYPos);
+
+		AssetManager.loadSounds("puzzle");
+		AssetManager.loadMusic("puzzle");
+		addMusic("bett_pcm.wav", true);
+		swipe = audioManager.getSound("puzzle", "swipe.wav");
+		win = audioManager.getSound("puzzle", "win.wav");
 
 		fillImagelist();
 		index = imagelist.size() - 1;
 		createButtons();
 		addToStage();
-		addMusic();
+
+		// puzzle stage
+		secondstage = new Stage(getViewport());
+		InputManager.addInputProcessor(secondstage);
+
+		addScore();
+
+		//
 
 	}
 
-	private void addMusic() {
+	public void addScore() {
+		BitmapFont font;
+		font = AssetManager.getTextFont(FontSize.VIERZIG);
+		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
+		label.setBounds(30, 45, 30, 30);
 
-		// AssetManager.loadMusic("puzzle");
-		// AssetManager.playMusic("puzzle", "bett.wav");
-		// AssetManager.playMusic("imagemanager", "bett");
-		bett.setLooping(true);
-		if (flagbett) {
-
-			bett.play();
-		}
+		addToStage(secondstage, label);
 
 	}
 
@@ -102,29 +125,26 @@ public class ImageManager extends Level {
 	}
 
 	private void createButtons() {
-		ImageButton button_next = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("selfmade", "button_next")));
-		ImageButton button_prev = new ImageButton(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("selfmade", "button_prev")));
+		ButtonSmall button_next = new ButtonSmall(ButtonType.RIGHT);
+		ButtonSmall button_prev = new ButtonSmall(ButtonType.LEFT);
 
 		Drawable button_img = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("menu", "buttonBackground"));
-		TextButton button_ok = new TextButton("OK",
-				new TextButton.TextButtonStyle(button_img, button_img,
-						button_img, AssetManager.getTextFont(FontSize.VIERZIG)));
+				AssetManager.getTextureRegion("ui", "panel_brown"));
+		ButtonOwnTextImage button_ok = new ButtonOwnTextImage("OK",
 
-		button_next.setHeight(100);
-		button_next.setWidth(100);
+				new ImageTextButton.ImageTextButtonStyle(
+						new TextButton.TextButtonStyle(button_img, button_img,
+								button_img,
+								AssetManager.getTextFont(FontSize.VIERZIG))));
 
-		button_prev.setHeight(100);
-		button_prev.setWidth(100);
-
-		button_ok.setHeight(100);
+		button_ok.setHeight(80);
 		button_ok.setWidth(300);
 
-		button_next.setPosition(width - button_next.getWidth(), height / 2);
-		button_prev.setPosition(0, height / 2);
-		button_ok.setPosition((width - button_ok.getWidth()) / 2, 10);
+		button_next.setPosition(width - button_next.getWidth() - 5, height / 2);
+		button_prev.setPosition(5, height / 2);
+
+		button_ok.setPosition(myXPos + myWidth / 2 - button_ok.getWidth() / 2,
+				myYPos + myHeight + 5);
 
 		button_next.setName("next");
 		button_prev.setName("prev");
@@ -132,9 +152,9 @@ public class ImageManager extends Level {
 
 		addListener(button_next, button_ok, button_prev);
 
-		stage.addActor(button_next);
-		stage.addActor(button_prev);
-		stage.addActor(button_ok);
+		firststage.addActor(button_next);
+		firststage.addActor(button_prev);
+		firststage.addActor(button_ok);
 	}
 
 	/**
@@ -153,7 +173,7 @@ public class ImageManager extends Level {
 			im.setPosition(myXPos, myYPos);
 			addListener(im);
 			im.toFront();
-			stage.addActor(im);
+			firststage.addActor(im);
 
 		}
 
@@ -191,7 +211,8 @@ public class ImageManager extends Level {
 	 * 
 	 * @param button
 	 */
-	private void addListener(ImageButton next, TextButton ok, ImageButton prev) {
+	private void addListener(final ImageButton next,
+			final ButtonOwnTextImage button_ok, final ImageButton prev) {
 
 		next.addListener(new ClickListener() {
 
@@ -200,14 +221,17 @@ public class ImageManager extends Level {
 				changeImage(1);
 			}
 		});
-		ok.addListener(new ClickListener() {
+		button_ok.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
-				flagbett = false;
-				bett.dispose();
-				GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
+				next.setVisible(false);
+				prev.setVisible(false);
+				button_ok.setVisible(false);
+				button_ok.removeListener(this);
+				new Puzzle();
+				// firststage.dispose();
 
 			};
 		});
@@ -236,19 +260,31 @@ public class ImageManager extends Level {
 		horse.toBack();
 		horse.setName("backround");
 
-		stage.addActor(horse);
+		firststage.addActor(horse);
 
+	}
+
+	public static void addToStage(Stage stage, Actor actor) {
+		stage.addActor(actor);
 	}
 
 	@Override
 	protected void doRender(float delta) {
-		stage.act();
-		stage.draw();
+
+		firststage.act();
+		firststage.draw();
+
+		secondstage.act();
+		secondstage.draw();
 	}
 
 	@Override
 	protected void doDispose() {
-		stage.dispose();
+		musik.pause();
+		// win.dispose();
+		// swipe.dispose();
+		firststage.dispose();
+		secondstage.dispose();
 
 	}
 
@@ -280,5 +316,50 @@ public class ImageManager extends Level {
 	protected void doResume() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public static Stage getSecondstage() {
+		return secondstage;
+	}
+
+	public static void setLabelText(String newText) {
+		label.setText(newText);
+	}
+
+	private void addMusic(String musicname, boolean loop) {
+
+		musik = audioManager.getMusic("puzzle", musicname);
+		// musik.setPosition(musikpos);
+		musik.play();
+		musik.setLooping(loop);
+
+	}
+
+	public static int getMyWidth() {
+		return myWidth;
+	}
+
+	public static int getMyHeight() {
+		return myHeight;
+	}
+
+	public static int getMyXPos() {
+		return myXPos;
+	}
+
+	public static int getMyYPos() {
+		return myYPos;
+	}
+
+	public static Stage getFirststage() {
+		return firststage;
+	}
+
+	public static Music getMusik() {
+		return musik;
+	}
+
+	public static Overlay getOverlay() {
+		return overlay;
 	}
 }

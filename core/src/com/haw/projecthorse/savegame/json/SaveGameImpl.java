@@ -5,16 +5,16 @@ import java.util.Collection;
 import java.util.List;
 
 import com.haw.projecthorse.lootmanager.Loot;
-import com.haw.projecthorse.player.color.PlayerColor;
+import com.haw.projecthorse.lootmanager.Lootable;
+import com.haw.projecthorse.player.race.HorseRace;
 
 public class SaveGameImpl implements SaveGame {
 	private int ID = -1, ep = 0;
+	private String name;
 	private Horse horse = new HorseImpl();
-	private ArrayList<Loot> lootCollection = new ArrayList<Loot>();
+	private ArrayList<Lootable> lootCollection = new ArrayList<Lootable>();
 
 	public SaveGameImpl() {
-		lootCollection.add(PlayerColor.BLACK);
-		lootCollection.add(PlayerColor.WHITE);
 	}
 	
 	public SaveGameImpl(int ID) {
@@ -33,13 +33,15 @@ public class SaveGameImpl implements SaveGame {
 	}
 
 	@Override
-	public String getHorseName() {
-		return horse.getName();
+	public String getPlayerName() {
+		if (name == null)
+			return "NoName";
+		return name;
 	}
 	
 	@Override
-	public void setHorseName(String name) {
-		horse.setName(name);
+	public void setPlayerName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -48,13 +50,13 @@ public class SaveGameImpl implements SaveGame {
 	}
 
 	@Override
-	public PlayerColor getHorseColor() {
-		return horse.getColor();
+	public HorseRace getHorseRace() {
+		return horse.getRace();
 	}
 
 	@Override
-	public void setHorseColor(PlayerColor color) {
-		horse.setColor(color);
+	public void setHorseRace(HorseRace race) {
+		horse.setRace(race);
 	}
 
 	@Override
@@ -65,7 +67,7 @@ public class SaveGameImpl implements SaveGame {
 	}
 	
 	@Override
-	public void addCollectedLootList(Collection<Loot> loots) {
+	public void addCollectedLootList(Collection<Lootable> loots) {
 		lootCollection.addAll(loots);
 	}
 
@@ -73,7 +75,7 @@ public class SaveGameImpl implements SaveGame {
 	@Override
 	public <T extends Loot> List<T> getSpecifiedLoot(Class<T> c) {
 		ArrayList<T> loots = new ArrayList<T>();
-		for (Loot l : lootCollection) {
+		for (Lootable l : lootCollection) {
 			if (c.isInstance(l)) {
 				loots.add((T) l);
 			}

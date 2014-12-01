@@ -1,54 +1,48 @@
 package com.haw.projecthorse.level.util.overlay.popup;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.gamemanager.settings.Settings;
+import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 
 /**
- * Dieses Popup ist speziell f�r die Verwendung in Mini Spielen gedacht. Es
+ * Dieses Popup ist speziell für die Verwendung in Mini Spielen gedacht. Es
  * bietet dem Nutzer zugriff auf die Funktionen: Musik : An/Aus Spiel Verlassen
  * Weiter Spielen
  * 
  * @author Philipp
  *
  */
-public class GamePausePopup extends Popup {
+public class GamePausePopup extends Popup implements Observer {
+	
+	private Settings setting = GameManagerFactory.getInstance().getSettings();
+	private ImageTextButton musicButton;	
+	private ImageTextButton soundButton;
 
 	public GamePausePopup() {
 
-		String musicState = "Musik An";
-		final boolean music = GameManagerFactory.getInstance().getSettings()
-				.getMusicState();
-		if (music)
-			musicState = "Musik Aus";
-		createButton(musicState, new ChangeListener() {
+		musicButton = createButton("", new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				GamePausePopup.this.getOverlay().disposePopup();
-				GameManagerFactory.getInstance().getSettings()
-						.setMusicState(!music);
-				event.cancel();
 
+				setting.setMusicState(!setting.getMusicState());
+				event.cancel();
 			}
 
 		});
-		
-		String soundState = "Sounds An";
-		final boolean sound = GameManagerFactory.getInstance().getSettings()
-				.getSoundState();
-		if (sound)
-			soundState = "Sounds Aus";
-		createButton(soundState, new ChangeListener() {
+
+		soundButton = createButton("", new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				GamePausePopup.this.getOverlay().disposePopup();
-				GameManagerFactory.getInstance().getSettings()
-						.setSoundState(!sound);
+				setting.setSoundState(!setting.getSoundState());
 				event.cancel();
-
 			}
 
 		});
@@ -60,7 +54,6 @@ public class GamePausePopup extends Popup {
 				GamePausePopup.this.getOverlay().disposePopup();
 				GameManagerFactory.getInstance().navigateBack();
 				event.cancel();
-
 			}
 
 		});
@@ -71,17 +64,37 @@ public class GamePausePopup extends Popup {
 			public void changed(ChangeEvent event, Actor actor) {
 				GamePausePopup.this.getOverlay().disposePopup();
 				event.cancel();
-
 			}
 
 		});
 
+		setTextes();
+		setting.addObserver(this);
+
 	}
 
-	private void createButton(String label, ChangeListener inputListener) {
-		Button btn = super.createButton(label);
+	private void setTextes() {
+		if (setting.getMusicState())
+			musicButton.setText("Musik ist AN");
+		else
+			musicButton.setText("Musik ist AUS");
+
+		if (setting.getSoundState())
+			soundButton.setText("Sound ist AN");
+		else
+			soundButton.setText("Sound ist AUS");
+	}
+
+	private ImageTextButton createButton(String label, ChangeListener inputListener) {
+		ImageTextButton btn = new ButtonLarge(label, inputListener);
 		btn.addListener(inputListener);
 		this.addActor(btn);
+		return btn;
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		setTextes();
 	}
 
 }

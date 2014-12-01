@@ -10,13 +10,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
-import com.haw.projecthorse.intputmanager.InputManager;
-import com.haw.projecthorse.level.Level;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 
@@ -25,10 +32,7 @@ import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 //in assets/json/GameConfig.json Zeile 15 wieder ersetzen
 //einkommentieren zeile 113 in level
 
-public class Puzzle extends Level {
-
-	private static Stage stage;
-	private static Label label;
+public class Puzzle {
 
 	private static int puzzleWidth;
 	private static int puzzleHeight;
@@ -39,47 +43,25 @@ public class Puzzle extends Level {
 	private static Image missingImage;
 	private static Image emptyImage;
 	static TextureRegion texture;
-	static Sound swipe;
-	static Sound win;
-	private Music bett;
+
 	private int SHUFFLE = 2;
 	private static int COL = 3;
 	private static int ROW = 3;
 
 	public Puzzle() {
 
-		super();
-
-		stage = new Stage(getViewport());
-		// InputManager.addInputProcessor(stage);
-		InputManager.addInputProcessor(new StageGestureDetector(stage, false,
-				ControlMode.HORIZONTAL));
-
-		addBackround();
-
-		addMusic();
-		swipe = Gdx.audio.newSound(Gdx.files
-				.internal("sounds/puzzle/swipe.wav"));
-		win = Gdx.audio.newSound(Gdx.files.internal("sounds/puzzle/win.wav"));
-		bett = Gdx.audio.newMusic(Gdx.files
-				.internal("music/puzzle/bett_pcm.wav"));
-		if (!bett.isPlaying()) {
-			bett.setLooping(true);
-			bett.play();
-		}
-
 		puzzleWidth = ImageManager.myWidth / COL; // 270
 		puzzleHeight = ImageManager.myHeight / ROW; // 480
 
+		createButtons();
 		createEmptyImage();
 		createImageArr();
 
+		ImageManager.setLabelText("Anzahl: "
+				+ String.valueOf(Counter.getCounter()));
+
 		shuffle();
-		addToStage();
-		addScore();
-
-		stage.addActor(label);
-
+		addPuzzlePartsToStage();
 	}
 
 	/**
@@ -113,7 +95,8 @@ public class Puzzle extends Level {
 					missingImage.setVisible(false);
 					missingImage.setPosition(xPos, yPos);
 
-					stage.addActor(missingImage);
+					ImageManager.addToStage(ImageManager.getSecondstage(),
+							missingImage);
 
 					emptyImage.setPosition(xPos, yPos);
 
@@ -129,7 +112,7 @@ public class Puzzle extends Level {
 		}
 	}
 
-	private void addToStage() {
+	private void addPuzzlePartsToStage() {
 
 		for (int i = 0; i < COL; i++) {
 			for (int j = 0; j < ROW; j++) {
@@ -137,21 +120,10 @@ public class Puzzle extends Level {
 				Image im = imageArr[i][j];
 				PuzzlePart.addListener(im);
 
-				stage.addActor(im);
+				ImageManager.addToStage(ImageManager.getSecondstage(), im);
 
 			}
 		}
-	}
-
-	private void addBackround() {
-
-		Image horse = new Image(AssetManager.getTextureRegion("puzzle",
-				"bilderrahmen-pferd"));
-		horse.toBack();
-		horse.setName("backround");
-
-		stage.addActor(horse);
-
 	}
 
 	private void shuffle() {
@@ -160,10 +132,6 @@ public class Puzzle extends Level {
 			for (int i = 0; i < ROW; i++) {
 				for (int j = 0; j < COL; j++) {
 
-					// PuzzlePart part = partArr[i][j];
-
-					// int xKoor = part.getXPos();
-					// int yKoor = part.getYPos();
 					Image im = imageArr[i][j];
 					int xKoor = (int) im.getX();
 					int yKoor = (int) im.getY();
@@ -212,68 +180,6 @@ public class Puzzle extends Level {
 				partArr[i][j].getImage().clearListeners();
 			}
 		}
-
-	}
-
-	public static void addToStage(Actor actor) {
-		stage.addActor(actor);
-	}
-
-	/**
-	 * Anzahl der Schritte ausgeben
-	 */
-	public void addScore() {
-		BitmapFont font;
-		font = AssetManager.getTextFont(FontSize.DREISSIG);
-		label = new Label("Anzahl: " + String.valueOf(Counter.getCounter()),
-				new Label.LabelStyle(font, Color.MAGENTA));
-		label.setBounds(30, 45, 30, 30);
-
-	}
-
-	@Override
-	protected void doRender(float delta) {
-		stage.act();
-		stage.draw();
-	}
-
-	@Override
-	protected void doDispose() {
-		stage.dispose();
-		swipe.dispose();
-		bett.dispose();
-		win.dispose();
-
-	}
-
-	@Override
-	protected void doResize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doShow() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doHide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doPause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void doResume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static int getPuzzleWidth() {
@@ -292,19 +198,35 @@ public class Puzzle extends Level {
 		return emptyImage;
 	}
 
-	public Label getLabel() {
-		return label;
+	// falls ich zurück zur bilderauswahl möchte
+	// GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
+	private void createButtons() {
+		ImageButton button_back = new ImageButton(new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "backIcon")));
+
+		button_back.setHeight(95);
+		button_back.setWidth(95);
+
+		button_back.setPosition(
+				ImageManager.getMyXPos() + ImageManager.getMyWidth()
+						- button_back.getWidth(), ImageManager.getMyYPos()
+						+ ImageManager.getMyHeight());
+		// button_back.setPosition(0, 0);
+		addListener(button_back);
+
+		ImageManager.addToStage(ImageManager.getSecondstage(), button_back);
+
 	}
 
-	public static void setLabelText(String newText) {
-		label.setText(newText);
-	}
+	private void addListener(final ImageButton back) {
 
-	private void addMusic() {
+		back.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
+			};
+		});
 
-		;
-		// bett.play();
-		// swipe.play();
 	}
 
 }
