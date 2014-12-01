@@ -30,6 +30,7 @@ public class PlayerImpl extends Player {
 
 	public PlayerImpl() {
 		this(getSaveGameRace());
+		this.scaleBy(-0.12f);
 	}
 
 	@Deprecated
