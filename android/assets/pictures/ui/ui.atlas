@@ -53,6 +53,13 @@ buttonStart
   orig: 80, 80
   offset: 0, 0
   index: -1
+cursor
+  rotate: false
+  xy: 1440, 1841
+  size: 10, 55
+  orig: 10, 55
+  offset: 0, 0
+  index: -1
 off
   rotate: false
   xy: 930, 275
