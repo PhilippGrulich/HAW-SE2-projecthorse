@@ -7,3 +7,4 @@ parcours;kuerbis6.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-go
 parcours;grass.png;CC-by;draconx;http://opengameart.org/node/10485
 textfont;Grundschrift-Bold.ttf;CC-by;Christian Urff;http://openfontlibrary.org/de/font/grundschrift
 headlinefont;GetVoIP Grotesque.ttf;CC-by;Sergiy S. Tkachenko;http://openfontlibrary.org/de/font/free-grotesque-web-font
+playerHannover;playerHannover.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon) 
