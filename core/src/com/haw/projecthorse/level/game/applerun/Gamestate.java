@@ -94,7 +94,7 @@ public class Gamestate {
 	private void initHorse() {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
-		horse.scaleBy(0.2F);
+//		horse.scaleBy(0.2F);
 		horse.setAnimationSpeed(0.4f);
 		horse.addAction(new AnimationAction(Direction.RIGHT));
 		// stage.addActor(horse); //Done inside constructor
@@ -124,16 +124,17 @@ public class Gamestate {
 		} // Nicht links rauslaufen
 		breite = this.width; // GameManagerFactory.getInstance().getSettings().getScreenWidth();
 
-		if (x > breite - horse.getWidth()) {
-			x = breite - horse.getWidth();
+		if (x > breite - (horse.getWidth()*horse.getScaleX())) {
+			x = breite - (horse.getWidth()*horse.getScaleX());
 		} // Nicht rechts rauslaufen
 			// Bewegungsrichtung ermitteln
 		AnimationAction animationAction = null;
-		distance = horse.getX() - x; // Positiv = move rechts
-		if (distance > 0) { // Move right
-			animationAction = new AnimationAction(Direction.RIGHT);
-		} else {
+		distance = horse.getX() - x; // Positiv = move links
+		if (distance > 0) { // Move links
 			animationAction = new AnimationAction(Direction.LEFT);
+			
+		} else {
+			animationAction = new AnimationAction(Direction.RIGHT);
 		}
 
 		moveToDuration = convertDistanceToTime(distance);
