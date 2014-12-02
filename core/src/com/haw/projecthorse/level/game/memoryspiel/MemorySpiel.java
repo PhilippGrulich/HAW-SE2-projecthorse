@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.game.memoryspiel;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,12 +33,16 @@ public class MemorySpiel extends Game {
 	private GameState state;
 	private Label replay;
 	private Karte playButton;
+	private Music music;
 
 	public MemorySpiel() {
 		manager = new KartenManager();
 		batcher = this.getSpriteBatch();
 		state = GameState.READY;
 		stage = new Stage(this.getViewport(), batcher);
+		AssetManager.loadMusic("memorySpiel");
+		this.music = this.audioManager.getMusic("memorySpiel", "Happy Ukulele(edited).mp3");
+		this.music.setLooping(true);
 		InputManager.addInputProcessor(stage);
 		replay = createReplayLabel();
 		replay.setPosition(this.width / 3.7f, this.height * 0.85f);
@@ -52,6 +57,7 @@ public class MemorySpiel extends Game {
 		stage.addActor(replay);
 		stage.addActor(playButton);
 		initKarten();
+		playMusic();
 	}
 
 	protected void initKarten() {
@@ -66,6 +72,11 @@ public class MemorySpiel extends Game {
 		Random rand = new Random();
 		int i = rand.nextInt(5);
 		return i;
+	}
+	
+	protected void playMusic(){	
+		this.music.play();
+		this.music.setVolume(0.4f);
 	}
 
 	protected Karte createPlayButton() {
@@ -110,6 +121,7 @@ public class MemorySpiel extends Game {
 		}
 		if (i == karten.size()) {
 			state = GameState.END;
+			music.stop();
 			enableReplayButton(true);
 			return;
 		}
@@ -137,12 +149,13 @@ public class MemorySpiel extends Game {
 		playButton.setState(CardState.CLOSED);
 		enableReplayButton(false);
 		state = GameState.READY;
+		playMusic();
 	}
 
 	@Override
-	protected void doDispose() {
-		// TODO Auto-generated method stub
-
+	protected void doDispose(){
+			this.stage.dispose();
+			this.music.stop();
 	}
 
 	@Override
