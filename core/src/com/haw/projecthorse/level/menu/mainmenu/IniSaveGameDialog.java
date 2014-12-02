@@ -27,8 +27,11 @@ public class IniSaveGameDialog extends Dialog {
 		textInput.setWidth(popupWidth - 100);
 		textInput.setMaxLength(20);
 
+		//getOverlay().setKeyboardFocus(textInput);
+		//show the keyboard
+		textInput.getOnscreenKeyboard().show(true);
+		
 		addActor(textInput);
-
 		addButton("Los", new ChangeListener() {
 
 			@Override
