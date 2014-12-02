@@ -58,7 +58,7 @@ public class PuzzlePart extends Image {
 						ImageManager.win.play(0.9f);
 
 						ImageManager
-								.setLabelText("Du hast gewonnen!!! \nAnzahl deiner Schritte : "
+								.setLabelText("Anzahl deiner Schritte : \n     "
 										+ String.valueOf(Counter.getCounter()));
 						Counter.setCounter(0);
 						ImageManager.getOverlay().showPopup(replay);
@@ -68,7 +68,7 @@ public class PuzzlePart extends Image {
 				} else {
 
 					Counter.setCounter(1);
-					ImageManager.setLabelText("Anzahl: "
+					ImageManager.setLabelText("Anzahl: \n"
 							+ String.valueOf(Counter.getCounter()));
 
 					int lokX = (int) image.getX();
@@ -113,7 +113,7 @@ public class PuzzlePart extends Image {
 	 * Overlay mit zwei Buttons, fürs Weiterspielen oder Zurückgehen
 	 */
 	private void replay() {
-		replay = new Dialog("Noch eine Runde?");
+		replay = new Dialog("Du hast gewonnen!!!\n Noch eine Runde?");
 
 		replay.addButton("ja", new ChangeListener() {
 

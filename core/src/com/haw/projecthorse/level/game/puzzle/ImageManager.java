@@ -54,6 +54,8 @@ public class ImageManager extends Game {
 
 	static int myXPos;
 	static int myYPos;
+	
+	private PuzzlePlayer puzzlePlayer;
 
 	public ImageManager() {
 
@@ -65,7 +67,7 @@ public class ImageManager extends Game {
 
 		addBackround();
 
-		new PuzzlePlayer();
+		puzzlePlayer=new PuzzlePlayer();
 
 		regionsmap = AssetManager.getAllTextureRegions("puzzleImageManager");
 
@@ -105,7 +107,7 @@ public class ImageManager extends Game {
 		font = AssetManager.getTextFont(FontSize.VIERZIG);
 		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
 		label.setBounds(30, 45, 30, 30);
-
+label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 		addToStage(secondstage, label);
 
 	}
