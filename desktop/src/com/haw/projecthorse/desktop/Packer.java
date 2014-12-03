@@ -43,9 +43,8 @@ public class Packer {
 			if (new File(root + filesep + content[i]).isDirectory()) {
 				inputDir = root + filesep + content[i];
 				outputDir = root + filesep + content[i];
-				outputFile = content[i];
-				TexturePacker.processIfModified(settings, inputDir, outputDir,
-						outputFile);
+				outputFile = content[i] + ".atlas";
+				TexturePacker.processIfModified(settings, inputDir, outputDir, outputFile);
 			}
 		}
 
