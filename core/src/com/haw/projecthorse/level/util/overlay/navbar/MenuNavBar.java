@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level.util.overlay.navbar;
 
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarBackButton;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarLootGalleryButton;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarSettingsButton;
@@ -12,11 +13,13 @@ public class MenuNavBar extends NavBar {
 		NavbarSettingsButton settingsButton = new NavbarSettingsButton();
 		addButton(settingsButton);
 
-		NavbarLootGalleryButton lootButton = new NavbarLootGalleryButton();
-		addButton(lootButton);
-		NavbarStableButton homeButton = new NavbarStableButton();
-		addButton(homeButton);
+		if (!GameManagerFactory.getInstance().getCurrentLevelID().equals("mainMenu")) {
+			NavbarStableButton homeButton = new NavbarStableButton();
+			addButton(homeButton);
+			NavbarLootGalleryButton lootButton = new NavbarLootGalleryButton();
+			addButton(lootButton);
 
+		}
 		NavbarBackButton pauseButton = new NavbarBackButton();
 		addButton(pauseButton);
 
