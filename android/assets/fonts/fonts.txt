@@ -1,0 +1,2 @@
+textfont;Grundschrift-Bold.ttf;CC-by;Christian Urff;http://openfontlibrary.org/de/font/grundschrift
+headlinefont;GetVoIP Grotesque.ttf;CC-by;Sergiy S. Tkachenko;http://openfontlibrary.org/de/font/free-grotesque-web-font

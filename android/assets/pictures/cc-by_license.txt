@@ -1,10 +1,8 @@
-parcours;kuerbis1.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
-parcours;kuerbis2.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
-parcours;kuerbis3.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
-parcours;kuerbis4.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
-parcours;kuerbis5.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
-parcours;kuerbis6.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
+parcours;Kuerbis1.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
+parcours;Kuerbis2.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
+parcours;Kuerbis3.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
+parcours;Kuerbis4.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
+parcours;Kuerbis5.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
+parcours;Kuerbis6.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
 parcours;grass.png;CC-by;draconx;http://opengameart.org/node/10485
-textfont;Grundschrift-Bold.ttf;CC-by;Christian Urff;http://openfontlibrary.org/de/font/grundschrift
-headlinefont;GetVoIP Grotesque.ttf;CC-by;Sergiy S. Tkachenko;http://openfontlibrary.org/de/font/free-grotesque-web-font
 playerHannover;playerHannover.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon) 

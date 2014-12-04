@@ -698,6 +698,14 @@ public final class AssetManager {
 		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_MUSIC + FILESEPARATOR + FOLDERNAME_MUSIC + ".txt");
 		stringMap.put(FOLDERNAME_MUSIC, createSeperatedEntries(stringList));
 
+		// **************************************************
+		// Music LizenzenfolderName
+		// **************************************************
+
+		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_FONTS + FILESEPARATOR + FOLDERNAME_FONTS + ".txt");
+		stringMap.put(FOLDERNAME_FONTS, createSeperatedEntries(stringList));
+
+		
 		return stringMap;
 	}
 
@@ -765,6 +773,7 @@ public final class AssetManager {
 		String[][] pictures = stringMap.get(FOLDERNAME_PICTURES);
 		String[][] sounds = stringMap.get(FOLDERNAME_SOUNDS);
 		String[][] music = stringMap.get(FOLDERNAME_MUSIC);
+		String[][] fonts = stringMap.get(FOLDERNAME_FONTS);
 
 		File checkFile = null;
 
@@ -806,6 +815,17 @@ public final class AssetManager {
 				writeFile(FOLDERNAME_MUSIC, music, checkFile, bWriter, i);
 			}
 
+			bWriter.write("***FONTS***");
+			bWriter.newLine();
+			
+			// **************************************************
+			// Fonts Eintraege
+			// **************************************************
+			for (int i = 0; i < fonts.length; i++) {
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_FONTS + FILESEPARATOR + fonts[i][0] + FILESEPARATOR + fonts[i][1]);
+				writeFile(FOLDERNAME_FONTS, fonts, checkFile, bWriter, i);
+			}
+
 			bWriter.close();
 			fWriter.close();
 
@@ -840,14 +860,12 @@ public final class AssetManager {
 			bWriter.newLine();
 
 			// Lizensierung pruefen
-			if (type.equals(FOLDERNAME_PICTURES)) {
-				if (stringFile[i][2].toLowerCase().matches("cc-0|cc-by|selfmade")) {
-					bWriter.write(stringFile[i][2] + " ENTRY OK!");
-				} else {
-					bWriter.write(stringFile[i][2] + " NOT VALID!");
-				}
-				bWriter.newLine();
+			if (stringFile[i][2].toLowerCase().matches("cc-0|cc-by|selfmade")) {
+				bWriter.write(stringFile[i][2] + " ENTRY OK!");
+			} else {
+				bWriter.write(stringFile[i][2] + " NOT VALID!");
 			}
+			bWriter.newLine();
 		} catch (IOException e) {
 			Gdx.app.error("AssetManager", "Couldn't write to logfile!");
 		}

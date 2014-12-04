@@ -184,7 +184,7 @@ public class Thimblerig extends Game{
 			for(int i = 0; i < HAT_NUMBER; i++){
 				if(this.hats[i].isFlinged() && this.hats[i].isChoosed()){
 					//Positionen von Pferd und korrektem Hut setzen
-					this.pl.setPosition(this.hats[i].getX() + 50, this.hats[i].getY());
+					this.pl.setPosition(this.hats[i].getX() + 15, this.hats[i].getY());
 					
 					Action moveTo = Actions.moveTo(this.hats[i].getX(),
 							this.hats[i].getY() + 80);
@@ -312,6 +312,7 @@ public class Thimblerig extends Game{
 	 */
 	private void initPlayer(){
 		this.pl = new PlayerImpl();
+		this.pl.setScale(1.2f);
 		this.pl.setVisible(false);
 	}
 	
