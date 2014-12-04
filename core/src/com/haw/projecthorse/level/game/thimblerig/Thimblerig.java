@@ -29,6 +29,7 @@ import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
+import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
@@ -101,7 +102,8 @@ public class Thimblerig extends Game{
 	/**
 	 * Button-Objekt
 	 */
-	private Dialog newGame;
+	private ButtonLarge newGame;
+	private ButtonLarge exitGame;
 
 	/**
 	 * Loot-Objekte
@@ -139,7 +141,7 @@ public class Thimblerig extends Game{
 		this.hatIndexList = new ArrayList<Integer>();
 		
 		this.justWonLoots = (List<ThimblerigLoot>) getThimblerigLoots();		
-		this.textFont = AssetManager.getTextFont(FontSize.DREISSIG);
+		this.textFont = AssetManager.getTextFont(FontSize.THIRTY);
 
 		/**
 		 * damit nicht direkt zu Beginn ein Hinweis kommt, den Counter bereits 
@@ -160,6 +162,7 @@ public class Thimblerig extends Game{
 		addActorsToStage();
 		initProcessorAndGestureDetector();
 		initLoots();
+		System.out.println("num: " + this.rightNum);
 	}
 
 	/**
@@ -215,7 +218,8 @@ public class Thimblerig extends Game{
 						break;
 					}
 					
-					overlay.showPopup(newGame);
+					this.newGame.setVisible(true);
+					this.exitGame.setVisible(true);
 					this.roundFinished = true;
 					//springe aus Schleife, wenn Pferd gefunden wurde
 					break;
@@ -239,8 +243,8 @@ public class Thimblerig extends Game{
 						this.thirdSax.play(0.4f);
 						this.labelTryAgain.setVisible(false);
 						this.labelFail.setVisible(true);
-						overlay.showPopup(newGame);
-						
+						this.newGame.setVisible(true);
+						this.exitGame.setVisible(true);
 						
 						if(this.wins > 0){
 							this.wins--;
@@ -404,12 +408,12 @@ public class Thimblerig extends Game{
 	 * Score initialisieren
 	 */
 	private void initScore(){
-		this.scoreFont = AssetManager.getHeadlineFont(FontSize.VIERZIG);
+		this.scoreFont = AssetManager.getHeadlineFont(FontSize.FORTY);
 		this.scoreFont.setScale(1f, 1.5f);
 		LabelStyle labelStyle = new LabelStyle(this.scoreFont, Color.BLACK);
 		this.labelWin = new Label(this.scoreStr + this.wins, labelStyle);
 		this.labelWin.setPosition(this.width  / 2.0f - this.labelWin.getWidth() / 2, 
-			this.height - 2 * this.labelWin.getHeight());
+			this.height - 2 * this.labelWin.getHeight() + 50);
 	}
 
 	/**
@@ -418,14 +422,16 @@ public class Thimblerig extends Game{
 	 * Weiterhin werden die Listener fuer die Buttons erstellt
 	 */
 	private void initButtons(){
-		this.newGame = new Dialog("Möchtest du eine\nweitere Runde spielen?");
 		
-		this.newGame.addButton("jaa, sehr gerne", new ChangeListener() {
+		this.newGame = new ButtonLarge("noch eine spannende Runde?", new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				
-					 overlay.disposePopup();
+					 //overlay.disposePopup();
+
+					 newGame.setVisible(false);
+					 exitGame.setVisible(false);
 					 pl.setVisible(false);
 					 labelStart.setVisible(true);
 					 labelGood.setVisible(false);
@@ -443,10 +449,9 @@ public class Thimblerig extends Game{
 					 generateHatNum();	
 				
 			}
-			
 		});
 		
-		this.newGame.addButton("och nö, lieber nicht", new ChangeListener() {
+		this.exitGame = new ButtonLarge("nö, nicht noch einmal..", new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -456,6 +461,13 @@ public class Thimblerig extends Game{
 		});
 
 		
+		this.newGame.setPosition(this.width / 2.0f - this.newGame.getWidth() / 2.0f, 
+				this.height - 2 * this.newGame.getHeight() - this.labelWin.getHeight() + 80);
+		this.exitGame.setPosition(this.width / 2.0f - this.exitGame.getWidth() / 2.0f, 
+				this.newGame.getY() - this.newGame.getHeight());
+		
+		this.newGame.setVisible(false);
+		this.exitGame.setVisible(false);
 	}
 	
 	/**
@@ -478,6 +490,9 @@ public class Thimblerig extends Game{
 		this.stage.addActor(this.group);
 		this.stage.addActor(this.pl);
 		this.stage.addActor(this.labelWin);
+		
+		this.stage.addActor(this.newGame);
+		this.stage.addActor(this.exitGame);
 	}
 	
 	/**
@@ -634,8 +649,10 @@ public class Thimblerig extends Game{
 		 * Sonst wurden alle Loots, die in diesem Spiel gewonnen werden konnten,
 		 * bereits gewonnen und ein entsprechender Dialog erscheint
 		 */
+
 		if (indexOfLoot > -1){
 			this.chest.addLoot(this.possibleWinLoots.get(indexOfLoot));
+			this.chest.showAllLoot();
 			//this.chest.addLootAndShowAchievment(this.possibleWinLoots.get(indexOfLoot));
 			//TODO: loot-dialog anzeigen....
 		}

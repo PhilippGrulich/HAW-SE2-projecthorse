@@ -162,7 +162,7 @@ public class Popup extends OverlayWidgetGroup {
 	protected Label createLabel(String message) {
 
 		LabelStyle style = new LabelStyle();
-		style.font = AssetManager.getTextFont(FontSize.VIERZIG);
+		style.font = AssetManager.getTextFont(FontSize.FORTY);
 		style.fontColor = Color.GRAY;
 		Label label = new Label(message, style);
 		label.setWrap(true);

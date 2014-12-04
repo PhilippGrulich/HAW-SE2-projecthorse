@@ -104,7 +104,7 @@ public class ImageManager extends Game {
 
 	public void addScore() {
 		BitmapFont font;
-		font = AssetManager.getTextFont(FontSize.VIERZIG);
+		font = AssetManager.getTextFont(FontSize.FORTY);
 		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
 		label.setBounds(30, 45, 30, 30);
 label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
@@ -137,7 +137,7 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 				new ImageTextButton.ImageTextButtonStyle(
 						new TextButton.TextButtonStyle(button_img, button_img,
 								button_img,
-								AssetManager.getTextFont(FontSize.VIERZIG))));
+								AssetManager.getTextFont(FontSize.FORTY))));
 
 		button_ok.setHeight(80);
 		button_ok.setWidth(300);

@@ -699,7 +699,7 @@ public final class AssetManager {
 		stringMap.put(FOLDERNAME_MUSIC, createSeperatedEntries(stringList));
 
 		// **************************************************
-		// Music LizenzenfolderName
+		// Fonts LizenzenfolderName
 		// **************************************************
 
 		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_FONTS + FILESEPARATOR + FOLDERNAME_FONTS + ".txt");
