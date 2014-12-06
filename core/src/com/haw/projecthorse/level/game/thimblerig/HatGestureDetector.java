@@ -7,43 +7,53 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 /**
  * Fuer die "Wisch"-Bewegung in alle Richtungen wird hier ein Detector und Listener
  * implementiert. Weiterhin werden die aktuellen X- und Y-Koordinaten ermittelt,
- * um ermitteln zu koennen, ob ein Hut ausgewaehlt wurde
+ * um ermitteln zu koennen, ob ein Hut ausgewaehlt wurde.
  * @author Fabian Reiber
+ * @version 1.0
  *
  */
 public class HatGestureDetector extends GestureDetector{
 	
 	/**
-	 * Richtungen, deren Logik jedes Modul selber implementieren kann
+	 * Richtungen, deren Logik jedes Modul selber implementieren kann.
 	 * @author Fabian Reiber
+	 * @version 1.0
 	 *
 	 */
 	public interface IOnDirection{
 		/**
-		 * Methode für Bewegung nach links
+		 * Methode für Bewegung nach links.
 		 */
  		void onLeft();
 		/**
-		 * Methode für Bewegung nach rechts
+		 * Methode für Bewegung nach rechts.
 		 */
  		void onRight();
 		/**
-		 * Methode für Bewegung nach unten
+		 * Methode für Bewegung nach unten.
 		 */
  		void onDown();
 		/**
-		 * Methode für Bewegung nach oben
+		 * Methode für Bewegung nach oben.
+		 * @param actualX aktuelle x-Position des Cursors
+		 * @param actualY aktuelle y-Position des Cursors
 		 */
 		void onUp(float actualX, float actualY);
  	}
 	
-	public HatGestureDetector(IOnDirection onDirection, Stage stage) {
+	/**
+	 * Konstruktor.
+	 * @param onDirection Richtungsangabe
+	 * @param stage aktuelle Stage auf der der Detector laeuft
+	 */
+	public HatGestureDetector(final IOnDirection onDirection, final Stage stage) {
 		super(new HatGestureListener(onDirection, stage));
 	}
 	
 	/**
-	 * innere Klasse um die jeweiligen Swipe-Typen zu implementieren
+	 * innere Klasse um die jeweiligen Swipe-Typen zu implementieren.
 	 * @author Fabian Reiber
+	 * @version 1.0
 	 *
 	 */
 	private static class HatGestureListener extends GestureAdapter{
@@ -53,7 +63,12 @@ public class HatGestureDetector extends GestureDetector{
 		private float actualY;
  		private IOnDirection onDirection;
  		
- 		public HatGestureListener(IOnDirection directionListener, Stage stage){
+ 		/**
+ 		 * Konstruktor.
+ 		 * @param directionListener Richtungsangabe
+ 		 * @param stage aktuelle Stage auf der der Detector laeuft
+ 		 */
+ 		public HatGestureListener(final IOnDirection directionListener, final Stage stage){
  			this.onDirection = directionListener;
  			this.stage = stage;
  		}
@@ -61,10 +76,14 @@ public class HatGestureDetector extends GestureDetector{
  		/**
  		 * aktuelle Position des Cursors ermittelt, da touchDown vor fling aufgerufen wird
  		 * mit dem Vektor werden immer die aktuellen stage-koordinaten gewaehtl, da bei 
- 		 * einem rezsie sich diese aendern
+ 		 * einem rezsie sich diese aendern.
+ 		 * @param x erkannte x-Position des Cursors
+ 		 * @param y erkannte y-Position des Cursors
+ 		 * @param pointer 
+ 		 * @param button 
+ 		 * @return true, falls touchDown erfolgreich, sonst false
  		 */
- 		@Override
- 		public boolean touchDown(float x, float y, int pointer, int button) {
+ 		public boolean touchDown(final float x, final float y, final int pointer, final int button) {
 			Vector2 stageCoordinates = stage.screenToStageCoordinates(new Vector2(x, y));
  			this.actualX = stageCoordinates.x;
  			this.actualY = stageCoordinates.y;
@@ -73,10 +92,13 @@ public class HatGestureDetector extends GestureDetector{
 
  		/**
  		 * erkennt eine "Wisch"-Bewegung in eine jeweilige Richtung und
- 		 * delegiert an die entsprechende Methode
+ 		 * delegiert an die entsprechende Methode.
+ 		 * @param velocityX Geschwindigkeit in x-Richtung
+ 		 * @param velocityY Geschwindigkeit in y-Richtung
+ 		 * @param button 
+ 		 * @return true, falls fling erfolgreich, sonst false
  		 */
- 		@Override
- 		public boolean fling (float velocityX, float velocityY, int button)  {
+ 		public boolean fling(final float velocityX, final float velocityY, final int button)  {
 			if(Math.abs(velocityX)>Math.abs(velocityY)){
  				if(velocityX>0){
  					onDirection.onRight();

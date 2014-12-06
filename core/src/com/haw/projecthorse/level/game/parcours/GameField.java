@@ -139,7 +139,7 @@ public class GameField implements IGameFieldFuerGameInputListener, IGameFieldFue
 		
 		initLoot(regions);
 		
-		scoreInformation = new Text(AssetManager.getTextFont(FontSize.DREISSIG),
+		scoreInformation = new Text(AssetManager.getTextFont(FontSize.THIRTY),
 				"Punkte: 0", 10, getHeight() * 50 / 60);
 		scoreInformation.setColor(0, 0, 0, 1);
 		scoreInformation.setName("Score");

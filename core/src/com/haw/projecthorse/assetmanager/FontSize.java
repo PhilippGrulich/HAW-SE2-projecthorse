@@ -6,7 +6,7 @@ package com.haw.projecthorse.assetmanager;
  * Definiert die Schriftgroesse
  */
 public enum FontSize {
-	DREISSIG(30), VIERZIG(40), SECHZIG(60);
+	THIRTY(30), FORTY(40), SIXTY(60);
 	
 	private final int val;
 	
