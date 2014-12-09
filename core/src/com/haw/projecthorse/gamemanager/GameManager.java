@@ -9,8 +9,8 @@ import com.haw.projecthorse.gamemanager.settings.Settings;
 import com.haw.projecthorse.platform.Platform;
 
 /**
- * Der GameManager ist ein Singelton und f�r die Kommunikation zwischen den einzelnen Modulen 
- * zust�ndig.
+ * Der GameManager ist ein Singelton und für die Kommunikation zwischen den einzelnen Modulen 
+ * zustündig.
  * Die Konfiguration wird aus der GameConfig.json geladen.
  */
 public interface GameManager {
@@ -43,12 +43,12 @@ public interface GameManager {
 	void navigateToMainMenu();
 	
 	/** 
-	 * Liefert das GameConfig Object zur�ck. �ber dieses Object k�nnen Informationen �ber das Spiel abgefragt werden.
+	 * Liefert das GameConfig Object zurück. über dieses Object können Informationen über das Spiel abgefragt werden.
 	 */
 	GameConfig getGameConfig();
 	
 	/** 
-	 * Liefert das CityObject zur�ck falls die LevelID existiert.
+	 * Liefert das CityObject zurück falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
 	 * @return {@link CityObjectImpl}
@@ -57,7 +57,7 @@ public interface GameManager {
 	CityObject getCityObject(String levelID) throws LevelNotFoundException;
 
 	/** 
-	 * Liefert das GameObject zur�ck falls die LevelID existiert.
+	 * Liefert das GameObject zurück falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
 	 * @return {@link GameObjecttImpl}
@@ -66,7 +66,7 @@ public interface GameManager {
 	GameObject getGameObject(final String levelID) throws LevelNotFoundException;
 	
 	/** 
-	 * Liefert das MenuObject zur�ck falls die LevelID existiert.
+	 * Liefert das MenuObject zurück falls die LevelID existiert.
 	 * Wenn nicht wird eine LevelNotFoundException geworfen.
 	 * @param levelID
 	 * @return {@link MenuObject}

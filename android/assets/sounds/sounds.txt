@@ -1,6 +1,5 @@
-﻿worldmap;flap.wav; -; kilobolt; http://www.kilobolt.com/uploads/1/2/5/7/12571940/flap.wav
-thimblerig;jingles_SAX04.ogg;-;Kenney;http://www.kenney.nl
-thimblerig;jingles_SAX07.ogg;-;Kenney;http://www.kenney.nl
-thimblerig;jingles_SAX10.ogg;-;Kenney;http://www.kenney.nl
+thimblerig;jingles_SAX04.ogg;cc-0;Kenney;http://www.kenney.nl
+thimblerig;jingles_SAX07.ogg;cc-0;Kenney;http://www.kenney.nl
+thimblerig;jingles_SAX10.ogg;cc-0;Kenney;http://www.kenney.nl
 thimblerig;Wiehern.ogg;cc-0;Hü;http://commons.wikimedia.org/wiki/File:Wiehern.ogg
 parcours;eat.wav;cc-0; -;http://www.freesound.org/people/phatcorns/sounds/250106/

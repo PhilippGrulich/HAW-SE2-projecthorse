@@ -10,6 +10,17 @@ lootCollection: [
 		black: false
 	},
 	{
+		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
+		achievedDate: {},
+		name: carrot,
+		availableAtScore: 10,
+		image: {
+			level: parcours,
+			fileName: carrot
+		},
+		description: "Eine leckere Möhre für dein Pferd."
+	},
+	{
 		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
 		achievedDate: {},
 		name: lolli,
@@ -28,32 +39,11 @@ lootCollection: [
 			fileName: Sugar_cube
 		},
 		description: "etwas Würfelzucker"
-	},
-	{
-		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
-		achievedDate: {},
-		name: carrot,
-		availableAtScore: 10,
-		image: {
-			level: parcours,
-			fileName: carrot
-		},
-		description: "Eine leckere Möhre für dein Pferd."
-	},
-	{
-		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
-		achievedDate: {},
-		name: ballon,
-		image: {
-			level: thimblerig,
-			fileName: Balionai
-		},
-		description: "leichter Ballon"
 	}
 ],
-ID: 1,
 name: Lisa,
+ID: 1,
 horse: {
-	class: com.haw.projecthorse.savegame.json.HorseImpl,
+	class: com.haw.projecthorse.savegame.json.HorseImpl
 }
 }

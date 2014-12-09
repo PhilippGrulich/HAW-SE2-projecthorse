@@ -67,7 +67,7 @@ public class City extends Menu {
 	}
 
 	private void createCityLabel(String cityName){
-		BitmapFont textFont = AssetManager.getHeadlineFont(FontSize.SECHZIG);
+		BitmapFont textFont = AssetManager.getHeadlineFont(FontSize.SIXTY);
 		Label cityLabel = new Label(cityName, new LabelStyle(
 				textFont, Color.MAGENTA));
 		cityLabel.setPosition(this.width * 0.05f / 2, this.height - cityLabel.getHeight());
