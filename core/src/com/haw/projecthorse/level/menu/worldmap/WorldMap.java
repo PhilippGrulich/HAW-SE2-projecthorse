@@ -77,7 +77,7 @@ public class WorldMap extends Menu {
 											// deaktiviert
 
 	private final float MAXZOOM = 0.3f; // Maximaler Kamera Zoom
-	
+
 	private Music music;
 
 	public WorldMap() throws LevelNotFoundException {
@@ -103,30 +103,23 @@ public class WorldMap extends Menu {
 													// gesetzt
 		prefs.flush();
 
-		selectedCityIndex = Arrays.asList(cities).indexOf(
-				prefs.getString("lastCity"));
+		selectedCityIndex = Arrays.asList(cities).indexOf(prefs.getString("lastCity"));
 
 		if (selectedCityIndex == -1) {
 			selectedCityIndex = 0;
 			prefs.putString("lastCity", cities[0]);
 			prefs.flush();
 		}
-		
-		Gdx.app.log(
-				"INFO",
-				"Zuletzt gewählte Stadt hat Index "
-						+ String.valueOf(selectedCityIndex));
+
+		Gdx.app.log("INFO", "Zuletzt gewählte Stadt hat Index " + String.valueOf(selectedCityIndex));
 
 		cityChanged = true;
 
-		germanyImg = new Image(AssetManager.getTextureRegion("worldmap",
-				"germanymap_scaled"));
+		germanyImg = new Image(AssetManager.getTextureRegion("worldmap", "germanymap_scaled"));
 		germanyImg.toBack();
-		worldImg = new Image(AssetManager.getTextureRegion("worldmap",
-				"erde-und-sterne"));
+		worldImg = new Image(AssetManager.getTextureRegion("worldmap", "erde-und-sterne"));
 		worldImg.toBack();
-		pointImg = new Image(AssetManager.getTextureRegion("worldmap",
-				"shadedLight28"));
+		pointImg = new Image(AssetManager.getTextureRegion("worldmap", "shadedLight28"));
 
 		state = State.INIT;
 
@@ -137,16 +130,19 @@ public class WorldMap extends Menu {
 		createButtons();
 		createCityPoints();
 		initAnimation();
-		
+
 		AssetManager.loadMusic("mainMenu");
 		AssetManager.loadSounds("worldmap");
-		
+
 		music = audioManager.getMusic("mainMenu", "belotti.mp3");
-		
+
 		if (!music.isPlaying()) {
 			music.setLooping(true);
 			music.play();
 		}
+
+		// Tutorial Popup
+		overlay.showPopup(new TutorialPopup());
 	}
 
 	// Erstellt eine Startanimation die einmalig abgearbeitet wird
@@ -160,29 +156,19 @@ public class WorldMap extends Menu {
 
 		int[] cityCoordinates = cityInfos.get(prefs.getString("lastCity"));
 
-		player.setPosition(
-				cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(),
-				cityCoordinates[1]);
+		player.setPosition(cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(), cityCoordinates[1]);
 
 		worldImg.setOrigin(0.643f * width, 0.65f * height); // Setzt den
 															// Zielpunkt auf
 															// Europa
 
-		pointImg.setPosition(worldImg.getOriginX() - pointImg.getWidth() / 2,
-				worldImg.getOriginY() - pointImg.getHeight() / 2);
+		pointImg.setPosition(worldImg.getOriginX() - pointImg.getWidth() / 2, worldImg.getOriginY() - pointImg.getHeight() / 2);
 
 		if (firstStart) {
-			SequenceAction worldMapSequence = Actions.sequence(
-					Actions.fadeIn(1f), Actions.delay(1f),
-					Actions.scaleBy(8f, 8f, 1f), Actions.fadeOut(0.25f));
-			SequenceAction pointBlinkSequence = Actions.sequence(
-					Actions.delay(1.0f), Actions.fadeIn(0.25f),
-					Actions.fadeOut(0.25f), Actions.fadeIn(0.25f),
-					Actions.fadeOut(0.25f));
-			SequenceAction germanyMapSequence = Actions.sequence(
-					Actions.delay(3.0f), Actions.fadeIn(0.25f));
-			SequenceAction playerSequence = Actions.sequence(
-					Actions.delay(3.0f), Actions.fadeIn(0.25f));
+			SequenceAction worldMapSequence = Actions.sequence(Actions.fadeIn(1f), Actions.delay(1f), Actions.scaleBy(8f, 8f, 1f), Actions.fadeOut(0.25f));
+			SequenceAction pointBlinkSequence = Actions.sequence(Actions.delay(1.0f), Actions.fadeIn(0.25f), Actions.fadeOut(0.25f), Actions.fadeIn(0.25f), Actions.fadeOut(0.25f));
+			SequenceAction germanyMapSequence = Actions.sequence(Actions.delay(3.0f), Actions.fadeIn(0.25f));
+			SequenceAction playerSequence = Actions.sequence(Actions.delay(3.0f), Actions.fadeIn(0.25f));
 
 			worldImg.addAction(worldMapSequence);
 			pointImg.addAction(pointBlinkSequence);
@@ -215,25 +201,19 @@ public class WorldMap extends Menu {
 
 		// Linien anlegen
 		for (int i = 1; i < cities.length; i++) {
-			Image lineImg = new Image(AssetManager.getTextureRegion("worldmap",
-					"flatLight09"));
+			Image lineImg = new Image(AssetManager.getTextureRegion("worldmap", "flatLight09"));
 			lineImg.setColor(1, 1, 1, 0);
 
 			// benötige Größe und Drehwinkel finden und setzen, ausgehend von
 			// einem rechtwinkligen Dreieck
-			double triangleWidth = cityInfos.get(cities[i])[0]
-					- cityInfos.get(cities[i - 1])[0];
-			double triangleHeigth = cityInfos.get(cities[i])[1]
-					- cityInfos.get(cities[i - 1])[1];
-			double hypotenuse = Math.sqrt(Math.pow(triangleWidth, 2.0)
-					+ Math.pow(triangleHeigth, 2.0));
-			double angle = Math.asin(triangleWidth / hypotenuse) * 180
-					/ Math.PI - 90;
+			double triangleWidth = cityInfos.get(cities[i])[0] - cityInfos.get(cities[i - 1])[0];
+			double triangleHeigth = cityInfos.get(cities[i])[1] - cityInfos.get(cities[i - 1])[1];
+			double hypotenuse = Math.sqrt(Math.pow(triangleWidth, 2.0) + Math.pow(triangleHeigth, 2.0));
+			double angle = Math.asin(triangleWidth / hypotenuse) * 180 / Math.PI - 90;
 
 			lineImg.setSize((float) hypotenuse, height * 0.005f);
 			lineImg.rotateBy((float) angle);
-			lineImg.setPosition(cityInfos.get(cities[i - 1])[0],
-					cityInfos.get(cities[i - 1])[1]);
+			lineImg.setPosition(cityInfos.get(cities[i - 1])[0], cityInfos.get(cities[i - 1])[1]);
 
 			lineImg.toFront();
 			lines[i - 1] = lineImg;
@@ -242,15 +222,12 @@ public class WorldMap extends Menu {
 
 		// Punkte anlegen
 		for (int i = 0; i < cities.length; i++) {
-			cityPoints[i] = new Image(AssetManager.getTextureRegion("worldmap",
-					"shadedLight28"));
+			cityPoints[i] = new Image(AssetManager.getTextureRegion("worldmap", "shadedLight28"));
 			cityPoints[i].setName(cities[i]);
 			cityPoints[i].setScale(0.5f * (width / 720));
 			cityPoints[i].setColor(1, 1, 1, 0);
-			cityPoints[i].setPosition(cityInfos.get(cities[i])[0]
-					- cityPoints[i].getWidth() * cityPoints[i].getScaleX() / 2,
-					cityInfos.get(cities[i])[1] - cityPoints[i].getHeight()
-							* cityPoints[i].getScaleX() / 2);
+			cityPoints[i].setPosition(cityInfos.get(cities[i])[0] - cityPoints[i].getWidth() * cityPoints[i].getScaleX() / 2,
+					cityInfos.get(cities[i])[1] - cityPoints[i].getHeight() * cityPoints[i].getScaleX() / 2);
 
 			cityPoints[i].toFront();
 			stage.addActor(cityPoints[i]);
@@ -275,9 +252,7 @@ public class WorldMap extends Menu {
 				city.scaleBy(delta * -0.3f);
 			}
 
-			city.setPosition(cityInfos.get(city.getName())[0] - city.getWidth()
-					* city.getScaleX() / 2, cityInfos.get(city.getName())[1]
-					- city.getHeight() * city.getScaleX() / 2);
+			city.setPosition(cityInfos.get(city.getName())[0] - city.getWidth() * city.getScaleX() / 2, cityInfos.get(city.getName())[1] - city.getHeight() * city.getScaleX() / 2);
 		}
 
 		for (Image line : lines) {
@@ -287,31 +262,25 @@ public class WorldMap extends Menu {
 	}
 
 	private void createButtons() {
-		uiBackground = new Image(AssetManager.getTextureRegion("ui",
-				"panel_beige"));
+		uiBackground = new Image(AssetManager.getTextureRegion("ui", "panel_beige"));
 		uiBackground.setHeight(height * 0.3f);
 		uiBackground.setWidth(width * 0.9f);
-		uiBackground.setPosition(width / 2 - uiBackground.getWidth() / 2,
-				height * 0.77f - uiBackground.getHeight() / 2);
+		uiBackground.setPosition(width / 2 - uiBackground.getWidth() / 2, height * 0.77f - uiBackground.getHeight() / 2);
 
-		flagButton = new ButtonOwnImage(new TextureRegionDrawable(
-				AssetManager.getTextureRegion("flaggen",
-						cities[selectedCityIndex])));
+		flagButton = new ButtonOwnImage(new TextureRegionDrawable(AssetManager.getTextureRegion("flaggen", cities[selectedCityIndex])));
 		flagButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (actor.getColor().a == 1f) {
 					prefs.putString("lastCity", cities[selectedCityIndex]);
 					prefs.flush();
-					GameManagerFactory.getInstance().navigateToLevel(
-							cities[selectedCityIndex]);
+					GameManagerFactory.getInstance().navigateToLevel(cities[selectedCityIndex]);
 				}
 			}
 		});
 		flagButton.setHeight(uiBackground.getHeight() * 0.68f);
 		flagButton.setWidth(uiBackground.getWidth() * 0.5f);
-		flagButton.setPosition(width / 2 - flagButton.getWidth() / 2,
-				uiBackground.getY() + uiBackground.getHeight() * 0.075f);
+		flagButton.setPosition(width / 2 - flagButton.getWidth() / 2, uiBackground.getY() + uiBackground.getHeight() * 0.075f);
 
 		InputManager.addInputProcessor(new StageGestureDetector(stage, true));
 		germanyImg.addListener(new SwipeListener() {
@@ -334,8 +303,7 @@ public class WorldMap extends Menu {
 
 		});
 
-		flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(
-				textFont, Color.LIGHT_GRAY));
+		flagLabel = new Label(cities[selectedCityIndex], new LabelStyle(textFont, Color.LIGHT_GRAY));
 
 		updateFlag();
 
@@ -354,17 +322,13 @@ public class WorldMap extends Menu {
 		leftButton.setHeight(100);
 		leftButton.setWidth(100);
 
-		leftButton.setPosition(
-				flagButton.getX() - leftButton.getWidth() * 1.2f,
-				uiBackground.getY() + uiBackground.getHeight() / 2
-						- leftButton.getHeight() / 2);
+		leftButton.setPosition(flagButton.getX() - leftButton.getWidth() * 1.2f, uiBackground.getY() + uiBackground.getHeight() / 2 - leftButton.getHeight() / 2);
 
 		rightButton = new ButtonSmall(ButtonType.RIGHT);
 		rightButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (actor.getColor().a >= 0.9f
-						&& selectedCityIndex < cities.length - 1) {
+				if (actor.getColor().a >= 0.9f && selectedCityIndex < cities.length - 1) {
 					selectedCityIndex++;
 					cityChanged = true;
 					movePlayer(cities[selectedCityIndex]);
@@ -375,9 +339,7 @@ public class WorldMap extends Menu {
 		rightButton.setHeight(100);
 		rightButton.setWidth(100);
 
-		rightButton.setPosition(flagButton.getX() + flagButton.getWidth()
-				+ leftButton.getWidth() * 0.2f, uiBackground.getY()
-				+ uiBackground.getHeight() / 2 - rightButton.getHeight() / 2);
+		rightButton.setPosition(flagButton.getX() + flagButton.getWidth() + leftButton.getWidth() * 0.2f, uiBackground.getY() + uiBackground.getHeight() / 2 - rightButton.getHeight() / 2);
 
 		uiStage.addActor(uiBackground);
 		uiStage.addActor(flagButton);
@@ -394,10 +356,7 @@ public class WorldMap extends Menu {
 		int[] cityCoordinates = cityInfos.get(city);
 
 		MoveByAction movement = new MoveByAction();
-		movement.setAmount(
-				cityCoordinates[0] - player.getX() - player.getWidth() / 2
-						* player.getScaleX(),
-				cityCoordinates[1] - player.getY());
+		movement.setAmount(cityCoordinates[0] - player.getX() - player.getWidth() / 2 * player.getScaleX(), cityCoordinates[1] - player.getY());
 		movement.setDuration(1.5f);
 
 		player.clearActions();
@@ -407,28 +366,19 @@ public class WorldMap extends Menu {
 
 	private void updateFlag() {
 		if (cityChanged) {
-			flagStyle.imageUp = new TextureRegionDrawable(
-					AssetManager.getTextureRegion("flaggen",
-							cities[selectedCityIndex]));
+			flagStyle.imageUp = new TextureRegionDrawable(AssetManager.getTextureRegion("flaggen", cities[selectedCityIndex]));
 			flagButton.setStyle(flagStyle);
 			flagButton.setName(cities[selectedCityIndex]);
 
 			flagLabel.remove();
 			try {
-				flagLabel = new Label(
-						GameManagerFactory.getInstance()
-								.getCityObject(cities[selectedCityIndex])
-								.getCityName(), new LabelStyle(textFont,
-								Color.MAGENTA));
+				flagLabel = new Label(GameManagerFactory.getInstance().getCityObject(cities[selectedCityIndex]).getCityName(), new LabelStyle(textFont, Color.MAGENTA));
 			} catch (LevelNotFoundException e) {
-				flagLabel = new Label("NotFound", new LabelStyle(textFont,
-						Color.MAGENTA));
-				Gdx.app.log("WARNING", "City name for city "
-						+ cities[selectedCityIndex] + " not found!");
+				flagLabel = new Label("NotFound", new LabelStyle(textFont, Color.MAGENTA));
+				Gdx.app.log("WARNING", "City name for city " + cities[selectedCityIndex] + " not found!");
 			}
 
-			flagLabel.setPosition(width / 2 - flagLabel.getWidth() / 2,
-					flagButton.getY() + flagButton.getHeight());
+			flagLabel.setPosition(width / 2 - flagLabel.getWidth() / 2, flagButton.getY() + flagButton.getHeight());
 			uiStage.addActor(flagLabel);
 
 			cityChanged = false;
@@ -437,10 +387,8 @@ public class WorldMap extends Menu {
 
 	private void getJasonCities() throws LevelNotFoundException {
 
-		MenuObject menuObject = GameManagerFactory.getInstance().getMenuObject(
-				"worldmap");
-		String cityCoordinates = menuObject.getParameter()
-				.get("cityCoordinates").replaceAll("\\s", "");
+		MenuObject menuObject = GameManagerFactory.getInstance().getMenuObject("worldmap");
+		String cityCoordinates = menuObject.getParameter().get("cityCoordinates").replaceAll("\\s", "");
 
 		cities = new String[cityCoordinates.split(";").length];
 		cityInfos = new HashMap<String, int[]>();
@@ -459,8 +407,7 @@ public class WorldMap extends Menu {
 				cityInfos.put(cityDetails[0], xy);
 
 			} else {
-				Gdx.app.log("WARNING",
-						"Falscher gameconfig.json Eintrag für cityCoordinate! Ignoriere Eintrag");
+				Gdx.app.log("WARNING", "Falscher gameconfig.json Eintrag für cityCoordinate! Ignoriere Eintrag");
 			}
 		}
 	}
@@ -509,8 +456,7 @@ public class WorldMap extends Menu {
 				rightButton.setColor(1, 1, 1, BUTTONALPHA);
 
 			flagButton.setColor(1, 1, 1, 1);
-			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g,
-					flagLabel.getColor().b, 1);
+			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g, flagLabel.getColor().b, 1);
 			uiBackground.setColor(1, 1, 1, 1);
 			break;
 
@@ -520,8 +466,7 @@ public class WorldMap extends Menu {
 			rightButton.setColor(1, 1, 1, BUTTONALPHA);
 			uiBackground.setColor(1, 1, 1, BUTTONALPHA);
 			flagButton.setColor(1, 1, 1, 0);
-			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g,
-					flagLabel.getColor().b, 0);
+			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g, flagLabel.getColor().b, 0);
 			break;
 
 		default:
@@ -530,8 +475,7 @@ public class WorldMap extends Menu {
 			rightButton.setColor(1, 1, 1, 0);
 			flagButton.setColor(1, 1, 1, 0);
 			uiBackground.setColor(1, 1, 1, 0);
-			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g,
-					flagLabel.getColor().b, 0);
+			flagLabel.setColor(flagLabel.getColor().r, flagLabel.getColor().g, flagLabel.getColor().b, 0);
 			break;
 		}
 
@@ -548,15 +492,11 @@ public class WorldMap extends Menu {
 			// werden
 		default:
 			// Zielkoordinaten für die Kamera berechnen
-			targetX = player.getX() + player.getWidth() * player.getScaleX()
-					/ 2.0f;
+			targetX = player.getX() + player.getWidth() * player.getScaleX() / 2.0f;
 			targetY = player.getY() + player.getHeight() * player.getScaleY();
 
 			// Kamera sanft zum Ziel schwenken
-			camera.position.set(camera.position.x
-					+ (targetX - camera.position.x) * delta * 2,
-					camera.position.y + (targetY - camera.position.y) * delta
-							* 2, 0);
+			camera.position.set(camera.position.x + (targetX - camera.position.x) * delta * 2, camera.position.y + (targetY - camera.position.y) * delta * 2, 0);
 			break;
 		}
 	}
