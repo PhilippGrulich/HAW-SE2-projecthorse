@@ -50,6 +50,7 @@ public class ImageManager extends Game {
 
 	static Sound swipe;
 	static Sound win;
+	static Sound click;
 
 	static int myWidth;
 	static int myHeight;
@@ -88,6 +89,7 @@ public class ImageManager extends Game {
 		addMusic("bett_pcm.wav", true);
 		swipe = audioManager.getSound("puzzle", "swipe.wav");
 		win = audioManager.getSound("puzzle", "win.wav");
+		click = audioManager.getSound("puzzle", "click.wav");
 
 		fillImagelist();
 		index = imagelist.size() - 1;
@@ -197,9 +199,11 @@ public class ImageManager extends Game {
 				switch (event.getDirection()) {
 				case LEFT:
 					changeImage(1);
+					swipe.play();
 					break;
 				case RIGHT:
 					changeImage(-1);
+					swipe.play();
 					break;
 				default:
 					break;
@@ -221,6 +225,7 @@ public class ImageManager extends Game {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				click.play();
 				changeImage(1);
 				blinc(button_ok);
 			}
@@ -228,7 +233,7 @@ public class ImageManager extends Game {
 		button_ok.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-
+				click.play();
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
 				next.setVisible(false);
 				prev.setVisible(false);
@@ -244,6 +249,7 @@ public class ImageManager extends Game {
 		prev.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				click.play();
 				changeImage(-1);
 				blinc(button_ok);
 			};
@@ -340,10 +346,12 @@ public class ImageManager extends Game {
 		musik.setLooping(loop);
 
 	}
-/**
- * simuliert ein einmaliges Blinken des ok_button's beim Bilderauswahl
- * @param button
- */
+
+	/**
+	 * simuliert ein einmaliges Blinken des ok_button's beim Bilderauswahl
+	 * 
+	 * @param button
+	 */
 	private void blinc(ButtonOwnTextImage button) {
 		button.addAction(Actions.sequence(Actions.fadeIn(0.2f),
 				Actions.fadeOut(0.2f), Actions.fadeIn(0.2f)));
