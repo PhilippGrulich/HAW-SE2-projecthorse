@@ -103,15 +103,15 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 			y = gameField.getPlayer().getY()
 					- gameField.getPlayer().getJumpSpeed();
 
-			if (y < gameField.getTopOfGroundPosition()) {
-				y = gameField.getTopOfGroundPosition();
+			if (y < gameField.getTopOfGroundPosition() - 25) {
+				y = gameField.getTopOfGroundPosition() - 25;
 			}
 		}
 
 		gameField.getPlayer().moveBy(x, y);
 		gameField.getPlayer().setPosition(x, y);
 
-		if (gameField.getPlayer().getY() == gameField.getTopOfGroundPosition()) {
+		if (gameField.getPlayer().getY() == gameField.getTopOfGroundPosition() - 25) {
 			setPlayerJump(false);
 		}
 	}
@@ -222,7 +222,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 
 	private boolean willPlayerBeLesserThanGround(float y) {
 
-		if (y < gameField.getTopOfGroundPosition()) {
+		if (y < gameField.getTopOfGroundPosition() - 25) {
 			return true;
 		}
 		return false;

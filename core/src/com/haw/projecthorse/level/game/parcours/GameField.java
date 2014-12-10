@@ -265,15 +265,15 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	}
 
 	public float getWidth() {
-		return stage.getWidth();
+		return width;
 	}
 
 	public void initPlayer(GameObjectInitializer goi) {
-		player.setHeight(getHeight() / 2f);
+		player.setHeight(getHeight() / 5f);
 		com.haw.projecthorse.player.Player p = new com.haw.projecthorse.player.PlayerImpl();
 		player.setWidth(goi.calcRelativeWidth(p.getHeight(), p.getWidth(),
-				getHeight() / 2f));
-		player.setPosition(20, getTopOfGroundPosition());
+				getHeight() / 5f));
+		player.setPosition(20, getTopOfGroundPosition() - 25);
 		player.setName("Player");
 		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
 		// setzen
