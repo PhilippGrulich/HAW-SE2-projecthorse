@@ -119,6 +119,7 @@ public class PuzzlePart extends Image {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				ImageManager.click.play();
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			}
 
@@ -128,6 +129,7 @@ public class PuzzlePart extends Image {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				ImageManager.click.play();
 				GameManagerFactory.getInstance().navigateBack();
 			}
 
