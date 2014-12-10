@@ -5,13 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class Dialog extends Popup {
 
-	public Dialog(String message) {
+	public Dialog(final String message) {
 		addActor(createLabel(message));
 	}
 
-
-
-	public void addButton(String text, ChangeListener listener) {
+	public final void addButton(final String text, final ChangeListener listener) {
 		Button btn = super.createButton(text);
 		btn.addListener(listener);
 		addActor(btn);

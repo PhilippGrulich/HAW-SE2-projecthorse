@@ -48,14 +48,15 @@ public class Popup extends OverlayWidgetGroup {
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
 	private Image backgroundImage;
+
 	public Popup() {
 
 		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Landscape) {
 			popupHeight = 0;
-			popupWidth = width/2;
+			popupWidth = width / 2;
 			content.setHeight(popupHeight);
 			content.setWidth(popupWidth);
-			content.setX(popupWidth/2);
+			content.setX(popupWidth / 2);
 		} else {
 			popupHeight = 0;
 			popupWidth = width - 100;
@@ -64,7 +65,6 @@ public class Popup extends OverlayWidgetGroup {
 			content.setX(50);
 		}
 
-		
 		this.setHeight(height);
 		this.setWidth(width);
 		// Setzen eines neuen KeyDown Listener um Back Keys abzufangen. So wird
@@ -88,17 +88,18 @@ public class Popup extends OverlayWidgetGroup {
 		super.addActor(content);
 
 	}
+
 	/**
 	 * Inizialisierung der VerticalGroup.
 	 */
 	private void createContentGroup() {
 		contentGroup = new VerticalGroup();
-		
+
 		contentGroup.space(10);
 		contentGroup.setHeight(popupHeight);
 		contentGroup.setWidth(popupWidth);
 		contentGroup.align(Align.center);
-	
+
 		content.addActor(contentGroup);
 	}
 
@@ -108,10 +109,10 @@ public class Popup extends OverlayWidgetGroup {
 	private void createBackgroundImage() {
 
 		backgroundImage = new Image(new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "panel_beige")));
-		
+
 		backgroundImage.setWidth(popupWidth);
-//		backgroundImage.setHeight(popupHeight);	
-//		backgroundImage.setY((height / 2) - popupHeight / 2);
+		// backgroundImage.setHeight(popupHeight);
+		// backgroundImage.setY((height / 2) - popupHeight / 2);
 		backgroundImage.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -127,15 +128,15 @@ public class Popup extends OverlayWidgetGroup {
 	 * auf das Vertical Layout gelegt werden.
 	 */
 	@Override
-	public void addActor(Actor actor) {
-		
+	public final void addActor(Actor actor) {
+
 		contentGroup.addActor(actor);
 		// Höhe des Popups wird erweitert = höhe + actorHöhe + Spacing
-		popupHeight += actor.getHeight()+10;
-		contentGroup.setY(((height / 2) - popupHeight / 2)+80);
+		popupHeight += actor.getHeight() + 10;
+		contentGroup.setY(((height / 2) - popupHeight / 2) + 80);
 		contentGroup.setHeight(popupHeight);
-		backgroundImage.setHeight(popupHeight+100);	
-		backgroundImage.setY(((height / 2) - popupHeight / 2)+40);
+		backgroundImage.setHeight(popupHeight + 100);
+		backgroundImage.setY(((height / 2) - popupHeight / 2) + 40);
 	}
 
 	/**
@@ -143,7 +144,7 @@ public class Popup extends OverlayWidgetGroup {
 	 * 
 	 * @return
 	 */
-	protected Overlay getOverlay() {
+	protected final Overlay getOverlay() {
 		if (this.getParent() == null)
 			return null;
 		if (!(this.getStage() instanceof Overlay))
@@ -159,15 +160,13 @@ public class Popup extends OverlayWidgetGroup {
 	 * @param message
 	 * @return {@link Label}
 	 */
-	protected Label createLabel(String message) {
+	protected final Label createLabel(final String message) {
 
 		LabelStyle style = new LabelStyle();
 		style.font = AssetManager.getTextFont(FontSize.FORTY);
 		style.fontColor = Color.GRAY;
 		Label label = new Label(message, style);
-		label.setWrap(true);
-		label.setAlignment(Align.center);
-		
+
 		label.setWidth(popupWidth);
 
 		return label;

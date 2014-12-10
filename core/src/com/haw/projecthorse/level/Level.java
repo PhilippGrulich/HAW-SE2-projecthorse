@@ -58,12 +58,9 @@ public abstract class Level implements Screen {
 	 * @param orientation
 	 */
 	public Level(Orientation orientation) {
-		GameManagerFactory.getInstance().getPlatform()
-				.SetOrientation(orientation);
-		height = GameManagerFactory.getInstance().getSettings()
-				.getVirtualScreenHeight();
-		width = GameManagerFactory.getInstance().getSettings()
-				.getVirtualScreenWidth();
+		GameManagerFactory.getInstance().getPlatform().SetOrientation(orientation);
+		height = GameManagerFactory.getInstance().getSettings().getVirtualScreenHeight();
+		width = GameManagerFactory.getInstance().getSettings().getVirtualScreenWidth();
 
 		createViewport();
 		audioManager = AudioManagerImpl.getInstance();
@@ -95,8 +92,7 @@ public abstract class Level implements Screen {
 
 	public final void setLevelID(String newID) {
 		if (levelID != null) {
-			System.out.println("ACHTUNG Level id: " + levelID
-					+ " umbenannt in: " + newID);
+			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
 		}
 
 		levelID = newID;
@@ -118,12 +114,13 @@ public abstract class Level implements Screen {
 		// Wenn das spiel pausiert wird bekommt das untere level ein Delta von 0
 		// übergeben.
 		// Hierdurch wird sichergestellt das die Interaktionen
+
+		overlay.act(delta);
 		if (paused) {
 			delta = 0;
 		}
 		doRender(delta);
 		overlay.draw();
-
 		// ########### DEBUG ##################
 		// TODO f�r Release entfernen
 		fpsLogger.log();
