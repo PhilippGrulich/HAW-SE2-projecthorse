@@ -10,13 +10,14 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 
 /**
  * @author Viktor Diese Klasse ist stellt das Standarddesign eines kleinen
- *         Buttons dar wie er zum Beispiel für die Navigationsmenüs genutzt wird.
+ *         Buttons dar wie er zum Beispiel für die Navigationsmenüs genutzt
+ *         wird.
  */
 
 public class ButtonSmall extends ImageButton {
 
 	public enum ButtonType {
-		BACK, APPLY, CANCEL, LEFT, RIGHT, START, PAUSE, SETTINGS;
+		BACK, APPLY, CANCEL, LEFT, RIGHT, START, PAUSE, SETTINGS, LOOT, HOME;
 
 		String getFileName() {
 			switch (this) {
@@ -34,12 +35,14 @@ public class ButtonSmall extends ImageButton {
 				return "buttonStart";
 			case PAUSE:
 				return "pauseIcon";
+			case LOOT:
+				return "buttonLoot";
+			case HOME:
+				return "buttonHome";
 			case SETTINGS:
 				return "settingsIcon";
 			default:
-				Gdx.app.log("ERROR",
-						"Missing Filename string for " + this.name()
-								+ " in ButtonType enum!");
+				Gdx.app.log("ERROR", "Missing Filename string for " + this.name() + " in ButtonType enum!");
 				return this.name();
 			}
 		}
@@ -51,15 +54,14 @@ public class ButtonSmall extends ImageButton {
 	}
 
 	private static Drawable getDrawable(ButtonType type) {
-		return new TextureRegionDrawable(
-				AssetManager.getTextureRegion("ui", type.getFileName()));
+		return new TextureRegionDrawable(AssetManager.getTextureRegion("ui", type.getFileName()));
 	}
-	
-	private void addVibrationFeedback(){
+
+	private void addVibrationFeedback() {
 		this.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-			Gdx.input.vibrate(50);	
+				Gdx.input.vibrate(50);
 			}
 		});
 	}

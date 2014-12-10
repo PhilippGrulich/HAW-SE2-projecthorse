@@ -19,7 +19,7 @@ public class PlayerImpl extends Player {
 	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
 	// desto schneller
 	
-	private String imgFolder = "temp";
+	private String imgFolder = "playerHannover";
 	private Map<String, TextureRegion> spriteMap = AssetManager.getAllTextureRegions(imgFolder);
 	private TextureRegion activeSprite;
 	private float speed = 0;
@@ -30,7 +30,8 @@ public class PlayerImpl extends Player {
 
 	public PlayerImpl() {
 		this(getSaveGameRace());
-		this.scaleBy(-0.12f);
+//		this.scaleBy(-0.12f);
+		this.setScale(1.75f);
 	}
 
 	@Deprecated
@@ -49,7 +50,7 @@ public class PlayerImpl extends Player {
 
 	public PlayerImpl(HorseRace horseRace) {
 		race = new Race(horseRace);		
-		activeSprite = spriteMap.get("left-1");
+		activeSprite = spriteMap.get("side-1");
 	
 		flipX = true;
 		

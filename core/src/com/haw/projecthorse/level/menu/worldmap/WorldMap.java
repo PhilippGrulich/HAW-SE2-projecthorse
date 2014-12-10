@@ -130,7 +130,7 @@ public class WorldMap extends Menu {
 
 		state = State.INIT;
 
-		textFont = AssetManager.getTextFont(FontSize.SECHZIG);
+		textFont = AssetManager.getTextFont(FontSize.SIXTY);
 
 		flagStyle = new ImageButtonStyle();
 
