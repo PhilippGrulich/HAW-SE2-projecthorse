@@ -1,12 +1,12 @@
 
 puzzle.png
-size: 722,1604
+size: 722,1455
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bilderrahmen-pferd
   rotate: false
-  xy: 2, 324
+  xy: 2, 175
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
@@ -14,7 +14,7 @@ bilderrahmen-pferd
 speechballoon
   rotate: false
   xy: 2, 2
-  size: 640, 320
-  orig: 640, 320
+  size: 640, 171
+  orig: 640, 171
   offset: 0, 0
   index: -1

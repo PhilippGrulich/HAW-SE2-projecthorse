@@ -82,7 +82,7 @@
             },
                   {
                title:"Puzzlespiel",
-			   className:"com.haw.projecthorse.level.game.puzzle.ImageManager",
+			   className:"com.haw.projecthorse.level.game.puzzle.PuzzleManager",
                levelID:"Puzzle"
             }
          ]

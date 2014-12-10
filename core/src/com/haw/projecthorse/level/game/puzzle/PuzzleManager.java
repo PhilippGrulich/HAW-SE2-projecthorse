@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
@@ -33,7 +35,7 @@ import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 
-public class ImageManager extends Game {
+public class PuzzleManager extends Game {
 
 	private static Stage firststage;
 	private static Stage secondstage;
@@ -48,16 +50,17 @@ public class ImageManager extends Game {
 
 	static Sound swipe;
 	static Sound win;
+	static Sound click;
 
 	static int myWidth;
 	static int myHeight;
 
 	static int myXPos;
 	static int myYPos;
-	
+
 	private PuzzlePlayer puzzlePlayer;
 
-	public ImageManager() {
+	public PuzzleManager() {
 
 		super();
 
@@ -66,8 +69,6 @@ public class ImageManager extends Game {
 				false, ControlMode.HORIZONTAL));
 
 		addBackround();
-
-		puzzlePlayer=new PuzzlePlayer();
 
 		regionsmap = AssetManager.getAllTextureRegions("puzzleImageManager");
 
@@ -86,6 +87,7 @@ public class ImageManager extends Game {
 		addMusic("bett_pcm.wav", true);
 		swipe = audioManager.getSound("puzzle", "swipe.wav");
 		win = audioManager.getSound("puzzle", "win.wav");
+		click = audioManager.getSound("puzzle", "click.wav");
 
 		fillImagelist();
 		index = imagelist.size() - 1;
@@ -96,6 +98,7 @@ public class ImageManager extends Game {
 		secondstage = new Stage(getViewport());
 		InputManager.addInputProcessor(secondstage);
 
+		puzzlePlayer = new PuzzlePlayer();
 		addScore();
 
 		//
@@ -107,7 +110,7 @@ public class ImageManager extends Game {
 		font = AssetManager.getTextFont(FontSize.FORTY);
 		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
 		label.setBounds(30, 45, 30, 30);
-label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
+		label.setPosition(myXPos, myYPos + myHeight+30);
 		addToStage(secondstage, label);
 
 	}
@@ -134,10 +137,9 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 				AssetManager.getTextureRegion("ui", "panel_brown"));
 		ButtonOwnTextImage button_ok = new ButtonOwnTextImage("OK",
 
-				new ImageTextButton.ImageTextButtonStyle(
-						new TextButton.TextButtonStyle(button_img, button_img,
-								button_img,
-								AssetManager.getTextFont(FontSize.FORTY))));
+		new ImageTextButton.ImageTextButtonStyle(
+				new TextButton.TextButtonStyle(button_img, button_img,
+						button_img, AssetManager.getTextFont(FontSize.FORTY))));
 
 		button_ok.setHeight(80);
 		button_ok.setWidth(300);
@@ -147,7 +149,7 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 
 		button_ok.setPosition(myXPos + myWidth / 2 - button_ok.getWidth() / 2,
 				myYPos + myHeight + 5);
-
+		blinc(button_ok);
 		button_next.setName("next");
 		button_prev.setName("prev");
 		button_prev.setName("ok");
@@ -196,9 +198,11 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 				switch (event.getDirection()) {
 				case LEFT:
 					changeImage(1);
+					swipe.play();
 					break;
 				case RIGHT:
 					changeImage(-1);
+					swipe.play();
 					break;
 				default:
 					break;
@@ -220,18 +224,21 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				click.play();
 				changeImage(1);
+				blinc(button_ok);
 			}
 		});
 		button_ok.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-
+				click.play();
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
 				next.setVisible(false);
 				prev.setVisible(false);
 				button_ok.setVisible(false);
 				button_ok.removeListener(this);
+				puzzlePlayer.setActorSpeech("Es geht los!");
 				new Puzzle();
 				// firststage.dispose();
 
@@ -241,7 +248,9 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 		prev.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				click.play();
 				changeImage(-1);
+				blinc(button_ok);
 			};
 		});
 	}
@@ -335,6 +344,16 @@ label.setPosition(puzzlePlayer.getPlayer().getWidth()+30, 50);
 		musik.play();
 		musik.setLooping(loop);
 
+	}
+
+	/**
+	 * simuliert ein einmaliges Blinken des ok_button's beim Bilderauswahl
+	 * 
+	 * @param button
+	 */
+	private void blinc(ButtonOwnTextImage button) {
+		button.addAction(Actions.sequence(Actions.fadeIn(0.2f),
+				Actions.fadeOut(0.2f), Actions.fadeIn(0.2f)));
 	}
 
 	public static int getMyWidth() {

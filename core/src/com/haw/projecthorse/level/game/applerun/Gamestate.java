@@ -73,6 +73,9 @@ public class Gamestate {
 	private int width;
 	private int height;
 
+	private boolean lastAnimationDirectionLeft = false;
+	private boolean lastAnimationActionIdle = false;
+
 	public Gamestate(Viewport viewport, Batch batch, int width, int heigth) {
 		stage = new Stage(viewport, batch);
 		this.width = width;
@@ -94,7 +97,7 @@ public class Gamestate {
 	private void initHorse() {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
-//		horse.scaleBy(0.2F);
+		// horse.scaleBy(0.2F);
 		horse.setAnimationSpeed(0.4f);
 		horse.addAction(new AnimationAction(Direction.RIGHT));
 		// stage.addActor(horse); //Done inside constructor
@@ -124,23 +127,28 @@ public class Gamestate {
 		} // Nicht links rauslaufen
 		breite = this.width; // GameManagerFactory.getInstance().getSettings().getScreenWidth();
 
-		if (x > breite - (horse.getWidth()*horse.getScaleX())) {
-			x = breite - (horse.getWidth()*horse.getScaleX());
+		if (x > breite - (horse.getWidth() * horse.getScaleX())) {
+			x = breite - (horse.getWidth() * horse.getScaleX());
 		} // Nicht rechts rauslaufen
 			// Bewegungsrichtung ermitteln
 		AnimationAction animationAction = null;
 		distance = horse.getX() - x; // Positiv = move links
 		if (distance > 0) { // Move links
 			animationAction = new AnimationAction(Direction.LEFT);
-			
+			lastAnimationDirectionLeft = true;
+			lastAnimationActionIdle = false;
 		} else {
 			animationAction = new AnimationAction(Direction.RIGHT);
+			lastAnimationDirectionLeft = false;
+			lastAnimationActionIdle = false;
 		}
 
 		moveToDuration = convertDistanceToTime(distance);
 		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
+
 		horse.addAction(animationAction);
 		horse.addAction(move);
+		horse.setAnimationSpeed(0.5f);
 	}
 
 	private float convertDistanceToTime(float distance) {
@@ -207,6 +215,9 @@ public class Gamestate {
 
 		updateAccelometer();
 
+		if (!lastAnimationActionIdle && horse.getActions().size == 1) { // Player ist nicht schon auf IDLE und bewegt sich gerade nicht
+			setPlayerActionToIdle();
+		}
 	}
 
 	private void updateAccelometer() {
@@ -290,4 +301,15 @@ public class Gamestate {
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
 
+	public void setPlayerActionToIdle() {
+		horse.clearActions();
+		if (lastAnimationDirectionLeft) {
+			horse.addAction(new AnimationAction(Direction.IDLELEFT));
+		} else {
+			horse.addAction(new AnimationAction(Direction.IDLERIGHT));
+		}
+		lastAnimationActionIdle = true;
+
+		horse.setAnimationSpeed(0.1f);
+	}
 }
