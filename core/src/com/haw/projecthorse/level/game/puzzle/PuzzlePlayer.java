@@ -19,13 +19,13 @@ public class PuzzlePlayer {
 
 	public PuzzlePlayer() {
 		player = new PlayerImpl();
-		player.setPosition(-30, ImageManager.getMyXPos()-player.getHeight()*0.65f);
+		player.setPosition(-30, PuzzleManager.getMyXPos()-player.getHeight()*0.65f);
 		player.scaleBy(0.5F);
 		addSpeechBalloon();
 		addTextLabel();
 		setActorSpeech("Wähle ein \nBild aus");
 
-		ImageManager.addToStage(ImageManager.getSecondstage(), player);
+		PuzzleManager.addToStage(PuzzleManager.getSecondstage(), player);
 
 	}
 
@@ -38,7 +38,7 @@ public class PuzzlePlayer {
 		speechBalloon.setHeight(170);
 		speechBalloon.setPosition(230, 0);
 
-		ImageManager.addToStage(ImageManager.getSecondstage(), speechBalloon);
+		PuzzleManager.addToStage(PuzzleManager.getSecondstage(), speechBalloon);
 
 	}
 
@@ -50,7 +50,7 @@ public class PuzzlePlayer {
 				+ (speechBalloon.getWidth() * 0.3f), speechBalloon.getY()
 				+ (speechBalloon.getHeight() * 0.3f));
 
-		ImageManager.addToStage(ImageManager.getSecondstage(), label);
+		PuzzleManager.addToStage(PuzzleManager.getSecondstage(), label);
 
 	}
 

@@ -35,7 +35,7 @@ import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 
-public class ImageManager extends Game {
+public class PuzzleManager extends Game {
 
 	private static Stage firststage;
 	private static Stage secondstage;
@@ -60,7 +60,7 @@ public class ImageManager extends Game {
 
 	private PuzzlePlayer puzzlePlayer;
 
-	public ImageManager() {
+	public PuzzleManager() {
 
 		super();
 

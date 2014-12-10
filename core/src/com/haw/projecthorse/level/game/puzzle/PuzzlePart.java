@@ -55,21 +55,21 @@ public class PuzzlePart extends Image {
 						image.setVisible(false);
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
-						ImageManager.win.play(0.9f);
+						PuzzleManager.win.play(0.9f);
 
 						PuzzlePlayer
 								.setActorSpeech("Mit nur "
 										+ String.valueOf(Counter.getCounter())+" \nSchritten!");
 						Counter.setCounter(0);
 						
-						ImageManager.getOverlay().showPopup(replay);
+						PuzzleManager.getOverlay().showPopup(replay);
 
 					}
 
 				} else {
 
 					Counter.setCounter(1);
-					ImageManager.setLabelText("Anzahl: "
+					PuzzleManager.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
 
 					int lokX = (int) image.getX();
@@ -77,7 +77,7 @@ public class PuzzlePart extends Image {
 
 					if (checkImage(lokX, lokY)) {
 
-						ImageManager.swipe.play();
+						PuzzleManager.swipe.play();
 						image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
 								.getEmptyImage().getY());
 
@@ -120,7 +120,7 @@ public class PuzzlePart extends Image {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				ImageManager.click.play();
+				PuzzleManager.click.play();
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			}
 
@@ -130,7 +130,7 @@ public class PuzzlePart extends Image {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				ImageManager.click.play();
+				PuzzleManager.click.play();
 				GameManagerFactory.getInstance().navigateBack();
 			}
 
