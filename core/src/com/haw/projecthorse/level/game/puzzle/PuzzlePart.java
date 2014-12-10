@@ -57,10 +57,11 @@ public class PuzzlePart extends Image {
 						Puzzle.removeClickListener();
 						ImageManager.win.play(0.9f);
 
-						ImageManager
-								.setLabelText("Anzahl deiner Schritte : \n     "
-										+ String.valueOf(Counter.getCounter()));
+						PuzzlePlayer
+								.setActorSpeech("Mit nur "
+										+ String.valueOf(Counter.getCounter())+" \nSchritten!");
 						Counter.setCounter(0);
+						
 						ImageManager.getOverlay().showPopup(replay);
 
 					}
@@ -68,7 +69,7 @@ public class PuzzlePart extends Image {
 				} else {
 
 					Counter.setCounter(1);
-					ImageManager.setLabelText("Anzahl: \n"
+					ImageManager.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
 
 					int lokX = (int) image.getX();

@@ -70,8 +70,6 @@ public class ImageManager extends Game {
 
 		addBackround();
 
-		puzzlePlayer = new PuzzlePlayer();
-
 		regionsmap = AssetManager.getAllTextureRegions("puzzleImageManager");
 
 		imagelist = new ArrayList<Image>();
@@ -100,6 +98,7 @@ public class ImageManager extends Game {
 		secondstage = new Stage(getViewport());
 		InputManager.addInputProcessor(secondstage);
 
+		puzzlePlayer = new PuzzlePlayer();
 		addScore();
 
 		//
@@ -111,7 +110,7 @@ public class ImageManager extends Game {
 		font = AssetManager.getTextFont(FontSize.FORTY);
 		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
 		label.setBounds(30, 45, 30, 30);
-		label.setPosition(puzzlePlayer.getPlayer().getWidth() + 30, 50);
+		label.setPosition(myXPos, myYPos + myHeight+30);
 		addToStage(secondstage, label);
 
 	}
@@ -239,7 +238,7 @@ public class ImageManager extends Game {
 				prev.setVisible(false);
 				button_ok.setVisible(false);
 				button_ok.removeListener(this);
-
+				puzzlePlayer.setActorSpeech("Es geht los!");
 				new Puzzle();
 				// firststage.dispose();
 

@@ -147,7 +147,6 @@ public class Puzzle {
 			}
 			count += 1;
 		}
-		System.out.println();
 	}
 
 	public static boolean check() {
