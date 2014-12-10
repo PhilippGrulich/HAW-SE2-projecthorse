@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.actions.Direction;
@@ -24,9 +25,15 @@ public class Player extends PlayerImpl {
 	private float SWIPEMOVE;
 	private float SWIPEDURATION = 0.2f;
 	private float playerHeight, playerWidth, gameWidth, gameHeight;
+	private float duration;
+	private int shouldMove;
 
 	public float getGameHeight() {
 		return gameHeight;
+	}
+	
+	public void setDuration(float d){
+		this.duration = d;
 	}
 
 	public float getGameWidth() {
@@ -36,21 +43,49 @@ public class Player extends PlayerImpl {
 	public Player(float gameWidth, float gameHeight) {
 		super();
 		toFront();
+		shouldMove = 0;
 		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
-		initSwipeListener();
 		
+		if(GameManagerFactory.getInstance().getSettings().getAccelerometerState())
+			initSwipeListener();
+
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.SWIPEMOVE = (getGameWidth() * 15 / 100) + athletic();
 	}
-	
-	private float athletic(){
-		return getAthletic()*5;
+
+	private float athletic() {
+		return getAthletic() * 5;
 	}
 
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		if(shouldMove == 2){
+				setX(getX() - this.duration*delta);
+		}else if(shouldMove == 1){
+			setX(getX() + this.duration*delta);	
+		}
+	}
+	
+	@Override
+	public void setX(float x){
+		r.x = x;
+		this.x = x;
+	}
+	
+	@Override
+	public void setY(float y){
+		r.y = y;
+		this.y = y;
+	}
+	
+	public int getShouldMove(){
+		return shouldMove;
+	}
+	
+	public void shouldMove(int m){
+		this.shouldMove = m;
 	}
 
 	public void applyRactangle() {
@@ -80,7 +115,7 @@ public class Player extends PlayerImpl {
 	}
 
 	/**
-	 * Berechnung von n�chstem Punkt (x,y) des Spielersprunges
+	 * Berechnung von nächstem Punkt (x,y) des Spielersprunges
 	 */
 	public Vector2 getNextJumpPosition() {
 		Vector2 v = new Vector2();
@@ -179,7 +214,7 @@ public class Player extends PlayerImpl {
 	}
 
 	public void setJumpSpeed(float duration) {
-		this.player_jumpspeed = duration+athletic();
+		this.player_jumpspeed = duration + athletic();
 	}
 
 	public void setJumpWitdh(float x) {
@@ -193,9 +228,9 @@ public class Player extends PlayerImpl {
 		r.y = y;
 		this.x = x;
 		this.y = y;
-		
+
 	}
-	
+
 	/**
 	 * Berechnung der Sprungfunktion in abh�ngigkeit des aktuellen x und y.
 	 */
@@ -240,3 +275,4 @@ public class Player extends PlayerImpl {
 		this.playerWidth = w;
 	}
 }
+	
