@@ -78,7 +78,7 @@ Hintergrund.png FILE OK!
 CC-0 ENTRY OK!
 horse1.jpg NOT EXISTS!
 CC-0 ENTRY OK!
-horse2.png FILE OK!
+horse2.png NOT EXISTS!
 CC-0 ENTRY OK!
 horse3.jpg NOT EXISTS!
 CC-0 ENTRY OK!

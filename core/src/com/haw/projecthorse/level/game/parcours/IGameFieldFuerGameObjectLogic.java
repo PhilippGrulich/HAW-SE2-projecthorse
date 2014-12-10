@@ -14,23 +14,46 @@ public interface IGameFieldFuerGameObjectLogic {
 
 	float getWidth();
 
+	/**
+	 * Da einige Objekte (u.a. das Pferd) direkt auf dem Boden stehen bzw. liegen,
+	 * liefert diese Methode die y Position des Bodens.
+	 * @return
+	 */
 	float getTopOfGroundPosition();
 
+	/**
+	 * Ruft act auf allen Actor des GameField auf.
+	 * @param delta
+	 */
 	void actGameField(float delta);
 
+	/**
+	 * Ruft draw auf allen Actor des GameField auf.
+	 */
 	void drawGameField();
 
 	Stage getStage();
-	
-	List<ParcoursLoot> getLoot();
-	
-	public void playGallop();
-	
-	public void pauseGallop();
-	
-	public void stopGallop();
-	
-	public void eat();
 
+	List<ParcoursLoot> getLoot();
+
+	/**
+	 * Spielt den Gallop-Sound ab.
+	 */
+	public void playGallop();
+
+	/**
+	 * Pausiert den Gallop-Sound.
+	 */
+	public void pauseGallop();
+
+	
+	/**
+	 * Stoppt den Gallop-Sound.
+	 */
+	public void stopGallop();
+
+	public void eat();
+	
+	float getGeneralGameSpeed();
 
 }

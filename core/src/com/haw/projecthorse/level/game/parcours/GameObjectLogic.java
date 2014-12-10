@@ -2,18 +2,23 @@ package com.haw.projecthorse.level.game.parcours;
 
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.haw.projecthorse.audiomanager.AudioManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.actions.Direction;
 
-public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameObjectLogicFuerGameInputListener {
+public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
+		IGameObjectLogicFuerGameInputListener {
 
 	private float freePosition;
 	private IGameFieldFuerGameObjectLogic gameField;
 	private boolean shouldPlayerJump;
 
-	public GameObjectLogic(float initialFreePosition, IGameFieldFuerGameObjectLogic g) {
+	public GameObjectLogic(float initialFreePosition,
+			IGameFieldFuerGameObjectLogic g) {
 		freePosition = initialFreePosition;
 		shouldPlayerJump = false;
 		gameField = g;
@@ -27,20 +32,23 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 
 	public void collisionDetection() {
 		List<GameObject> objects = gameField.getGameObjects();
-		
+
 		for (GameObject l : objects) {
 			if (l.isCollidable()) {
 				if (((CollidableGameObject) l).getRectangle().overlaps(
 						gameField.getPlayer().getRectangle())) {
 					l.setVisible(false);
 					l.setX(-5 - l.getWidth());
-					if(l.getPoints() > 0){
+					if (l.getPoints() > 0) {
 						gameField.eat();
-						gameField.addToScore(l.getPoints() + (int)Math.ceil(l.getPoints()*gameField.getPlayer().getIntelligence()));
-					}else {
+						gameField.addToScore(l.getPoints()
+								+ (int) Math.ceil(l.getPoints()
+										* gameField.getPlayer()
+												.getIntelligence()));
+					} else {
 						gameField.addToScore(l.getPoints());
 					}
-					
+
 				}
 			}
 		}
@@ -64,14 +72,15 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 		return f;
 	}
 
-	public float getRandomCoordinate(float[] interval, float gameObjectWidth, boolean colidable) {
+	public float getRandomCoordinate(float[] interval, float gameObjectWidth,
+			boolean colidable) {
 		float rand = (float) Math.floor(Math.random()
 				* (interval[1] - interval[0]) + interval[0]);
 		float result = freePosition + rand;
-		
-		if(colidable)
+
+		if (colidable)
 			freePosition = result + gameObjectWidth;
-	
+
 		return result;
 	}
 
@@ -123,9 +132,9 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 	}
 
 	public void setPlayerJump(boolean a) {
-		if(a){
+		if (a) {
 			gameField.pauseGallop();
-		}else{
+		} else {
 			gameField.playGallop();
 		}
 		this.shouldPlayerJump = a;
@@ -133,11 +142,62 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 
 	public void update(float delta) {
 		updateGameObjects(delta);
+		updateAccelometer(delta);
 		checkPlayerConstraints();
 		collisionDetection();
 		gameField.actGameField(delta);
 		gameField.drawGameField();
 
+	}
+	
+	/**
+	 * Abfrage von Neigung des Devices und Setzen von Player-Position.
+	 * Da Parcours im Landscape-Modus läuft: Abfrage von Y (Intervall [-10,10]. Alles über 2 
+	 * -> uninteressant).
+	 */
+	private void updateAccelometer(float delta) {
+		// nur wenn das Accelerometer activiert ist wird es auch genutzt
+		
+		if (GameManagerFactory.getInstance().getSettings().getAccelerometerState()) {
+			float y = Gdx.input.getAccelerometerY();
+			if(y >= 2f)
+				movePlayerR(delta);
+			
+			if(y <= -2f)
+				movePlayerL(delta);
+		}
+	}
+	
+	public void movePlayerR(float delta) {
+		float x = gameField.getPlayer().getX() 
+				+ gameField.getPlayer().getWidth()
+				+ gameField.getGeneralGameSpeed()*delta;
+
+		gameField.getPlayer().setJumpDirection(Direction.RIGHT);
+		
+		if(willPlayerBeOutOfGameField(x)){
+			gameField.getPlayer().shouldMove(0);
+		}else {
+			gameField.getPlayer().shouldMove(1);
+		}
+		
+		gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
+			
+	}
+
+	public void movePlayerL(float delta) {
+		float x = gameField.getPlayer().getX() - gameField.getGeneralGameSpeed()*delta;
+	
+		gameField.getPlayer().setJumpDirection(Direction.LEFT);
+		
+		if(willPlayerBeOutOfGameField(x)){
+			gameField.getPlayer().shouldMove(0);
+		}else {
+			gameField.getPlayer().shouldMove(2);
+		}
+		
+		gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
+		
 	}
 
 	public void updateGameObjects(float delta) {
@@ -147,13 +207,14 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 		for (GameObject o : objects) {
 			if (!o.isVisible() && outOfGameField(o)) {
 				o.setVisible(true);
-				o.setX(getRandomCoordinate(getInterval(), o.getWidth(), o.isCollidable()));
+				o.setX(getRandomCoordinate(getInterval(), o.getWidth(),
+						o.isCollidable()));
 			}
 			if (o.isVisible() && outOfGameField(o)) {
 				o.setVisible(false);
 			}
 			if (o.getX() + o.getWidth() == getFreePosition()) {
-			  	freePosition = o.getX() - o.getDuration() * delta
+				freePosition = o.getX() - o.getDuration() * delta
 						+ o.getWidth();
 			}
 		}
@@ -166,7 +227,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator, IGameO
 		}
 		return false;
 	}
-	
+
 	public boolean willPlayerBeOutOfGameField(float x) {
 		if (gameField.getPlayer().getDirection() == Direction.RIGHT) {
 

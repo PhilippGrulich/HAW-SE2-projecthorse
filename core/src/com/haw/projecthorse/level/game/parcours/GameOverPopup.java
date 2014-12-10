@@ -27,7 +27,7 @@ public class GameOverPopup extends Popup {
 		wonButtonNo.setName("Button");
 		lostButtonYes.setName("Button");
 		lostButtonNo.setName("Button");
-		
+
 		initWonPopup();
 		initLostPopup();
 	}
@@ -35,12 +35,12 @@ public class GameOverPopup extends Popup {
 	private void initWonPopup() {
 		wonPopup = new Popup();
 		wonPopup.setName("Popup");
-		
+
 		Label wonLabel = this.createLabel("Gratulation!\nDu hast gewonnen!");
 		Label labelQuestion = this.createLabel("Möchtest Du nochmal spielen?");
 		wonLabel.setName("Label");
 		labelQuestion.setName("Label");
-		
+
 		wonPopup.addActor(wonLabel);
 		wonPopup.addActor(labelQuestion);
 		wonPopup.addActor(wonButtonYes);
@@ -50,12 +50,12 @@ public class GameOverPopup extends Popup {
 	private void initLostPopup() {
 		lostPopup = new Popup();
 		lostPopup.setName("Popup");
-		
+
 		Label lostLabel = this.createLabel("Schade,\nDu hast leider verloren!");
 		Label labelQuestion = this.createLabel("Möchtest Du nochmal spielen?");
 		lostLabel.setName("Label");
 		labelQuestion.setName("Label");
-		
+
 		lostPopup.addActor(lostLabel);
 		lostPopup.addActor(labelQuestion);
 		lostPopup.addActor(lostButtonYes);
@@ -64,16 +64,16 @@ public class GameOverPopup extends Popup {
 	}
 
 	public boolean isButtonYesPressed(GameState g) {
-		if(g == GameState.WON)
+		if (g == GameState.WON)
 			return wonButtonYes.isPressed();
-		
+
 		return lostButtonYes.isPressed();
 	}
 
 	public boolean isButtonNoPressed(GameState g) {
-		if(g == GameState.WON)
+		if (g == GameState.WON)
 			return wonButtonNo.isPressed();
-		
+
 		return lostButtonNo.isPressed();
 	}
 

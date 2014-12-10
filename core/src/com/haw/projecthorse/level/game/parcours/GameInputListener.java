@@ -8,8 +8,8 @@ public class GameInputListener implements GestureListener {
 	IGameObjectLogicFuerGameInputListener logic;
 	IGameFieldFuerGameInputListener gameField;
 
-	
-	public GameInputListener(IGameObjectLogicFuerGameInputListener logic, IGameFieldFuerGameInputListener gameField){
+	public GameInputListener(IGameObjectLogicFuerGameInputListener logic,
+			IGameFieldFuerGameInputListener gameField) {
 		this.logic = logic;
 		this.gameField = gameField;
 	}
@@ -19,13 +19,13 @@ public class GameInputListener implements GestureListener {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	@Override
 	public boolean longPress(float x, float y) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
 		// TODO Auto-generated method stub

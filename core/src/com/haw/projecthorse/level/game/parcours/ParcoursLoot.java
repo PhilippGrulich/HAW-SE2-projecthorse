@@ -6,13 +6,13 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 
 	private LootImage image;
 	private int availableAtScore;
-	
+
 	public int getAvailableAtScore() {
 		return availableAtScore;
 	}
-	
-	public ParcoursLoot(){
-		
+
+	public ParcoursLoot() {
+
 	}
 
 	public ParcoursLoot(int availableAtScore, String name, String description) {
@@ -32,26 +32,19 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + availableAtScore;
-		result = prime * result + (((LootImage)image == null) ? 0 : image.hashCode());
+		result = prime * result
+				+ (((LootImage) image == null) ? 0 : image.hashCode());
 		return result;
 	}
-	
-	/*@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Loot other = (Loot) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		return doEquals(obj);
-	}*/
+
+	/*
+	 * @Override public boolean equals(Object obj) { if (this == obj) return
+	 * true; if (obj == null) return false; if (getClass() != obj.getClass())
+	 * return false; Loot other = (Loot) obj; if (description == null) { if
+	 * (other.description != null) return false; } else if
+	 * (!description.equals(other.description)) return false; return
+	 * doEquals(obj); }
+	 */
 
 	@Override
 	public boolean doEquals(Object obj) {
@@ -61,7 +54,8 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 		if (image == null) {
 			if (other.getLootImage() != null)
 				return false;
-		} else if (!((LootImage)image).equals((LootImage)other.getLootImage()))
+		} else if (!((LootImage) image)
+				.equals((LootImage) other.getLootImage()))
 			return false;
 		return true;
 	}
