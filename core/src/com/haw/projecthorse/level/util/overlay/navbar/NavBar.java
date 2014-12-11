@@ -30,7 +30,7 @@ public class NavBar extends OverlayWidgetGroup {
 			NAVBAR_HIGH = (int) (this.height * 0.14);
 			NAVBAR_WITH = (int) (this.width);
 		}
-		
+
 		horizontalGroup = new HorizontalGroup();
 
 		horizontalGroup.reverse();
@@ -49,19 +49,21 @@ public class NavBar extends OverlayWidgetGroup {
 	 * 
 	 * @return
 	 */
-	public Overlay getOverlay() {
-		if (this.getParent() == null)
+	public final Overlay getOverlay() {
+		if (this.getParent() == null) {
 			return null;
-		if (!(this.getStage() instanceof Overlay))
+		}
+		if (!(this.getStage() instanceof Overlay)) {
 			return null;
+		}
 		return (Overlay) this.getStage();
 	}
 
-	public void setToTop() {
+	public final void setToTop() {
 		this.horizontalGroup.setY(this.height - NAVBAR_HIGH);
 	};
 
-	public void setToButton() {
+	public final void setToButton() {
 		this.horizontalGroup.setY(horizontalGroup.getHeight());
 	}
 
@@ -70,7 +72,7 @@ public class NavBar extends OverlayWidgetGroup {
 	 * 
 	 * @param btn
 	 */
-	public void addButton(NavbarButton btn) {
+	public final void addButton(NavbarButton btn) {
 
 		this.horizontalGroup.addActor(btn);
 		this.horizontalGroup.layout();
