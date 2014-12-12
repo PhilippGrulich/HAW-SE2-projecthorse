@@ -1,5 +1,6 @@
 package com.haw.projecthorse.level.util.background;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,7 +9,7 @@ public class EndlessBackground extends Actor {
 	private TextureRegion img;
 	private int stageWidth;
 	private float startPosition = 0, duration;
-	
+
 	/**
 	 * Ein Hintergrund, der sich endlos bewegt
 	 * 
@@ -20,12 +21,11 @@ public class EndlessBackground extends Actor {
 	 *            Die Dauer (in Sekunden), wie schnell das Bild von links nach
 	 *            rechts laufen soll.
 	 */
-	public EndlessBackground(int stageWidth, TextureRegion backgroundImage,
-			float duration) {
+	public EndlessBackground(int stageWidth, TextureRegion backgroundImage, float duration) {
 		img = backgroundImage;
 		this.stageWidth = stageWidth;
 		this.duration = duration;
-		
+
 		toBack();
 	}
 
@@ -43,12 +43,13 @@ public class EndlessBackground extends Actor {
 			// also koennen wir die startPosition verringern
 			startPosition += img.getRegionWidth();
 		}
-
+		Color c = batch.getColor();
+		batch.setColor(c.r, c.g, c.b, 1f);
 		float pos = startPosition;
 
 		while (pos < stageWidth) {
 			batch.draw(img, pos, 0);
-			pos += img.getRegionWidth()-10;
+			pos += img.getRegionWidth() - 10;
 		}
 	}
 }

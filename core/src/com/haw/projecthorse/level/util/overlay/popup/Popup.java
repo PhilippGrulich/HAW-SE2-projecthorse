@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -21,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.level.util.actions.CompleteAction;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
@@ -44,10 +48,12 @@ import com.haw.projecthorse.level.util.uielements.ButtonLarge;
  */
 public class Popup extends OverlayWidgetGroup {
 
-	protected int popupHeight = (int) 0, popupWidth;
+	protected int popupHeight = 0;
+	protected int popupWidth = 0;
 	protected VerticalGroup contentGroup;
 	private OverlayWidgetGroup content = new OverlayWidgetGroup();
 	private Image backgroundImage;
+	private final float fadeTime = 0.2F;
 
 	public Popup() {
 
@@ -72,7 +78,7 @@ public class Popup extends OverlayWidgetGroup {
 		this.addListener(new InputListener() {
 
 			@Override
-			public boolean keyDown(InputEvent event, int keycode) {
+			public boolean keyDown(final InputEvent event, final int keycode) {
 				if ((keycode == Keys.ESCAPE) || (keycode == Keys.BACK)) {
 					Gdx.app.log("Popup", "Back Key Detected");
 					getOverlay().disposePopup();
@@ -86,7 +92,23 @@ public class Popup extends OverlayWidgetGroup {
 		createBackgroundImage();
 		createContentGroup();
 		super.addActor(content);
+		fadeIn();
+	}
 
+	public final void fadeIn() {
+		Color c = contentGroup.getColor();
+		content.setColor(c.r, c.g, c.b, 0.0f);
+		content.addAction(new SequenceAction(Actions.fadeIn(fadeTime)));
+	}
+
+	public final void fadeOut() {
+		Action completeAction = new CompleteAction() {
+			@Override
+			public void done() {
+				Popup.this.remove();
+			}
+		};
+		content.addAction(new SequenceAction(Actions.fadeOut(fadeTime), completeAction));
 	}
 
 	/**
@@ -115,7 +137,8 @@ public class Popup extends OverlayWidgetGroup {
 		// backgroundImage.setY((height / 2) - popupHeight / 2);
 		backgroundImage.addListener(new InputListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer,
+					final int button) {
 				event.cancel();
 				return true;
 			}
@@ -128,7 +151,7 @@ public class Popup extends OverlayWidgetGroup {
 	 * auf das Vertical Layout gelegt werden.
 	 */
 	@Override
-	public final void addActor(Actor actor) {
+	public final void addActor(final Actor actor) {
 
 		contentGroup.addActor(actor);
 		// Höhe des Popups wird erweitert = höhe + actorHöhe + Spacing
@@ -145,10 +168,12 @@ public class Popup extends OverlayWidgetGroup {
 	 * @return
 	 */
 	protected final Overlay getOverlay() {
-		if (this.getParent() == null)
+		if (this.getParent() == null) {
 			return null;
-		if (!(this.getStage() instanceof Overlay))
+		}
+		if (!(this.getStage() instanceof Overlay)) {
 			return null;
+		}
 		return (Overlay) this.getStage();
 	}
 
