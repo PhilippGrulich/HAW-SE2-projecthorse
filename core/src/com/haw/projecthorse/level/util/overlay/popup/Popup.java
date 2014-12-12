@@ -156,10 +156,10 @@ public class Popup extends OverlayWidgetGroup {
 		contentGroup.addActor(actor);
 		// Höhe des Popups wird erweitert = höhe + actorHöhe + Spacing
 		popupHeight += actor.getHeight() + 10;
-		contentGroup.setY(((height / 2) - popupHeight / 2) + 80);
+		contentGroup.setY(((height / 2) - popupHeight / 2) + 40);
 		contentGroup.setHeight(popupHeight);
 		backgroundImage.setHeight(popupHeight + 100);
-		backgroundImage.setY(((height / 2) - popupHeight / 2) + 40);
+		backgroundImage.setY(((height / 2) - popupHeight / 2));
 	}
 
 	/**
