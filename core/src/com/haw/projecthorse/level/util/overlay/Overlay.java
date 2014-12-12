@@ -20,14 +20,13 @@ import com.haw.projecthorse.level.util.overlay.popup.Popup;
  */
 public class Overlay extends Stage {
 
-	private NavBar navBar;
 	private Popup popup;
 	private Level level;
 
-	public Overlay(Viewport viewport, SpriteBatch spriteBatch, Level level) {
+	public Overlay(final Viewport viewport, final SpriteBatch spriteBatch, final Level levelPara) {
 		super(viewport, spriteBatch);
 		InputManager.addInputProcessor(this, Integer.MAX_VALUE);
-		this.level = level;
+		this.level = levelPara;
 	}
 
 	/**
@@ -36,9 +35,8 @@ public class Overlay extends Stage {
 	 * 
 	 * @param nav
 	 */
-	public void setNavigationBar(NavBar nav) {
+	public final void setNavigationBar(final NavBar nav) {
 		this.addActor(nav);
-		navBar = nav;
 	}
 
 	/**
@@ -46,7 +44,7 @@ public class Overlay extends Stage {
 	 * 
 	 * @return
 	 */
-	public Level getLevel() {
+	public final Level getLevel() {
 		return level;
 	}
 
@@ -55,7 +53,7 @@ public class Overlay extends Stage {
 	 * 
 	 * @param Popup
 	 */
-	public void showPopup(Popup p) {
+	public final void showPopup(final Popup p) {
 		if (popup != null) {
 			disposePopup();
 		}
@@ -68,7 +66,7 @@ public class Overlay extends Stage {
 	/**
 	 * Lässt alle Popups verschwinden.
 	 */
-	public void disposePopup() {
+	public final void disposePopup() {
 		this.popup.fadeOut();
 		this.level.resume();
 

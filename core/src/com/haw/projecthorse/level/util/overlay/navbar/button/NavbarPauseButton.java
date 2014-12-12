@@ -1,6 +1,7 @@
 package com.haw.projecthorse.level.util.overlay.navbar.button;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.haw.projecthorse.level.util.overlay.Overlay;
@@ -18,9 +19,8 @@ public class NavbarPauseButton extends NavbarButton {
 		this.addListener(new InputListener() {
 
 			@Override
-			public boolean touchDown(
-					com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-					float y, int pointer, int button) {
+			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer,
+					final int button) {
 				Gdx.app.log("PAUSE Button", "PAUSE BUTTON CLick");
 				NavBar navBar = NavbarPauseButton.this.getNavigationBar();
 

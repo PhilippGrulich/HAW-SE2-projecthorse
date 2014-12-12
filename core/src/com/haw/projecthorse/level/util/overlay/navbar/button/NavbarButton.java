@@ -6,12 +6,11 @@ import com.haw.projecthorse.level.util.overlay.navbar.NavBar;
 
 public abstract class NavbarButton extends OverlayWidgetGroup {
 
-
 	public NavbarButton() {
-						
+
 	}
 
-	public NavBar getNavigationBar() {
+	public final NavBar getNavigationBar() {
 		Group parent = this.getParent().getParent();
 		return (NavBar) parent;
 	}
