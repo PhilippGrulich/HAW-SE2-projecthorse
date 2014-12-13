@@ -8,10 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Text extends Actor {
 
 	private BitmapFont font;
-	private String message;
+	private String message; //Das, was angezeigt werden soll.
 	private float x;
 	private float y;
 
+	/**
+	 * Erzeugt ein neues Text-Objekt.
+	 * @param f BitmapFont vom AssetManager.
+	 * @param message Die Information, die angezeigt werden soll.
+	 * @param x Die x-Koordinate, an der der Text angezeigt werden soll.
+	 * @param y Die y-Koordinate, an der der Text angezeigt werden soll.
+	 */
 	public Text(BitmapFont f, String message, float x, float y) {
 		font = f;
 		this.message = message;

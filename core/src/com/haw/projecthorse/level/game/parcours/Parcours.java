@@ -19,7 +19,7 @@ public class Parcours extends Game {
 		super(Orientation.Landscape);
 		gameOperator = new GameOperator(new Stage(this.getViewport(),
 				this.getSpriteBatch()), this.getViewport(), this.width,
-				this.height, chest, this.audioManager);
+				this.height, chest, this.audioManager, this.overlay);
 	}
 
 	@Override

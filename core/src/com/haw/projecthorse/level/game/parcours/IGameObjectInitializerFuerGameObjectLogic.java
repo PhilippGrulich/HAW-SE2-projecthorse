@@ -24,10 +24,10 @@ public interface IGameObjectInitializerFuerGameObjectLogic {
 	 * @param regionWidth
 	 *            Breite der TextureRegion.
 	 * @param regionHeight
-	 *            H�he der TextureRegion.
+	 *            Höhe der TextureRegion.
 	 * @param desiredHeight
-	 *            Neue H�he des ->GameObjects<-
-	 * @return w Die, auf Grundlage der angegebenen H�he, berechnete Breite.
+	 *            Neue Höhe des ->GameObjects<-
+	 * @return w Die, auf Grundlage der angegebenen Höhe, berechnete Breite.
 	 */
 	public float calcRelativeWidth(float regionHeight, float regionWidth,
 			float desiredHeight);

@@ -16,8 +16,13 @@ import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.level.game.parcours.ParcoursLoot;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
+import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.Race;
+import com.haw.projecthorse.player.race.RaceLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
  * Container-Klasse für GameObjects.
@@ -28,24 +33,34 @@ import com.haw.projecthorse.player.actions.AnimationAction;
 public class GameField implements IGameFieldFuerGameInputListener,
 		IGameFieldFuerGameObjectLogic, IGameFieldFuerGameOperator {
 
-	private Stage stage;
-	private int width;
-	private int height;
-	private List<GameObject> gameObjects;
-	private List<ParcoursLoot> loot;
-	private Player player;
-	private float SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP;
-	private float groundHeight; // init wenn ground geladen
-	private float generalGameSpeed;
-	private Text scoreInformation;
-	private int score;
-	private float grass_ground_height;
-	private GameOverPopup popup;
+	private Stage stage; //In der Stage befinden sich alle Actors (Pferd, GameObjects)
+	private int width; //Spielfeldbreite
+	private int height; //Spielfeldhöhe
+	private List<GameObject> gameObjects; //Bis auf das Pferd alle Objekte auf dem Spielfeld
+	private List<ParcoursLoot> loot; //Zu gewinnende Loot-Objekte des Spiels.
+	private Player player; //Das Pferd
+	private float SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP; //Pixel die zwischen den Mulden des Bodens u. der Gesamthöhe des Bodens liegen. 
+	private float groundHeight; //Höhe des Bodens
+	private float generalGameSpeed; //Spielgeschwindigkeit
+	private Text scoreInformation; //Im Spiel angezeigte Punktzahl-
+	private int score; //Punktwert des Spiels.
+	private float grass_ground_height; //Höhe des Gras aus dem Hintergrund.
+	private GameOverPopup popup; //Popup das erscheint, wenn das Spiel zuende ist
 	private boolean gameOverState;
-	private AudioManager audioManager;
-	private Music gallop;
-	private Sound eat;
+	private AudioManager audioManager; //Zuständig für Abspielen von Sound u. Musik.
+	private Music gallop; //Gallopieren-Musik im Hintergrund.
+	private Sound eat; //Essen-Sound bei Berührung mit essbarem Gegenstand.
+	private HashMap<String, TextureRegion> regions;
 
+	/**
+	 * Erzeugt das Spielfeld, lädt Sound und Musik von Parcours, setzt die übergebenen Parameter,
+	 * initialisiert den Spieler und Lädt die Texturen.
+	 * @param s Stage vom Level
+	 * @param p Viewport vom Level
+	 * @param w Breite des Spielfelds
+	 * @param h Höhe des Spielfelds
+	 * @param a AudioManager
+	 */
 	public GameField(Stage s, Viewport p, int w, int h, AudioManager a) {
 		audioManager = a;
 		AssetManager.loadMusic("parcours");
@@ -65,30 +80,49 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		loot = new ArrayList<ParcoursLoot>();
 		generalGameSpeed = getWidth() / 3;
 		loadTextureRegions(new GameObjectInitializer());
+		initLoot();
 		player = new Player(getWidth(), getHeight());
 		initPlayer(new GameObjectInitializer());
 	}
 
+	/**
+	 * @return gameOverState true, wenn das Spielende erreicht wurde (zu geringe oder zu erreichende
+	 * Punktzahl)
+	 */
 	public boolean isGameOverState() {
 		return gameOverState;
 	}
 
+	/**
+	 * @param gameOverState true, wenn das Spielende erreicht wurde (zu geringe oder zu erreichende
+	 * Punktzahl) sonst false.
+	 */
 	public void setGameOverState(boolean gameOverState) {
 		this.gameOverState = gameOverState;
 	}
 
+	/**
+	 * Zeigt das Gewinner-Popup bei GameState.WON und das Verlierer-Popup bei GameState.LOST
+	 */
 	public void showPopup(GameState g) {
 		stage.addActor(popup.getPopup(g));
 	}
 
+	/**
+	 * Ruft act auf der Stage auf.
+	 */
 	public void actGameField(float delta) {
 		stage.act(delta);
 	}
 
+	/**
+	 * Lädt alle Texturen und GameObjects des Spiels.
+	 * @param goi GameObjectInitializer
+	 */
 	public void loadTextureRegions(IGameObjectInitializerFuerGameObjectLogic goi) {
 		HashMap<String, TextureRegion> regions = ((HashMap<String, TextureRegion>) AssetManager
 				.getAllTextureRegions("parcours"));
-
+		this.regions = regions;
 		// groundHeight setzen vor Objekten die auf dem "Boden" stehen.
 		TextureRegion r = regions.get("crosssection_long");
 
@@ -139,8 +173,6 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				.getRegionHeight() * 9 / 50, -1000, getTopOfGroundPosition(),
 				true, generalGameSpeed, -10, regions, goi, false, true);
 
-		initLoot(regions);
-
 		scoreInformation = new Text(
 				AssetManager.getTextFont(FontSize.THIRTY), "Punkte: 0", 10,
 				getHeight() * 50 / 60);
@@ -152,14 +184,37 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	}
 
-	private void initLoot(HashMap<String, TextureRegion> regions) {
-		System.out.println("Lade Loot");
-		TextureRegion r = regions.get("carrot");
+	/**
+	 * Lädt die zu gewinnenden Loots.
+	 * @param regions Enthält alle Texturen des Spiels "Parcours"
+	 */
+	private void initLoot() {
+		
+		//TextureRegion r = regions.get("carrot");
+//		RaceLoot horse1 = new RaceLoot(new Race(HorseRace.HANNOVERANER));
+//		ParcoursLoot hannoveraner = new ParcoursLoot(10, horse1, "Wow! Du hast ein neues Pferd gewonnen!");
 		ParcoursLoot carrot = new ParcoursLoot(10, "carrot",
 				"Eine leckere Möhre für dein Pferd.");
+//		loot.add(hannoveraner);
 		loot.add(carrot);
 	}
 
+	/**
+	 * Lädt die Texture "name" aus "regions" und erzeugt ein GameObject in
+	 * Abhängigkeit der übergebenen Parameter. Berechnet die Breite des GameObject
+	 * in Abhängigkeit der gewünschten Höhe.
+	 * @param name Name der Texture im TextureAtlas. Wird Name des GameObjects.
+	 * @param desiredHeight Gewünschte Höhe des GameObjects (Breite wird orignalgetreu angepasst).
+	 * @param x x-Koordinate des GameObjects bei Spielstart.
+	 * @param y y-Koordinate des GameObjects bei Spielstart.
+	 * @param collidable true, wenn das Pferd mit diesem GameObject kollidieren kann.
+	 * @param speed Geschwindigkeit in Pixel pro Sekunde mit der sich das GameObject bewegt.
+	 * @param points Punkte die dem Spieler bei Berührung mit dem GameObject gutgeschrieben oder abgezogen werden.
+	 * @param regions Enthält alle Texturen des Spiels "Parcours" aus dem TextureAtlas.
+	 * @param goi GameObjectInitializer initialisert das GameObject mit den übergebenen Werten.
+	 * @param isLoot true, wenn das GameObject gewonnen werden kann.
+	 * @param isMoveable true, wenn speed > 0, sonst false.
+	 */
 	private void addGameObjectWithRelativHeight(String name,
 			float desiredHeight, float x, float y, boolean collidable,
 			float speed, int points, HashMap<String, TextureRegion> regions,
@@ -175,6 +230,23 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		stage.addActor(o);
 	}
 
+	/**
+	 * Lädt die Texture "name" aus "regions" und erzeugt ein GameObject in
+	 * Abhängigkeit der übergebenen Parameter. Berechnet die Höhe des GameObject in Abhängigkeit
+	 * der übergebenen Breite.
+	 * @param name Name der Texture im TextureAtlas. Wird Name des GameObjects.
+	 * @param width Gewünschte Höhe des GameObjects (Breite wird orignalgetreu angepasst).
+	 * @aram height Die tatsächliche Höhe der Texture.
+	 * @param x x-Koordinate des GameObjects bei Spielstart.
+	 * @param y y-Koordinate des GameObjects bei Spielstart.
+	 * @param collidable true, wenn das Pferd mit diesem GameObject kollidieren kann.
+	 * @param speed Geschwindigkeit in Pixel pro Sekunde mit der sich das GameObject bewegt.
+	 * @param points Punkte die dem Spieler bei Berührung mit dem GameObject gutgeschrieben oder abgezogen werden.
+	 * @param regions Enthält alle Texturen des Spiels "Parcours" aus dem TextureAtlas.
+	 * @param goi GameObjectInitializer initialisert das GameObject mit den übergebenen Werten.
+	 * @param isLoot true, wenn das GameObject gewonnen werden kann.
+	 * @param isMoveable true, wenn speed > 0, sonst false.
+	 */
 	private void addGameObjectFixedWidthHeight(String name, float width,
 			float height, float x, float y, boolean collidable, float speed,
 			int points, HashMap<String, TextureRegion> regions,
@@ -187,6 +259,12 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		stage.addActor(o);
 	}
 
+	/**
+	 * Lädt Büsche aus regions und setzt so viele auf den Gras-Hintergrund, bis von Koordinate 0
+	 * bis GameField.width Büsche gesetzt wurden.
+	 * @param goi GameObjectInitalizer zur Initialisierung der Büsche.
+	 * @param regions Enthält alle TextureRegions des Spiels "Parcours" aus dem TextureAtlas.
+	 */
 	private void addBushs(IGameObjectInitializerFuerGameObjectLogic goi,
 			HashMap<String, TextureRegion> regions) {
 		boolean outOfGameField = false;
@@ -230,19 +308,32 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		}
 	}
 
+	/**
+	 * Addiert points Punkte zur Punktzahl u. passt die Punkteanzeige an.
+	 */
 	public void addToScore(int points) {
 		score += points;
 		scoreInformation.setText("Punkte: " + score);
 	}
 
+	/**
+	 * Ruft draw auf der Stage auf.
+	 */
 	public void drawGameField() {
 		stage.draw();
 	}
 
+	/**
+	 * Liefert alle GameObjects des Spiels.
+	 */
 	public List<GameObject> getGameObjects() {
 		return gameObjects;
 	}
 
+	/**
+	 * Liefert die Höhe des Spielfelds.
+	 * @return height die Höhe des Spielfelds.
+	 */
 	public float getHeight() {
 		return height;
 	}
@@ -252,22 +343,40 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		return player;
 	}
 
+	/**
+	 * Liefert die Punktzahl des Spiels.
+	 * @return score die Punktzahl des Spiels.
+	 */
 	public int getScore() {
 		return score;
 	}
 
+	/**
+	 * Liefert die Stage in der alle Actors (GameObjects + Pferd + Boden) des Spiels sind.
+	 * @return stage Die Stage.
+	 */
 	public Stage getStage() {
 		return stage;
 	}
 
+	/**
+	 * Liefert die Oberflächenposition des Bodens auf dem gewisse GameObjects u. das Pferd stehen.
+	 */
 	public float getTopOfGroundPosition() {
 		return groundHeight - SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP;
 	}
 
+	/**
+	 * Liefert die Spielfeldbreite.
+	 */
 	public float getWidth() {
 		return width;
 	}
-
+	
+	/**
+	 * Initialisert das Pferd.
+	 * @param goi GameObjectInitializer.
+	 */
 	public void initPlayer(GameObjectInitializer goi) {
 		player.setHeight(getHeight() / 5f);
 		com.haw.projecthorse.player.Player p = new com.haw.projecthorse.player.PlayerImpl();
@@ -339,7 +448,6 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	@Override
 	public void removePopup() {
 		for (Actor a : stage.getActors()) {
-			System.out.println(a.getX());
 			if (a.getName().equals("Popup")) {
 				a.remove();
 			}
@@ -347,18 +455,30 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	};
 
+	/**
+	 * Spield den Gallop-Sound als Music-Stream am.
+	 */
 	public void playGallop() {
 		this.gallop.play();
 	}
 
+	/**
+	 * Pausiert den Gallop-Sound-Music-Stream.
+	 */
 	public void pauseGallop() {
 		this.gallop.pause();
 	}
 
+	/**
+	 * Stoppt den Gallop-Sound-Music-Stream.
+	 */
 	public void stopGallop() {
 		this.gallop.stop();
 	}
 
+	/**
+	 * Spiel den Essen-Sound ab.
+	 */
 	public void eat() {
 		this.eat.play();
 	}
@@ -373,6 +493,12 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	public float getGeneralGameSpeed() {
 		// TODO Auto-generated method stub
 		return generalGameSpeed;
+	}
+	
+	@Override
+	public void fadePopup(float delta, GameState g){
+		if(g == GameState.LOST || g == GameState.WON)
+			popup.getPopup(g).act(delta);
 	}
 
 
