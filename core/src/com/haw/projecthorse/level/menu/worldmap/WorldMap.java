@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -36,6 +37,8 @@ import com.haw.projecthorse.level.util.uielements.ButtonOwnImage;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class WorldMap extends Menu {
@@ -45,7 +48,7 @@ public class WorldMap extends Menu {
 	private enum State {
 		INIT, ZOOMING, NORMAL, RUNNING
 	}
-
+	
 	private static boolean firstStart = true;
 
 	private final OrthographicCamera camera; // Zum Zentrieren des Bildes auf
@@ -78,6 +81,8 @@ public class WorldMap extends Menu {
 											// deaktiviert
 
 	private final float MAXZOOM = 0.3f; // Maximaler Kamera Zoom
+	
+	private final float PLAYERSPEED = 1.5f; // Zeit die der Player von einem Punkt zum nächsten benötigt
 
 	private Music music;
 
@@ -92,7 +97,7 @@ public class WorldMap extends Menu {
 		camera = getCam();
 		player = new PlayerImpl(); // TODO color auslesen und im Konstruktor
 									// setzen
-		player.clearActions(); // TODO Workaround bis Player umgebaut
+		//player.clearActions(); // TODO Workaround bis Player umgebaut
 
 		getJasonCities();
 
@@ -169,7 +174,7 @@ public class WorldMap extends Menu {
 		pointImg.setColor(1, 1, 1, 0);
 		pointImg.setScale(0.5f * (width / 720));
 		player.setColor(1, 1, 1, 0);
-		player.scaleBy(-0.5f);
+		player.scaleBy(-1.0f);
 
 		int[] cityCoordinates = cityInfos.get(prefs.getString("lastCity"));
 
@@ -381,14 +386,31 @@ public class WorldMap extends Menu {
 
 	private void movePlayer(String city) {
 		int[] cityCoordinates = cityInfos.get(city);
-
+		
+		
+		
+		
+		Vector2 source = new Vector2(player.getX() + player.getWidth() / 2 * player.getScaleX(), player.getY());
+		Vector2 target = new Vector2(cityCoordinates[0], cityCoordinates[1]);
+		
+		
+		Direction animationDirection = WorldMapUtils.getDirection(source, target);
+		AnimationAction animationRun = new AnimationAction(animationDirection, PLAYERSPEED);
+		//AnimationAction animationIdle = new AnimationAction(WorldMapUtils.getIdleDirection(animationDirection));
+		
+		//SequenceAction animationSequence = new SequenceAction(animationRun, animationIdle); // TODO Fehler bei AnimationIdle finden
+		
+		
+		
 		MoveByAction movement = new MoveByAction();
-		movement.setAmount(cityCoordinates[0] - player.getX() - player.getWidth() / 2 * player.getScaleX(),
-				cityCoordinates[1] - player.getY());
-		movement.setDuration(1.5f);
+		movement.setAmount(target.x - source.x, target.y - source.y);
+		movement.setDuration(PLAYERSPEED);
 
 		player.clearActions();
+		player.setAnimationSpeed(1 - PLAYERSPEED / 2.5f);
 		player.addAction(movement);
+		//player.addAction(animationSequence); // TODO AnimationSequence einbauen
+		player.addAction(animationRun);
 
 	}
 
@@ -459,7 +481,7 @@ public class WorldMap extends Menu {
 		if (germanyImg.getActions().size == 0) {
 			if (camera.zoom > MAXZOOM)
 				state = State.ZOOMING;
-			else if (player.getActions().size > 0)
+			else if (WorldMapUtils.isPlayerMoving(player))
 				state = State.RUNNING;
 			else
 				state = State.NORMAL;

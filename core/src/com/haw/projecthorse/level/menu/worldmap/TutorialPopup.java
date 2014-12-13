@@ -85,10 +85,10 @@ public class TutorialPopup extends Popup {
 
 		MyStringBuilder sb = new MyStringBuilder(18);
 		sb.appendLine("Hi " + playerName);
-		sb.appendLine("wir hoffen das du viel" + " Spaß mit  " + gameTitle + " hast.");
+		sb.appendLine("wir hoffen das du viel Spaß mit " + gameTitle + " hast.");
 		sb.appendLine("Auf der Weltkarte kannst du mit deinem Pferd von Stadt"
 				+ " zu Stadt reisen und dort tolle Spiele spielen.");
-		sb.appendLine("Umso mehr Spiele du spielst umso schönere Pferde kannst du gewinnen.");
+		sb.appendLine("Je mehr Spiele du spielst umso schönere Pferde kannst du gewinnen.");
 
 		return sb.toString();
 	}
