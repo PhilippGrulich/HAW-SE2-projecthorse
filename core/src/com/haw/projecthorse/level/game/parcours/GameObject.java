@@ -6,13 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class GameObject extends Actor {
 
-	private TextureRegion tr;
-	private float duration;
-	private int points;
-	private boolean collidable;
-	private boolean loot;
-	private boolean isMoveable;
+	private TextureRegion tr; //Die TextureRegion die dieses GameObject darstellt.
+	private float duration; //Die Geschwindigkeit in Pixel pro Sekunde mit der sich das GameObject bewegt.
+	private int points; //Die Punkte die bei Kollision mit dem Pferd gutgeschrieben bzw. abgezogen werden.
+	private boolean collidable; //true, wenn man mit dem GameObject kollidieren kan.
+	private boolean loot; //true, wenn man das GameObject gewinnen kann.
+	private boolean isMoveable; //true, wenn duration > 0.
 
+	
 	public boolean isMoveable() {
 		return isMoveable;
 	}

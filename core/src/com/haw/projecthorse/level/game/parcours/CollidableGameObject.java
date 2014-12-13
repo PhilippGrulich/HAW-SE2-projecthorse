@@ -4,10 +4,10 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class CollidableGameObject extends GameObject {
 
-	private Rectangle r;
-	private float x, width;
-	private float y, height;
-	private boolean collidable;
+	private Rectangle r; //Das Rectangle, welches für die Collision-Detection verwendet wird.
+	private float x, width; //x-Koordinate des GameObjects, Breite des GameObjects
+	private float y, height; //y-Koordinate des GameObjects, Höhe des GameObjects
+	private boolean collidable; //true, wenn das Pferd mit dem GameObject kollidieren kann.
 
 	private void checkIfRectangleIsInitialized() {
 		if (r == null) {
