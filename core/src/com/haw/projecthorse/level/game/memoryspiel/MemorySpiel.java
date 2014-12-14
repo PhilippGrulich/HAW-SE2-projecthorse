@@ -35,6 +35,8 @@ public class MemorySpiel extends Game {
 	private Karte playButton;
 	private Music music;
 
+	private Label scoreLabel;
+	
 	public MemorySpiel() {
 		manager = new KartenManager();
 		batcher = this.getSpriteBatch();

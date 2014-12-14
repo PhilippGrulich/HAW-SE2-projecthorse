@@ -23,6 +23,7 @@ public class KartenManager extends Thread {
 	private Drawable picture4;
 	private Drawable picture5;
 	private Drawable picture6;
+	private int score = 0;
 
 	public KartenManager() {
 		setUpKarten();
@@ -98,11 +99,14 @@ public class KartenManager extends Thread {
 							if (karte1.getPicture().equals(karte2.getPicture())) {
 								karte1.setState(CardState.OPEN);
 								karte2.setState(CardState.OPEN);
+								score+=10;
 								canOpen = true;
 							} else {
 								karteA = karte1;
 								karteB = karte2;
 								flag = true;
+								if(score-15<0) score = 0;
+								else score-=15;
 							}
 						}
 					}
