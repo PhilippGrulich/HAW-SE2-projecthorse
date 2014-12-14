@@ -50,6 +50,8 @@ public class WorldMap extends Menu {
 	}
 	
 	private static boolean firstStart = true;
+	private static boolean showedTutorial = false;
+	
 
 	private final OrthographicCamera camera; // Zum Zentrieren des Bildes auf
 												// das Pferd
@@ -95,9 +97,9 @@ public class WorldMap extends Menu {
 		InputManager.addInputProcessor(stage);
 
 		camera = getCam();
-		player = new PlayerImpl(); // TODO color auslesen und im Konstruktor
-									// setzen
-		//player.clearActions(); // TODO Workaround bis Player umgebaut
+		
+		player = new PlayerImpl();
+		
 
 		getJasonCities();
 
@@ -146,10 +148,6 @@ public class WorldMap extends Menu {
 			music.setLooping(true);
 			music.play();
 		}
-
-		// Sollte aufgerufen werden wen die Animation fertig ist. Aber ich weiß
-		// nicht wo das ist. TODO
-		initTutorial();
 	}
 
 	/**
@@ -163,7 +161,10 @@ public class WorldMap extends Menu {
 		if (!prefs.contains(String.valueOf(userID))) {
 			overlay.showPopup(new TutorialPopup());
 			prefs.putString(String.valueOf(userID), "");
+			prefs.flush();
 		}
+		showedTutorial = true;
+		
 
 	}
 
@@ -387,18 +388,18 @@ public class WorldMap extends Menu {
 	private void movePlayer(String city) {
 		int[] cityCoordinates = cityInfos.get(city);
 		
-		
-		
-		
 		Vector2 source = new Vector2(player.getX() + player.getWidth() / 2 * player.getScaleX(), player.getY());
 		Vector2 target = new Vector2(cityCoordinates[0], cityCoordinates[1]);
 		
 		
 		Direction animationDirection = WorldMapUtils.getDirection(source, target);
 		AnimationAction animationRun = new AnimationAction(animationDirection, PLAYERSPEED);
-		//AnimationAction animationIdle = new AnimationAction(WorldMapUtils.getIdleDirection(animationDirection));
 		
-		//SequenceAction animationSequence = new SequenceAction(animationRun, animationIdle); // TODO Fehler bei AnimationIdle finden
+		
+		// Weggelassen, da alleine schon die Existens einer Idle AnimationAction während der Abarbeitung einer anderen AnimationAction
+		// stand 14.12.14 zum Fehler führt
+		//AnimationAction animationIdle = new AnimationAction(WorldMapUtils.getIdleDirection(animationDirection));
+		//SequenceAction animationSequence = new SequenceAction(animationRun, animationIdle); 
 		
 		
 		
@@ -409,7 +410,7 @@ public class WorldMap extends Menu {
 		player.clearActions();
 		player.setAnimationSpeed(1 - PLAYERSPEED / 2.5f);
 		player.addAction(movement);
-		//player.addAction(animationSequence); // TODO AnimationSequence einbauen
+		//player.addAction(animationSequence);
 		player.addAction(animationRun);
 
 	}
@@ -479,8 +480,11 @@ public class WorldMap extends Menu {
 	private void updateState() {
 		// INIT ist durch wenn Deutschlandkarte fertig animiert
 		if (germanyImg.getActions().size == 0) {
-			if (camera.zoom > MAXZOOM)
+			if (camera.zoom > MAXZOOM) {
+				if (!showedTutorial)
+					initTutorial();
 				state = State.ZOOMING;
+			}
 			else if (WorldMapUtils.isPlayerMoving(player))
 				state = State.RUNNING;
 			else

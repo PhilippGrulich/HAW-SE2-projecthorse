@@ -15,7 +15,7 @@ import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class TutorialPopup extends Popup {
 
-	private float tutorialPopupHigh = height / 2;
+	private float tutorialPopupHeight = height / 2;
 	private String gameTitle = GameManagerFactory.getInstance().getGameConfig().getGameTitle();
 	private String playerName = SaveGameManager.getLoadedGame().getPlayerName();
 
@@ -50,7 +50,7 @@ public class TutorialPopup extends Popup {
 		VerticalGroup table = new VerticalGroup() {
 			@Override
 			public float getPrefHeight() {
-				return tutorialPopupHigh;
+				return tutorialPopupHeight;
 			}
 		};
 
@@ -61,11 +61,11 @@ public class TutorialPopup extends Popup {
 		ScrollPane scollContent = new ScrollPane(label, paneStyle) {
 			@Override
 			public float getPrefHeight() {
-				return tutorialPopupHigh - 150;
+				return tutorialPopupHeight - 150;
 			}
 		};
 
-		scollContent.setSize(label.getPrefWidth(), tutorialPopupHigh);
+		scollContent.setSize(label.getPrefWidth(), tutorialPopupHeight);
 		table.addActor(scollContent);
 		Button btn = new ButtonLarge("Los");
 		btn.addListener(new ChangeListener() {
@@ -77,7 +77,7 @@ public class TutorialPopup extends Popup {
 
 		});
 		table.addActor(btn);
-		table.setSize(label.getPrefWidth(), tutorialPopupHigh);
+		table.setSize(label.getPrefWidth(), tutorialPopupHeight);
 		this.addActor(table);
 	}
 

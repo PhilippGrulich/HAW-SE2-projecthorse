@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 
 /**
  * @author Viktor
@@ -78,7 +79,7 @@ public class ButtonLarge extends ImageTextButton{
 	
 	public ButtonLarge(String label, ButtonColor btnColor){
 		super(label, getImageButtonStyle(btnColor));
-		addVibrationFeedback();
+		addFeedback();
 	}
 	
 	public ButtonLarge(String label){
@@ -106,11 +107,12 @@ public class ButtonLarge extends ImageTextButton{
 		return imageButtonStyle;
 	}
 	
-	private void addVibrationFeedback(){
+	private void addFeedback(){
 		this.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-			Gdx.input.vibrate(50);	
+			AudioManagerImpl.getInstance().getSound("ui", "click.ogg").play();
+			Gdx.input.vibrate(50);
 			}
 		});
 	}

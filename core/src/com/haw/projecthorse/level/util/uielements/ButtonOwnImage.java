@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 
 public class ButtonOwnImage extends ImageButton{
 	
@@ -16,23 +17,24 @@ public class ButtonOwnImage extends ImageButton{
 
 	public ButtonOwnImage(Drawable imageUp){
 		super(imageUp);
-		addVibrationFeedback();
+		addFeedback();
 	}
 	
 	public ButtonOwnImage(Skin skin){
 		super(skin);
-		addVibrationFeedback();
+		addFeedback();
 	}
 	
 	public ButtonOwnImage(ImageButtonStyle style){
 		super(style);
-		addVibrationFeedback();
+		addFeedback();
 	}
 	
-	private void addVibrationFeedback(){
+	private void addFeedback(){
 		this.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+			AudioManagerImpl.getInstance().getSound("ui", "click.ogg").play();
 			Gdx.input.vibrate(50);	
 			}
 		});

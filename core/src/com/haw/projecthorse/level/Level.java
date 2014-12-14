@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
@@ -64,6 +65,7 @@ public abstract class Level implements Screen {
 
 		createViewport();
 		audioManager = AudioManagerImpl.getInstance();
+		AssetManager.loadSounds("ui");
 	}
 
 	public void createViewport() {
