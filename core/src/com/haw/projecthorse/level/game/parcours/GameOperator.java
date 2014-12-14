@@ -1,20 +1,26 @@
 package com.haw.projecthorse.level.game.parcours;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
+import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.level.game.parcours.ParcoursLoot;
+import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
@@ -22,16 +28,23 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private IGameObjectLogicFuerGameOperator logic;
 	private IGameFieldFuerGameOperator gameField;
 	private Chest chest;
+	private Chest chestToShow;
 	private boolean saved = false;
 	private boolean paused = false;
 	private boolean gameEndReached;
 	private GameState gameStatus = GameState.START;
 	GestureDetector listener;
 	private InputMultiplexer inputMultiplexer;
+	private float breite;
+	private float distance;
+	private float moveToDuration;
+	private final float MOVEMENT_PER_SECOND;
+	private boolean lootShown = false;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
-			Chest chest, AudioManager audioManager) {
-		AssetManager.loadMusic("parcours");;
+			Chest chest, AudioManager audioManager, Overlay overlay) {
+		AssetManager.loadMusic("parcours");
+		
 		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport,
 				width, height, audioManager);
 		logic = new GameObjectLogic(width,
@@ -39,16 +52,17 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		setInputProcessor();
 		// getEarnedLoot();
 		this.chest = chest;
-		showEarnedLoot();
+		chestToShow = new Chest(overlay);
+		MOVEMENT_PER_SECOND = gameField.getStage().getWidth() / 1.25f;
+		
+//		ArrayList<ParcoursLoot> loots = (ArrayList<ParcoursLoot>) getLoots();
+//		for(ParcoursLoot l : loots){
+//			chest.addLoot(l);
+//		}
+//		showEarnedLoot(chest);
+
 	}
 
-	
-	private void showEarnedLoot() {
-		List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
-		if(allreadyWon.size() > 0){
-			chest.showAllLoot();
-		}
-	}
 
 	@Override
 	public void restart() {
@@ -67,13 +81,14 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		inputMultiplexer.addProcessor(listener);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
+
 	}
 
 	@Override
 	public void update(float delta) {
-		if (delta != 0 && !paused &&  gameStatus != GameState.END) {
+		if (delta != 0 && !paused && gameStatus != GameState.END) {
 			logic.update(delta);
+			
 			verifyGameState(delta);
 		} else {
 			if (gameField.isButtonYesPressed(gameStatus)) {
@@ -86,6 +101,14 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				this.gameStatus = GameState.START;
 				this.setPause(false);
 			} else if (gameField.isButtonNoPressed(gameStatus)) {
+				List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+				List<ParcoursLoot> loot = gameField.getLoot();
+				for(ParcoursLoot pl : loot){
+					if(!allreadyWon.contains(pl) && pl.getWonStatus()){
+						chest.addLoot(pl);
+					}
+				}
+				chest.saveAllLoot();
 				gameEndReached = false;
 				this.setPause(false);
 				gameField.clear();
@@ -93,9 +116,11 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				gameField.stopGallop();
 				GameManagerFactory.getInstance().navigateBack();
 			}
+			gameField.fadePopup(delta, gameStatus);
 			gameField.drawGameField();
+			
 		}
-
+		
 		// TODO logic.success -> popup, stats, loot, restart?
 	}
 
@@ -107,17 +132,24 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			inputMultiplexer.removeProcessor(listener);
 			Gdx.input.setInputProcessor(inputMultiplexer);
 			gameField.pauseGallop();
-			gameField.showPopup(GameState.WON);
 			gameEndReached = true;
 			gameStatus = GameState.WON;
-			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
-			for(ParcoursLoot l : gameField.getLoot()){
-				if(l.getAvailableAtScore() <= gameField.getScore() && !allreadyWon.contains(l)){
-					chest.addLoot(l);
-					chest.saveAllLoot();
+			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>)getLoots();
+			for (ParcoursLoot l : gameField.getLoot()) {
+				if (l.getAvailableAtScore() <= gameField.getScore()
+						 && !l.getWonStatus()) {
+					chestToShow.addLoot(l);
+					l.setWonStatus(true);
 				}
 			}
 			
+			if(!lootShown){
+				chestToShow.showAllLoot();
+				lootShown = true;
+			}else{
+				gameField.showPopup(GameState.WON);
+				lootShown = false;
+			}
 			this.pause();
 		} else if (gameField.getScore() < 0) {
 			gameField.pauseGallop();
@@ -129,7 +161,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	}
 
 	public void setPause(boolean p) {
-		if(!p)
+		if (!p)
 			gameField.playGallop();
 		paused = p;
 	}
@@ -138,18 +170,28 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		gameField.pauseGallop();
 		paused = true;
 	}
-	
-	/**
-	 * ermittelt alle bereits gewonnen Loots aus diesem Spiel die unter dem verwendeten
-	 * Spielstand gesichert sind
-	 * @return Liste aller Thimblerig-Loots
-	 */
-	private List<? extends ParcoursLoot> getLoots(){
-		return SaveGameManager.getLoadedGame().getSpecifiedLoot(com.haw.projecthorse.level.game.parcours.ParcoursLoot.class);
+
+
+	public void dispose() {
+		gameField.dispose();
 	}
 	
-	public void dispose(){
-		gameField.dispose();
+	private void showEarnedLoot(Chest chest) {
+		List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+		if (allreadyWon.size() > 0) {
+			chest.showAllLoot();
+		}
+	}
+	
+	/**
+	 * ermittelt alle bereits gewonnen Loots aus diesem Spiel die unter dem
+	 * verwendeten Spielstand gesichert sind
+	 * 
+	 * @return Liste aller Thimblerig-Loots
+	 */
+	public List<? extends ParcoursLoot> getLoots() {
+		return SaveGameManager.getLoadedGame().getSpecifiedLoot(
+				com.haw.projecthorse.level.game.parcours.ParcoursLoot.class);
 	}
 
 }

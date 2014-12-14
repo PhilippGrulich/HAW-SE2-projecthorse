@@ -8,10 +8,10 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
 
 /**
- * Eine Navbar ist eine kleine Leiste mit Men� Elementen(Pause Button) die
+ * Eine Navbar ist eine kleine Leiste mit Menü Elementen(Pause Button) die
  * entweder am oberen oder am unteren Bildschirmrand angezeigt wird. Jeder
- * Navbar k�nnen mehrere Men� Elemente (NavBarButton) �ber die Methode addButton
- * hinzugef�gt werden.
+ * Navbar können mehrere Menü Elemente (NavBarButton) über die Methode addButton
+ * hinzugefügt werden.
  * 
  * @author Philipp
  *
@@ -30,7 +30,7 @@ public class NavBar extends OverlayWidgetGroup {
 			NAVBAR_HIGH = (int) (this.height * 0.14);
 			NAVBAR_WITH = (int) (this.width);
 		}
-		
+
 		horizontalGroup = new HorizontalGroup();
 
 		horizontalGroup.reverse();
@@ -43,34 +43,36 @@ public class NavBar extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Leifert das Parent Overlay Object zur�ck. Wenn die NavigationBar nicht
-	 * auf einem Overlay liegt wird null zur�ck gegeben. Daher sollte die Navbar
+	 * Leifert das Parent Overlay Object zurück. Wenn die NavigationBar nicht
+	 * auf einem Overlay liegt wird null zurück gegeben. Daher sollte die Navbar
 	 * immer auf einem Overlay liegen.
 	 * 
 	 * @return
 	 */
-	public Overlay getOverlay() {
-		if (this.getParent() == null)
+	public final Overlay getOverlay() {
+		if (this.getParent() == null) {
 			return null;
-		if (!(this.getStage() instanceof Overlay))
+		}
+		if (!(this.getStage() instanceof Overlay)) {
 			return null;
+		}
 		return (Overlay) this.getStage();
 	}
 
-	public void setToTop() {
+	public final void setToTop() {
 		this.horizontalGroup.setY(this.height - NAVBAR_HIGH);
 	};
 
-	public void setToButton() {
+	public final void setToButton() {
 		this.horizontalGroup.setY(horizontalGroup.getHeight());
 	}
 
 	/**
-	 * F�gt ein neuen NavbarButton zur Navbar hinzu.
+	 * Fügt ein neuen NavbarButton zur Navbar hinzu.
 	 * 
 	 * @param btn
 	 */
-	public void addButton(NavbarButton btn) {
+	public final void addButton(NavbarButton btn) {
 
 		this.horizontalGroup.addActor(btn);
 		this.horizontalGroup.layout();

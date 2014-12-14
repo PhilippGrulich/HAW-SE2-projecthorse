@@ -55,20 +55,21 @@ public class PuzzlePart extends Image {
 						image.setVisible(false);
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
-						ImageManager.win.play(0.9f);
+						PuzzleManager.win.play(0.9f);
 
-						ImageManager
-								.setLabelText("Du hast gewonnen!!! \nAnzahl deiner Schritte : "
-										+ String.valueOf(Counter.getCounter()));
+						PuzzlePlayer
+								.setActorSpeech("Mit nur "
+										+ String.valueOf(Counter.getCounter())+" \nSchritten!");
 						Counter.setCounter(0);
-						ImageManager.getOverlay().showPopup(replay);
+						
+						PuzzleManager.getOverlay().showPopup(replay);
 
 					}
 
 				} else {
 
 					Counter.setCounter(1);
-					ImageManager.setLabelText("Anzahl: "
+					PuzzleManager.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
 
 					int lokX = (int) image.getX();
@@ -76,7 +77,7 @@ public class PuzzlePart extends Image {
 
 					if (checkImage(lokX, lokY)) {
 
-						ImageManager.swipe.play();
+						PuzzleManager.swipe.play();
 						image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
 								.getEmptyImage().getY());
 
@@ -113,12 +114,13 @@ public class PuzzlePart extends Image {
 	 * Overlay mit zwei Buttons, fürs Weiterspielen oder Zurückgehen
 	 */
 	private void replay() {
-		replay = new Dialog("Noch eine Runde?");
+		replay = new Dialog("Du hast gewonnen!!!\n Noch eine Runde?");
 
 		replay.addButton("ja", new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				PuzzleManager.click.play();
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			}
 
@@ -128,6 +130,7 @@ public class PuzzlePart extends Image {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				PuzzleManager.click.play();
 				GameManagerFactory.getInstance().navigateBack();
 			}
 

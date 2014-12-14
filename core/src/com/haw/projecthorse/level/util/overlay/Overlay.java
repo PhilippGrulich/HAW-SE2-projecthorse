@@ -9,61 +9,67 @@ import com.haw.projecthorse.level.util.overlay.navbar.NavBar;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 
 /**
- * Die Overlay Stage liegt immer über jedem Level. 
- * So wird der Inhalt dieser Stage immer vor dem eigentlichen Level Content angezeigt.
- * Ein Overlay kann eine Navigationsleiste und ein Popup enthalten. 
- * Außerdem muss dem Overlay eine Referenz auf das Level übergeben werden damit z.B. ein Popup auch mit diesem Interagieren kann. 
+ * Die Overlay Stage liegt immer über jedem Level. So wird der Inhalt dieser
+ * Stage immer vor dem eigentlichen Level Content angezeigt. Ein Overlay kann
+ * eine Navigationsleiste und ein Popup enthalten. Außerdem muss dem Overlay
+ * eine Referenz auf das Level übergeben werden damit z.B. ein Popup auch mit
+ * diesem Interagieren kann.
  * 
  * @author Philipp
  * 
  */
 public class Overlay extends Stage {
 
-	private NavBar navBar;
-
+	private Popup popup;
 	private Level level;
 
-	public Overlay(Viewport viewport, SpriteBatch spriteBatch, Level level) {
+	public Overlay(final Viewport viewport, final SpriteBatch spriteBatch, final Level levelPara) {
 		super(viewport, spriteBatch);
 		InputManager.addInputProcessor(this, Integer.MAX_VALUE);
-		this.level = level;
+		this.level = levelPara;
 	}
 
 	/**
-	 * Setzt eine neue Navigationsbar welche durch {@link NavBar} bzw. durch deren Unterklassen Implementiert wurde.
+	 * Setzt eine neue Navigationsbar welche durch {@link NavBar} bzw. durch
+	 * deren Unterklassen Implementiert wurde.
+	 * 
 	 * @param nav
 	 */
-	public void setNavigationBar(NavBar nav) {
-		//if (navBar != null)
-			// this.re(navBar);
-			this.addActor(nav);
-		navBar = nav;
+	public final void setNavigationBar(final NavBar nav) {
+		this.addActor(nav);
 	}
 
 	/**
 	 * Liefert die Referenz auf das Level über welchem das Overlay liegt
+	 * 
 	 * @return
 	 */
-	public Level getLevel(){
+	public final Level getLevel() {
 		return level;
 	}
-	
+
 	/**
 	 * Zeigt ein neues Popup und lässt das Lavel Pausieren.
+	 * 
 	 * @param Popup
 	 */
-	public void showPopup(Popup p) {
-		this.addActor(p);	
+	public final void showPopup(final Popup p) {
+		if (popup != null) {
+			disposePopup();
+		}
+		popup = p;
+
+		this.addActor(p);
 		this.level.pause();
 	}
 
 	/**
 	 * Lässt alle Popups verschwinden.
 	 */
-	public void disposePopup() {
-		this.clear();
+	public final void disposePopup() {
+		this.popup.fadeOut();
 		this.level.resume();
-		this.addActor(navBar);
+
 	}
 
 }

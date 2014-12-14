@@ -50,14 +50,14 @@ public class Puzzle {
 
 	public Puzzle() {
 
-		puzzleWidth = ImageManager.myWidth / COL; // 270
-		puzzleHeight = ImageManager.myHeight / ROW; // 480
+		puzzleWidth = PuzzleManager.myWidth / COL; // 270
+		puzzleHeight = PuzzleManager.myHeight / ROW; // 480
 
 		createButtons();
 		createEmptyImage();
 		createImageArr();
 
-		ImageManager.setLabelText("Anzahl: "
+		PuzzleManager.setLabelText("Anzahl: "
 				+ String.valueOf(Counter.getCounter()));
 
 		shuffle();
@@ -81,9 +81,9 @@ public class Puzzle {
 		for (int i = 0; i < COL; i++) {
 			for (int j = 0; j < ROW; j++) {
 
-				int xPos = (j * puzzleWidth) + ImageManager.myXPos;
+				int xPos = (j * puzzleWidth) + PuzzleManager.myXPos;
 				int yPos = ((COL - (2 * i + 1) + i) * puzzleHeight)
-						+ ImageManager.myYPos;
+						+ PuzzleManager.myYPos;
 
 				Image im = new Image(puzzleTexRegArrOrigin[i][j]);
 
@@ -95,7 +95,7 @@ public class Puzzle {
 					missingImage.setVisible(false);
 					missingImage.setPosition(xPos, yPos);
 
-					ImageManager.addToStage(ImageManager.getSecondstage(),
+					PuzzleManager.addToStage(PuzzleManager.getSecondstage(),
 							missingImage);
 
 					emptyImage.setPosition(xPos, yPos);
@@ -120,7 +120,7 @@ public class Puzzle {
 				Image im = imageArr[i][j];
 				PuzzlePart.addListener(im);
 
-				ImageManager.addToStage(ImageManager.getSecondstage(), im);
+				PuzzleManager.addToStage(PuzzleManager.getSecondstage(), im);
 
 			}
 		}
@@ -147,7 +147,6 @@ public class Puzzle {
 			}
 			count += 1;
 		}
-		System.out.println();
 	}
 
 	public static boolean check() {
@@ -208,13 +207,13 @@ public class Puzzle {
 		button_back.setWidth(95);
 
 		button_back.setPosition(
-				ImageManager.getMyXPos() + ImageManager.getMyWidth()
-						- button_back.getWidth(), ImageManager.getMyYPos()
-						+ ImageManager.getMyHeight());
+				PuzzleManager.getMyXPos() + PuzzleManager.getMyWidth()
+						- button_back.getWidth(), PuzzleManager.getMyYPos()
+						+ PuzzleManager.getMyHeight());
 		// button_back.setPosition(0, 0);
 		addListener(button_back);
 
-		ImageManager.addToStage(ImageManager.getSecondstage(), button_back);
+		PuzzleManager.addToStage(PuzzleManager.getSecondstage(), button_back);
 
 	}
 
@@ -223,6 +222,7 @@ public class Puzzle {
 		back.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				PuzzleManager.click.play();
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			};
 		});

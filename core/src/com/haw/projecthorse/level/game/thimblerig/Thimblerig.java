@@ -29,23 +29,25 @@ import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.thimblerig.HatGestureDetector.IOnDirection;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
+import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
- * Richtiges Huetchen finden, unter dem das Pferd versteckt ist
+ * Richtiges Huetchen finden, unter dem das Pferd versteckt ist.
  * @author Fabian Reiber
+ * @version 1.0
  */
 
 public class Thimblerig extends Game{
 
 	private Stage stage;
-	private static boolean ISPAUSED;
+	private static boolean isPaused;
 	
 	/**
-	 * Musik und Sound Objekte
+	 * Musik und Sound Objekte.
 	 */
 	private Music bgMusic;
 	private Sound firstSax;
@@ -53,15 +55,15 @@ public class Thimblerig extends Game{
 	private Sound thirdSax;
 	private Sound horseNeighing;
 	/**
-	 * Hut- und Logik-Objekte
+	 * Hut- und Logik-Objekte.
 	 */
 	private Hat[] hats;
 	private GestureDetector hatGestureDetector;
 	private InputMultiplexer hatGameMultiplexer;
 	private Group group;
-	private static float[] XCORDHAT;
-	private static float YCORDHAT;
-	private static int HAT_NUMBER = 3;
+	private static float[] xCordHat;
+	private static float yCordHat;
+	private static int hatNumber = 3;
 	private Player pl;
 	private Random rnd;
 	private int rightNum;
@@ -71,8 +73,9 @@ public class Thimblerig extends Game{
 	//wurde ein Hut in der Runde gewaehlt: zur Liste hinzufuegen, damit 
 	//dieser nicht nochmal gewaehlt werden kann
 	private List<Integer> hatIndexList;
+	
 	/**
-	 * Background-Objekte
+	 * Background-Objekte.
 	 */
 	private BitmapFont textFont;
 	private Image bgTable;
@@ -82,7 +85,7 @@ public class Thimblerig extends Game{
 	private Image bgWitch;
 	private Image bgSpeechBalloon;
 	/**
-	 * Dialog-Objekte
+	 * Dialog-Objekte.
 	 */
 	private Label labelStart;
 	private Label labelGood;
@@ -91,7 +94,7 @@ public class Thimblerig extends Game{
 	private Label labelFail;
 	
 	/**
-	 * Score-Objekte
+	 * Score-Objekte.
 	 */
 	private BitmapFont scoreFont;
 	private String scoreStr;
@@ -99,39 +102,40 @@ public class Thimblerig extends Game{
 	private Label labelWin;
 	
 	/**
-	 * Button-Objekt
+	 * Button-Objekt.
 	 */
-	private Dialog newGame;
+	private ButtonLarge newGame;
+	private ButtonLarge exitGame;
 
 	/**
-	 * Loot-Objekte
+	 * Loot-Objekte.
 	 */
 	private List<Loot> possibleWinLoots;
 	private List<ThimblerigLoot> justWonLoots;
 	private static final int MINSCORE = 10;
-	private static boolean ISMINSCORED;
+	private static boolean isMinscored;
 	private static final int MIDSCORE = 20;
-	private static boolean ISMIDSCORED;
+	private static boolean isMidScored;
 	private static final int MAXSCORE = 30;
-	private static boolean ISMAXSCORED;
+	private static boolean isMaxScored;
 	/**
-	 * Hint-Objekte
+	 * Hint-Objekte.
 	 */
 	private int jiggleVal;
 	private int jiggleCounter;
 	private static final int JIGGLETIMEMIN = 6;
 	private static final int JIGGLETIMEMAX = 12;
-	private static boolean JIGGLECOUNTERFLAG;
+	private static boolean jiggleCounterFlag;
 	
 	/**
-	 * Konstruktor
+	 * Konstruktor.
 	 */
 	@SuppressWarnings("unchecked")
 	public Thimblerig(){
 		super();
-		ISPAUSED = false;
+		isPaused = false;
 		this.rnd = new Random();
-		XCORDHAT = new float[HAT_NUMBER];
+		xCordHat = new float[hatNumber];
 		this.choiceCounter = 0;
 		this.roundFinished = false;
 		this.scoreStr = "Score: ";
@@ -139,7 +143,7 @@ public class Thimblerig extends Game{
 		this.hatIndexList = new ArrayList<Integer>();
 		
 		this.justWonLoots = (List<ThimblerigLoot>) getThimblerigLoots();		
-		this.textFont = AssetManager.getTextFont(FontSize.DREISSIG);
+		this.textFont = AssetManager.getTextFont(FontSize.THIRTY);
 
 		/**
 		 * damit nicht direkt zu Beginn ein Hinweis kommt, den Counter bereits 
@@ -147,7 +151,7 @@ public class Thimblerig extends Game{
 		 */
 		this.jiggleVal = 1000;
 		this.jiggleCounter = 800;
-		JIGGLECOUNTERFLAG = false;
+		jiggleCounterFlag = false;
 		
 		initStage();
 		initPlayer();
@@ -160,63 +164,39 @@ public class Thimblerig extends Game{
 		addActorsToStage();
 		initProcessorAndGestureDetector();
 		initLoots();
+		System.out.println("num: " + this.rightNum);
 	}
 
 	/**
-	 * Prueft, ob einer der Huete ausgewaehlt wurde
-	 * @param delta
+	 * Prueft, ob einer der Huete ausgewaehlt wurde.
+	 * @param delta 
 	 */
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 0); 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.stage.act(delta);
 		this.stage.draw();
 		
 		//eigentliche Spiellogik
-		if(!this.roundFinished && !ISPAUSED){
+		if(!this.roundFinished && !isPaused){
 			//es gibt nur Hinweise fuer die Spieler_innen, wenn das Pferd
 			//etwas ungehorsam ist
 			if(this.pl.getObedience() <= 0.5f){
 				doHint(delta);
 			}
 			
-			for(int i = 0; i < HAT_NUMBER; i++){
+			for(int i = 0; i < hatNumber; i++){
 				if(this.hats[i].isFlinged() && this.hats[i].isChoosed()){
 					//Positionen von Pferd und korrektem Hut setzen
-					this.pl.setPosition(this.hats[i].getX() + 50, this.hats[i].getY());
+					this.pl.setPosition(this.hats[i].getX() + 15, this.hats[i].getY());
 					
 					Action moveTo = Actions.moveTo(this.hats[i].getX(),
 							this.hats[i].getY() + 80);
 					this.hats[i].addAction(moveTo);
 					this.pl.setVisible(true);
 					this.labelStart.setVisible(false);
-					
-					/*
-					 * wurde Pferd beim ersten Mal gefunden, dann entsprechende
-					 * Ausgabe und Score hochzaehlen. 
-					 * wurde Pferd beim zweiten Mal gefunden, dann entsprechende
-					 * Ausgabe.
-					 */
-					switch(this.choiceCounter){
-					case 0:
-						this.firstSax.play(0.4f);
-						this.labelGood.setVisible(true);					
-						this.wins++;
-						this.labelWin.setText(this.scoreStr + this.wins);
-						checkPrize();
-						break;
-					case 1:
-						this.firstSax.play(0.4f);
-						this.labelTryAgain.setVisible(false);
-						this.labelOk.setVisible(true);
-						break;
-					default:
-						break;
-					}
-					
-					overlay.showPopup(newGame);
-					this.roundFinished = true;
+					showSloganAndPlaySound();
 					//springe aus Schleife, wenn Pferd gefunden wurde
 					break;
 				}
@@ -231,34 +211,62 @@ public class Thimblerig extends Game{
 					this.hats[i].addAction(moveTo);
 					this.choiceCounter++;
 					this.hatIndexList.add(i);
-					/*
-					 * Sind alle zwei Versuche gescheitert, dann wird Score um
-					 * einen runtergezaehlt und Runde beendet. Weniger als 0 geht aber nicht
-					 */
+					
 					if(this.choiceCounter == 2){
-						this.thirdSax.play(0.4f);
-						this.labelTryAgain.setVisible(false);
-						this.labelFail.setVisible(true);
-						overlay.showPopup(newGame);
-						
-						
-						if(this.wins > 0){
-							this.wins--;
-							this.labelWin.setText(this.scoreStr + this.wins);
-						}
-						this.roundFinished = true;
+						showSloganAndPlaySound();
 						//ein dritter Versuch in einer Runde ist nicht moegliche
 						//aus der Schleife springen
 						break;
 					}
 					else{
 						this.labelStart.setVisible(false);
-						this.labelTryAgain.setVisible(true);
+						this.labelTryAgain.setVisible(true);						
 						}
 					}
 				}
 			}	
 		}
+	
+	/**
+	 * Prueft bei dem wie vielten Versuch das Pferd gefunden bzw. nicht gefunden wurde
+	 * und gibt dementsprechend ein Slogan aus und spielt einen Sound ab.
+	 */
+	private void showSloganAndPlaySound(){		
+		switch(this.choiceCounter){
+		case 0:
+			this.firstSax.play(0.4f);
+			this.labelGood.setVisible(true);					
+			this.wins++;
+			this.labelWin.setText(this.scoreStr + this.wins);
+			checkPrize();
+			break;
+		case 1:
+			this.firstSax.play(0.4f);
+			this.labelTryAgain.setVisible(false);
+			this.labelOk.setVisible(true);
+			break;
+		case 2:
+			this.thirdSax.play(0.4f);
+			this.labelTryAgain.setVisible(false);
+			this.labelFail.setVisible(true);
+
+			/*
+			 * Sind alle zwei Versuche gescheitert, dann wird Score um
+			 * einen runtergezaehlt und Runde beendet. Weniger als 0 geht aber nicht
+			 */
+			if(this.wins > 0){
+				this.wins--;
+				this.labelWin.setText(this.scoreStr + this.wins);
+			}
+			break;
+		default:
+			break;
+		}
+		
+		this.newGame.setVisible(true);
+		this.exitGame.setVisible(true);
+		this.roundFinished = true;
+	}
 
 	@Override
 	protected void doDispose() {
@@ -268,7 +276,7 @@ public class Thimblerig extends Game{
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		
 	}
 
@@ -292,31 +300,32 @@ public class Thimblerig extends Game{
 
 	@Override
 	protected void doPause() {		
-		ISPAUSED = true;
+		isPaused = true;
 	}
 
 	@Override
 	protected void doResume() {
-		ISPAUSED = false;
+		isPaused = false;
 	}
 	
 	/**
-	 * Stage initialisieren
+	 * Stage initialisieren.
 	 */
 	private void initStage(){
 		this.stage = new Stage(this.getViewport(), this.getSpriteBatch());
 	}
 	
 	/**
-	 * Horse initialisieren
+	 * Horse initialisieren.
 	 */
 	private void initPlayer(){
 		this.pl = new PlayerImpl();
+		this.pl.setScale(1.2f);
 		this.pl.setVisible(false);
 	}
 	
 	/**
-	 * Background initialisieren und positionieren
+	 * Background initialisieren und positionieren.
 	 */
 	private void initBackground(){
 		TextureRegion bgTableTexReg = AssetManager.getTextureRegion("thimblerig", "table");
@@ -347,7 +356,7 @@ public class Thimblerig extends Game{
 	}
 	
 	/**
-	 * Dialoge der Hexe initialisieren und positionieren
+	 * Dialoge der Hexe initialisieren und positionieren.
 	 */
 	private void initSlogans(){
 		String start = "Entscheide dich\nfür einen Hut\nund 'wische' ihn\nhoch.";
@@ -380,51 +389,50 @@ public class Thimblerig extends Game{
 	
 	/**
 	 * Initialisierung der Huete mit Vergabe einer ID, sowie
-	 * Positionierung auf den Screen
+	 * Positionierung auf den Screen.
 	 */
 	private void initHats(){
 		TextureRegion texHat = AssetManager.getTextureRegion("thimblerig", "purple-witch-hat");
-		this.hats = new Hat[HAT_NUMBER];
+		this.hats = new Hat[hatNumber];
 		this.group = new Group();
 		int xPosition = 0;
-		YCORDHAT = this.bgTable.getHeight() / 2.12f;
-		for(int i = 0; i < HAT_NUMBER; i++){
-			XCORDHAT[i] = xPosition;
+		yCordHat = this.bgTable.getHeight() / 2.12f;
+		for(int i = 0; i < hatNumber; i++){
+			xCordHat[i] = xPosition;
 			this.hats[i] = new Hat(texHat);
 			this.hats[i].setWidth(200);
 			this.hats[i].setHeight(150);
-			this.hats[i].setPosition(xPosition, YCORDHAT);
+			this.hats[i].setPosition(xPosition, yCordHat);
 			this.group.addActor(this.hats[i]);
 			xPosition += (this.width / 2) - 100;
 		}
 	}
 	
 	/**
-	 * Score initialisieren
+	 * Score initialisieren.
 	 */
 	private void initScore(){
-		this.scoreFont = AssetManager.getHeadlineFont(FontSize.VIERZIG);
+		this.scoreFont = AssetManager.getHeadlineFont(FontSize.FORTY);
 		this.scoreFont.setScale(1f, 1.5f);
 		LabelStyle labelStyle = new LabelStyle(this.scoreFont, Color.BLACK);
 		this.labelWin = new Label(this.scoreStr + this.wins, labelStyle);
 		this.labelWin.setPosition(this.width  / 2.0f - this.labelWin.getWidth() / 2, 
-			this.height - 2 * this.labelWin.getHeight());
+			this.height - 2 * this.labelWin.getHeight() + 50);
 	}
 
 	/**
-	 * initalisierung der Buttons die gezeigt werden, wenn
+	 * Initalisierung der Buttons die gezeigt werden, wenn
 	 * das korrekte Huetchen gewaehlt wurde.
 	 * Weiterhin werden die Listener fuer die Buttons erstellt
 	 */
 	private void initButtons(){
-		this.newGame = new Dialog("Möchtest du eine\nweitere Runde spielen?");
 		
-		this.newGame.addButton("jaa, sehr gerne", new ChangeListener() {
+		this.newGame = new ButtonLarge("noch eine spannende Runde?", new ChangeListener() {
 			
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				
-					 overlay.disposePopup();
+			public void changed(final ChangeEvent event, final Actor actor) {
+					 newGame.setVisible(false);
+					 exitGame.setVisible(false);
 					 pl.setVisible(false);
 					 labelStart.setVisible(true);
 					 labelGood.setVisible(false);
@@ -435,30 +443,35 @@ public class Thimblerig extends Game{
 					 roundFinished = false;
 					 hatIndexList.clear();
 					 hats[rightNum].setChoosed(false);
-					 for(int i = 0; i < HAT_NUMBER; i++){
-						 hats[i].setPosition(XCORDHAT[i], YCORDHAT);
+					 for(int i = 0; i < hatNumber; i++){
+						 hats[i].setPosition(xCordHat[i], yCordHat);
 						 hats[i].setFlinged(false);
 					 }
-					 generateHatNum();	
-				
+					 generateHatNum();		
 			}
-			
 		});
 		
-		this.newGame.addButton("och nö, lieber nicht", new ChangeListener() {
+		this.exitGame = new ButtonLarge("nö, nicht noch einmal..", new ChangeListener() {
 			
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				GameManagerFactory.getInstance().navigateBack();
 			}
 			
 		});
 
 		
+		this.newGame.setPosition(this.width / 2.0f - this.newGame.getWidth() / 2.0f, 
+				this.height - 2 * this.newGame.getHeight() - this.labelWin.getHeight() + 80);
+		this.exitGame.setPosition(this.width / 2.0f - this.exitGame.getWidth() / 2.0f, 
+				this.newGame.getY() - this.newGame.getHeight());
+		
+		this.newGame.setVisible(false);
+		this.exitGame.setVisible(false);
 	}
 	
 	/**
-	 * fuegt alle Actor der Stage hinzu
+	 * Alle Actor der Stage hinzufügen.
 	 */
 	private void addActorsToStage(){
 		this.stage.addActor(this.bgBackground);
@@ -477,18 +490,21 @@ public class Thimblerig extends Game{
 		this.stage.addActor(this.group);
 		this.stage.addActor(this.pl);
 		this.stage.addActor(this.labelWin);
+		
+		this.stage.addActor(this.newGame);
+		this.stage.addActor(this.exitGame);
 	}
 	
 	/**
-	 * initialisiert den GestureDetector fuer die Swipes und fuegt diesen und
-	 * die Stage dem InputProcessor hinzu
+	 * Initialisierung des GestureDetector fuer die Swipes und fuegt diesen und
+	 * die Stage dem InputProcessor hinzu.
 	 */
 	private void initProcessorAndGestureDetector(){
 		this.hatGestureDetector = new HatGestureDetector(new IOnDirection() {
 			
 			@Override
-			public void onUp(float actualX, float actualY) {				
-				if(!ISPAUSED){
+			public void onUp(final float actualX, final float actualY) {				
+				if(!isPaused){
 					for(int i = 0; i < hats.length; i++){
 						if(actualX > hats[i].getX()
 		 						&& actualX < (hats[i].getX() + hats[i].getWidth())
@@ -530,6 +546,9 @@ public class Thimblerig extends Game{
 		InputManager.addInputProcessor(this.hatGameMultiplexer);
 	}
 	
+	/**
+	 * Initialisierung der Loots.
+	 */
 	private void initLoots(){
 		this.possibleWinLoots = new ArrayList<Loot>();
 		
@@ -550,14 +569,14 @@ public class Thimblerig extends Game{
 		this.possibleWinLoots.add(new ThimblerigLoot("heu", "kraftbringendes Heu"
 				, "mcol_haystack"));
 		
-		ISMINSCORED = false;
-		ISMIDSCORED = false;
-		ISMAXSCORED = false;
+		isMinscored = false;
+		isMidScored = false;
+		isMaxScored = false;
 	}
 	
 	/**
-	 * ermittelt alle bereits gewonnen Loots aus diesem Spiel die unter dem verwendeten
-	 * Spielstand gesichert sind
+	 * Ermittlung aller bereits gewonnen Loots aus diesem Spiel die unter dem verwendeten
+	 * Spielstand gesichert sind.
 	 * @return Liste aller Thimblerig-Loots
 	 */
 	private List<? extends Loot> getThimblerigLoots(){
@@ -565,7 +584,7 @@ public class Thimblerig extends Game{
 	}
 	
 	/**
-	 * ermittelt, ob eine der Scoregrenzen erreicht wurde. Wenn ja, dann wird der Reihe
+	 * Ermittlung, ob eine der Scoregrenzen erreicht wurde. Wenn ja, dann wird der Reihe
 	 * nach geprueft, ob die einzelnen Loots, die in diesem Spiel gewonnen werden
 	 * koennen, bereits in der Loot-Galerie vorhanden sind. Wenn ja wird das Loot
 	 * hinzugefuegt, sonst eine entsprechende Ausgabe erzeugt. Wurd der Maxscore erreicht
@@ -576,54 +595,32 @@ public class Thimblerig extends Game{
 		 * wurden beide Werte auf -2 gesetzt, dann darf entsprechend keine Ausgabe
 		 * oder ein hinzufuegen von Loot/Pferd erfolgen
 		 */
-		int indexOfLoot = -1;
-		int indexOfHorseLoot = -1;
+		int indexOfLoot = -2;
+		int indexOfHorseLoot = -2;
 		int maxNumberOfLootsMinscore = (this.possibleWinLoots.size() / 2) - 1;
 		switch(this.wins){
 		case MINSCORE:
-			if(!ISMINSCORED){
-				ISMINSCORED = true;
+			if(!isMinscored){
+				isMinscored = true;
 				indexOfLoot = getLootIndexMinscore(maxNumberOfLootsMinscore);
-				indexOfHorseLoot = -2;
-			}
-			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
-			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
-			else{
-				indexOfLoot = -2;
 				indexOfHorseLoot = -2;
 			}
 			break;
 		case MIDSCORE:
-			if(!ISMIDSCORED){
-				ISMIDSCORED = true;
+			if(!isMidScored){
+				isMidScored = true;
 				indexOfLoot = getLootIndexMidscore(maxNumberOfLootsMinscore);		
-				indexOfHorseLoot = -2;
-			}
-			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
-			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
-			else{
-				indexOfLoot = -2;
 				indexOfHorseLoot = -2;
 			}
 			break;
 		case MAXSCORE:
-			if(!ISMAXSCORED){
-				ISMAXSCORED = true;
+			if(!isMaxScored){
+				isMaxScored = true;
 				indexOfHorseLoot = getHorseIndexMaxscore();
 				indexOfLoot = -2;
 			}
-			//Wurde bereits der Minscore einmal erreicht, dann darf keine weitere 
-			//Pruefung getaetigt werden bzw. Ausgabe der Loots/Pferde erscheinen
-			else{
-				indexOfLoot = -2;
-				indexOfHorseLoot = -2;
-			}
 			break;
 		default:
-			//keine Ausgabe oder hinzufuegen eines Loots/Pferdes, da Score keinen 
-			//der Scoregrenzen erreicht hat
-			indexOfLoot = -2;
-			indexOfHorseLoot = -2;
 			break;
 		}
 		
@@ -635,6 +632,7 @@ public class Thimblerig extends Game{
 		 */
 		if (indexOfLoot > -1){
 			this.chest.addLoot(this.possibleWinLoots.get(indexOfLoot));
+			this.chest.showAllLoot();
 			//this.chest.addLootAndShowAchievment(this.possibleWinLoots.get(indexOfLoot));
 			//TODO: loot-dialog anzeigen....
 		}
@@ -643,8 +641,8 @@ public class Thimblerig extends Game{
 					+ "nichts mehr gewinnen!");
 			d.addButton("na gut...", new ChangeListener() {
 				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					if(!ISPAUSED){
+				public void changed(final ChangeEvent event, final Actor actor) {
+					if(!isPaused){
 						d.setVisible(false);
 					}
 				}
@@ -667,8 +665,8 @@ public class Thimblerig extends Game{
 					+ "in diesem Minispiel gewinnen!");
 			d.addButton("ist ok...", new ChangeListener(){
 				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					if(!ISPAUSED){
+				public void changed(final ChangeEvent event, final Actor actor) {
+					if(!isPaused){
 						d.setVisible(false);
 					}
 				}
@@ -682,10 +680,12 @@ public class Thimblerig extends Game{
 	 * wurde der Minscore erreicht, kann hier nur ((n / 2) - 1)-mal ein neues
 	 * Loot gewonnen werden. n ist die Listengroesse der moeglichen Loots die in 
 	 * diesem Spiel gewonnen werden koennen
+	 * @param maxNumberOfLootsMinscore maximale Anzahl an Loots die fuer den Minscore 
+	 * 			erreicht werden duerfen
 	 * @return Index des Loots, welches gewonnen wurde. -1, sonst, wenn bereits
 	 * 			maxNumberOfLootsMinscore erreicht wurde.
 	 */
-	private int getLootIndexMinscore(int maxNumberOfLootsMinscore){
+	private int getLootIndexMinscore(final int maxNumberOfLootsMinscore){
 		int index = -1;
 		for(int i = 0; i < maxNumberOfLootsMinscore; i++){
 			if(this.justWonLoots != null){
@@ -702,10 +702,12 @@ public class Thimblerig extends Game{
 	 * wurde der Midscore erreicht, kann hier nur (n / 2)-mal ein neues
 	 * Loot gewonnen werden. n ist die Listengroesse der moeglichen Loots die in 
 	 * diesem Spiel gewonnen werden koennen.
+	 * @param maxNumberOfLootsMinscore maximale Anzahl an Loots die fuer den Minscore 
+	 * 			erreicht werden duerfen
 	 * @return Index des Loots, welches gewonnen wurde. -1, sonst, wenn bereits 
 	 * 			maxNumberOfLootsMaxScore erreicht wurde.
 	 */
-	private int getLootIndexMidscore(int maxNumberOfLootsMinscore){
+	private int getLootIndexMidscore(final int maxNumberOfLootsMinscore){
 		int index = -1;
 		for(int i = maxNumberOfLootsMinscore; i < this.possibleWinLoots.size(); i++){
 			if(this.justWonLoots != null){
@@ -733,10 +735,10 @@ public class Thimblerig extends Game{
 	}
 	
 	/**
-	 * Generiert die ID des Hutes unter der das Pferd versteckt ist
+	 * Generiert die ID des Hutes unter der das Pferd versteckt ist.
 	 */
 	private void generateHatNum(){
-		this.rightNum = this.rnd.nextInt(HAT_NUMBER);
+		this.rightNum = this.rnd.nextInt(hatNumber);
 		this.hats[this.rightNum].setChoosed(true);
 	}
 	
@@ -744,38 +746,38 @@ public class Thimblerig extends Game{
 	 * Abhaengig von der Pferderasse gibt es einen Hinweis an den/die Spieler/in.
 	 * Dieser sieht so aus, dass der Hut, unter dem das Pferd versteckt ist, einmal
 	 * kurz wackelt.
-	 * @param delta
+	 * @param delta 
 	 */
-	private void doHint(float delta){
+	private void doHint(final float delta){
 		if(this.jiggleCounter <= 0){
-			JIGGLECOUNTERFLAG = false;
+			jiggleCounterFlag = false;
 			generateJiggleCounter(delta);
 		}
 		this.jiggleCounter--;
-		rotateHats();
+		jiggleHats();
 	}
 	
 	/**
-	 * generiert einen Faktor um den jiggleCounter in Abhaengigkeit des delta's
+	 * Generiert einen Faktor um den jiggleCounter in Abhaengigkeit des delta's
 	 * zu berechnen. Der Faktor liegt zwischen JIGGLETIMEMIN und JIGGLETIMEMAX. 
 	 * Der Faktor kann auch als Zeitspanne in Sekunden gesehen werden. Nach Ablauf
 	 * dieser Zeit bewegt sich der Hut einmal.
-	 * @param delta
+	 * @param delta 
 	 */
-	private void generateJiggleCounter(float delta){
-		if(!JIGGLECOUNTERFLAG && Math.round(1/delta) > 0){
+	private void generateJiggleCounter(final float delta){
+		if(!jiggleCounterFlag && Math.round(1/delta) > 0){
 			int factor = this.rnd.nextInt(JIGGLETIMEMAX - JIGGLETIMEMIN)
 					+ JIGGLETIMEMIN;
 			this.jiggleCounter = factor * Math.round(1/delta);
 			this.jiggleVal = this.jiggleCounter;
-			JIGGLECOUNTERFLAG = true;
+			jiggleCounterFlag = true;
 		}
 	}
 	
 	/**
-	 * laesst den jeweiligen Hut unter dem das Pferd ist wackeln.
+	 * Den jeweiligen Hut unter dem das Pferd steckt wackeln lassen.
 	 */
-	private void rotateHats(){
+	private void jiggleHats(){
 		if(this.jiggleCounter == this.jiggleVal){
 			this.hats[this.rightNum].setRotation(10f);
 		}

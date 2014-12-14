@@ -19,9 +19,9 @@ import com.haw.projecthorse.level.util.uielements.ButtonLarge;
  *
  */
 public class GamePausePopup extends Popup implements Observer {
-	
+
 	private Settings setting = GameManagerFactory.getInstance().getSettings();
-	private ImageTextButton musicButton;	
+	private ImageTextButton musicButton;
 	private ImageTextButton soundButton;
 
 	public GamePausePopup() {
@@ -29,7 +29,7 @@ public class GamePausePopup extends Popup implements Observer {
 		musicButton = createButton("", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 
 				setting.setMusicState(!setting.getMusicState());
 				event.cancel();
@@ -40,7 +40,7 @@ public class GamePausePopup extends Popup implements Observer {
 		soundButton = createButton("", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				setting.setSoundState(!setting.getSoundState());
 				event.cancel();
 			}
@@ -50,7 +50,7 @@ public class GamePausePopup extends Popup implements Observer {
 		createButton("Spiel verlassen", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				GamePausePopup.this.getOverlay().disposePopup();
 				GameManagerFactory.getInstance().navigateBack();
 				event.cancel();
@@ -61,7 +61,7 @@ public class GamePausePopup extends Popup implements Observer {
 		createButton("Weiter Spielen", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				GamePausePopup.this.getOverlay().disposePopup();
 				event.cancel();
 			}
@@ -74,18 +74,20 @@ public class GamePausePopup extends Popup implements Observer {
 	}
 
 	private void setTextes() {
-		if (setting.getMusicState())
+		if (setting.getMusicState()) {
 			musicButton.setText("Musik ist AN");
-		else
+		} else {
 			musicButton.setText("Musik ist AUS");
+		}
 
-		if (setting.getSoundState())
+		if (setting.getSoundState()) {
 			soundButton.setText("Sound ist AN");
-		else
+		} else {
 			soundButton.setText("Sound ist AUS");
+		}
 	}
 
-	private ImageTextButton createButton(String label, ChangeListener inputListener) {
+	private ImageTextButton createButton(final String label, final ChangeListener inputListener) {
 		ImageTextButton btn = new ButtonLarge(label, inputListener);
 		btn.addListener(inputListener);
 		this.addActor(btn);
@@ -93,7 +95,7 @@ public class GamePausePopup extends Popup implements Observer {
 	}
 
 	@Override
-	public void update(Observable observable, Object data) {
+	public final void update(final Observable observable, final Object data) {
 		setTextes();
 	}
 

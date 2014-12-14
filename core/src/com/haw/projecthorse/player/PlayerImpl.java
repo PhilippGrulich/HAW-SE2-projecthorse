@@ -19,7 +19,7 @@ public class PlayerImpl extends Player {
 	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
 	// desto schneller
 	
-	private String imgFolder = "temp";
+	private String imgFolder = "playerHannover";
 	private Map<String, TextureRegion> spriteMap = AssetManager.getAllTextureRegions(imgFolder);
 	private TextureRegion activeSprite;
 	private float speed = 0;
@@ -27,17 +27,6 @@ public class PlayerImpl extends Player {
 	private Direction direction = Direction.RIGHT;
 	private boolean flipX = false;
 
-
-	public PlayerImpl() {
-		this(getSaveGameRace());
-		this.scaleBy(-0.12f);
-	}
-
-	@Deprecated
-	public PlayerImpl(PlayerColor color) {
-		this(getSaveGameRace());
-	}
-	
 	private static HorseRace getSaveGameRace() {
 		SaveGame game = SaveGameManager.getLoadedGame();
 		if (game == null) {
@@ -47,13 +36,28 @@ public class PlayerImpl extends Player {
 		}
 	}
 
+	public PlayerImpl() {
+		this(getSaveGameRace());
+//		this.scaleBy(-0.12f);
+		this.setScale(1.75f);
+	}
+	
+	/**
+	 * @param horseRace
+	 *            Die Rasse des Pferdes, welchen den Spieler darstellt.
+	 */
 	public PlayerImpl(HorseRace horseRace) {
 		race = new Race(horseRace);		
-		activeSprite = spriteMap.get("left-1");
-	
+		activeSprite = spriteMap.get("side-1");
+		
 		flipX = true;
 		
 		setBounds(getX(), getY(), activeSprite.getRegionWidth(), activeSprite.getRegionHeight());
+	}
+
+	@Deprecated
+	public PlayerImpl(PlayerColor color) {
+		this(getSaveGameRace());
 	}
 	
 	public void chageDirection(Direction newDirection) {

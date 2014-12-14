@@ -26,7 +26,7 @@ public class TextInputField extends TextField {
 	
 	private static TextFieldStyle getTextFieldStyle(){
 		TextFieldStyle textFieldStyle = new TextFieldStyle();	
-		textFieldStyle.font = AssetManager.getTextFont(FontSize.VIERZIG);
+		textFieldStyle.font = AssetManager.getTextFont(FontSize.FORTY);
 		textFieldStyle.fontColor = Color.LIGHT_GRAY;
 		textFieldStyle.focusedFontColor = Color.GRAY;
 		textFieldStyle.cursor = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "cursor"));

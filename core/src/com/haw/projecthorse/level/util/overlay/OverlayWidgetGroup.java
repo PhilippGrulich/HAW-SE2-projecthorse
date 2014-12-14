@@ -4,25 +4,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
 public class OverlayWidgetGroup extends WidgetGroup {
-	protected final int height = GameManagerFactory.getInstance().getSettings()
-			.getVirtualScreenHeight();
-	protected final int width = GameManagerFactory.getInstance().getSettings()
-			.getVirtualScreenWidth();
-	
-	
-	public float getPrefWidth () {
+	protected final int height = GameManagerFactory.getInstance().getSettings().getVirtualScreenHeight();
+	protected final int width = GameManagerFactory.getInstance().getSettings().getVirtualScreenWidth();
+
+	public float getPrefWidth() {
 		return this.getWidth();
 	}
 
-	public float getPrefHeight () {
+	public float getPrefHeight() {
 		return this.getHeight();
 	}
 
-	public float getMaxWidth () {
+	public float getMaxWidth() {
 		return this.getWidth();
 	}
 
-	public float getMaxHeight () {
+	public float getMaxHeight() {
 		return this.getHeight();
 	}
 }

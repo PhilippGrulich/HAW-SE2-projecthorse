@@ -90,7 +90,7 @@ public class MemorySpiel extends Game {
 	}
 
 	protected Label createReplayLabel() {
-		BitmapFont font = AssetManager.getTextFont(FontSize.VIERZIG);
+		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
 		font.setScale(1f, 1f);
 		font.setColor(Color.WHITE);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);

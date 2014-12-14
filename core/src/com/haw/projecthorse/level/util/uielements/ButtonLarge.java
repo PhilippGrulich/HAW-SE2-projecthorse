@@ -26,7 +26,7 @@ public class ButtonLarge extends ImageTextButton{
 		}
 		
 		protected static FontSize getDefaultFontSize(){
-			return FontSize.VIERZIG;
+			return FontSize.FORTY;
 		}
 		
 		protected static Color getDefaultFontColor(){
@@ -64,9 +64,9 @@ public class ButtonLarge extends ImageTextButton{
 		protected FontSize getFontSize(){
 			switch (this) {
 			case LIGHT_GRAY:
-				return FontSize.VIERZIG;
+				return FontSize.FORTY;
 			case LIGHT_BROWN:
-				return FontSize.VIERZIG;
+				return FontSize.FORTY;
 			default:
 				Gdx.app.log("ERROR",
 						"Missing FontSize for " + this.name()
