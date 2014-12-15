@@ -39,6 +39,7 @@ public class IniSaveGameDialog extends Dialog {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
 				if (!textInput.getText().equals("")) {
+					textInput.getOnscreenKeyboard().show(false);
 					SaveGame game = SaveGameManager.loadSavedGame(saveGameID);
 					game.setPlayerName(textInput.getText());
 					SaveGameManager.saveLoadedGame();
@@ -52,6 +53,7 @@ public class IniSaveGameDialog extends Dialog {
 
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
+				textInput.getOnscreenKeyboard().show(false);
 				getOverlay().disposePopup();
 
 			}
