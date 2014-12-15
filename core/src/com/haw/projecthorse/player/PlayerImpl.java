@@ -19,8 +19,8 @@ public class PlayerImpl extends Player {
 	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
 	// desto schneller
 	
-	private String imgFolder = "playerHannover";
-	private Map<String, TextureRegion> spriteMap = AssetManager.getAllTextureRegions(imgFolder);
+	private String imgFolder;
+	private Map<String, TextureRegion> spriteMap;
 	private TextureRegion activeSprite;
 	private float speed = 0;
 //	private int spriteStartX, spriteStartY;
@@ -47,7 +47,9 @@ public class PlayerImpl extends Player {
 	 *            Die Rasse des Pferdes, welchen den Spieler darstellt.
 	 */
 	public PlayerImpl(HorseRace horseRace) {
-		race = new Race(horseRace);		
+		race = new Race(horseRace);
+		imgFolder = "player" + race.name();
+		spriteMap = AssetManager.getAllTextureRegions(imgFolder);
 		activeSprite = spriteMap.get("side-1");
 		
 		flipX = true;
