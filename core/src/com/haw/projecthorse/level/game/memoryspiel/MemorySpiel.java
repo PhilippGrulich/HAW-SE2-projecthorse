@@ -7,17 +7,21 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
+import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 
 public class MemorySpiel extends Game {
 
@@ -31,34 +35,39 @@ public class MemorySpiel extends Game {
 	private Drawable drawable;
 	private Image backgroundImage;
 	private GameState state;
-	private Label replay;
-	private Karte playButton;
-	private Music music;
-
 	private Label scoreLabel;
-	
+	private Label score;
+	private Music music;
+	private ButtonLarge newGame;
+	private ButtonLarge exitGame;
+
 	public MemorySpiel() {
 		manager = new KartenManager();
 		batcher = this.getSpriteBatch();
 		state = GameState.READY;
 		stage = new Stage(this.getViewport(), batcher);
 		AssetManager.loadMusic("memorySpiel");
-		this.music = this.audioManager.getMusic("memorySpiel", "Happy Ukulele(edited).mp3");
+		this.music = this.audioManager.getMusic("memorySpiel",
+				"Happy Ukulele(edited).mp3");
 		this.music.setLooping(true);
 		InputManager.addInputProcessor(stage);
-		replay = createReplayLabel();
-		replay.setPosition(this.width / 3.7f, this.height * 0.85f);
-		drawable = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("memorySpiel", "Background" + getBackground()));
+
+		// Hintergrund
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Background" + getBackground()));
 		backgroundImage = new Image(drawable);
 		backgroundImage.toFront();
-		playButton = createPlayButton();
-		playButton.setVisible(false);
-		enableReplayButton(false);
 		stage.addActor(backgroundImage);
-		stage.addActor(replay);
-		stage.addActor(playButton);
+
+		// Score Anzeige
+		scoreLabel = createScoreLabel();
+		scoreLabel.toFront();
+		score = initScore();
+		score.toFront();
+		stage.addActor(scoreLabel);
+		stage.addActor(score);
 		initKarten();
+		initButtons();
 		playMusic();
 	}
 
@@ -70,36 +79,80 @@ public class MemorySpiel extends Game {
 		}
 	}
 
+	protected void initButtons() {
+
+		this.newGame = new ButtonLarge("Neue Runde?", new ChangeListener() {
+
+			@Override
+			public void changed(final ChangeEvent event, final Actor actor) {
+				newGame.setVisible(false);
+				exitGame.setVisible(false);
+				state = GameState.END;
+			}
+		});
+
+		this.exitGame = new ButtonLarge("Nein, danke", new ChangeListener() {
+
+			@Override
+			public void changed(final ChangeEvent event, final Actor actor) {
+				GameManagerFactory.getInstance().navigateBack();
+			}
+
+		});
+
+		this.newGame.setPosition(this.width / 6.5f, this.height / 2f);
+		this.exitGame.setPosition(this.width / 6.5f, this.height / 3f);
+		this.newGame.setColor(Color.PINK);
+		this.exitGame.setColor(Color.PINK);
+		this.newGame.getStyle().fontColor = Color.WHITE;
+		this.exitGame.getStyle().fontColor = Color.WHITE;
+
+		this.newGame.toFront();
+		this.exitGame.toFront();
+		stage.addActor(newGame);
+		stage.addActor(exitGame);
+		this.newGame.setVisible(false);
+		this.exitGame.setVisible(false);
+	}
+
 	protected int getBackground() {
 		Random rand = new Random();
 		int i = rand.nextInt(5);
 		return i;
 	}
-	
-	protected void playMusic(){	
+
+	protected void playMusic() {
 		this.music.play();
 		this.music.setVolume(0.4f);
 	}
 
-	protected Karte createPlayButton() {
-		Karte button = new Karte(this.width / 2.2f , 900);
-		button.setDrawable(new TextureRegionDrawable(AssetManager
-				.getTextureRegion("memorySpiel", "PlayButton")));
-		button.setWidth(250);
-		return button;
-	}
-
-	protected Label createReplayLabel() {
+	protected Label createScoreLabel() {
 		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
-		font.setScale(1f, 1f);
+		font.setScale(2f, 2f);
 		font.setColor(Color.WHITE);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
-		return new Label("Neue Runde?", labelStyle);
+		Label label = new Label("Score", labelStyle);
+		label.setPosition(this.width / 2.5f, this.height * 0.9f);
+		return label;
 	}
 
-	protected void enableReplayButton(boolean b) {
-		replay.setVisible(b);
-		playButton.setVisible(b);
+	protected void setScore(int score) {
+		if (score > 9) {
+			this.score.setPosition(this.width / 2.8f, this.height * 0.75f);
+		} else {
+			this.score.setPosition(this.width / 2.2f, this.height * 0.75f);
+		}
+		this.score.setText(score + "");
+	}
+
+	protected Label initScore() {
+		BitmapFont font = AssetManager.getTextFont(FontSize.SIXTY);
+		font.setScale(3f, 3f);
+		font.setColor(Color.WHITE);
+		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+		Label label = new Label("0", labelStyle);
+		label.setPosition(this.width / 2.2f, this.height * 0.75f);
+		return label;
 	}
 
 	protected void updateKarten(float delta) {
@@ -122,13 +175,13 @@ public class MemorySpiel extends Game {
 			}
 		}
 		if (i == karten.size()) {
-			state = GameState.END;
+			this.newGame.setVisible(true);
+			this.exitGame.setVisible(true);
 			music.stop();
-			enableReplayButton(true);
 			return;
 		}
 		manager.checkChanged(delta);
-
+		setScore(manager.getScore());
 	}
 
 	@Override
@@ -137,27 +190,23 @@ public class MemorySpiel extends Game {
 		if (state == GameState.READY) {
 			updateKarten(delta);
 		} else if (state == GameState.END) {
-			if (playButton.getState() == CardState.TEMPORARILY_OPENED) {
-				restart();
-			}
+			restart();
 		}
 	}
 
 	protected void restart() {
-		drawable = new TextureRegionDrawable(
-				AssetManager.getTextureRegion("memorySpiel", "Background" + getBackground()));
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Background" + getBackground()));
 		backgroundImage.setDrawable(drawable);
 		manager.restart();
-		playButton.setState(CardState.CLOSED);
-		enableReplayButton(false);
 		state = GameState.READY;
 		playMusic();
 	}
 
 	@Override
-	protected void doDispose(){
-			this.stage.dispose();
-			this.music.stop();
+	protected void doDispose() {
+		this.stage.dispose();
+		this.music.stop();
 	}
 
 	@Override

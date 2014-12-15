@@ -66,9 +66,9 @@ public class KartenManager extends Thread {
 		picture4 = new TextureRegionDrawable(AssetManager.getTextureRegion(
 				"memorySpiel", "Foto" + 4));
 		picture5 = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Foto" + 5));
+				"memorySpiel", "Foto" + 10));
 		picture6 = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Foto" + 6));
+				"memorySpiel", "Foto" + 9));
 		((Karte) karten.get(0)).setPicture(picture1);
 		((Karte) karten.get(1)).setPicture(picture1);
 		((Karte) karten.get(2)).setPicture(picture2);
@@ -99,14 +99,17 @@ public class KartenManager extends Thread {
 							if (karte1.getPicture().equals(karte2.getPicture())) {
 								karte1.setState(CardState.OPEN);
 								karte2.setState(CardState.OPEN);
-								score+=10;
+								score += 10;
 								canOpen = true;
 							} else {
 								karteA = karte1;
 								karteB = karte2;
+								if (flag == false) {
+									score -= 5;
+									if (score < 0)
+										score = 0;
+								}
 								flag = true;
-								if(score-15<0) score = 0;
-								else score-=15;
 							}
 						}
 					}
@@ -153,7 +156,15 @@ public class KartenManager extends Thread {
 		karten.get(9).setState(CardState.TEMPORARILY_CLOSED);
 		karten.get(10).setState(CardState.TEMPORARILY_CLOSED);
 		karten.get(11).setState(CardState.TEMPORARILY_CLOSED);
-		
+
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 }
