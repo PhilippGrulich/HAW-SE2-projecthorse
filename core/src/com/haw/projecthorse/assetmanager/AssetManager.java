@@ -668,9 +668,10 @@ public final class AssetManager {
 		// einer Liste hinzufuegen
 		for (String item : licenseTypes) {
 			try {
-				BufferedReader bufReadPic = new BufferedReader(new FileReader(licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES + FILESEPARATOR + item + ".txt"));
+				BufferedReader bufReadPic = new BufferedReader(new FileReader(licenseDir + FILESEPARATOR + 
+						FOLDERNAME_PICTURES + FILESEPARATOR + item + ".txt"));
 				String fileLinePic = null;
-				while ((fileLinePic = bufReadPic.readLine()) != null) {
+				while ((fileLinePic = bufReadPic.readLine()) != null && !fileLinePic.isEmpty()) {
 					stringList.add(fileLinePic);
 				}
 				bufReadPic.close();
@@ -768,7 +769,8 @@ public final class AssetManager {
 	 *            repraesentiert
 	 */
 	private static void checkFiles(final Map<String, String[][]> stringMap) {
-		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR + ".." + FILESEPARATOR + "android" + FILESEPARATOR + "assets";
+		String licenseDir = System.getProperty("user.dir") + FILESEPARATOR + ".." 
+				+ FILESEPARATOR + "android" + FILESEPARATOR + "assets";
 
 		String[][] pictures = stringMap.get(FOLDERNAME_PICTURES);
 		String[][] sounds = stringMap.get(FOLDERNAME_SOUNDS);
@@ -789,7 +791,8 @@ public final class AssetManager {
 			// Pictures Eintraege
 			// **************************************************
 			for (int i = 0; i < pictures.length; i++) {
-				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES + FILESEPARATOR + pictures[i][0] + FILESEPARATOR + pictures[i][1]);
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_PICTURES 
+						+ FILESEPARATOR + pictures[i][0] + FILESEPARATOR + pictures[i][1]);
 				writeFile(FOLDERNAME_PICTURES, pictures, checkFile, bWriter, i);
 			}
 
@@ -800,7 +803,8 @@ public final class AssetManager {
 			// Sounds Eintraege
 			// **************************************************
 			for (int i = 0; i < sounds.length; i++) {
-				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_SOUNDS + FILESEPARATOR + sounds[i][0] + FILESEPARATOR + sounds[i][1]);
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_SOUNDS
+						+ FILESEPARATOR + sounds[i][0] + FILESEPARATOR + sounds[i][1]);
 				writeFile(FOLDERNAME_SOUNDS, sounds, checkFile, bWriter, i);
 			}
 
@@ -811,7 +815,8 @@ public final class AssetManager {
 			// Music Eintraege
 			// **************************************************
 			for (int i = 0; i < music.length; i++) {
-				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_MUSIC + FILESEPARATOR + music[i][0] + FILESEPARATOR + music[i][1]);
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_MUSIC 
+						+ FILESEPARATOR + music[i][0] + FILESEPARATOR + music[i][1]);
 				writeFile(FOLDERNAME_MUSIC, music, checkFile, bWriter, i);
 			}
 
@@ -822,7 +827,8 @@ public final class AssetManager {
 			// Fonts Eintraege
 			// **************************************************
 			for (int i = 0; i < fonts.length; i++) {
-				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_FONTS + FILESEPARATOR + fonts[i][0] + FILESEPARATOR + fonts[i][1]);
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_FONTS
+						+ FILESEPARATOR + fonts[i][0] + FILESEPARATOR + fonts[i][1]);
 				writeFile(FOLDERNAME_FONTS, fonts, checkFile, bWriter, i);
 			}
 
@@ -848,7 +854,8 @@ public final class AssetManager {
 	 * @param i
 	 *            Laufvariable
 	 */
-	private static void writeFile(String type, String[][] stringFile, File checkFile, BufferedWriter bWriter, int i) {
+	private static void writeFile(String type, String[][] stringFile, File checkFile, 
+			BufferedWriter bWriter, int i) {
 		try {
 			// Pruefen, ob Datei im jeweiligen Ordner
 			// vorhanden ist
