@@ -53,6 +53,7 @@ public class IniSaveGameDialog extends Dialog {
 
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
+				textInput.getOnscreenKeyboard().show(false);
 				getOverlay().disposePopup();
 
 			}
