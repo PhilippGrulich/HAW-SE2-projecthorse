@@ -18,7 +18,7 @@ import com.haw.projecthorse.lootmanager.Lootable;
 
 public class LootPopup extends Popup {
 
-	private int lootPopupHeigh = height / 3;
+	private int lootPopupHeight = height / 3;
 
 	public LootPopup(ArrayList<Lootable> loots) {
 		super();
@@ -29,7 +29,7 @@ public class LootPopup extends Popup {
 		// label.layout();
 		addActor(label);
 
-		LootDisplay button = new LootDisplay(loots, lootPopupHeigh, popupWidth - 80);
+		LootDisplay button = new LootDisplay(loots, lootPopupHeight, popupWidth - 80);
 		addActor(button);
 
 		Button ok = createButton("OK");
