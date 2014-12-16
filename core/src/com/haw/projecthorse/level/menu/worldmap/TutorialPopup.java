@@ -4,69 +4,28 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
+import com.haw.projecthorse.level.util.textWrapper.TextWrapper;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
+import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class TutorialPopup extends Popup {
 
-	private float tutorialPopupHeight = height / 2;
+	private float tutorialPopupHeight = height / 3;
 	private String gameTitle = GameManagerFactory.getInstance().getGameConfig().getGameTitle();
 	private String playerName = SaveGameManager.getLoadedGame().getPlayerName();
 
-	class MyStringBuilder extends StringBuilder {
-		private int charPerLine;
-
-		public MyStringBuilder(final int charPerLinePara) {
-			this.charPerLine = charPerLinePara;
-		}
-
-		public void appendLine(final String s) {
-
-			String[] words = s.split(" ");
-			int line = 0;
-			for (String word : words) {
-				if (line + word.length() > charPerLine) {
-					line = 0;
-					append(System.getProperty("line.separator"));
-				} else {
-					line += word.length();
-				}
-				append(" " + word);
-
-			}
-			append(System.getProperty("line.separator"));
-
-		}
-	};
-
 	public TutorialPopup() {
 
-		VerticalGroup table = new VerticalGroup() {
-			@Override
-			public float getPrefHeight() {
-				return tutorialPopupHeight;
-			}
-		};
-
-		ScrollPaneStyle paneStyle = new ScrollPaneStyle();
-
 		Label label = createLabel(gennerateText());
+		ScrollPane scollContent = new DefaultScrollPane(label, tutorialPopupHeight, popupWidth * 0.8f);
 
-		ScrollPane scollContent = new ScrollPane(label, paneStyle) {
-			@Override
-			public float getPrefHeight() {
-				return tutorialPopupHeight - 150;
-			}
-		};
+		this.addActor(createLabel("Anleitung :)"));
 
-		scollContent.setSize(label.getPrefWidth(), tutorialPopupHeight);
-		table.addActor(scollContent);
+		this.addActor(scollContent);
 		Button btn = new ButtonLarge("Los");
 		btn.addListener(new ChangeListener() {
 
@@ -76,21 +35,20 @@ public class TutorialPopup extends Popup {
 			}
 
 		});
-		table.addActor(btn);
-		table.setSize(label.getPrefWidth(), tutorialPopupHeight);
-		this.addActor(table);
+		this.addActor(btn);
+
 	}
 
 	private String gennerateText() {
 
-		MyStringBuilder sb = new MyStringBuilder(18);
-		sb.appendLine("Hi " + playerName);
-		sb.appendLine("wir hoffen das du viel Spaß mit " + gameTitle + " hast.");
-		sb.appendLine("Auf der Weltkarte kannst du mit deinem Pferd von Stadt"
+		TextWrapper wrapper = new TextWrapper(23);
+		wrapper.appendLine("Hi %s", playerName);
+		wrapper.appendLine("wir hoffen das du viel Spaß mit %s hast.", gameTitle);
+		wrapper.appendLine("Auf der Weltkarte kannst du mit deinem Pferd von Stadt"
 				+ " zu Stadt reisen und dort tolle Spiele spielen.");
-		sb.appendLine("Je mehr Spiele du spielst umso schönere Pferde kannst du gewinnen.");
+		wrapper.appendLine("Je mehr Spiele du spielst umso schönere Pferde kannst du gewinnen.");
 
-		return sb.toString();
+		return wrapper.toString();
 	}
 
 }

@@ -123,3 +123,17 @@ settingsIcon
   orig: 80, 80
   offset: 0, 0
   index: -1
+vScroll
+  rotate: false
+  xy: 1157, 1543
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+vScrollKnob
+  rotate: false
+  xy: 1239, 1625
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
