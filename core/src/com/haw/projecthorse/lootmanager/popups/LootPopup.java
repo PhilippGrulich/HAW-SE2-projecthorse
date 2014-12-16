@@ -18,22 +18,23 @@ import com.haw.projecthorse.lootmanager.Lootable;
 
 public class LootPopup extends Popup {
 
+	private int lootPopupHeigh = height / 3;
+
 	public LootPopup(ArrayList<Lootable> loots) {
 		super();
 
 		Label label = createLabel("Deine gesammelten Gegenstaende");
-//		label.setWidth(popupWidth - 80);
-//		label.setWrap(true);
-//		label.layout();
+		// label.setWidth(popupWidth - 80);
+		// label.setWrap(true);
+		// label.layout();
 		addActor(label);
 
-		LootDisplay button = new LootDisplay(loots, (int)(popupHeight / 2.5),
-				popupWidth - 80);
+		LootDisplay button = new LootDisplay(loots, lootPopupHeigh, popupWidth - 80);
 		addActor(button);
-		
+
 		Button ok = createButton("OK");
 		ok.addListener(new ChangeListener() {
-			
+
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				LootPopup.this.getOverlay().disposePopup();
@@ -94,8 +95,8 @@ public class LootPopup extends Popup {
 		}
 
 		private void createArrowButtons() {
-			ImageButton left = new ImageButton(new TextureRegionDrawable(
-					AssetManager.getTextureRegion("loot", "arrow_left")));
+			ImageButton left = new ImageButton(new TextureRegionDrawable(AssetManager.getTextureRegion("loot",
+					"arrow_left")));
 			left.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -108,8 +109,8 @@ public class LootPopup extends Popup {
 			left.setPosition(0, (getHeight() - left.getHeight()) / 2);
 			addActor(left);
 
-			ImageButton right = new ImageButton(new TextureRegionDrawable(
-					AssetManager.getTextureRegion("loot", "arrow_right")));
+			ImageButton right = new ImageButton(new TextureRegionDrawable(AssetManager.getTextureRegion("loot",
+					"arrow_right")));
 			right.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -119,8 +120,7 @@ public class LootPopup extends Popup {
 			right.setHeight(getHeight() / 4);
 			right.setWidth(getHeight() / 4);
 
-			right.setPosition(getWidth() - right.getWidth(),
-					(getHeight() - right.getHeight()) / 2);
+			right.setPosition(getWidth() - right.getWidth(), (getHeight() - right.getHeight()) / 2);
 			addActor(right);
 		}
 
@@ -136,10 +136,10 @@ public class LootPopup extends Popup {
 
 		private void refreshImage() {
 			currentImage = lootList.get(i).getImage();
-			
+
 			imageWidth = (currentImage.getMinWidth() > getWidth()) ? getWidth() : currentImage.getMinWidth();
 			imageHeight = (currentImage.getMinHeight() > getHeight()) ? getHeight() : currentImage.getMinHeight();
-			
+
 			imageX = getX() + ((getWidth() - imageWidth) / 2);
 			imageY = getY() + ((getHeight() - imageHeight) / 2);
 
@@ -152,9 +152,8 @@ public class LootPopup extends Popup {
 				refreshImage();
 			}
 
-			currentImage.draw(batch, imageX, imageY,
-					imageWidth, imageHeight);
-			
+			currentImage.draw(batch, imageX, imageY, imageWidth, imageHeight);
+
 			super.draw(batch, parentAlpha);
 		}
 	}
