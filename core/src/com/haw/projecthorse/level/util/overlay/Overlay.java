@@ -22,6 +22,7 @@ public class Overlay extends Stage {
 
 	private Popup popup;
 	private Level level;
+	private NavBar navBar;
 
 	public Overlay(final Viewport viewport, final SpriteBatch spriteBatch, final Level levelPara) {
 		super(viewport, spriteBatch);
@@ -36,7 +37,12 @@ public class Overlay extends Stage {
 	 * @param nav
 	 */
 	public final void setNavigationBar(final NavBar nav) {
+		this.navBar = nav;
 		this.addActor(nav);
+	}
+
+	public final NavBar getNavBar() {
+		return navBar;
 	}
 
 	/**

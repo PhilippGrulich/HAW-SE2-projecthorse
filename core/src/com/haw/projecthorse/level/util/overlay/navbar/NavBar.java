@@ -78,4 +78,16 @@ public class NavBar extends OverlayWidgetGroup {
 		this.horizontalGroup.layout();
 
 	}
+
+	/**
+	 * Fügt ein neuen NavbarButton zur Navbar hinzu.
+	 * 
+	 * @param btn
+	 */
+	public final void addButtonAt(NavbarButton btn, int index) {
+
+		this.horizontalGroup.addActorAt(index, btn);
+		this.horizontalGroup.layout();
+
+	}
 }

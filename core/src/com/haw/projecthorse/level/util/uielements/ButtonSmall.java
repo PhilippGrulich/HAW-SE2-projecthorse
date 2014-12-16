@@ -18,7 +18,7 @@ import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 public class ButtonSmall extends ImageButton {
 
 	public enum ButtonType {
-		BACK, APPLY, CANCEL, LEFT, RIGHT, START, PAUSE, SETTINGS, LOOT, HOME;
+		BACK, APPLY, CANCEL, LEFT, RIGHT, START, PAUSE, SETTINGS, LOOT, HOME, INFO;
 
 		String getFileName() {
 			switch (this) {
@@ -42,6 +42,8 @@ public class ButtonSmall extends ImageButton {
 				return "buttonHome";
 			case SETTINGS:
 				return "settingsIcon";
+			case INFO:
+				return "buttonCityInfo";
 			default:
 				Gdx.app.log("ERROR", "Missing Filename string for " + this.name() + " in ButtonType enum!");
 				return this.name();

@@ -32,9 +32,16 @@ buttonCancel
   orig: 80, 80
   offset: 0, 0
   index: -1
-buttonHome
+buttonCityInfo
   rotate: false
   xy: 1012, 330
+  size: 80, 78
+  orig: 80, 78
+  offset: 0, 0
+  index: -1
+buttonHome
+  rotate: false
+  xy: 1094, 412
   size: 80, 78
   orig: 80, 78
   offset: 0, 0
@@ -76,7 +83,7 @@ cursor
   index: -1
 off
   rotate: false
-  xy: 1094, 439
+  xy: 1157, 1508
   size: 50, 51
   orig: 50, 51
   offset: 0, 0
@@ -125,14 +132,14 @@ settingsIcon
   index: -1
 vScroll
   rotate: false
-  xy: 1157, 1543
+  xy: 1239, 1625
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 vScrollKnob
   rotate: false
-  xy: 1239, 1625
+  xy: 1321, 1707
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

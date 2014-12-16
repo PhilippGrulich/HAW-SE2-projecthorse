@@ -6,6 +6,7 @@ class CityObjectImpl implements CityObject {
 	private String name = "";
 	private String className = "";
 	private String levelID = "";
+	private String info = "";
 	private HashMap<String, String> parameter = new HashMap<String, String>();
 	private GameObjecttImpl[] games = new GameObjecttImpl[0];
 
@@ -25,7 +26,6 @@ class CityObjectImpl implements CityObject {
 
 	}
 
-	
 	public final GameObjecttImpl getGameByLevelID(final String otherLevelID) {
 		for (GameObjecttImpl game : games) {
 			if (game.getLevelID().equals(otherLevelID)) {
@@ -54,8 +54,13 @@ class CityObjectImpl implements CityObject {
 	}
 
 	@Override
-	public final HashMap<String, String> getParameter() {			
-		return parameter;			
+	public final HashMap<String, String> getParameter() {
+		return parameter;
+	}
+
+	@Override
+	public String getCityInfo() {
+		return info;
 	}
 
 }

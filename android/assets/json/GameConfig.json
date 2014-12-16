@@ -42,9 +42,10 @@
                className:"com.haw.projecthorse.level.game.parcours.Parcours",
                levelID:"Parcours"
             }
-         ]
-      },
-            {
+         ],
+         info:"EditierenHamburg ist die zweitgrößte Stadt Deutschlands. Sie hat 1,75 Millionen Einwohner. Hamburg ist besonders führ seinen Hafen bekannt, der einer der größten Häfen der Welt ist."
+         },
+         {
          name:"Berlin",
          levelID:"Berlin",
          className:"com.haw.projecthorse.level.menu.city.City",
@@ -62,7 +63,8 @@
 			   className:"com.haw.projecthorse.level.game.memoryspiel.MemorySpiel",
                levelID:"Memoryspiel"
             }
-         ]
+         ],
+         info:"Berlin ist eine Stadt in Deutschland. Sie wurde am 28. Oktober 1237 gegründet. Heute wohnen 3,4 Mio. Menschen in der Stadt. Das Brandenburger Tor ist das Wahrzeichen Berlins. Auf dem Tor ziehen Pferde einen Wagen in dem die Friedensgöttin Eirene sitzt. Der Fernsehturm ist Berlins höchstes Bauwerk und gehört zu den 16 höchsten Türmen der Welt. Er ist 368 m hoch. Im 2.Weltkrieg wurde Berlin zerbombt.Viele Häuser wurden zerstört. Nach dem Krieg Wurde Berlin in 4 Sektoren aufgeteielt: Westberlin Wurde von USA,Frankreich und England aufgeteilt und Ostberlin wurde von den Russen besetzt. Die Mauer wurde 1961 gebaut. Die Mauer teilte Berlin bis 1989."
       },
       {
          name:"München",
@@ -85,7 +87,9 @@
 			   className:"com.haw.projecthorse.level.game.puzzle.PuzzleManager",
                levelID:"Puzzle"
             }
-         ]
+         ],
+         info:"München liegt in Bayern. Die Stadt hat etwa 1,5 Millionen Einwohnern und Sie ist nach Berlin und Hamburg die drittgrößte Stadt Deutschlands. Eine der wichtigsten Atraktionen in München ist das Oktoberfest."
+    
       }
    ]
 }

@@ -11,3 +11,12 @@ playerHannover;playerHannover.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; 
 ui;buttonLoot.png;CC-BY;Freepik;http://www.flaticon.com
 ui;buttonLoot.png;CC-BY;Freepik;http://www.flaticon.com
 playerHannover;playerHannover.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon) 
+
+
+
+
+
+
+
+
+CityTexte;berlinText;CC-BY,http://grundschulwiki.zum.de/wiki/Berlin

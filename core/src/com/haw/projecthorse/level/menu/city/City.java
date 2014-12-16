@@ -1,7 +1,5 @@
 package com.haw.projecthorse.level.menu.city;
 
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +20,8 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.CityObject;
 import com.haw.projecthorse.gamemanager.navigationmanager.json.GameObject;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
+import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarButton;
+import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarCityInfoButton;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge.ButtonColor;
 
@@ -31,67 +31,76 @@ public class City extends Menu {
 
 	private CityObject cityObject;
 
-	private int lastButtonY = (int)(this.height - this.height * 0.35F);
+	private int lastButtonY = (int) (this.height - this.height * 0.35F);
 	private VerticalGroup verticalGroup = new VerticalGroup();
 
 	private Music music;
-	
-	public City(){
+
+	public City() {
 		AssetManager.loadMusic("mainMenu");
 		AssetManager.loadSounds("city");
-		
+
 		music = audioManager.getMusic("mainMenu", "belotti.mp3");
-		
+
 		if (!music.isPlaying()) {
 			music.setLooping(true);
 			music.play();
 		}
+
+		NavbarButton button = new NavbarCityInfoButton() {
+
+			@Override
+			public void clicked() {
+				overlay.showPopup(new CityPopup(cityObject));
+
+			}
+		};
+		overlay.getNavBar().addButtonAt(button, 3);
+		;
 	}
-	
+
 	@Override
-	protected void doShow() {		
-		
-		stage = new Stage(this.getViewport(), this.getSpriteBatch());		
-		
-		try {			
+	protected void doShow() {
+
+		stage = new Stage(this.getViewport(), this.getSpriteBatch());
+
+		try {
 			cityObject = GameManagerFactory.getInstance().getCityObject(getLevelID());
 			addBackground(cityObject.getParameter().get("backgroundPath"));
 			addGameButtons();
 			createCityLabel(cityObject.getCityName());
 		} catch (LevelNotFoundException e1) {
-			Gdx.app.log("CITY", "Für " +getLevelID() + " konnten keine City Informationen geladen werden");
-		}		
-		
+			Gdx.app.log("CITY", "Für " + getLevelID() + " konnten keine City Informationen geladen werden");
+		}
+
 		InputManager.addInputProcessor(stage);
 
 	}
 
-	private void createCityLabel(String cityName){
+	private void createCityLabel(String cityName) {
 		BitmapFont textFont = AssetManager.getHeadlineFont(FontSize.SIXTY);
-		Label cityLabel = new Label(cityName, new LabelStyle(
-				textFont, Color.MAGENTA));
-		cityLabel.setPosition(this.width * 0.05f / 2, this.height - cityLabel.getHeight());
-		
+		Label cityLabel = new Label(cityName, new LabelStyle(textFont, Color.MAGENTA));
+		cityLabel.setPosition(this.width / 2 - cityLabel.getWidth() / 2, this.height - cityLabel.getHeight() - 180);
+
 		stage.addActor(cityLabel);
 	}
-	
+
 	private void addBackground(String backgroundImage) {
-		Image background = new Image(AssetManager.getTextureRegion("city",backgroundImage));
-		
+		Image background = new Image(AssetManager.getTextureRegion("city", backgroundImage));
+
 		float scaleFactor = height / background.getHeight();
 		background.setHeight(background.getHeight() * scaleFactor);
 		background.setWidth(background.getWidth() * scaleFactor);
-		
+
 		float widthDiff = width - background.getWidth();
 		background.setPosition(widthDiff / 2, 0);
-		
+
 		stage.addActor(background);
 		background.toBack();
 	}
 
 	private void addGameButtons() throws LevelNotFoundException {
 
-		
 		GameObject[] games = cityObject.getGames();
 		for (GameObject game : games) {
 			addGameButton(game);
@@ -111,7 +120,7 @@ public class City extends Menu {
 		});
 		verticalGroup.addActor(imgTextButton);
 
-		imgTextButton.setPosition(this.width /2 - imgTextButton.getWidth() /2, lastButtonY);
+		imgTextButton.setPosition(this.width / 2 - imgTextButton.getWidth() / 2, lastButtonY);
 		lastButtonY = (int) (lastButtonY - imgTextButton.getHeight());
 		stage.addActor(imgTextButton);
 		imgTextButton.toFront();
