@@ -3,7 +3,6 @@ package com.haw.projecthorse.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,8 +30,7 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
-	// TODO für Release entfernen
-	private FPSLogger fpsLogger = new FPSLogger();
+	//private FPSLogger fpsLogger = new FPSLogger();
 	// ####################################
 
 	private Boolean paused = false;
@@ -123,9 +121,9 @@ public abstract class Level implements Screen {
 		}
 		doRender(delta);
 		overlay.draw();
+		
 		// ########### DEBUG ##################
-		// TODO f�r Release entfernen
-		fpsLogger.log();
+		//fpsLogger.log();
 		// ####################################
 
 	}
