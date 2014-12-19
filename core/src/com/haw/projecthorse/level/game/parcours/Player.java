@@ -64,7 +64,7 @@ public class Player extends PlayerImpl {
 		shouldMove = 0;
 		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
 		
-		if(GameManagerFactory.getInstance().getSettings().getAccelerometerState())
+		if(!GameManagerFactory.getInstance().getSettings().getAccelerometerState())
 			initSwipeListener();
 
 		this.gameWidth = gameWidth;
