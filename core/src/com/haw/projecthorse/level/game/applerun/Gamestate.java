@@ -89,13 +89,16 @@ public class Gamestate {
 		stage = new Stage(viewport, batch);
 		this.width = width;
 		this.height = heigth;
-		MOVEMENT_PER_SECOND = this.width / 1.25f;
-
+		
+		
 		initBackground();
 		initHorse();
 		initScore();
 		initTimer();
-
+		
+		float speedModifikator = 1 + (horse.getAthletic() * 10 / 100); //Bis zu 10% schneller durch Stärke
+		MOVEMENT_PER_SECOND = (this.width / 1.25f) * speedModifikator;
+		
 		fallingEntities = new EntityGroup();
 
 		stage.addActor(backgroundGraphics);
