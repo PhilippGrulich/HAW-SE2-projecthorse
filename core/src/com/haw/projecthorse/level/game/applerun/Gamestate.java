@@ -1,12 +1,10 @@
 package com.haw.projecthorse.level.game.applerun;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Library;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,18 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManager;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.actions.Direction;
-import com.haw.projecthorse.player.race.HorseRace;
-import com.haw.projecthorse.player.race.Race;
-import com.haw.projecthorse.player.race.RaceLoot;
-import com.haw.projecthorse.savegame.SaveGameManager;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
@@ -47,7 +43,7 @@ public class Gamestate {
 	float distance;// Temp var
 	float moveToDuration;// Temp var
 
-	private final float TOTAL_GAME_TIME_SECONDS = 20; // Total run time of the
+	private final float TOTAL_GAME_TIME_SECONDS = 90; // Total run time of the
 														// game.
 	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; // Time to play
 																// left
@@ -79,12 +75,17 @@ public class Gamestate {
 
 	private int width;
 	private int height;
+	
+	private int score;
+	private int appleCatchSeries; //Äpfel nacheinander gefangen.
 
 	private boolean lastAnimationDirectionLeft = false;
 	private boolean lastAnimationActionIdle = false;
-	
-	private final Chest chest;
 
+	private final Chest chest;
+	
+	private Label scoreAnzeige;
+	
 	public Gamestate(Viewport viewport, Batch batch, int width, int heigth, Chest chest) {
 		this.chest = chest;
 		stage = new Stage(viewport, batch);
@@ -94,17 +95,32 @@ public class Gamestate {
 
 		initBackground();
 		initHorse();
+		initScore();
 
 		fallingEntities = new EntityGroup();
 
 		stage.addActor(backgroundGraphics);
 		stage.addActor(horse);
 		stage.addActor(fallingEntities);
+		stage.addActor(scoreAnzeige);
 
 		InputManager.addInputProcessor(stage);
 		
+		score = 0;
+		appleCatchSeries = 0;
 	}
-
+	
+	protected void initScore() {
+		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
+		LabelStyle labelStyle = new LabelStyle(font, Color.BLUE);
+		scoreAnzeige = new Label("Score: " + score, labelStyle);
+		scoreAnzeige.setPosition(50, 50);
+	}
+	
+	protected void updateScore(){
+		scoreAnzeige.setText("Score: " + score);
+	}
+	
 	private void initHorse() {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
@@ -126,6 +142,8 @@ public class Gamestate {
 			}
 		});
 	}
+
+
 
 	private void moveHorseTo(float x) {
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des
@@ -272,21 +290,18 @@ public class Gamestate {
 		timeBar.setScaleX(scaleX);
 	}
 
-	private void endThisGame(){
-		//TODO BUGFIX, derzeit stürzt er noch ab wenn einmal ein Friese im savegame drin ist.
+	private void endThisGame() {
+		// TODO BUGFIX, derzeit stürzt er noch ab wenn einmal ein Friese im savegame drin ist.
 		/*
-		double roll = Math.random();
-		if(roll <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)){
-			this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.FRIESE)));
-			System.out.println("ASLKDNASNLD: ");
-			
-		}
-		
-		this.chest.showAllLoot();
-		this.chest.saveAllLoot();*/
+		 * double roll = Math.random(); if(roll <= 0.2f &&
+		 * !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)){
+		 * this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.FRIESE))); }
+		 * 
+		 * this.chest.showAllLoot(); this.chest.saveAllLoot();
+		 */
 		GameManagerFactory.getInstance().navigateBack();
 	}
-	
+
 	private void drawCollisionRectangles(float delta) {
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.CYAN);
@@ -322,9 +337,16 @@ public class Gamestate {
 		// atlas.dispose(); //Removed due to AssetManager-Management
 	}
 
-	public void playerHitByBranch() {
+	void playerHitByBranch() {
+		appleCatchSeries = appleCatchSeries/2;
 		Gdx.input.vibrate(200);
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
+	}
+	
+	void playerHitByApple() {
+		appleCatchSeries++;
+		score += appleCatchSeries;
+		updateScore();
 	}
 
 	public void setPlayerActionToIdle() {

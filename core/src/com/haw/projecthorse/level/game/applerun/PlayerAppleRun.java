@@ -28,6 +28,7 @@ public class PlayerAppleRun extends PlayerImpl implements Collidable {
 		// Add score
 		if (entity instanceof Apple) {
 			// ??? //gamestate.addScore();
+			gamestate.playerHitByApple();
 			chewSound.play();
 		}
 
