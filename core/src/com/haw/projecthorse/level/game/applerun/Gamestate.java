@@ -43,14 +43,12 @@ public class Gamestate {
 	float distance;// Temp var
 	float moveToDuration;// Temp var
 
-	private final float TOTAL_GAME_TIME_SECONDS = 90; // Total run time of the
-														// game.
-	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; // Time to play
-																// left
-	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5; //
-
+	private boolean endThisGame = false; // if true -> Nächster render aufruf delta > 0 -> navigate back
+	private final float BASIS_GAME_TIME_SECONDS = 90; // Basis spiellaufzeit
+	private float totalGameTime; // Basis laufzeit + Modifikator durch Pferderasse
+	private float timeLeftSeconds;// Time to play left
+	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5;
 	private final int MAX_FALLING_ENTITIES = 5;
-
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
 													// nächsten entity spawn
 	private final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
@@ -75,17 +73,17 @@ public class Gamestate {
 
 	private int width;
 	private int height;
-	
+
 	private int score;
-	private int appleCatchSeries; //Äpfel nacheinander gefangen.
+	private int appleCatchSeries; // Äpfel nacheinander gefangen.
 
 	private boolean lastAnimationDirectionLeft = false;
 	private boolean lastAnimationActionIdle = false;
 
-	private final Chest chest;
-	
+	private final Chest chest; // referenz auf Chest aus der Game class
+
 	private Label scoreAnzeige;
-	
+
 	public Gamestate(Viewport viewport, Batch batch, int width, int heigth, Chest chest) {
 		this.chest = chest;
 		stage = new Stage(viewport, batch);
@@ -96,6 +94,7 @@ public class Gamestate {
 		initBackground();
 		initHorse();
 		initScore();
+		initTimer();
 
 		fallingEntities = new EntityGroup();
 
@@ -105,22 +104,29 @@ public class Gamestate {
 		stage.addActor(scoreAnzeige);
 
 		InputManager.addInputProcessor(stage);
-		
+
 		score = 0;
 		appleCatchSeries = 0;
+
 	}
-	
+
+	private void initTimer() {
+		float bonusTimeFactorByInt = 1 + horse.getIntelligence() * 20 / 100; // Je nach intelligenz bis zu 20% längere Spielzeit
+		totalGameTime = BASIS_GAME_TIME_SECONDS * bonusTimeFactorByInt;
+		timeLeftSeconds = totalGameTime;
+	}
+
 	protected void initScore() {
 		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
 		LabelStyle labelStyle = new LabelStyle(font, Color.BLUE);
 		scoreAnzeige = new Label("Score: " + score, labelStyle);
 		scoreAnzeige.setPosition(50, 50);
 	}
-	
-	protected void updateScore(){
+
+	protected void updateScore() {
 		scoreAnzeige.setText("Score: " + score);
 	}
-	
+
 	private void initHorse() {
 		horse = new PlayerAppleRun(this);
 		horse.setPosition(0, 110);
@@ -142,8 +148,6 @@ public class Gamestate {
 			}
 		});
 	}
-
-
 
 	private void moveHorseTo(float x) {
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des
@@ -279,14 +283,21 @@ public class Gamestate {
 	}
 
 	private void updateTimer(float delta) {
+		if (delta == 0) {
+			return;
+		}
 		timeLeftSeconds -= delta;
+		if (endThisGame) {
+			GameManagerFactory.getInstance().navigateBack();
+		}
 		if (timeLeftSeconds < 0) {
 			endThisGame();
 		}
+
 		// updateTimeBar Scale
-		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; // Time left as
-															// ratio. (Between
-															// 0.0 and 1.0)
+		scaleX = timeLeftSeconds / totalGameTime; // Time left as
+													// ratio. (Between
+													// 0.0 and 1.0)
 		timeBar.setScaleX(scaleX);
 	}
 
@@ -299,7 +310,8 @@ public class Gamestate {
 		 * 
 		 * this.chest.showAllLoot(); this.chest.saveAllLoot();
 		 */
-		GameManagerFactory.getInstance().navigateBack();
+
+		endThisGame = true;
 	}
 
 	private void drawCollisionRectangles(float delta) {
@@ -338,11 +350,11 @@ public class Gamestate {
 	}
 
 	void playerHitByBranch() {
-		appleCatchSeries = appleCatchSeries/2;
+		appleCatchSeries = appleCatchSeries / 2;
 		Gdx.input.vibrate(200);
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
-	
+
 	void playerHitByApple() {
 		appleCatchSeries++;
 		score += appleCatchSeries;
