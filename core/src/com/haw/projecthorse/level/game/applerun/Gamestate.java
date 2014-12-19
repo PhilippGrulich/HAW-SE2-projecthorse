@@ -1,9 +1,12 @@
 package com.haw.projecthorse.level.game.applerun;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Library;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,9 +21,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
+import com.haw.projecthorse.gamemanager.navigationmanager.NavigationManager;
 import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.Race;
+import com.haw.projecthorse.player.race.RaceLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
@@ -31,8 +40,6 @@ public class Gamestate {
 																// drawing
 																// collision
 																// rectangles
-	// TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
-
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 	int roll; // Temp var
 	int breite; // Temp var
@@ -40,7 +47,7 @@ public class Gamestate {
 	float distance;// Temp var
 	float moveToDuration;// Temp var
 
-	private final float TOTAL_GAME_TIME_SECONDS = 90; // Total run time of the
+	private final float TOTAL_GAME_TIME_SECONDS = 20; // Total run time of the
 														// game.
 	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; // Time to play
 																// left
@@ -75,8 +82,11 @@ public class Gamestate {
 
 	private boolean lastAnimationDirectionLeft = false;
 	private boolean lastAnimationActionIdle = false;
+	
+	private final Chest chest;
 
-	public Gamestate(Viewport viewport, Batch batch, int width, int heigth) {
+	public Gamestate(Viewport viewport, Batch batch, int width, int heigth, Chest chest) {
+		this.chest = chest;
 		stage = new Stage(viewport, batch);
 		this.width = width;
 		this.height = heigth;
@@ -92,6 +102,7 @@ public class Gamestate {
 		stage.addActor(fallingEntities);
 
 		InputManager.addInputProcessor(stage);
+		
 	}
 
 	private void initHorse() {
@@ -252,7 +263,7 @@ public class Gamestate {
 	private void updateTimer(float delta) {
 		timeLeftSeconds -= delta;
 		if (timeLeftSeconds < 0) {
-			// TODO end this game
+			endThisGame();
 		}
 		// updateTimeBar Scale
 		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; // Time left as
@@ -261,6 +272,21 @@ public class Gamestate {
 		timeBar.setScaleX(scaleX);
 	}
 
+	private void endThisGame(){
+		//TODO BUGFIX, derzeit stürzt er noch ab wenn einmal ein Friese im savegame drin ist.
+		/*
+		double roll = Math.random();
+		if(roll <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)){
+			this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.FRIESE)));
+			System.out.println("ASLKDNASNLD: ");
+			
+		}
+		
+		this.chest.showAllLoot();
+		this.chest.saveAllLoot();*/
+		GameManagerFactory.getInstance().navigateBack();
+	}
+	
 	private void drawCollisionRectangles(float delta) {
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.CYAN);
