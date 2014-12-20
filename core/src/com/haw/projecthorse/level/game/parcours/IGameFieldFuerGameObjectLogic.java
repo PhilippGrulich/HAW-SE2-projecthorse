@@ -2,7 +2,9 @@ package com.haw.projecthorse.level.game.parcours;
 
 import java.util.List;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 public interface IGameFieldFuerGameObjectLogic {
 
@@ -86,5 +88,16 @@ public interface IGameFieldFuerGameObjectLogic {
 	 * @return generalGameSpeed Die Spielgeschwindigkeit.
 	 */
 	float getGeneralGameSpeed();
+	
+	/**
+	 * Fügt der Stage ein GameObject hinzu
+	 * @param o
+	 */
+	public void addCollidableGameObject(CollidableGameObject o);
 
+	public CollidableGameObject getRandomObject();
+
+	void passBack(CollidableGameObject o);
+
+	public Array<Actor> getActors();
 }

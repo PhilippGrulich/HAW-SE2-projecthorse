@@ -12,6 +12,8 @@ public class GameObject extends Actor {
 	private boolean collidable; //true, wenn man mit dem GameObject kollidieren kan.
 	private boolean loot; //true, wenn man das GameObject gewinnen kann.
 	private boolean isMoveable; //true, wenn duration > 0.
+	private float y;
+	private float x;
 
 	
 	public boolean isMoveable() {
@@ -32,12 +34,39 @@ public class GameObject extends Actor {
 
 	@Override
 	public void act(float delta) {
-		super.act(delta);
 		if (duration > 0) {
+			
 			setX(this.getX() - duration * delta);
 		} else if (duration < 0) {
 			setX(this.getX() + duration * delta);
 		}
+		//super.act(delta);
+	}
+	
+	@Override
+	public void setX(float x){
+		this.x = x;
+	}
+	
+	@Override
+	public void setY(float y){
+		this.y = y;
+	}
+	
+	@Override
+	public void setPosition(float x, float y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	@Override
+	public float getX(){
+		return x;
+	}
+	
+	@Override
+	public float getY(){
+		return y;
 	}
 
 	@Override
