@@ -128,7 +128,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	// Dann prüfen ob Loot gewonnen -> wenn ja, Erfolgsmeldung u. in Chest
 	// legen.
 	private void verifyGameState(float delta) {
-		if (gameField.getScore() >= 10) {
+		if (gameField.getScore() >= 10000) {
 			inputMultiplexer.removeProcessor(listener);
 			Gdx.input.setInputProcessor(inputMultiplexer);
 			gameField.pauseGallop();
@@ -151,7 +151,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				lootShown = false;
 			}
 			this.pause();
-		} else if (gameField.getScore() < 0) {
+		} else if (gameField.getScore() < -10000) {
 			gameField.pauseGallop();
 			gameField.showPopup(GameState.LOST);
 			gameStatus = GameState.LOST;

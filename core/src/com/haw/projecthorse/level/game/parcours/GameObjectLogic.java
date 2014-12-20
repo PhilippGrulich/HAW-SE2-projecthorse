@@ -1,10 +1,12 @@
 package com.haw.projecthorse.level.game.parcours;
 
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.player.actions.AnimationAction;
@@ -13,20 +15,26 @@ import com.haw.projecthorse.player.actions.Direction;
 public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		IGameObjectLogicFuerGameInputListener {
 
-	private float freePosition; //Position des am weitesten rechts befindlichen GameObjects
+	private float freePosition; // Position des am weitesten rechts befindlichen
+								// GameObjects
 	private IGameFieldFuerGameObjectLogic gameField;
 	private boolean shouldPlayerJump;
+	private float lastPosStored;
+	private float lastPositionTmp;
+	private Random randomGenerator;
 
 	public GameObjectLogic(float initialFreePosition,
 			IGameFieldFuerGameObjectLogic g) {
 		freePosition = initialFreePosition;
 		shouldPlayerJump = false;
 		gameField = g;
+		lastPosStored = gameField.getWidth();
+		randomGenerator = new Random();
 	}
 
 	/**
-	 * Prüft ob das Pferd springt und ruft die Methode auf, die die nächset Position
-	 * des Pferds berechnet, sollte es springen.
+	 * Prüft ob das Pferd springt und ruft die Methode auf, die die nächset
+	 * Position des Pferds berechnet, sollte es springen.
 	 */
 	private void checkPlayerConstraints() {
 		if (isPlayerJumping()) {
@@ -35,26 +43,29 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Prüft für alle GameObjects mit denen das Pferd kollidieren kann, ob es mit ihnen
-	 * kollidiert ist und passt den Punktestand entsprechend an.
+	 * Prüft für alle GameObjects mit denen das Pferd kollidieren kann, ob es
+	 * mit ihnen kollidiert ist und passt den Punktestand entsprechend an.
 	 */
 	public void collisionDetection() {
-		List<GameObject> objects = gameField.getGameObjects();
-
-		for (GameObject l : objects) {
-			if (l.isCollidable()) {
+		for (Actor l : gameField.getActors()) {
+			if (l instanceof CollidableGameObject) {
 				if (((CollidableGameObject) l).getRectangle().overlaps(
 						gameField.getPlayer().getRectangle())) {
-					l.setVisible(false);
-					l.setX(-5 - l.getWidth());
-					if (l.getPoints() > 0) {
+					((CollidableGameObject) l).remove();
+					((CollidableGameObject) l).setX(-5
+							- ((CollidableGameObject) l).getWidth());
+					gameField.passBack((CollidableGameObject) l);
+					if (((CollidableGameObject) l).getPoints() > 0) {
 						gameField.eat();
-						gameField.addToScore(l.getPoints()
-								+ (int) Math.round(l.getPoints()
+						gameField.addToScore(((CollidableGameObject) l)
+								.getPoints()
+								+ (int) Math.round(((CollidableGameObject) l)
+										.getPoints()
 										* gameField.getPlayer()
 												.getIntelligence()));
 					} else {
-						gameField.addToScore(l.getPoints());
+						gameField.addToScore(((CollidableGameObject) l)
+								.getPoints());
 					}
 
 				}
@@ -63,16 +74,21 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Liefert die Position auf die als nächstes ein GameObject gesetzt werden kann.
-	 * @return freePosition Die Position auf die als nächstes ein GameObject gesetzt werden kann.
+	 * Liefert die Position auf die als nächstes ein GameObject gesetzt werden
+	 * kann.
+	 * 
+	 * @return freePosition Die Position auf die als nächstes ein GameObject
+	 *         gesetzt werden kann.
 	 */
 	public float getFreePosition() {
 		return freePosition;
 	}
 
 	/**
-	 * Liefert ein Intervall aus dem eine zufällige Zahl gewählt wird, die auf die freePosition addiert wird,
-	 * damit GameObjects nicht unmittelbar hintereinander gesetzt werden.
+	 * Liefert ein Intervall aus dem eine zufällige Zahl gewählt wird, die auf
+	 * die freePosition addiert wird, damit GameObjects nicht unmittelbar
+	 * hintereinander gesetzt werden.
+	 * 
 	 * @return intervall[2] Das Intervall.
 	 */
 	private float[] getInterval() {
@@ -90,14 +106,19 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Liefert in Abhängigkeit des übergebenen Intervalls und der freePosition die x-Koordinate
-	 * auf die ein GameObject gesetzt werden kann. Passt den freePosition Wert an, wenn mit dem
-	 * GameObject kollidiert werden kann, da diese Methode auch von GameObjects verwendet wird,
-	 * die sich bewegen u. nicht überschneiden sollen ober mit denen nicht kollidiert werden kann
+	 * Liefert in Abhängigkeit des übergebenen Intervalls und der freePosition
+	 * die x-Koordinate auf die ein GameObject gesetzt werden kann. Passt den
+	 * freePosition Wert an, wenn mit dem GameObject kollidiert werden kann, da
+	 * diese Methode auch von GameObjects verwendet wird, die sich bewegen u.
+	 * nicht überschneiden sollen ober mit denen nicht kollidiert werden kann
 	 * (wie z.B. Wolken).
-	 * @param interval Das Intervall von getIntervall()
-	 * @param gameObjectWidth Die Breite des GameObject
-	 * @param colidable true, wenn man mit dem GameObject kollidieren kann.
+	 * 
+	 * @param interval
+	 *            Das Intervall von getIntervall()
+	 * @param gameObjectWidth
+	 *            Die Breite des GameObject
+	 * @param colidable
+	 *            true, wenn man mit dem GameObject kollidieren kann.
 	 * @return x Die berechnete x-Koordinate.
 	 */
 	public float getRandomCoordinate(float[] interval, float gameObjectWidth,
@@ -113,8 +134,9 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Prüft ob das Pferd beim Sprung außerhalb des linken bzw. rechten Spielfeldrands
-	 * springen würde und liefert bewegt das Pferd so, dass dies nicht geschehen kann.
+	 * Prüft ob das Pferd beim Sprung außerhalb des linken bzw. rechten
+	 * Spielfeldrands springen würde und liefert bewegt das Pferd so, dass dies
+	 * nicht geschehen kann.
 	 */
 	public void handleJump() {
 		Vector2 v = gameField.getPlayer().getNextJumpPosition();
@@ -154,8 +176,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 
 	/**
 	 * 
-	 * @param o In der Stage befindlicher Actor.
-	 * @return true, wenn der Actor vollständig aus dem linken Spielfeldrand ist.
+	 * @param o
+	 *            In der Stage befindlicher Actor.
+	 * @return true, wenn der Actor vollständig aus dem linken Spielfeldrand
+	 *         ist.
 	 */
 	private boolean outOfGameField(Actor o) {
 		if (o.getX() + o.getWidth() < 0) {
@@ -165,8 +189,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Setzt die Freiposition freePosition. 
-	 * @param f x-Koordinate auf ab der sich kein GameObject mehr befindet.
+	 * Setzt die Freiposition freePosition.
+	 * 
+	 * @param f
+	 *            x-Koordinate auf ab der sich kein GameObject mehr befindet.
 	 */
 	public void setFreePosition(float f) {
 		freePosition = f;
@@ -188,92 +214,126 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		collisionDetection();
 		gameField.actGameField(delta);
 		gameField.drawGameField();
-
 	}
-	
+
 	/**
-	 * Abfrage von Neigung des Devices und Setzen von Player-Position.
-	 * Da Parcours im Landscape-Modus läuft: Abfrage von Y (Intervall [-10,10]. Alles über 4 
-	 * -> uninteressant).
+	 * Abfrage von Neigung des Devices und Setzen von Player-Position. Da
+	 * Parcours im Landscape-Modus läuft: Abfrage von Y (Intervall [-10,10].
+	 * Alles über 4 -> uninteressant).
 	 */
 	private void updateAccelometer(float delta) {
 		// nur wenn das Accelerometer activiert ist wird es auch genutzt
-		
-		if (GameManagerFactory.getInstance().getSettings().getAccelerometerState()) {
+
+		if (GameManagerFactory.getInstance().getSettings()
+				.getAccelerometerState()) {
 			float y = Gdx.input.getAccelerometerY();
-			if(y >= 4f)
+			if (y >= 4f)
 				movePlayerR(delta);
-			
-			if(y <= -4f)
+
+			if (y <= -4f)
 				movePlayerL(delta);
 		}
 	}
-	
+
 	public void movePlayerR(float delta) {
-		float x = gameField.getPlayer().getX() 
+		float x = gameField.getPlayer().getX()
 				+ gameField.getPlayer().getWidth()
-				+ gameField.getGeneralGameSpeed()*delta;
+				+ gameField.getGeneralGameSpeed() * delta;
 
 		gameField.getPlayer().setJumpDirection(Direction.RIGHT);
-		
-		if(willPlayerBeOutOfGameField(x)){
+
+		if (willPlayerBeOutOfGameField(x)) {
 			gameField.getPlayer().shouldMove(0);
-		}else {
+		} else {
 			gameField.getPlayer().shouldMove(1);
 		}
-		
+
 		gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
-			
+
 	}
 
 	public void movePlayerL(float delta) {
-		float x = gameField.getPlayer().getX() - gameField.getGeneralGameSpeed()*delta;
-	
+		float x = gameField.getPlayer().getX()
+				- gameField.getGeneralGameSpeed() * delta;
+
 		gameField.getPlayer().setJumpDirection(Direction.LEFT);
-		
-		if(willPlayerBeOutOfGameField(x)){
+
+		if (willPlayerBeOutOfGameField(x)) {
 			gameField.getPlayer().shouldMove(0);
-		}else {
+		} else {
 			gameField.getPlayer().shouldMove(2);
 		}
-		
+
 		gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
-		
+
 	}
 
 	/**
-	 * Setzt GameObjects die vollständig außerhalb des Spielfelds sind auf unvisible,
-	 * setzt GameObjects die unvisible und vollständig außerhalb des Spielfelds sind
-	 * auf eine neue, freie Position und veranlasst genau das GameObject, welches das
-	 * letzte - also am weitesten rechts befindliche- GameObject ist, die freePosition
-	 * auf seine neue Position anzupassen.
-	 * @param delta Die Zeit in Sekunden, die seit dem letzten Frame vergangen ist.
+	 * Setzt GameObjects die vollständig außerhalb des Spielfelds sind auf
+	 * unvisible, setzt GameObjects die unvisible und vollständig außerhalb des
+	 * Spielfelds sind auf eine neue, freie Position und veranlasst genau das
+	 * GameObject, welches das letzte - also am weitesten rechts befindliche-
+	 * GameObject ist, die freePosition auf seine neue Position anzupassen.
+	 * 
+	 * @param delta
+	 *            Die Zeit in Sekunden, die seit dem letzten Frame vergangen
+	 *            ist.
 	 */
 	public void updateGameObjects(float delta) {
+		boolean posAssigned = false;
+		for (Actor a : gameField.getActors()) {
+			if (a instanceof CollidableGameObject
+					&& getRightBottomCorner(a) > 0) {
+				if (getRightBottomCorner(a) > gameField.getWidth()
+						- getRandomMargin()) {
+					posAssigned = true;
+				}
+			} else if (a instanceof CollidableGameObject
+					&& getRightBottomCorner(a) <= 0) {
+				((CollidableGameObject) a).remove();
+				((CollidableGameObject) a).setX(-10000);
+				gameField.passBack((CollidableGameObject) a);
+			}
+		}
 
-		List<GameObject> objects = gameField.getGameObjects();
-
-		for (GameObject o : objects) {
-			if (!o.isVisible() && outOfGameField(o)) {
-				o.setVisible(true);
-				o.setX(getRandomCoordinate(getInterval(), o.getWidth(),
-						o.isCollidable()));
-			}
-			if (o.isVisible() && outOfGameField(o)) {
-				o.setVisible(false);
-			}
-			if (o.getX() + o.getWidth() == getFreePosition()) {
-				freePosition = o.getX() - o.getDuration() * delta
-						+ o.getWidth();
-			}
+		if (!posAssigned) {
+			CollidableGameObject co = gameField.getRandomObject();
+			co.setX(gameField.getWidth());
+			gameField.addCollidableGameObject(co);
 		}
 	}
 
+	public float getRightBottomCorner(Actor a) {
+		if (a instanceof CollidableGameObject) {
+			return ((CollidableGameObject) a).getX()
+					+ ((CollidableGameObject) a).getWidth();
+		} else if (a instanceof GameObject) {
+			return ((GameObject) a).getX() + ((GameObject) a).getWidth();
+		} else {
+			return a.getX() + a.getWidth();
+		}
+	}
+
+	public float getRandomMargin() {
+		return Math.max(gameField.getWidth() * 35 / 100, randomGenerator
+				.nextInt((int) (gameField.getWidth() * 45 / 100)));
+	}
+
+	public float distance(CollidableGameObject co) {
+		return (co.getX() < 0) ? gameField.getWidth() + co.getX()
+				+ co.getWidth() : gameField.getWidth()
+				- (co.getX() - co.getWidth());
+	}
+
 	/**
-	 * Prüft auf Grundlage der berechneten y-Koordinate der getNextJumpPosition-Methode,
-	 * ob das Pferd unterhalb des Bodens springen würde - also ob der y-Wert richtig berechnet wurde.
-	 * @param y Die nächste y-Koordinate des Pferds während eines Sprungs.
-	 * @return true, wenn das Pferd nicht genau auf dem Boden landen würde, sondern darunter, sonst false.
+	 * Prüft auf Grundlage der berechneten y-Koordinate der
+	 * getNextJumpPosition-Methode, ob das Pferd unterhalb des Bodens springen
+	 * würde - also ob der y-Wert richtig berechnet wurde.
+	 * 
+	 * @param y
+	 *            Die nächste y-Koordinate des Pferds während eines Sprungs.
+	 * @return true, wenn das Pferd nicht genau auf dem Boden landen würde,
+	 *         sondern darunter, sonst false.
 	 */
 	private boolean willPlayerBeLesserThanGround(float y) {
 
@@ -286,8 +346,12 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	/**
 	 * Prüft ob das Pferd bei Bewegen zur übergebnene x-Koordinate außerhalb des
 	 * linken o. rechten Spielfeldbereichs sein würde.
-	 * @param x Die x-Koordinate zu der sich das Pferd beabsichtigt zu bewegen.
-	 * @return true, wenn das Pferd außerhalb des linken oder rechten Spielfeldbereichs sein würde, sonst false.
+	 * 
+	 * @param x
+	 *            Die x-Koordinate zu der sich das Pferd beabsichtigt zu
+	 *            bewegen.
+	 * @return true, wenn das Pferd außerhalb des linken oder rechten
+	 *         Spielfeldbereichs sein würde, sonst false.
 	 */
 	public boolean willPlayerBeOutOfGameField(float x) {
 		if (gameField.getPlayer().getDirection() == Direction.RIGHT) {

@@ -375,5 +375,9 @@ public class Player extends PlayerImpl {
 		r.width = w;
 		this.playerWidth = w;
 	}
+	
+	public float getJumpWidth(){
+		return player_jumpwidth;
+	}
 }
 	

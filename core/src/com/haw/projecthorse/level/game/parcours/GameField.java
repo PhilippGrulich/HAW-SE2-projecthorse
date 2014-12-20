@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
@@ -167,12 +168,12 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		for (int i = 1; i < 9; i++) {
 			addGameObjectWithRelativHeight("Kuerbis" + i,
 					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
-					-1000, getTopOfGroundPosition(), true, generalGameSpeed, 1,
+					-10000, getTopOfGroundPosition(), true, generalGameSpeed, 1,
 					regions, this.goi, false, true);
 		}
 
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
-				.getRegionHeight() * 9 / 50, -1000, getTopOfGroundPosition(),
+				.getRegionHeight() * 9 / 50, -10000, getTopOfGroundPosition(),
 				true, generalGameSpeed, -10, regions, this.goi, false, true);
 
 		scoreInformation = new Text(
@@ -183,7 +184,17 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		stage.addActor(scoreInformation);
 
 		stage.addActor(endlessBackground);
+		
+		CollidableGameObject co = goi.getObject();
+		co.setX(getWidth());
+		addCollidableGameObject(co);
+		
 
+	}
+	
+	@Override
+	public Array<Actor> getActors(){
+		return stage.getActors();
 	}
 
 	/**
@@ -228,7 +239,8 @@ public class GameField implements IGameFieldFuerGameInputListener,
 						desiredHeight), speed, x, y, collidable, isLoot,
 				isMoveable);
 
-		gameObjects.add(o);
+		//gameObjects.add(o);
+		if(!collidable)
 		stage.addActor(o);
 	}
 
@@ -257,7 +269,8 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		GameObject o = goi.initGameObject(regions.get(name), name, points,
 				height, width, speed, x, y, collidable, isLoot, isMoveable);
 
-		gameObjects.add(o);
+		//gameObjects.add(o);
+		if(!collidable)
 		stage.addActor(o);
 	}
 
@@ -329,7 +342,22 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * Liefert alle GameObjects des Spiels.
 	 */
 	public List<GameObject> getGameObjects() {
-		return gameObjects;
+		return goi.getObjects();
+	}
+	
+	@Override
+	public void addCollidableGameObject(CollidableGameObject o){
+		stage.addActor(o);
+	}
+	
+	@Override
+	public void passBack(CollidableGameObject o){
+		goi.passBack(o);
+	}
+	
+	@Override
+	public CollidableGameObject getRandomObject(){
+		return goi.getObject();
 	}
 
 	/**
@@ -390,7 +418,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		// setzen
 		float maxHeight = 0;
 		float maxWidth = 0;
-		for (GameObject o : gameObjects) {
+		for (GameObject o : getGameObjects()) {
 			if (o.isCollidable()) {
 				if (o.getHeight() > maxHeight) {
 					maxHeight = o.getHeight();

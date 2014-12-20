@@ -14,6 +14,17 @@ public class CollidableGameObject extends GameObject {
 			r = new Rectangle();
 		}
 	}
+	
+	@Override
+	public void act(float delta) {
+		if (getDuration() > 0) {
+			
+			setX(this.getX() - getDuration() * delta);
+		} else if (getDuration() < 0) {
+			setX(this.getX() + getDuration() * delta);
+		}
+		//super.act(delta);
+	}
 
 	@Override
 	public float getHeight() {

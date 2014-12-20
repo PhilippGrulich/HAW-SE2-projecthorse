@@ -16,6 +16,7 @@ public class GameObjectInitializer implements
 	private HashMap<String, String> params; //Namen aller Objekte müssen verschieden sein.
 	private ArrayList<CollidableGameObject> badCollidables; //Punkte < 0
 	private ArrayList<CollidableGameObject> goodCollidables; //Punkte > 0
+	private ArrayList<GameObject> nonCollidables;
 	
 	public GameObjectInitializer(HashMap<String, TextureRegion> r){
 		regions = r;
@@ -23,6 +24,7 @@ public class GameObjectInitializer implements
 		params = new HashMap<String, String>();
 		goodCollidables = new ArrayList<CollidableGameObject>();
 		badCollidables = new ArrayList<CollidableGameObject>();
+		nonCollidables = new ArrayList<GameObject>();
 		probability = 50;
 	}
 	
@@ -46,15 +48,15 @@ public class GameObjectInitializer implements
 			float height, float width, float duration, float x, float y,
 			boolean collidable, boolean isLoot, boolean isMoveable) {
 		
-		GameObject o;
+
 		
 		if (collidable) {
-			o = new CollidableGameObject();
+			CollidableGameObject o = new CollidableGameObject();
 			o.setTextureRegion(r);
 			o.setName(name);
 			o.setPoints(points);
 			o.setCollidable(collidable);
-			((CollidableGameObject) o).setRectangle(new Rectangle());
+			o.setRectangle(new Rectangle());
 			o.setX(x);
 			o.setY(y);
 			o.setDuration(duration);
@@ -62,9 +64,9 @@ public class GameObjectInitializer implements
 			o.setWidth(width);
 			o.setLoot(isLoot);
 			o.setMoveable(isMoveable);
-			
+			o.setVisible(true);
 			if(!params.containsKey(name)){
-				String params = "" + points + ";" + "" + height + ";" + width + "" + duration + ";"
+				String params = "" + points + ";" + height + ";" + width + ";" + duration + ";"
 					+ x + ";" + y + ";" + collidable + ";" + isLoot + ";" + isMoveable;
 				this.params.put(name, params);
 			}
@@ -77,6 +79,7 @@ public class GameObjectInitializer implements
 			
 			return o;
 		} else {
+			GameObject o = new GameObject();
 			o = new GameObject();
 			o.setTextureRegion(r);
 			o.setName(name);
@@ -89,6 +92,7 @@ public class GameObjectInitializer implements
 			o.setWidth(width);
 			o.setLoot(isLoot);
 			o.setMoveable(isMoveable);
+			nonCollidables.add(o);
 			return o;
 		}
 	}
@@ -105,12 +109,13 @@ public class GameObjectInitializer implements
 	 * Legt ein benutztes und nicht mehr benötigtes GameObject zurück in den Objektpool.
 	 * @param o GameObject
 	 */
-	public void passBack(GameObject o){
+	public void passBack(CollidableGameObject o){
+		o.setX(-1000);
 		if(o.getPoints() < 0){
 			badCollidables.add((CollidableGameObject) o);
 		}else if(o.getPoints() > 0){
 			goodCollidables.add((CollidableGameObject) o);
-		}	
+		}
 	}
 	
 	/**
@@ -120,7 +125,6 @@ public class GameObjectInitializer implements
 	 */
 	public CollidableGameObject getObject(){
 		int prob = randomGenerator.nextInt(101);
-		
 		return (prob < 100 - probability) ? getRandomBadCollidable() : getRandomGoodCollidable();
 	}
 	
@@ -148,12 +152,14 @@ public class GameObjectInitializer implements
 					boolean isLoot = Boolean.parseBoolean(param.substring(0, param.indexOf(';')));
 					param = param.substring(param.indexOf(';') + 1, param.length());
 					boolean isMoveable = Boolean.parseBoolean(param);
-					initGameObject(regions.get(key), key, points, height, width, duration, x, y, 
+					CollidableGameObject co = (CollidableGameObject) initGameObject(regions.get(key), key, points, height, width, duration, x, y, 
 							collidable, isLoot, isMoveable);
-					break;
+					badCollidables.remove(0);
+					return co;
+					//break;
 				}
 			}
-			return getObject();
+			return getObject(); //never used
 		}else {
 			int rand = randomGenerator.nextInt(badCollidables.size());
 			CollidableGameObject co = badCollidables.get(rand);
@@ -186,12 +192,13 @@ public class GameObjectInitializer implements
 					boolean isLoot = Boolean.parseBoolean(param.substring(0, param.indexOf(';')));
 					param = param.substring(param.indexOf(';') + 1, param.length());
 					boolean isMoveable = Boolean.parseBoolean(param);
-					initGameObject(regions.get(key), key, points, height, width, duration, x, y, 
+					CollidableGameObject co = (CollidableGameObject)initGameObject(regions.get(key), key, points, height, width, duration, x, y, 
 							collidable, isLoot, isMoveable);
-					break;
+					goodCollidables.remove(0);
+					return co;
 				}
 			}
-			return getObject();
+			return getObject(); //never used
 		}else {
 		int rand = randomGenerator.nextInt(goodCollidables.size());
 		CollidableGameObject co = goodCollidables.get(rand);
@@ -208,6 +215,17 @@ public class GameObjectInitializer implements
 	 */
 	public void setProbability(int probability){
 		this.probability = ((probability < 0) || (probability > 100)) ?  50 : probability;
+	}
+	
+	/**
+	 * Liefert alle GameObjects.
+	 * @return
+	 */
+	public ArrayList<GameObject> getObjects(){
+		ArrayList<GameObject> g = new ArrayList<GameObject>();
+		g.addAll(badCollidables);
+		g.addAll(goodCollidables);
+		return g;
 	}
 	
 	
