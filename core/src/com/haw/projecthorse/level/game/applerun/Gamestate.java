@@ -48,7 +48,7 @@ public class Gamestate {
 	private final float BASIS_GAME_TIME_SECONDS = 70; // Basis spiellaufzeit
 	private float totalGameTime; // Basis laufzeit + Modifikator durch Pferderasse
 	private float timeLeftSeconds;// Time to play left
-	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5;
+	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	private final int MAX_FALLING_ENTITIES = 5;
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
 													// nächsten entity spawn
@@ -94,11 +94,16 @@ public class Gamestate {
 		initBackground();
 		initHorse();
 		initScore();
-		initTimer();
+		
+		initTimer(); //Calc: Intelligenz BonusZeit
 
 		float speedModifikator = 1 + (horse.getAthletic() * 10 / 100); // Bis zu 10% schneller durch Stärke
 		MOVEMENT_PER_SECOND = (this.width / 2.2f) * speedModifikator;
 
+		float loseModifikator = 1 - (horse.getObedience() * 50 / 100); //Bis zu 50% weniger verlorene Zeit
+		TIME_LOST_PER_BRANCH_HIT_SECONDS = 5 * loseModifikator; 
+		
+		
 		fallingEntities = new EntityGroup();
 
 		stage.addActor(backgroundGraphics);
