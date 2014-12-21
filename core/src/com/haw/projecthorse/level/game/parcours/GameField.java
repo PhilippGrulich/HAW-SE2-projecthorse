@@ -53,6 +53,8 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	private Sound eat; //Essen-Sound bei Berührung mit essbarem Gegenstand.
 	private HashMap<String, TextureRegion> regions;
 	private GameObjectInitializer goi;
+	private boolean greetingPopupSet;
+	private GreetingPopup greetingPopup;
 
 	/**
 	 * Erzeugt das Spielfeld, lädt Sound und Musik von Parcours, setzt die übergebenen Parameter,
@@ -65,6 +67,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 */
 	public GameField(Stage s, Viewport p, int w, int h, AudioManager a) {
 		audioManager = a;
+		greetingPopupSet = false;
 		AssetManager.loadMusic("parcours");
 		AssetManager.loadSounds("parcours");
 		gallop = this.audioManager.getMusic("parcours", "gallop.wav");
@@ -111,7 +114,18 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * Zeigt das Gewinner-Popup bei GameState.WON und das Verlierer-Popup bei GameState.LOST
 	 */
 	public void showPopup(GameState g) {
-		stage.addActor(popup.getPopup(g));
+		if(g == GameState.GREETING && !greetingPopupSet){
+			this.greetingPopupSet = true;
+			this.greetingPopup = new GreetingPopup();
+			stage.addActor(greetingPopup.getPopup());
+		}else if(g == GameState.LOST || g == GameState.WON){
+			stage.addActor(popup.getPopup(g));
+		}
+	}
+	
+	@Override
+	public boolean isGreetingButtonPressed(){
+		return greetingPopup.isButtonPressed();
 	}
 
 	/**
@@ -534,6 +548,9 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	public void fadePopup(float delta, GameState g){
 		if(g == GameState.LOST || g == GameState.WON)
 			popup.getPopup(g).act(delta);
+		
+		if(g == GameState.GREETING)
+			greetingPopup.act(delta);
 	}
 
 

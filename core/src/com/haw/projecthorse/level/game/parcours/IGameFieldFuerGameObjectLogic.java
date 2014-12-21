@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 
 public interface IGameFieldFuerGameObjectLogic {
 
@@ -100,4 +101,8 @@ public interface IGameFieldFuerGameObjectLogic {
 	void passBack(CollidableGameObject o);
 
 	public Array<Actor> getActors();
+
+	public void showPopup(GameState greeting);
+
+	public boolean isGreetingButtonPressed();
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -32,7 +33,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private boolean saved = false;
 	private boolean paused = false;
 	private boolean gameEndReached;
-	private GameState gameStatus = GameState.START;
+	private GameState gameStatus = GameState.GREETING;
 	GestureDetector listener;
 	private InputMultiplexer inputMultiplexer;
 	private float breite;
@@ -40,11 +41,12 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private float moveToDuration;
 	private final float MOVEMENT_PER_SECOND;
 	private boolean lootShown = false;
+	private boolean greeting = true;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
 			Chest chest, AudioManager audioManager, Overlay overlay) {
 		AssetManager.loadMusic("parcours");
-		
+
 		gameField = (IGameFieldFuerGameOperator) new GameField(stage, viewport,
 				width, height, audioManager);
 		logic = new GameObjectLogic(width,
@@ -54,15 +56,13 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		this.chest = chest;
 		chestToShow = new Chest(overlay);
 		MOVEMENT_PER_SECOND = gameField.getStage().getWidth() / 1.25f;
-		
-//		ArrayList<ParcoursLoot> loots = (ArrayList<ParcoursLoot>) getLoots();
-//		for(ParcoursLoot l : loots){
-//			chest.addLoot(l);
-//		}
-//		showEarnedLoot(chest);
+		// ArrayList<ParcoursLoot> loots = (ArrayList<ParcoursLoot>) getLoots();
+		// for(ParcoursLoot l : loots){
+		// chest.addLoot(l);
+		// }
+		// showEarnedLoot(chest);
 
 	}
-
 
 	@Override
 	public void restart() {
@@ -86,41 +86,65 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
 	@Override
 	public void update(float delta) {
-		if (delta != 0 && !paused && gameStatus != GameState.END) {
-			logic.update(delta);
-			
-			verifyGameState(delta);
-		} else {
-			if (gameField.isButtonYesPressed(gameStatus)) {
-				inputMultiplexer.addProcessor(listener);
+		if (gameStatus == GameState.GREETING) {
+			if (greeting) {
+				gameField.showPopup(GameState.GREETING);
+				inputMultiplexer.removeProcessor(listener);
+				gameField.getPlayer().removeSwipeListener();
 				Gdx.input.setInputProcessor(inputMultiplexer);
-				gameEndReached = false;
-				gameField.restart();
+				gameField.pauseGallop();
+				this.pause();
+				greeting = false;
+			}
+
+			if (gameField.isGreetingButtonPressed()) {
+				inputMultiplexer.addProcessor(listener);
+				gameField.getPlayer().addSwipeListener();
+				Gdx.input.setInputProcessor(inputMultiplexer);
 				gameField.removePopup();
 				gameField.playGallop();
 				this.gameStatus = GameState.START;
 				this.setPause(false);
-			} else if (gameField.isButtonNoPressed(gameStatus)) {
-				List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
-				List<ParcoursLoot> loot = gameField.getLoot();
-				for(ParcoursLoot pl : loot){
-					if(!allreadyWon.contains(pl) && pl.getWonStatus()){
-						chest.addLoot(pl);
-					}
-				}
-				chest.saveAllLoot();
-				gameEndReached = false;
-				this.setPause(false);
-				gameField.clear();
-				this.gameStatus = GameState.END;
-				gameField.stopGallop();
-				GameManagerFactory.getInstance().navigateBack();
+			} else {
+				gameField.fadePopup(delta, gameStatus);
+				gameField.drawGameField();
 			}
-			gameField.fadePopup(delta, gameStatus);
-			gameField.drawGameField();
-			
+		} else {
+
+			if (delta != 0 && !paused && gameStatus != GameState.END) {
+				logic.update(delta);
+				verifyGameState(delta);
+			} else {
+				if (gameField.isButtonYesPressed(gameStatus)) {
+					inputMultiplexer.addProcessor(listener);
+					Gdx.input.setInputProcessor(inputMultiplexer);
+					gameEndReached = false;
+					gameField.restart();
+					gameField.removePopup();
+					gameField.playGallop();
+					this.gameStatus = GameState.START;
+					this.setPause(false);
+				} else if (gameField.isButtonNoPressed(gameStatus)) {
+					List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+					List<ParcoursLoot> loot = gameField.getLoot();
+					for (ParcoursLoot pl : loot) {
+						if (!allreadyWon.contains(pl) && pl.getWonStatus()) {
+							chest.addLoot(pl);
+						}
+					}
+					chest.saveAllLoot();
+					gameEndReached = false;
+					this.setPause(false);
+					gameField.clear();
+					this.gameStatus = GameState.END;
+					gameField.stopGallop();
+					GameManagerFactory.getInstance().navigateBack();
+				}
+				gameField.fadePopup(delta, gameStatus);
+				gameField.drawGameField();
+
+			}
 		}
-		
 		// TODO logic.success -> popup, stats, loot, restart?
 	}
 
@@ -134,19 +158,19 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			gameField.pauseGallop();
 			gameEndReached = true;
 			gameStatus = GameState.WON;
-			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>)getLoots();
+			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
 			for (ParcoursLoot l : gameField.getLoot()) {
 				if (l.getAvailableAtScore() <= gameField.getScore()
-						 && !l.getWonStatus()) {
+						&& !l.getWonStatus()) {
 					chestToShow.addLoot(l);
 					l.setWonStatus(true);
 				}
 			}
-			
-			if(!lootShown){
+
+			if (!lootShown) {
 				chestToShow.showAllLoot();
 				lootShown = true;
-			}else{
+			} else {
 				gameField.showPopup(GameState.WON);
 				lootShown = false;
 			}
@@ -171,18 +195,17 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		paused = true;
 	}
 
-
 	public void dispose() {
 		gameField.dispose();
 	}
-	
+
 	private void showEarnedLoot(Chest chest) {
 		List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
 		if (allreadyWon.size() > 0) {
 			chest.showAllLoot();
 		}
 	}
-	
+
 	/**
 	 * ermittelt alle bereits gewonnen Loots aus diesem Spiel die unter dem
 	 * verwendeten Spielstand gesichert sind

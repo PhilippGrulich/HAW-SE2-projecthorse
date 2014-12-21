@@ -30,6 +30,7 @@ public class Player extends PlayerImpl {
 	private int shouldMove; //Werte 0, 1 o. 2. 0 := Nicht bewegen, 1 := nach rechts bewegen, 2 := nach links bewegen.
 	private float velocityInc;
 	private Direction jumpDirection;
+	private SwipeListener listener;
 
 	/**
 	 * Liefert die Höhe des Spiels
@@ -244,7 +245,7 @@ public class Player extends PlayerImpl {
 	 * Initialisiert den Swipe-Listener des Pferds.
 	 */
 	private void initSwipeListener() {
-		SwipeListener listener = new SwipeListener() {
+		 listener = new SwipeListener() {
 
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
@@ -269,8 +270,19 @@ public class Player extends PlayerImpl {
 				}
 			}
 		};
-
 		this.addListener(listener);
+	}
+	
+	public void removeSwipeListener(){
+		this.removeListener(listener);
+	}
+	
+	public void addSwipeListener(){
+		if(listener == null){
+			initSwipeListener();
+		}else{
+		this.addListener(listener);
+		}
 	}
 
 	private boolean isJumpDirectionRight() {

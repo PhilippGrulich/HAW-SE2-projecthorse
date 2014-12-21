@@ -97,4 +97,6 @@ public interface IGameFieldFuerGameOperator {
 	 */
 	public void fadePopup(float delta, GameState g);
 
+	boolean isGreetingButtonPressed();
+
 }
