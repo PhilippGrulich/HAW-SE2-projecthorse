@@ -94,16 +94,15 @@ public class Gamestate {
 		initBackground();
 		initHorse();
 		initScore();
-		
-		initTimer(); //Calc: Intelligenz BonusZeit
+
+		initTimer(); // Calc: Intelligenz BonusZeit
 
 		float speedModifikator = 1 + (horse.getAthletic() * 10 / 100); // Bis zu 10% schneller durch Stärke
 		MOVEMENT_PER_SECOND = (this.width / 2.2f) * speedModifikator;
 
-		float loseModifikator = 1 - (horse.getObedience() * 50 / 100); //Bis zu 50% weniger verlorene Zeit
-		TIME_LOST_PER_BRANCH_HIT_SECONDS = 5 * loseModifikator; 
-		
-		
+		float loseModifikator = 1 - (horse.getObedience() * 50 / 100); // Bis zu 50% weniger verlorene Zeit
+		TIME_LOST_PER_BRANCH_HIT_SECONDS = 5 * loseModifikator;
+
 		fallingEntities = new EntityGroup();
 
 		stage.addActor(backgroundGraphics);
@@ -161,7 +160,7 @@ public class Gamestate {
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des
 																// Pferdes
 																// bewegen
-		horse.clearActions(); // Alte bewegungen etc. entfernen
+		boolean previousAnimationLeft = lastAnimationDirectionLeft;
 
 		if (x < 0) {
 			x = 0;
@@ -185,10 +184,26 @@ public class Gamestate {
 		}
 
 		moveToDuration = convertDistanceToTime(distance);
-		//Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
-		Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration);
-		horse.addAction(animationAction);
-		horse.addAction(move);
+
+		if (lastAnimationDirectionLeft != previousAnimationLeft || horse.getActions().size == 1) {
+			//Animation hat sich geändert, bzw. es war nur IDLE aktiv
+			horse.clearActions(); // Alte bewegungen etc. entfernen
+			horse.addAction(animationAction); // Nur bei Richtungsänderung Animation neu starten
+			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration);
+			horse.addAction(move);
+		} else { //Richtung beibehalten. Animation bleibt, bewegung bekommt neues Ziel
+			Action actionToDelete = null;
+			for (Action action : horse.getActions()) {
+				if (action instanceof AnimationAction) {
+					// do nothing //Animation action drin behalten
+				} else {
+					actionToDelete = action;
+				}
+			}
+			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration, null); // Instant movement (keine Interpolation)
+			horse.removeAction(actionToDelete);
+			horse.addAction(move);
+		}
 		horse.setAnimationSpeed(0.5f);
 	}
 
@@ -263,7 +278,7 @@ public class Gamestate {
 
 	private void updateAccelerometer() {
 		// nur wenn das Accelerometer activiert ist wird es auch genutzt
-		
+
 		if (GameManagerFactory.getInstance().getSettings().getAccelerometerState()) {
 			boolean changedDirection = false;
 			float adjustedX = (Gdx.input.getAccelerometerX());
@@ -285,18 +300,18 @@ public class Gamestate {
 
 			} else if (adjustedX == 0f) { // IDLE
 				if (currentAccelerometerDirection != Direction.IDLELEFT) {
-//					changedDirection = true;
-//					currentAccelerometerDirection = Direction.IDLELEFT;
-//					target_x = horse.getX();
-//					lastAnimationActionIdle = true;
+					// changedDirection = true;
+					// currentAccelerometerDirection = Direction.IDLELEFT;
+					// target_x = horse.getX();
+					// lastAnimationActionIdle = true;
 					setPlayerActionToIdle();
 				}
 
 				// adjustedX = (float) (Math.pow(adjustedX, 2));
 			}
 
-			else{
-				if (currentAccelerometerDirection != Direction.RIGHT && horse.getX() < (this.width-horse.getWidth()*horse.getScaleX())) {
+			else {
+				if (currentAccelerometerDirection != Direction.RIGHT && horse.getX() < (this.width - horse.getWidth() * horse.getScaleX())) {
 					changedDirection = true;
 					currentAccelerometerDirection = Direction.RIGHT;
 					target_x = this.width;
@@ -307,7 +322,7 @@ public class Gamestate {
 			}
 
 			if (changedDirection) { // Bewegung nur wenn
-			// moveHorseTo((float) (horseX + horseWith - adjustedX));
+				// moveHorseTo((float) (horseX + horseWith - adjustedX));
 				moveHorseTo(target_x);
 			}
 
