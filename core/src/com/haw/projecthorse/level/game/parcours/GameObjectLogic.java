@@ -143,8 +143,14 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		float x = 0;
 		float y = 0;
 		boolean outOfBound1 = !willPlayerBeLesserThanGround(v.y);
-		boolean outOfBound2 = !willPlayerBeOutOfGameField(v.x);
-		if (outOfBound2) {
+		boolean outOfBound2;
+		if(gameField.getPlayer().getJumpDirection() == Direction.RIGHT){
+			outOfBound2 = willPlayerBeOutOfGameField(v.x + gameField.getPlayer().getWidth());
+		}else {
+			outOfBound2 = willPlayerBeOutOfGameField(v.x);
+		}
+		
+		if (!outOfBound2) {
 			x = v.x;
 		} else {
 			x = gameField.getPlayer().getX();
@@ -227,41 +233,41 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		if (GameManagerFactory.getInstance().getSettings()
 				.getAccelerometerState()) {
 			float y = Gdx.input.getAccelerometerY();
-			if (y >= 4f)
-				movePlayerR(delta);
+			if (y >= 2.5f)
+				movePlayerR(delta, y);
 
-			if (y <= -4f)
-				movePlayerL(delta);
+			if (y <= -2.5f)
+				movePlayerL(delta, y*(-1));
 		}
 	}
 
-	public void movePlayerR(float delta) {
+	public void movePlayerR(float delta, float y) {
 		float x = gameField.getPlayer().getX()
 				+ gameField.getPlayer().getWidth()
-				+ gameField.getGeneralGameSpeed() * delta;
+				+ gameField.getGeneralGameSpeed() * delta * (y/2.0f);
 
 		gameField.getPlayer().setJumpDirection(Direction.RIGHT);
 
 		if (willPlayerBeOutOfGameField(x)) {
-			gameField.getPlayer().shouldMove(0);
+			gameField.getPlayer().shouldMove(0, 0);
 		} else {
-			gameField.getPlayer().shouldMove(1);
+			gameField.getPlayer().shouldMove(1, y/2.0f);
 		}
 
 		gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
 
 	}
 
-	public void movePlayerL(float delta) {
+	public void movePlayerL(float delta, float y) {
 		float x = gameField.getPlayer().getX()
-				- gameField.getGeneralGameSpeed() * delta;
+				- gameField.getGeneralGameSpeed() * delta * (y/2.0f);
 
 		gameField.getPlayer().setJumpDirection(Direction.LEFT);
 
 		if (willPlayerBeOutOfGameField(x)) {
-			gameField.getPlayer().shouldMove(0);
+			gameField.getPlayer().shouldMove(0, 0);
 		} else {
-			gameField.getPlayer().shouldMove(2);
+			gameField.getPlayer().shouldMove(2, y/2.0f);
 		}
 
 		gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
@@ -344,7 +350,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Prüft ob das Pferd bei Bewegen zur übergebnene x-Koordinate außerhalb des
+	 * Prüft ob das Pferd beim Bewegen zur übergebnenen x-Koordinate außerhalb des
 	 * linken o. rechten Spielfeldbereichs sein würde.
 	 * 
 	 * @param x
@@ -354,8 +360,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	 *         Spielfeldbereichs sein würde, sonst false.
 	 */
 	public boolean willPlayerBeOutOfGameField(float x) {
-		if (gameField.getPlayer().getDirection() == Direction.RIGHT) {
-
+		if (gameField.getPlayer().getJumpDirection() == Direction.RIGHT) {
+			if(x > gameField.getWidth()){
+				return true;
+			}
 			float positionOnRightJump = gameField.getPlayer().getX()
 					+ gameField.getPlayer().getWidth()
 					+ (x - gameField.getPlayer().getX());
@@ -365,15 +373,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 			}
 
 		} else {
-
-			float positionOnLeftJump = 0;
-			if (x < 0) {
-				positionOnLeftJump = gameField.getPlayer().getX() + x;
-			} else {
-				positionOnLeftJump = (gameField.getPlayer().getX() - x);
-			}
-
-			if (positionOnLeftJump < 0) {
+			if(x < 0){
 				return true;
 			}
 		}

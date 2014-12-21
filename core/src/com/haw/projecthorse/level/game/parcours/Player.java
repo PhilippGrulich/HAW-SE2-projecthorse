@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.game.parcours;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -27,6 +28,8 @@ public class Player extends PlayerImpl {
 	private float playerHeight, playerWidth, gameWidth, gameHeight;
 	private float duration; //Geschwindigkeit mit dem sich das Pferd bei eingeschaltetem Accelerometer bewegt
 	private int shouldMove; //Werte 0, 1 o. 2. 0 := Nicht bewegen, 1 := nach rechts bewegen, 2 := nach links bewegen.
+	private float velocityInc;
+	private Direction jumpDirection;
 
 	/**
 	 * Liefert die Höhe des Spiels
@@ -62,6 +65,8 @@ public class Player extends PlayerImpl {
 		super();
 		toFront();
 		shouldMove = 0;
+		velocityInc = 1;
+		jumpDirection = Direction.RIGHT;
 		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
 		
 		if(!GameManagerFactory.getInstance().getSettings().getAccelerometerState())
@@ -84,11 +89,13 @@ public class Player extends PlayerImpl {
 	public void act(float delta) {
 		super.act(delta);
 		if(shouldMove == 2){
-				setX(getX() - this.duration*delta);
+				setX(getX() - this.duration*delta*velocityInc);
 				shouldMove = 0;
+				velocityInc = 1;
 		}else if(shouldMove == 1){
-			setX(getX() + this.duration*delta);
+			setX(getX() + this.duration*delta*velocityInc);
 			shouldMove = 0;
+			velocityInc = 1;
 		}
 	}
 	
@@ -121,8 +128,9 @@ public class Player extends PlayerImpl {
 	 * m = 2 := nach links bewegen.
 	 * @param m 0, 1 o. 2
 	 */
-	public void shouldMove(int m){
+	public void shouldMove(int m, float y){
 		this.shouldMove = m;
+		this.velocityInc = y;
 	}
 
 	/**
@@ -203,8 +211,14 @@ public class Player extends PlayerImpl {
 	 */
 	private float getRightSwipePosition() {
 		if (getX() + getWidth() + SWIPEMOVE > getGameWidth()) {
-			return getX() + (getGameWidth() - (getX() + getWidth()));
+			//Hier Beachtung d. Scaling da draw in Superklasse impl. unter Verwendung von Scaling.
+			//Ohne Scaling an dieser Stelle: Methode arbeitet korrekt, doch Pferd bewegt sich außerhalb
+			//d. Spielfeldrandes da berechnete Position sich nicht auf die Position auswirkt, an der das Pferd gemalt
+			//wird.
+			return getGameWidth() - getWidth()*getScaleX();
 		}
+
+		System.out.println("! " + (getX() + getWidth() + SWIPEMOVE + " > " + getGameWidth()));
 		return getX() + SWIPEMOVE;
 	}
 
@@ -236,14 +250,16 @@ public class Player extends PlayerImpl {
 			public void swiped(SwipeEvent event, Actor actor) {
 				// Vormals Pr�fung auf instanceof APlayer
 				if (getDirection() == event.getDirection()) {
+					
 					if (getDirection() == Direction.RIGHT) {
+						setJumpDirection(Direction.RIGHT);
 						addAction(Actions.moveTo(getRightSwipePosition(),
 								getY(), SWIPEDURATION));
-						setJumpDirection(Direction.RIGHT);
+						System.out.println("beAt: " + (getX() + getWidth()));
 					} else {
+						setJumpDirection(Direction.LEFT);
 						addAction(Actions.moveTo(getLeftSwipePosition(),
 								getY(), SWIPEDURATION));
-						setJumpDirection(Direction.LEFT);
 					}
 				} else {
 					setAnimationSpeed(0.3f);
@@ -280,6 +296,11 @@ public class Player extends PlayerImpl {
 		} else {
 			setJumpDirectionRight(false);
 		}
+		jumpDirection = d;
+	}
+	
+	public Direction getJumpDirection(){
+		return jumpDirection;
 	}
 
 	/**
