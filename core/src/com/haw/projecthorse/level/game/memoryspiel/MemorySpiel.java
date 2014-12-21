@@ -102,10 +102,10 @@ public class MemorySpiel extends Game {
 
 		this.newGame.setPosition(this.width / 6.5f, this.height / 2f);
 		this.exitGame.setPosition(this.width / 6.5f, this.height / 3f);
-		this.newGame.setColor(Color.PINK);
-		this.exitGame.setColor(Color.PINK);
-		this.newGame.getStyle().fontColor = Color.WHITE;
-		this.exitGame.getStyle().fontColor = Color.WHITE;
+//		this.newGame.setColor(Color.PINK);
+//		this.exitGame.setColor(Color.PINK);
+//		this.newGame.getStyle().fontColor = Color.WHITE;
+//		this.exitGame.getStyle().fontColor = Color.WHITE;
 
 		this.newGame.toFront();
 		this.exitGame.toFront();
@@ -127,8 +127,8 @@ public class MemorySpiel extends Game {
 	}
 
 	protected Label createScoreLabel() {
-		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
-		font.setScale(2f, 2f);
+		BitmapFont font = AssetManager.getTextFont(FontSize.THIRTY);
+		font.setScale(3f, 3f);
 		font.setColor(Color.WHITE);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		Label label = new Label("Score", labelStyle);
@@ -147,7 +147,7 @@ public class MemorySpiel extends Game {
 
 	protected Label initScore() {
 		BitmapFont font = AssetManager.getTextFont(FontSize.SIXTY);
-		font.setScale(3f, 3f);
+		font.setScale(2f, 2f);
 		font.setColor(Color.WHITE);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		Label label = new Label("0", labelStyle);
@@ -176,7 +176,9 @@ public class MemorySpiel extends Game {
 		}
 		if (i == karten.size()) {
 			this.newGame.setVisible(true);
+			this.newGame.getStyle().font.setScale(1f, 1f);
 			this.exitGame.setVisible(true);
+			this.exitGame.getStyle().font.setScale(1f, 1f);
 			music.stop();
 			return;
 		}
