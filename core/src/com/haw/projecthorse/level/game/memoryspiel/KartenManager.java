@@ -41,6 +41,7 @@ public class KartenManager extends Thread {
 		Karte karte10 = new Karte(40, 750+y);
 		Karte karte11 = new Karte(265, 750+y);
 		Karte karte12 = new Karte(490, 750+y);
+		
 		karten.add(karte1);
 		karten.add(karte2);
 		karten.add(karte3);
@@ -68,6 +69,7 @@ public class KartenManager extends Thread {
 				"memorySpiel", "Foto" + 10));
 		picture6 = new TextureRegionDrawable(AssetManager.getTextureRegion(
 				"memorySpiel", "Foto" + 9));
+		
 		((Karte) karten.get(0)).setPicture(picture1);
 		((Karte) karten.get(1)).setPicture(picture1);
 		((Karte) karten.get(2)).setPicture(picture2);
@@ -143,19 +145,9 @@ public class KartenManager extends Thread {
 		karten.get(10).setPicture(picture6);
 		karten.get(11).setPicture(picture6);
 
-		karten.get(0).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(1).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(2).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(3).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(4).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(5).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(6).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(7).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(8).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(9).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(10).setState(CardState.TEMPORARILY_CLOSED);
-		karten.get(11).setState(CardState.TEMPORARILY_CLOSED);
-
+		for(int i = 0; i<12; i++){
+			karten.get(i).setState(CardState.TEMPORARILY_CLOSED);
+		}
 	}
 
 	public int getScore() {

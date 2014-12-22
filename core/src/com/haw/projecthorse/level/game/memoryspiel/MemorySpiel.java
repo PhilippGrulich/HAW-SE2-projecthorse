@@ -28,7 +28,7 @@ import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 public class MemorySpiel extends Game {
 
 	public enum GameState {
-		READY, RESTART, END;
+		READY, END;
 	}
 
 	private SpriteBatch batcher;
