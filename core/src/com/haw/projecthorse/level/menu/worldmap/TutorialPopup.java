@@ -46,7 +46,7 @@ public class TutorialPopup extends Popup {
 		wrapper.appendLine("wir hoffen das du viel Spaß mit %s hast.", gameTitle);
 		wrapper.appendLine("Auf der Weltkarte kannst du mit deinem Pferd von Stadt"
 				+ " zu Stadt reisen und dort tolle Spiele spielen.");
-		wrapper.appendLine("Je mehr Spiele du spielst umso schönere Pferde kannst du gewinnen.");
+		wrapper.appendLine("Je mehr Spiele du spielst, umso schönere Pferde kannst du gewinnen.");
 
 		return wrapper.toString();
 	}

@@ -113,7 +113,7 @@ public class GameOverPopup extends Popup {
 	 *
 	 */
 	public enum GameState {
-		WON, LOST, START, END;
+		WON, LOST, START, END, GREETING;
 	}
 
 }

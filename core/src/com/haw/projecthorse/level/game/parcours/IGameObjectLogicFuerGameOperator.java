@@ -11,12 +11,12 @@ public interface IGameObjectLogicFuerGameOperator {
 	 * übersteigt, wird der Spieler in dieser Funktion nach rechts bewegt.
 	 * @param delta Die Zeit die seit dem letzten Frame vergangen ist.
 	 */
-	public void movePlayerR(float delta);
+	public void movePlayerR(float delta, float y);
 
 	/**
 	 * Wenn der Wert von Gdx.input.getAccelerometerY() einen festgelegten Wert
 	 * übersteigtt, wird der Spieler in dieser Funktion nach links bewegt.
 	 * @param delta Die Zeit die seit dem letzten Frame vergangen ist.
 	 */
-	public void movePlayerL(float delta);
+	public void movePlayerL(float delta, float y);
 }
