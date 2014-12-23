@@ -8,11 +8,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.Race;
 
 public class Player extends PlayerImpl {
 
@@ -31,6 +34,7 @@ public class Player extends PlayerImpl {
 	private float velocityInc;
 	private Direction jumpDirection;
 	private SwipeListener listener;
+	private PlayerImpl p;
 
 	/**
 	 * Liefert die Höhe des Spiels
@@ -62,6 +66,24 @@ public class Player extends PlayerImpl {
 	 * @param gameWidth Spielbreite
 	 * @param gameHeight Spielhöhe
 	 */
+	public Player(float gameWidth, float gameHeight, HorseRace race) {
+		super(race);
+		
+		toFront();
+		shouldMove = 0;
+		velocityInc = 1;
+		jumpDirection = Direction.RIGHT;
+		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
+		
+		if(!GameManagerFactory.getInstance().getSettings().getAccelerometerState())
+			initSwipeListener();
+
+		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
+		this.SWIPEMOVE = (getGameWidth() * 15 / 100) + athletic();
+	}
+	
+
 	public Player(float gameWidth, float gameHeight) {
 		super();
 		toFront();
@@ -85,6 +107,7 @@ public class Player extends PlayerImpl {
 	private float athletic() {
 		return getAthletic() * 5;
 	}
+
 
 	@Override
 	public void act(float delta) {
@@ -249,14 +272,12 @@ public class Player extends PlayerImpl {
 
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
-				// Vormals Pr�fung auf instanceof APlayer
 				if (getDirection() == event.getDirection()) {
 					
 					if (getDirection() == Direction.RIGHT) {
 						setJumpDirection(Direction.RIGHT);
 						addAction(Actions.moveTo(getRightSwipePosition(),
 								getY(), SWIPEDURATION));
-						System.out.println("beAt: " + (getX() + getWidth()));
 					} else {
 						setJumpDirection(Direction.LEFT);
 						addAction(Actions.moveTo(getLeftSwipePosition(),

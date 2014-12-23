@@ -51,18 +51,6 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 		image = new LootImage("parcours", ParcoursLoot.this.getName());
 		this.availableAtScore = availableAtScore;
 	}
-	
-	/**
-	 * Konstruktor für Loot-Objekte, welche Pferderassen sind.
-	 * @param availableAtScore Punktzahl ab der das Loot-Objekt gewonnen werden kann.
-	 * @param r Die Pferderasse.
-	 * @param description Eine kurze beschreibung des Bildes.
-	 */
-	public ParcoursLoot(int availableAtScore, RaceLoot r, String description) {
-		super(r.race().name(), description);
-		image = new LootImage("parcours", ParcoursLoot.this.getName());
-		this.availableAtScore = availableAtScore;
-	}
 
 	@Override
 	public LootImage getLootImage() {
