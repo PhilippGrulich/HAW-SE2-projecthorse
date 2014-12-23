@@ -322,12 +322,14 @@ public final class AssetManager {
 		}
 		
 		if (headlineFonts[size.ordinal()] == null) {
-		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
-		String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "headlinefont/GetVoIP Grotesque.ttf";
-
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
-		headlineFonts[size.ordinal()] = generator.generateFont(size.getVal());
+			int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
+			String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "headlinefont/GetVoIP Grotesque.ttf";
+	
+			FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
+			headlineFonts[size.ordinal()] = generator.generateFont(size.getVal());
 		}
+		headlineFonts[size.ordinal()].setScale(1f);
+		
 		return headlineFonts[size.ordinal()];
 	}
 
@@ -345,13 +347,14 @@ public final class AssetManager {
 		}
 		
 		if (textFonts[size.ordinal()] == null) {
-		int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
-		String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "textfont/Grundschrift-Bold.ttf";
-
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
-		textFonts[size.ordinal()] = gen.generateFont(size.getVal());
-		gen.dispose();
+			int startIdx = directory_fonts.indexOf(FOLDERNAME_FONTS);
+			String relativeFilePath = directory_fonts.substring(startIdx, directory_fonts.length()).replace("\\", "/") + FILESEPARATOR + "textfont/Grundschrift-Bold.ttf";
+	
+			FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal(relativeFilePath));
+			textFonts[size.ordinal()] = gen.generateFont(size.getVal());
+			gen.dispose();
 		}
+		textFonts[size.ordinal()].setScale(1f);
 		
 		return textFonts[size.ordinal()];
 	}

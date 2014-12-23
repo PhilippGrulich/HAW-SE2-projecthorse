@@ -21,12 +21,14 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
+import com.haw.projecthorse.level.util.overlay.Overlay;
+import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 
 public class MemorySpiel extends Game {
 
 	public enum GameState {
-		READY, RESTART, END;
+		READY, END;
 	}
 
 	private SpriteBatch batcher;
@@ -35,21 +37,16 @@ public class MemorySpiel extends Game {
 	private Drawable drawable;
 	private Image backgroundImage;
 	private GameState state;
-	private Label scoreLabel;
 	private Label score;
 	private Music music;
-	private ButtonLarge newGame;
-	private ButtonLarge exitGame;
+	private Dialog replay;
 
 	public MemorySpiel() {
 		manager = new KartenManager();
 		batcher = this.getSpriteBatch();
 		state = GameState.READY;
+
 		stage = new Stage(this.getViewport(), batcher);
-		AssetManager.loadMusic("memorySpiel");
-		this.music = this.audioManager.getMusic("memorySpiel",
-				"Happy Ukulele(edited).mp3");
-		this.music.setLooping(true);
 		InputManager.addInputProcessor(stage);
 
 		// Hintergrund
@@ -60,14 +57,23 @@ public class MemorySpiel extends Game {
 		stage.addActor(backgroundImage);
 
 		// Score Anzeige
-		scoreLabel = createScoreLabel();
-		scoreLabel.toFront();
 		score = initScore();
 		score.toFront();
-		stage.addActor(scoreLabel);
 		stage.addActor(score);
+
 		initKarten();
-		initButtons();
+
+		initReplay();
+
+		initMusic();
+
+	}
+
+	private void initMusic() {
+		AssetManager.loadMusic("memorySpiel");
+		this.music = this.audioManager.getMusic("memorySpiel",
+				"Happy Ukulele(edited).mp3");
+		this.music.setLooping(true);
 		playMusic();
 	}
 
@@ -79,20 +85,19 @@ public class MemorySpiel extends Game {
 		}
 	}
 
-	protected void initButtons() {
+	protected void initReplay() {
 
-		this.newGame = new ButtonLarge("Neue Runde?", new ChangeListener() {
+		replay = new Dialog("Neue Runde?");
 
+		replay.addButton("Ja, gerne", new ChangeListener() {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
-				newGame.setVisible(false);
-				exitGame.setVisible(false);
-				state = GameState.END;
+				MemorySpiel.getOverlay().disposePopup();
+				restart();
 			}
 		});
 
-		this.exitGame = new ButtonLarge("Nein, danke", new ChangeListener() {
-
+		replay.addButton("Nein, danke", new ChangeListener() {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
 				GameManagerFactory.getInstance().navigateBack();
@@ -100,19 +105,6 @@ public class MemorySpiel extends Game {
 
 		});
 
-		this.newGame.setPosition(this.width / 6.5f, this.height / 2f);
-		this.exitGame.setPosition(this.width / 6.5f, this.height / 3f);
-		this.newGame.setColor(Color.PINK);
-		this.exitGame.setColor(Color.PINK);
-		this.newGame.getStyle().fontColor = Color.WHITE;
-		this.exitGame.getStyle().fontColor = Color.WHITE;
-
-		this.newGame.toFront();
-		this.exitGame.toFront();
-		stage.addActor(newGame);
-		stage.addActor(exitGame);
-		this.newGame.setVisible(false);
-		this.exitGame.setVisible(false);
 	}
 
 	protected int getBackground() {
@@ -126,32 +118,18 @@ public class MemorySpiel extends Game {
 		this.music.setVolume(0.4f);
 	}
 
-	protected Label createScoreLabel() {
-		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
-		font.setScale(2f, 2f);
-		font.setColor(Color.WHITE);
-		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
-		Label label = new Label("Score", labelStyle);
-		label.setPosition(this.width / 2.5f, this.height * 0.9f);
-		return label;
-	}
-
 	protected void setScore(int score) {
-		if (score > 9) {
-			this.score.setPosition(this.width / 2.8f, this.height * 0.75f);
-		} else {
-			this.score.setPosition(this.width / 2.2f, this.height * 0.75f);
-		}
-		this.score.setText(score + "");
+		this.score.setText("Score: " + score);
 	}
 
 	protected Label initScore() {
-		BitmapFont font = AssetManager.getTextFont(FontSize.SIXTY);
-		font.setScale(3f, 3f);
+		BitmapFont font = AssetManager.getHeadlineFont(FontSize.SIXTY);
 		font.setColor(Color.WHITE);
+		font.setScale(1f, 1f);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
-		Label label = new Label("0", labelStyle);
-		label.setPosition(this.width / 2.2f, this.height * 0.75f);
+		Label label = new Label("Score: 0", labelStyle);
+		// label.setPosition(this.width / 2.2f, this.height * 0.75f);
+		label.setPosition(1.5f, this.height * 0.93f);
 		return label;
 	}
 
@@ -175,9 +153,9 @@ public class MemorySpiel extends Game {
 			}
 		}
 		if (i == karten.size()) {
-			this.newGame.setVisible(true);
-			this.exitGame.setVisible(true);
 			music.stop();
+			state = GameState.END;
+			MemorySpiel.getOverlay().showPopup(replay);
 			return;
 		}
 		manager.checkChanged(delta);
@@ -189,8 +167,6 @@ public class MemorySpiel extends Game {
 		stage.draw();
 		if (state == GameState.READY) {
 			updateKarten(delta);
-		} else if (state == GameState.END) {
-			restart();
 		}
 	}
 
@@ -200,6 +176,7 @@ public class MemorySpiel extends Game {
 		backgroundImage.setDrawable(drawable);
 		manager.restart();
 		state = GameState.READY;
+		initReplay();
 		playMusic();
 	}
 
@@ -236,6 +213,10 @@ public class MemorySpiel extends Game {
 	protected void doResume() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public static Overlay getOverlay() {
+		return overlay;
 	}
 
 }
