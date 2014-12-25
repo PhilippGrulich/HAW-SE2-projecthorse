@@ -13,9 +13,9 @@
          levelID:"worldmap",
          className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
          parameter:{
-         			   	cityCoordinates:"Hamburg,329,786;
-         			   						Berlin,593,668;
-         			   						Muenchen,438,108"
+         			   	cityCoordinates:"Hamburg,706,1550;
+         			   						Berlin,1200,1300;
+         			   						Muenchen,965,255"
          }
       },
 

@@ -1,5 +1,32 @@
 
 worldmap.png
+size: 1664,2002
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+flatLight09
+  rotate: false
+  xy: 1504, 1842
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+germanymap_scaled
+  rotate: false
+  xy: 2, 2
+  size: 1500, 2000
+  orig: 1500, 2000
+  offset: 0, 0
+  index: -1
+shadedLight28
+  rotate: false
+  xy: 1504, 1760
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+
+worldmap2.png
 size: 1444,1282
 format: RGBA8888
 filter: Nearest,Nearest
@@ -11,24 +38,10 @@ erde-und-sterne
   orig: 720, 1280
   offset: 0, 0
   index: -1
-flatLight09
-  rotate: false
-  xy: 724, 115
-  size: 160, 160
-  orig: 160, 160
-  offset: 0, 0
-  index: -1
-germanymap_scaled
+germanymap_scaled - Kopie
   rotate: false
   xy: 724, 277
   size: 720, 1005
   orig: 720, 1005
-  offset: 0, 0
-  index: -1
-shadedLight28
-  rotate: false
-  xy: 724, 33
-  size: 80, 80
-  orig: 80, 80
   offset: 0, 0
   index: -1
