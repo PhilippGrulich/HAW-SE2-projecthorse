@@ -34,13 +34,13 @@ public class Karte extends Image {
 		this.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				changed();
+				touched();
 				return true; // or false
 			}
 		});
 	}
 
-	public void changed() {
+	public void touched() {
 		if (this.state == (CardState.CLOSED)) {
 			setState(CardState.TEMPORARILY_OPENED);
 		}

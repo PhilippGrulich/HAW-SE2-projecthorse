@@ -3,6 +3,7 @@ package com.haw.projecthorse.level.game.applerun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -13,12 +14,15 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.actions.Direction;
 
@@ -31,8 +35,6 @@ public class Gamestate {
 																// drawing
 																// collision
 																// rectangles
-	// TextureAtlas atlas = AssetManager.load("appleRun", false, false, true);
-
 	final float MOVEMENT_PER_SECOND;// Movement in px per second
 	int roll; // Temp var
 	int breite; // Temp var
@@ -40,14 +42,14 @@ public class Gamestate {
 	float distance;// Temp var
 	float moveToDuration;// Temp var
 
-	private final float TOTAL_GAME_TIME_SECONDS = 90; // Total run time of the
-														// game.
-	private float timeLeftSeconds = TOTAL_GAME_TIME_SECONDS; // Time to play
-																// left
-	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS = 5; //
+	Direction currentAccelerometerDirection;
 
+	private boolean endThisGame = false; // if true -> Nächster render aufruf delta > 0 -> navigate back
+	private final float BASIS_GAME_TIME_SECONDS = 70; // Basis spiellaufzeit
+	private float totalGameTime; // Basis laufzeit + Modifikator durch Pferderasse
+	private float timeLeftSeconds;// Time to play left
+	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	private final int MAX_FALLING_ENTITIES = 5;
-
 	private final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
 													// nächsten entity spawn
 	private final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
@@ -73,25 +75,63 @@ public class Gamestate {
 	private int width;
 	private int height;
 
+	private int score;
+	private int appleCatchSeries; // Äpfel nacheinander gefangen.
+
 	private boolean lastAnimationDirectionLeft = false;
 	private boolean lastAnimationActionIdle = false;
 
-	public Gamestate(Viewport viewport, Batch batch, int width, int heigth) {
+	private final Chest chest; // referenz auf Chest aus der Game class
+
+	private Label scoreAnzeige;
+
+	public Gamestate(Viewport viewport, Batch batch, int width, int heigth, Chest chest) {
+		this.chest = chest;
 		stage = new Stage(viewport, batch);
 		this.width = width;
 		this.height = heigth;
-		MOVEMENT_PER_SECOND = this.width / 1.25f;
 
 		initBackground();
 		initHorse();
+		initScore();
+
+		initTimer(); // Calc: Intelligenz BonusZeit
+
+		float speedModifikator = 1 + (horse.getAthletic() * 10 / 100); // Bis zu 10% schneller durch Stärke
+		MOVEMENT_PER_SECOND = (this.width / 2.2f) * speedModifikator;
+
+		float loseModifikator = 1 - (horse.getObedience() * 50 / 100); // Bis zu 50% weniger verlorene Zeit
+		TIME_LOST_PER_BRANCH_HIT_SECONDS = 5 * loseModifikator;
 
 		fallingEntities = new EntityGroup();
 
 		stage.addActor(backgroundGraphics);
 		stage.addActor(horse);
 		stage.addActor(fallingEntities);
+		stage.addActor(scoreAnzeige);
 
 		InputManager.addInputProcessor(stage);
+
+		score = 0;
+		appleCatchSeries = 0;
+		currentAccelerometerDirection = Direction.IDLELEFT;
+	}
+
+	private void initTimer() {
+		float bonusTimeFactorByInt = 1 + horse.getIntelligence() * 20 / 100; // Je nach intelligenz bis zu 20% längere Spielzeit
+		totalGameTime = BASIS_GAME_TIME_SECONDS * bonusTimeFactorByInt;
+		timeLeftSeconds = totalGameTime;
+	}
+
+	protected void initScore() {
+		BitmapFont font = AssetManager.getTextFont(FontSize.FORTY);
+		LabelStyle labelStyle = new LabelStyle(font, Color.BLUE);
+		scoreAnzeige = new Label("Score: " + score, labelStyle);
+		scoreAnzeige.setPosition(50, 50);
+	}
+
+	protected void updateScore() {
+		scoreAnzeige.setText("Score: " + score);
 	}
 
 	private void initHorse() {
@@ -120,7 +160,7 @@ public class Gamestate {
 		x = x - ((horse.getWidth() * horse.getScaleX()) / 2); // Zur mitte des
 																// Pferdes
 																// bewegen
-		horse.clearActions(); // Alte bewegungen etc. entfernen
+		boolean previousAnimationLeft = lastAnimationDirectionLeft;
 
 		if (x < 0) {
 			x = 0;
@@ -144,10 +184,26 @@ public class Gamestate {
 		}
 
 		moveToDuration = convertDistanceToTime(distance);
-		Action move = Actions.moveTo(x, horse.getY(), moveToDuration);
 
-		horse.addAction(animationAction);
-		horse.addAction(move);
+		if (lastAnimationDirectionLeft != previousAnimationLeft || horse.getActions().size == 1) {
+			//Animation hat sich geändert, bzw. es war nur IDLE aktiv
+			horse.clearActions(); // Alte bewegungen etc. entfernen
+			horse.addAction(animationAction); // Nur bei Richtungsänderung Animation neu starten
+			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration);
+			horse.addAction(move);
+		} else { //Richtung beibehalten. Animation bleibt, bewegung bekommt neues Ziel
+			Action actionToDelete = null;
+			for (Action action : horse.getActions()) {
+				if (action instanceof AnimationAction) {
+					// do nothing //Animation action drin behalten
+				} else {
+					actionToDelete = action;
+				}
+			}
+			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration, null); // Instant movement (keine Interpolation)
+			horse.removeAction(actionToDelete);
+			horse.addAction(move);
+		}
 		horse.setAnimationSpeed(0.5f);
 	}
 
@@ -213,29 +269,63 @@ public class Gamestate {
 		removeDroppedDownEntities();
 		updateTimer(delta);
 
-		updateAccelometer();
+		updateAccelerometer();
 
 		if (!lastAnimationActionIdle && horse.getActions().size == 1) { // Player ist nicht schon auf IDLE und bewegt sich gerade nicht
 			setPlayerActionToIdle();
 		}
 	}
 
-	private void updateAccelometer() {
+	private void updateAccelerometer() {
 		// nur wenn das Accelerometer activiert ist wird es auch genutzt
+
 		if (GameManagerFactory.getInstance().getSettings().getAccelerometerState()) {
+			boolean changedDirection = false;
 			float adjustedX = (Gdx.input.getAccelerometerX());
-			float horseWith = ((horse.getWidth() * horse.getScaleX()) / 2);
-			float horseX = horse.getX();
+			// float horseWith = ((horse.getWidth() * horse.getScaleX()) / 2);
+			// float horseX = horse.getX();
 			if (adjustedX > -1.5f && adjustedX < 1.5f) {
 				adjustedX = 0f;
-			} else {
-				if (adjustedX >= 0f)
-					adjustedX = (float) (Math.pow(adjustedX, 2));
-				else
-					adjustedX = (float) (Math.pow(adjustedX, 2)) * -1;
-				moveHorseTo((float) (horseX + horseWith - adjustedX));
-
 			}
+			float target_x = 0;
+			if (adjustedX > 0f) { // MOVE left
+				if (currentAccelerometerDirection != Direction.LEFT && horse.getX() > 0) {
+					currentAccelerometerDirection = Direction.LEFT;
+					changedDirection = true;
+					target_x = 0;
+					lastAnimationDirectionLeft = true;
+					lastAnimationActionIdle = false;
+				}
+				// adjustedX = (float) (Math.pow(adjustedX, 2));
+
+			} else if (adjustedX == 0f) { // IDLE
+				if (currentAccelerometerDirection != Direction.IDLELEFT) {
+					// changedDirection = true;
+					// currentAccelerometerDirection = Direction.IDLELEFT;
+					// target_x = horse.getX();
+					// lastAnimationActionIdle = true;
+					setPlayerActionToIdle();
+				}
+
+				// adjustedX = (float) (Math.pow(adjustedX, 2));
+			}
+
+			else {
+				if (currentAccelerometerDirection != Direction.RIGHT && horse.getX() < (this.width - horse.getWidth() * horse.getScaleX())) {
+					changedDirection = true;
+					currentAccelerometerDirection = Direction.RIGHT;
+					target_x = this.width;
+					lastAnimationDirectionLeft = false;
+					lastAnimationActionIdle = false;
+				}
+				// adjustedX = (float) (Math.pow(adjustedX, 2)) * -1;
+			}
+
+			if (changedDirection) { // Bewegung nur wenn
+				// moveHorseTo((float) (horseX + horseWith - adjustedX));
+				moveHorseTo(target_x);
+			}
+
 		}
 	}
 
@@ -250,15 +340,35 @@ public class Gamestate {
 	}
 
 	private void updateTimer(float delta) {
-		timeLeftSeconds -= delta;
-		if (timeLeftSeconds < 0) {
-			// TODO end this game
+		if (delta == 0) {
+			return;
 		}
+		timeLeftSeconds -= delta;
+		if (endThisGame) {
+			GameManagerFactory.getInstance().navigateBack();
+		}
+		if (timeLeftSeconds < 0) {
+			endThisGame();
+		}
+
 		// updateTimeBar Scale
-		scaleX = timeLeftSeconds / TOTAL_GAME_TIME_SECONDS; // Time left as
-															// ratio. (Between
-															// 0.0 and 1.0)
+		scaleX = timeLeftSeconds / totalGameTime; // Time left as
+													// ratio. (Between
+													// 0.0 and 1.0)
 		timeBar.setScaleX(scaleX);
+	}
+
+	private void endThisGame() {
+		// TODO BUGFIX, derzeit stürzt er noch ab wenn einmal ein Friese im savegame drin ist.
+		/*
+		 * double roll = Math.random(); if(roll <= 0.2f &&
+		 * !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)){
+		 * this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.FRIESE))); }
+		 * 
+		 * this.chest.showAllLoot(); this.chest.saveAllLoot();
+		 */
+
+		endThisGame = true;
 	}
 
 	private void drawCollisionRectangles(float delta) {
@@ -296,9 +406,16 @@ public class Gamestate {
 		// atlas.dispose(); //Removed due to AssetManager-Management
 	}
 
-	public void playerHitByBranch() {
+	void playerHitByBranch() {
+		appleCatchSeries = appleCatchSeries / 2;
 		Gdx.input.vibrate(200);
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
+	}
+
+	void playerHitByApple() {
+		appleCatchSeries++;
+		score += appleCatchSeries;
+		updateScore();
 	}
 
 	public void setPlayerActionToIdle() {
@@ -311,5 +428,7 @@ public class Gamestate {
 		lastAnimationActionIdle = true;
 
 		horse.setAnimationSpeed(0.1f);
+
+		currentAccelerometerDirection = Direction.IDLELEFT;
 	}
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 import com.haw.projecthorse.lootmanager.Chest;
+import com.haw.projecthorse.player.PlayerImpl;
+import com.haw.projecthorse.player.race.HorseRace;
 
 public interface IGameFieldFuerGameOperator {
 
@@ -34,6 +36,14 @@ public interface IGameFieldFuerGameOperator {
 	 * @param g
 	 */
 	void showPopup(GameState g);
+	
+	/**
+	 * Zeigt für den GameState Greeting den Begrüßungsbildschirm und die Pferdeauswahl vor.
+	 * @param g
+	 * @param userName
+	 * @param p
+	 */
+	void showPopup(GameState g, String userName);
 
 	/**
 	 * Ruft draw auf der Stage auf.
@@ -96,5 +106,17 @@ public interface IGameFieldFuerGameOperator {
 	 * @param delta Zeit, die seit dem letzten Frame vergangen ist.
 	 */
 	public void fadePopup(float delta, GameState g);
+
+	boolean isGreetingButtonPressed();
+
+	void initPlayerHannoveraner();
+
+	void initPlayer(HorseRace race);
+
+	boolean isHorseSelected();
+
+	HorseRace getSelectedRace();
+
+	void showPopup(GameState horseselection, HorseRace[] races);
 
 }

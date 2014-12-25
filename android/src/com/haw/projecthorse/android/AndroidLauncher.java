@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -17,7 +18,6 @@ public class AndroidLauncher extends AndroidApplication {
 
 		// Hiermit wird die Android Navigation Bar ausgeblendet, zur�ckholen
 		// geht ab Android 4.4 mit einem Swipe vom oberen Bildschirmrand nach unten
-
 		if (Build.VERSION.SDK_INT >= 19) {
 			Window window = getWindow();
 			if(window!=null){
@@ -31,12 +31,12 @@ public class AndroidLauncher extends AndroidApplication {
 			
 			}
 		}
+		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Disable standbye mode
 
 		AndroidPlatform platform = new AndroidPlatform(this);
 		
-		
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new CoreGameMain(platform), config);
-
 	}
 }
