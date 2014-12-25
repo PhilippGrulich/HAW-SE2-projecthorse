@@ -32,7 +32,7 @@ public class CityPopup extends Popup {
 	}
 
 	private String gennerateText(String text) {
-		TextWrapper wrapper = new TextWrapper(25);
+		TextWrapper wrapper = new TextWrapper(23);
 		wrapper.appendLine(text);
 		return wrapper.toString();
 	}
