@@ -308,7 +308,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 
 		if (!posAssigned) {
 			CollidableGameObject co = gameField.getRandomObject();
-			co.setX(gameField.getWidth());
+			co.setX(gameField.getWidth() + getRandomMargin());
 			gameField.addCollidableGameObject(co);
 		}
 	}
