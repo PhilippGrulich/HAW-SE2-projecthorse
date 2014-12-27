@@ -634,6 +634,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	@Override
 	public void dispose() {
+		gallop.stop();
 		audioManager.dispose();
 		stage.clear();
 		stage.dispose();

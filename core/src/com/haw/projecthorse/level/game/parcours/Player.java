@@ -315,7 +315,7 @@ public class Player extends PlayerImpl {
 	 */
 	@Override
 	public void setHeight(float h) {
-		r.height = h;
+		r.height = h*this.getScaleY();
 		this.playerHeight = h;
 	}
 
@@ -426,7 +426,7 @@ public class Player extends PlayerImpl {
 	 */
 	@Override
 	public void setWidth(float w) {
-		r.width = w;
+		r.width = w*this.getScaleX() - (w*this.getScaleX() * 20 / 100);
 		this.playerWidth = w;
 	}
 	

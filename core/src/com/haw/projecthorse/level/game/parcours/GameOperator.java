@@ -223,6 +223,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
 			if (!lootShown) {
 				chestToShow.showAllLoot();
+				chest.saveAllLoot();
 				lootShown = true;
 			} else {
 				gameField.showPopup(GameState.WON);
@@ -251,13 +252,6 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 
 	public void dispose() {
 		gameField.dispose();
-	}
-
-	private void showEarnedLoot(Chest chest) {
-		List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
-		if (allreadyWon.size() > 0) {
-			chest.showAllLoot();
-		}
 	}
 
 	/**
