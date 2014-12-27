@@ -114,7 +114,6 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			
 				List<ParcoursLoot> loot = SaveGameManager.getLoadedGame().getSpecifiedLoot(ParcoursLoot.class);
 				
-				System.out.println("1");
 				boolean set = false;
 				for(ParcoursLoot l : loot){
 					if(l.getName().equals("hannoveraner")){
@@ -128,12 +127,10 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 					}
 				}
 				if(!set){
-					System.out.println("2");
 					gameField.initPlayer(null);
 				}
 				
 				if(!selectHorse){
-					System.out.println("3");
 				inputMultiplexer.addProcessor(listener);
 				//gameField.getPlayer().addSwipeListener();
 				Gdx.input.setInputProcessor(inputMultiplexer);
@@ -148,9 +145,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			}
 			
 			if(selectHorse){
-				System.out.println("4");
 				if(gameField.isHorseSelected()){
-					System.out.println("5");
 					gameField.initPlayer(gameField.getSelectedRace());
 					isHorseChosen = true;
 					selectHorse = false;
@@ -159,7 +154,6 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 					gameField.drawGameField();
 				}
 			}else if(isHorseChosen){
-				System.out.println("7");
 				gameField.removePopup();
 				inputMultiplexer.addProcessor(listener);
 				//gameField.getPlayer().addSwipeListener();
