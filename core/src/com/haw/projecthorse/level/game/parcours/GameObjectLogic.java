@@ -24,6 +24,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	private float lastPositionTmp;
 	private Random randomGenerator;
 	private boolean greeting;
+	private float accelerometerBound;
 
 	public GameObjectLogic(float initialFreePosition,
 			IGameFieldFuerGameObjectLogic g) {
@@ -33,6 +34,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		lastPosStored = gameField.getWidth();
 		randomGenerator = new Random();
 		greeting = true;
+		accelerometerBound = 1.5f;
 	}
 
 	/**
@@ -237,10 +239,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		if (GameManagerFactory.getInstance().getSettings()
 				.getAccelerometerState()) {
 			float y = Gdx.input.getAccelerometerY();
-			if (y >= 2.5f)
+			if (y >= accelerometerBound)
 				movePlayerR(delta, y);
 
-			if (y <= -2.5f)
+			if (y <= -accelerometerBound)
 				movePlayerL(delta, y * (-1));
 		}
 	}
@@ -248,14 +250,14 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	public void movePlayerR(float delta, float y) {
 		float x = gameField.getPlayer().getX()
 				+ gameField.getPlayer().getWidth()
-				+ gameField.getGeneralGameSpeed() * delta * (y / 2.0f);
+				+ gameField.getGeneralGameSpeed() * delta * (y / accelerometerBound);
 
 		gameField.getPlayer().setJumpDirection(Direction.RIGHT);
 
 		if (willPlayerBeOutOfGameField(x)) {
 			gameField.getPlayer().shouldMove(0, 0);
 		} else {
-			gameField.getPlayer().shouldMove(1, y / 2.0f);
+			gameField.getPlayer().shouldMove(1, y / accelerometerBound);
 		}
 
 		gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
@@ -264,14 +266,14 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 
 	public void movePlayerL(float delta, float y) {
 		float x = gameField.getPlayer().getX()
-				- gameField.getGeneralGameSpeed() * delta * (y / 2.0f);
+				- gameField.getGeneralGameSpeed() * delta * (y / accelerometerBound);
 
 		gameField.getPlayer().setJumpDirection(Direction.LEFT);
 
 		if (willPlayerBeOutOfGameField(x)) {
 			gameField.getPlayer().shouldMove(0, 0);
 		} else {
-			gameField.getPlayer().shouldMove(2, y / 2.0f);
+			gameField.getPlayer().shouldMove(2, y / accelerometerBound);
 		}
 
 		gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
