@@ -24,16 +24,16 @@ thimblerig;horseshoe.png;cc-0;casino;https://openclipart.org/image/300px/svg_to_
 thimblerig;liftarn_Green_hat.png;cc-0;liftarn;https://openclipart.org/image/300px/svg_to_png/1334/liftarn_Green_hat.png
 thimblerig;mcol_haystack.png;cc-0;mcol;https://openclipart.org/image/300px/svg_to_png/6173/mcol_haystack.png
 parcours;cratetex.png;CC-0;Philman401;http://opengameart.org/content/simple-toon-wooden-crate-texture
-parcours;bling_birdhouse_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
-parcours;bling_wildmushrooms_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;birdhouse1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;wildmushrooms1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;rainbow.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
-parcours;bush_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
-parcours;bush_2.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
-parcours;bush_3.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bush1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bush2.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;bush3.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;cliff_cover_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;cliff_cover_3.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;cloud_fluffy_2.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
-parcours;dirt_mountaint_dirt_cap_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
+parcours;dirt_mountain_dirt_cap_1.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;grass_ground.png;CC-0;Tiny Speck;http://www.glitchthegame.com/public-domain-game-art/
 parcours;Hintergrund.png;CC-0;Francis
 puzzleImageManager;horse1.jpg;CC-0;Kaz;http://pixabay.com/de/pferd-pony-palomino-kopf-gesicht-317036/
