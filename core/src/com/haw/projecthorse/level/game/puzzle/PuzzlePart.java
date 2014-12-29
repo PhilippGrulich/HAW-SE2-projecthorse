@@ -12,16 +12,19 @@ public class PuzzlePart extends Image {
 
 	private int xPos, yPos;
 	private Image image;
-	private static Dialog replay;
+	
+	private static PuzzleManager puzzleManager;
+	private static int score=0;
 
-	public PuzzlePart(Image im, int x, int y) {
+	public PuzzlePart(Image im, int x, int y, PuzzleManager puzzleManager) {
 		super();
+		PuzzlePart.puzzleManager=puzzleManager;
 		this.xPos = x;
 		this.yPos = y;
 
 		this.image = im;
 		setSize();
-		replay();
+		
 	}
 
 	/**
@@ -56,20 +59,24 @@ public class PuzzlePart extends Image {
 						Puzzle.getMissingImage().setVisible(true);
 						Puzzle.removeClickListener();
 						PuzzleManager.win.play(0.9f);
+						
+						score=Counter.getCounter();
 
 						PuzzlePlayer
 								.setActorSpeech("Mit nur "
-										+ String.valueOf(Counter.getCounter())+" \nSchritten!");
+										+ String.valueOf(score)+" \nSchritten!");
 						Counter.setCounter(0);
+						Puzzle.getAndShowLoot(score);
 						
-						PuzzleManager.getOverlay().showPopup(replay);
+						
+						
 
 					}
 
 				} else {
 
 					Counter.setCounter(1);
-					PuzzleManager.setLabelText("Anzahl: "
+					puzzleManager.setLabelText("Anzahl: "
 							+ String.valueOf(Counter.getCounter()));
 
 					int lokX = (int) image.getX();
@@ -110,33 +117,7 @@ public class PuzzlePart extends Image {
 		return false;
 	}
 
-	/**
-	 * Overlay mit zwei Buttons, fürs Weiterspielen oder Zurückgehen
-	 */
-	private void replay() {
-		replay = new Dialog("Du hast gewonnen!!!\n Noch eine Runde?");
 
-		replay.addButton("ja", new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				PuzzleManager.click.play();
-				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
-			}
-
-		});
-
-		replay.addButton("nein", new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				PuzzleManager.click.play();
-				GameManagerFactory.getInstance().navigateBack();
-			}
-
-		});
-
-	}
 
 	public Image getImage() {
 		return image;

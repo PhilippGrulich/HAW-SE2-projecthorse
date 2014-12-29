@@ -26,6 +26,7 @@ import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.lootmanager.Chest;
 
 //className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
 //className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
@@ -44,20 +45,26 @@ public class Puzzle {
 	private static Image emptyImage;
 	static TextureRegion texture;
 
-	private int SHUFFLE = 2;
+	private static int SHUFFLE = 2;
 	private static int COL = 3;
 	private static int ROW = 3;
+	private static PuzzleManager puzzleManager;
+	private static Chest chest;
 
-	public Puzzle() {
+	public Puzzle(PuzzleManager puzzleManager, Chest chest2) {
 
-		puzzleWidth = PuzzleManager.myWidth / COL; // 270
-		puzzleHeight = PuzzleManager.myHeight / ROW; // 480
+		this.puzzleManager = puzzleManager;
+
+		puzzleWidth = puzzleManager.getMyWidth() / COL; // 270
+		puzzleHeight = puzzleManager.getMyHeight() / ROW; // 480
+
+		this.chest = chest2;
 
 		createButtons();
 		createEmptyImage();
 		createImageArr();
 
-		PuzzleManager.setLabelText("Anzahl: "
+		puzzleManager.setLabelText("Anzahl: "
 				+ String.valueOf(Counter.getCounter()));
 
 		shuffle();
@@ -87,7 +94,8 @@ public class Puzzle {
 
 				Image im = new Image(puzzleTexRegArrOrigin[i][j]);
 
-				PuzzlePart puzzlePart = new PuzzlePart(im, xPos, yPos);
+				PuzzlePart puzzlePart = new PuzzlePart(im, xPos, yPos,
+						puzzleManager);
 
 				if (i == zzRow && j == zzCol) {
 
@@ -207,9 +215,9 @@ public class Puzzle {
 		button_back.setWidth(95);
 
 		button_back.setPosition(
-				PuzzleManager.getMyXPos() + PuzzleManager.getMyWidth()
+				PuzzleManager.getMyXPos() + puzzleManager.getMyWidth()
 						- button_back.getWidth(), PuzzleManager.getMyYPos()
-						+ PuzzleManager.getMyHeight());
+						+ puzzleManager.getMyHeight());
 		// button_back.setPosition(0, 0);
 		addListener(button_back);
 
@@ -227,6 +235,21 @@ public class Puzzle {
 			};
 		});
 
+	}
+
+	public static void getAndShowLoot(int score) {
+
+		if (score <= SHUFFLE * 3) {
+			chest.addLoot(new PuzzleLoot("croissant", "Die beste Leckerei für dein Pferd", "croissant"));
+		} else if (score > SHUFFLE * 3 && score <= SHUFFLE * 4) {
+			chest.addLoot(new PuzzleLoot("brezel", "Eine Brezel", "brezel"));
+		} else {
+			chest.addLoot(new PuzzleLoot("brötchen", "Ein Brötchen", "buns"));
+		}
+		//chest.saveAllLoot();
+		chest.showAllLoot();
+		puzzleManager.getOverlay().showPopup(puzzleManager.getReplay());
+		
 	}
 
 }

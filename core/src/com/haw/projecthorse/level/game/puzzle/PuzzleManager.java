@@ -13,17 +13,19 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
@@ -57,6 +59,7 @@ public class PuzzleManager extends Game {
 
 	static int myXPos;
 	static int myYPos;
+	private static Dialog replay;
 
 	private PuzzlePlayer puzzlePlayer;
 
@@ -80,15 +83,13 @@ public class PuzzleManager extends Game {
 		myXPos = (width - myWidth) / 2; // 90
 		myYPos = (height - myHeight) / 5 + (height - myHeight) / 2; // 224
 
-		System.out.println("meine koor: " + myXPos + myYPos);
-
 		AssetManager.loadSounds("puzzle");
 		AssetManager.loadMusic("puzzle");
 		addMusic("bett_pcm.wav", true);
 		swipe = audioManager.getSound("puzzle", "swipe.wav");
 		win = audioManager.getSound("puzzle", "win.wav");
 		click = audioManager.getSound("puzzle", "click.wav");
-
+		replay();
 		fillImagelist();
 		index = imagelist.size() - 1;
 		createButtons();
@@ -101,8 +102,6 @@ public class PuzzleManager extends Game {
 		puzzlePlayer = new PuzzlePlayer();
 		addScore();
 
-		//
-
 	}
 
 	public void addScore() {
@@ -110,7 +109,7 @@ public class PuzzleManager extends Game {
 		font = AssetManager.getTextFont(FontSize.FORTY);
 		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
 		label.setBounds(30, 45, 30, 30);
-		label.setPosition(myXPos, myYPos + myHeight+30);
+		label.setPosition(myXPos, myYPos + myHeight + 30);
 		addToStage(secondstage, label);
 
 	}
@@ -239,7 +238,7 @@ public class PuzzleManager extends Game {
 				button_ok.setVisible(false);
 				button_ok.removeListener(this);
 				puzzlePlayer.setActorSpeech("Es geht los!");
-				new Puzzle();
+				createPuzzle();
 				// firststage.dispose();
 
 			};
@@ -253,6 +252,10 @@ public class PuzzleManager extends Game {
 				blinc(button_ok);
 			};
 		});
+	}
+
+	public void createPuzzle() {
+		new Puzzle(this, this.chest);
 	}
 
 	private void changeImage(int delta) {
@@ -326,21 +329,21 @@ public class PuzzleManager extends Game {
 	@Override
 	protected void doResume() {
 		// TODO Auto-generated method stub
-
+		
+		
 	}
 
 	public static Stage getSecondstage() {
 		return secondstage;
 	}
 
-	public static void setLabelText(String newText) {
+	public void setLabelText(String newText) {
 		label.setText(newText);
 	}
 
 	private void addMusic(String musicname, boolean loop) {
 
 		musik = audioManager.getMusic("puzzle", musicname);
-		// musik.setPosition(musikpos);
 		musik.play();
 		musik.setLooping(loop);
 
@@ -356,11 +359,39 @@ public class PuzzleManager extends Game {
 				Actions.fadeOut(0.2f), Actions.fadeIn(0.2f)));
 	}
 
-	public static int getMyWidth() {
+	/**
+	 * Overlay mit zwei Buttons, fürs Weiterspielen oder Zurückgehen
+	 */
+	private void replay() {
+		replay = new Dialog("Du hast gewonnen!!!\n Noch eine Runde?");
+
+		replay.addButton("ja", new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				click.play();
+				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
+			}
+
+		});
+
+		replay.addButton("nein", new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				click.play();
+				GameManagerFactory.getInstance().navigateBack();
+			}
+
+		});
+
+	}
+
+	public int getMyWidth() {
 		return myWidth;
 	}
 
-	public static int getMyHeight() {
+	public int getMyHeight() {
 		return myHeight;
 	}
 
@@ -379,8 +410,12 @@ public class PuzzleManager extends Game {
 	public static Music getMusik() {
 		return musik;
 	}
-
-	public static Overlay getOverlay() {
+	public Overlay getOverlay() {
 		return overlay;
 	}
+
+	public static Dialog getReplay() {
+		return replay;
+	}
+	
 }

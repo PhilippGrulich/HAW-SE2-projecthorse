@@ -4,27 +4,27 @@ import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.LootImage;
 
 public class PuzzleLoot extends Loot {
-	private String color;
+	private String imageName;
 	
-	public PuzzleLoot(String name, String description, String color) {
+	public PuzzleLoot(String name, String description, String imageName) {
 		super(name, description);
-		this.color = color;
+		this.imageName = imageName;
 	}
 
 	@Override
 	protected LootImage getLootImage() {
-		return new LootImage("puzzle", "carrot_" + color);
+		return new LootImage("puzzle", imageName);
 	}
 
 	@Override
 	protected int doHashCode() {
-		return color.hashCode();
+		return imageName.hashCode();
 	}
 
 	@Override
 	protected boolean doEquals(Object other) {
 		PuzzleLoot o = (PuzzleLoot)other;
-		return color.equals(o.color);
+		return imageName.equals(o.imageName);
 	}
 
 }

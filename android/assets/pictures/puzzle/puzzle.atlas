@@ -1,19 +1,40 @@
 
 puzzle.png
-size: 722,1455
+size: 2006,1282
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bilderrahmen-pferd
   rotate: false
-  xy: 2, 175
+  xy: 2, 2
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: -1
+brezel
+  rotate: false
+  xy: 1366, 784
+  size: 640, 498
+  orig: 640, 498
+  offset: 0, 0
+  index: -1
+buns
+  rotate: false
+  xy: 724, 155
+  size: 640, 542
+  orig: 640, 542
+  offset: 0, 0
+  index: -1
+croissant
+  rotate: false
+  xy: 724, 699
+  size: 640, 583
+  orig: 640, 583
+  offset: 0, 0
+  index: -1
 speechballoon
   rotate: false
-  xy: 2, 2
+  xy: 1366, 611
   size: 640, 171
   orig: 640, 171
   offset: 0, 0
