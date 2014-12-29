@@ -34,7 +34,7 @@ public class Player extends PlayerImpl {
 	private float velocityInc;
 	private Direction jumpDirection;
 	private SwipeListener listener;
-	private PlayerImpl p;
+	private float defaultAnimationSpeed;
 
 	/**
 	 * Liefert die Höhe des Spiels
@@ -68,12 +68,12 @@ public class Player extends PlayerImpl {
 	 */
 	public Player(float gameWidth, float gameHeight, HorseRace race) {
 		super(race);
-		
 		toFront();
+		defaultAnimationSpeed = this.getAnimationSpeed();
 		shouldMove = 0;
 		velocityInc = 1;
 		jumpDirection = Direction.RIGHT;
-		r = new Rectangle(getX(), getY(), getWidth(), getHeight());
+		r = new Rectangle(getX(), getY(), getWidth()*this.getScaleX(), getHeight()*this.getScaleY());
 		
 		if(!GameManagerFactory.getInstance().getSettings().getAccelerometerState())
 			initSwipeListener();
@@ -83,7 +83,10 @@ public class Player extends PlayerImpl {
 		this.SWIPEMOVE = (getGameWidth() * 15 / 100) + athletic();
 	}
 	
-
+	public float getDefaultAnimationSpeed(){
+		return defaultAnimationSpeed;
+	}
+	
 	public Player(float gameWidth, float gameHeight) {
 		super();
 		toFront();

@@ -90,27 +90,6 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	}
 
 	/**
-	 * Liefert ein Intervall aus dem eine zufällige Zahl gewählt wird, die auf
-	 * die freePosition addiert wird, damit GameObjects nicht unmittelbar
-	 * hintereinander gesetzt werden.
-	 * 
-	 * @return intervall[2] Das Intervall.
-	 */
-	private float[] getInterval() {
-		float[] f = new float[2];
-
-		if (getFreePosition() >= gameField.getWidth()) {
-			f[0] = gameField.getPlayer().getWidth() * 120 / 100;
-			f[1] = gameField.getPlayer().getWidth() * 150 / 100;
-		} else {
-			f[0] = (gameField.getWidth() - getFreePosition());
-			f[1] = f[0] + gameField.getPlayer().getWidth() * 120 / 100;
-		}
-
-		return f;
-	}
-
-	/**
 	 * Liefert in Abhängigkeit des übergebenen Intervalls und der freePosition
 	 * die x-Koordinate auf die ein GameObject gesetzt werden kann. Passt den
 	 * freePosition Wert an, wenn mit dem GameObject kollidiert werden kann, da
@@ -239,12 +218,17 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		if (GameManagerFactory.getInstance().getSettings()
 				.getAccelerometerState()) {
 			float y = Gdx.input.getAccelerometerY();
-			if (y >= accelerometerBound)
+			if (y >= accelerometerBound){
 				movePlayerR(delta, y);
-
-			if (y <= -accelerometerBound)
+				
+			}else if(y <= -accelerometerBound){
 				movePlayerL(delta, y * (-1));
+			}else{
+				gameField.getPlayer().setAnimationSpeed(0.3f);
+			}
+		
 		}
+		
 	}
 
 	public void movePlayerR(float delta, float y) {
@@ -252,32 +236,48 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 				+ gameField.getPlayer().getWidth()
 				+ gameField.getGeneralGameSpeed() * delta * (y / accelerometerBound);
 
+		if(gameField.getPlayer().getJumpDirection() != Direction.RIGHT) {
+			gameField.getPlayer().clearActions();
+			gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
+		}
+		
 		gameField.getPlayer().setJumpDirection(Direction.RIGHT);
 
 		if (willPlayerBeOutOfGameField(x)) {
 			gameField.getPlayer().shouldMove(0, 0);
 		} else {
 			gameField.getPlayer().shouldMove(1, y / accelerometerBound);
+			if(gameField.getPlayer().getAnimationSpeed() > y / accelerometerBound*2){
+				gameField.getPlayer().changeAnimationSpeed( -y / accelerometerBound*2);
+			}else{
+				gameField.getPlayer().changeAnimationSpeed( y / accelerometerBound*2);	
+			}
 		}
-
-		gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
-
+		
 	}
 
 	public void movePlayerL(float delta, float y) {
 		float x = gameField.getPlayer().getX()
 				- gameField.getGeneralGameSpeed() * delta * (y / accelerometerBound);
 
+		if(gameField.getPlayer().getJumpDirection() != Direction.LEFT){
+			gameField.getPlayer().clearActions();
+			gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
+		}
+		
 		gameField.getPlayer().setJumpDirection(Direction.LEFT);
 
 		if (willPlayerBeOutOfGameField(x)) {
 			gameField.getPlayer().shouldMove(0, 0);
 		} else {
 			gameField.getPlayer().shouldMove(2, y / accelerometerBound);
+			if(gameField.getPlayer().getAnimationSpeed() > y / accelerometerBound*2){
+				gameField.getPlayer().changeAnimationSpeed( -y / accelerometerBound*2);
+			}else{
+				gameField.getPlayer().changeAnimationSpeed( y / accelerometerBound*2);	
+			}
 		}
-
-		gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
-
+		
 	}
 
 	/**
@@ -303,8 +303,14 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 			} else if (a instanceof CollidableGameObject
 					&& getRightBottomCorner(a) <= 0) {
 				((CollidableGameObject) a).remove();
-				((CollidableGameObject) a).setX(-10000);
+				((CollidableGameObject) a).setX(gameField.getWidth() - a.getWidth());
 				gameField.passBack((CollidableGameObject) a);
+			} else if (a instanceof GameObject) {
+				if(!((GameObject)a).isCollidable() && ((GameObject)a).isMoveable()){
+					if(getRightBottomCorner(a) <= 0){
+						a.setX(gameField.getWidth() + getRandomMargin());
+					}
+				}
 			}
 		}
 
@@ -326,6 +332,10 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 		}
 	}
 
+	/**
+	 * Liefert einen Wert zwischen 35% und 45% der Spielfeldbreite.
+	 * @return rm s.o.
+	 */
 	public float getRandomMargin() {
 		return Math.max(gameField.getWidth() * 35 / 100, randomGenerator
 				.nextInt((int) (gameField.getWidth() * 45 / 100)));

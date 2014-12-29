@@ -66,4 +66,10 @@ public class Text extends Actor {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	@Override
+	public void setPosition(float x, float y){
+		this.x = x;
+		this.y = y;
+	}
 }

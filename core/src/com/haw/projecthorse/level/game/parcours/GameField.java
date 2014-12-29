@@ -194,19 +194,31 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				0, 0, false, 0, 0, regions, this.goi, false, false);
 
 		TextureRegion cloud = regions.get("cloud_fluffy");
-		addGameObjectWithRelativHeight("cloud_fluffy", cloud.getRegionHeight(),
-				getWidth() - cloud.getRegionWidth(), getHeight() * 40 / 100,
-				false, generalGameSpeed / 5, 0, regions, this.goi, false, true);
+		addGameObjectWithRelativHeight("cloud_fluffy", cloud.getRegionHeight() ,
+				getWidth() + getWidth() * 10 / 100 + cloud.getRegionWidth(), getHeight() * 70 / 100,
+				false, generalGameSpeed / 3f, 0, regions, this.goi, false, true);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
 				cloud.getRegionHeight() / 3,
-				getWidth() - cloud.getRegionWidth(), getHeight() * 30 / 100,
-				false, generalGameSpeed / 6, 0, regions, this.goi, false, true);
+				getWidth() + getWidth() * 20 / 100 + cloud.getRegionWidth(), getHeight() * 50 / 100,
+				false, generalGameSpeed / 5f, 0, regions, this.goi, false, true);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
 				cloud.getRegionHeight() / 2,
-				getWidth() - cloud.getRegionWidth(), getHeight() * 35 / 100,
-				false, generalGameSpeed / 5.5f, 0, regions, this.goi, false,
+				getWidth() + getWidth() * 30 / 100 + cloud.getRegionWidth(), getHeight() * 60 / 100,
+				false, generalGameSpeed / 4.5f, 0, regions, this.goi, false,
+				true);
+		
+		addGameObjectWithRelativHeight("cloud_fluffy",
+				cloud.getRegionHeight() / 4,
+				getWidth() + getWidth() * 40 / 100 + cloud.getRegionWidth(), getHeight() * 55 / 100,
+				false, generalGameSpeed / 6f, 0, regions, this.goi, false,
+				true);
+		
+		addGameObjectWithRelativHeight("cloud_fluffy",
+				cloud.getRegionHeight() ,
+				getWidth() + getWidth() * 50 / 100 + cloud.getRegionWidth(), getHeight() * 55 / 100,
+				false, generalGameSpeed / 3.5f, 0, regions, this.goi, false,
 				true);
 
 		addGameObjectWithRelativHeight("rainbow", regions.get("rainbow")
@@ -225,7 +237,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 			addGameObjectWithRelativHeight("Kuerbis" + i,
 					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
 					-10000, getTopOfGroundPosition(), true, generalGameSpeed,
-					1, regions, this.goi, false, true);
+					10, regions, this.goi, false, true);
 		}
 
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
@@ -233,7 +245,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				true, generalGameSpeed, -10, regions, this.goi, false, true);
 
 		scoreInformation = new Text(AssetManager.getTextFont(FontSize.THIRTY),
-				"Punkte: 0", 10, getHeight() * 50 / 60);
+				"Punkte: 0", 10, getHeight() - FontSize.THIRTY.getVal());
 		scoreInformation.setColor(0, 0, 0, 1);
 		scoreInformation.setName("Score");
 		stage.addActor(scoreInformation);
@@ -390,7 +402,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		int randomBush;
 		float bushHeight = getWidth() * 3 / 100;
 		float bushWidth;
-		float maxY = grass_ground_height - (grass_ground_height * 5 / 100);
+		float maxY = grass_ground_height - (grass_ground_height * 10 / 100);
 
 		float x = 0;
 
@@ -412,7 +424,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 							+ possibleBushs[randomBush], 0, bushHeight,
 					bushWidth, 0, x, randomPosY, false, false, false);
 
-			x = x + bushWidth;
+			x = x + bushWidth - (bushWidth * 30 / 100);
 			gameObjects.add(a);
 			stage.addActor(a);
 
