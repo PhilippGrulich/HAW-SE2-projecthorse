@@ -108,10 +108,6 @@ Kuerbis8.png FILE OK!
 CC-by ENTRY OK!
 grass.png FILE OK!
 CC-by ENTRY OK!
-Grundschrift-Bold.ttf NOT EXISTS!
-CC-by ENTRY OK!
-GetVoIP Grotesque.ttf NOT EXISTS!
-CC-by ENTRY OK!
 playerHannover.png NOT EXISTS!
 CC-BY ENTRY OK!
 buttonLoot.png FILE OK!
@@ -120,8 +116,6 @@ buttonLoot.png FILE OK!
 CC-BY ENTRY OK!
 playerHannover.png NOT EXISTS!
 CC-BY ENTRY OK!
-logo.png NOT EXISTS!
-selfmade ENTRY OK!
 hintergrund.png FILE OK!
 selfmade ENTRY OK!
 table.png FILE OK!
