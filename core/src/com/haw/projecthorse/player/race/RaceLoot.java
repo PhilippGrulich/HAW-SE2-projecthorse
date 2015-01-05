@@ -39,4 +39,9 @@ public class RaceLoot extends Loot {
 	public Race race() {
 		return race;
 	}
+
+	@Override
+	public String getCategory() {
+		return "Pferde";
+	}
 }

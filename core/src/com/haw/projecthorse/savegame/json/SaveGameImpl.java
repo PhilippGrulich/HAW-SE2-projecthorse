@@ -73,11 +73,22 @@ public class SaveGameImpl implements SaveGame {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Loot> List<T> getSpecifiedLoot(Class<T> c) {
+	public <T extends Lootable> List<T> getSpecifiedLoot(Class<T> c) {
 		ArrayList<T> loots = new ArrayList<T>();
 		for (Lootable l : lootCollection) {
 			if (c.isInstance(l)) {
 				loots.add((T) l);
+			}
+		}
+		return loots;
+	}
+
+	@Override
+	public List<Lootable> getSpecifiedLoot(String category) {
+		ArrayList<Lootable> loots = new ArrayList<Lootable>();
+		for (Lootable l : lootCollection) {
+			if (l.getCategory().equals(category)) {
+				loots.add(l);
 			}
 		}
 		return loots;

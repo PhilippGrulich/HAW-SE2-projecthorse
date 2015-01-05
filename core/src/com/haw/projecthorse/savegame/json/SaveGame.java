@@ -51,7 +51,7 @@ public interface SaveGame {
 	void setHorseRace(HorseRace race);
 
 	/**
-	 * F�gt ein gesammelten Gegenstand dem Spieler hinzu
+	 * Fügt ein gesammelten Gegenstand dem Spieler hinzu
 	 * 
 	 * @param loot
 	 *            Der gesammelte Gegenstand
@@ -59,20 +59,30 @@ public interface SaveGame {
 	void addCollectedLoot(Loot loot);
 	
 	/**
-	 * F�gt eine Liste von gesammelten Gegenst�nden dem Spieler hinzu
+	 * Fügt eine Liste von gesammelten Gegenständen dem Spieler hinzu
 	 * 
 	 * @param loots
-	 *            Liste der gesammelte Gegenst�nde
+	 *            Liste der gesammelte Gegenstände
 	 */
 	void addCollectedLootList(Collection<Lootable> loots);
 
 	/**
-	 * Erstellt eine Liste von gesammelten Gegest�nden eines bestimmten Typs.
+	 * Erstellt eine Liste von gesammelten Gegeständen eines bestimmten Typs.
 	 * 
 	 * @param c
-	 *            Die Klasse der Lootobjekte, die zur�ck kommen sollen.
+	 *            Die Klasse der Lootobjekte, die zurück kommen sollen.
 	 *            
-	 * @return Die Liste von Gegenst�nden.
+	 * @return Die Liste von Gegenständen.
 	 */
-	<T extends Loot> List<T> getSpecifiedLoot(Class<T> c);
+	<T extends Lootable> List<T> getSpecifiedLoot(Class<T> c);
+	
+	/**
+	 * Erstellt eine Liste von gesammelten Gegeständen der angegebenen Kategorie.
+	 * 
+	 * @param category
+	 *            Die Kategorie der Lootobjekte, die zurück kommen sollen.
+	 *            
+	 * @return Die Liste von Gegenständen.
+	 */
+	List<Lootable> getSpecifiedLoot(String category);
 }

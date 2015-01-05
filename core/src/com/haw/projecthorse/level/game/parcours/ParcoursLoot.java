@@ -81,4 +81,8 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 			return false;
 		return true;
 	}
+	@Override
+	public String getCategory() {
+		return "Parcours";
+	}
 }

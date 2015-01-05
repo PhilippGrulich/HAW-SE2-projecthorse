@@ -27,4 +27,9 @@ public class PuzzleLoot extends Loot {
 		return imageName.equals(o.imageName);
 	}
 
+	@Override
+	public String getCategory() {
+		return "Puzzle";
+	}
+
 }
