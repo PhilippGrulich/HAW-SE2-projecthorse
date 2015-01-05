@@ -1,6 +1,11 @@
 {
 lootCollection: [
 	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		race: FRIESE
+	},
+	{
 		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
 		achievedDate: {},
 		name: carrot,

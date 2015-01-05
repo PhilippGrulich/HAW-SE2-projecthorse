@@ -4,9 +4,16 @@ import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.LootImage;
 
 public class RaceLoot extends Loot {
-	private Race race;
+	private HorseRace race;
 
-	public RaceLoot(Race race) {
+	/**
+	 * NUR zum Laden aus der JSON-Datei
+	 */
+	public RaceLoot() {
+		super();
+	}
+	
+	public RaceLoot(HorseRace race) {
 		super();
 		this.race = race;
 	}
@@ -19,10 +26,7 @@ public class RaceLoot extends Loot {
 
 	@Override
 	protected int doHashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((race == null) ? 0 : race.hashCode());
-		return result;
+		return ((race == null) ? 0 : race.hashCode());
 	}
 
 	@Override
@@ -37,7 +41,7 @@ public class RaceLoot extends Loot {
 	}
 
 	public Race race() {
-		return race;
+		return new Race(race);
 	}
 
 	@Override

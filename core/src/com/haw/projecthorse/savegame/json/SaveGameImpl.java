@@ -2,6 +2,7 @@ package com.haw.projecthorse.savegame.json;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import com.haw.projecthorse.lootmanager.Loot;
@@ -69,6 +70,8 @@ public class SaveGameImpl implements SaveGame {
 	@Override
 	public void addCollectedLootList(Collection<Lootable> loots) {
 		lootCollection.addAll(loots);
+		// Doppelte Elemente entfernen
+		lootCollection = new ArrayList<Lootable>(new HashSet<Lootable>(lootCollection));
 	}
 
 	@SuppressWarnings("unchecked")

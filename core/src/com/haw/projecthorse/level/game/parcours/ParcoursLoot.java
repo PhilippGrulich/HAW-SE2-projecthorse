@@ -61,7 +61,7 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 	@Override
 	public int doHashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + availableAtScore;
 		result = prime * result
 				+ (((LootImage) image == null) ? 0 : image.hashCode());

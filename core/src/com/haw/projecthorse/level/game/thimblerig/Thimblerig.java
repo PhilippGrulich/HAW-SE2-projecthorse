@@ -629,7 +629,7 @@ public class Thimblerig extends Game{
 				//eine 20%ige Wahrscheinlichkeit, dass eine Pferderasse gewonnen werden kann
 				//das Pferd darf natuerlich noch nicht gewonnen worden sein
 				if(probability <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.SHETTI)){
-					this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.SHETTI)));
+					this.chest.addLootAndShowAchievment(new RaceLoot(HorseRace.SHETTI));
 					//TODO: pferderasse holen, abspeichern und loot-dialog anzeigen	
 				}
 				else{

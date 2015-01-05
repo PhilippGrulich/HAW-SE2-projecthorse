@@ -1,7 +1,7 @@
 package com.haw.projecthorse.lootmanager;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.util.overlay.Overlay;
@@ -11,7 +11,7 @@ import com.haw.projecthorse.lootmanager.popups.LootPopup;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class Chest {
-	private ArrayList<Lootable> content = null;
+	private HashSet<Lootable> content = null;
 	private Overlay overlay;
 
 	public Chest(Overlay overlay) {
@@ -20,7 +20,7 @@ public class Chest {
 
 	public void addLoot(Lootable loot) {
 		if (content == null) {
-			content = new ArrayList<Lootable>();
+			content = new HashSet<Lootable>();
 		}
 		loot.setAchievedDate(new Date());
 		content.add(loot);
