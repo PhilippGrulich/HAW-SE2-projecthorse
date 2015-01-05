@@ -10,6 +10,10 @@
          className:"com.haw.projecthorse.level.menu.playermenu.PlayerMenu"
       },
       {
+         levelID:"lootGallery",
+         className:"com.haw.projecthorse.level.menu.lootgallery.LootGallery"
+      },
+      {
          levelID:"worldmap",
          className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
          parameter:{

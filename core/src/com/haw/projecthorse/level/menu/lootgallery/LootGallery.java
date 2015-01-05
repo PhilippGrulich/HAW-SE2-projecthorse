@@ -99,7 +99,6 @@ public class LootGallery extends Menu {
 
 	private void initializeLootList() {
 		loots = new HashMap<String, List<Lootable>>();
-		SaveGameManager.loadSavedGame(1); // for testing
 		List<Lootable> allLoot = SaveGameManager.getLoadedGame()
 				.getSpecifiedLoot(Lootable.class);
 
