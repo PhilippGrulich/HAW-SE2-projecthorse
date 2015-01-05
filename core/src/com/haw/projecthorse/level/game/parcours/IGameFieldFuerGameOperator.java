@@ -118,5 +118,7 @@ public interface IGameFieldFuerGameOperator {
 	HorseRace getSelectedRace();
 
 	void showPopup(GameState horseselection, HorseRace[] races);
+	
+	public boolean isGameOverState();
 
 }

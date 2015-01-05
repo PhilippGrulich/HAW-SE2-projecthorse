@@ -2,6 +2,7 @@ package com.haw.projecthorse.level.game.parcours;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -48,6 +49,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	private boolean greeting = true;
 	private boolean selectHorse = false;
 	private boolean isHorseChosen = false;
+	private Random randomGenerator;
 
 	public GameOperator(Stage stage, Viewport viewport, int width, int height,
 			Chest chest, AudioManager audioManager, Overlay overlay) {
@@ -62,6 +64,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 		this.chest = chest;
 		chestToShow = new Chest(overlay);
 		MOVEMENT_PER_SECOND = gameField.getStage().getWidth() / 1.25f;
+		randomGenerator = new Random();
 		// ArrayList<ParcoursLoot> loots = (ArrayList<ParcoursLoot>) getLoots();
 		// for(ParcoursLoot l : loots){
 		// chest.addLoot(l);
@@ -205,7 +208,50 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	// Score von GameField erfragen u. bei Niederlage Spiel beenden.
 	// Dann prüfen ob Loot gewonnen -> wenn ja, Erfolgsmeldung u. in Chest
 	// legen.
-	private void verifyGameState(float delta) {
+	private void verifyGameState(float delta){
+		if(gameField.isGameOverState()){
+			inputMultiplexer.removeProcessor(listener);
+			Gdx.input.setInputProcessor(inputMultiplexer);
+			gameField.pauseGallop();
+			gameEndReached = true;
+			gameStatus = GameState.WON;
+			List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+			List<ParcoursLoot> loot = gameField.getLoot();
+			
+			for(ParcoursLoot p : allreadyWon){
+				if(loot.contains(p)){
+					loot.remove(p);
+				}
+			}
+			
+			for (ParcoursLoot l : loot) {
+				if (l.getAvailableAtScore() <= gameField.getScore()
+						&& !l.getWonStatus()) {
+					if(l.getName().equals("hannoveraner")){
+						if(randomGenerator.nextInt(101) <= 19){
+							chestToShow.addLoot(l);
+							l.setWonStatus(true);
+						}
+					}else{
+						chestToShow.addLoot(l);
+						l.setWonStatus(true);	
+					}
+				}
+			}
+
+			if (!lootShown && !loot.isEmpty()) {
+				chestToShow.showAllLoot();
+				chest.saveAllLoot();
+				lootShown = true;
+			} else {
+				gameField.showPopup(GameState.WON);
+				lootShown = false;
+			}
+			this.pause();
+		} 
+	}
+	
+/*	private void verifyGameState(float delta) {
 		if (gameField.getScore() >= 40) {
 			inputMultiplexer.removeProcessor(listener);
 			Gdx.input.setInputProcessor(inputMultiplexer);
@@ -237,7 +283,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			gameEndReached = true;
 			this.pause();
 		}
-	}
+	}*/
 
 	public void setPause(boolean p) {
 		if (!p)
