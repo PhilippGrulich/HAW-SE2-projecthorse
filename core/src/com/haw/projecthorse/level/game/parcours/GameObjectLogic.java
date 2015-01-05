@@ -69,8 +69,9 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 										* gameField.getPlayer()
 												.getIntelligence()));
 					} else {
-						gameField.addToScore(((CollidableGameObject) l)
-								.getPoints());
+						gameField.setGameOverState(true);
+						/*gameField.addToScore(((CollidableGameObject) l)
+								.getPoints());*/
 					}
 
 				}

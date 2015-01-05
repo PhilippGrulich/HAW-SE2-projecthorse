@@ -39,12 +39,9 @@ public class GameOverPopup extends Popup {
 		wonPopup = new Popup();
 		wonPopup.setName("Popup");
 
-		Label wonLabel = this.createLabel("Gratulation!\nDu hast gewonnen!");
 		Label labelQuestion = this.createLabel("Möchtest Du nochmal spielen?");
-		wonLabel.setName("Label");
 		labelQuestion.setName("Label");
 
-		wonPopup.addActor(wonLabel);
 		wonPopup.addActor(labelQuestion);
 		wonPopup.addActor(wonButtonYes);
 		wonPopup.addActor(wonButtonNo);

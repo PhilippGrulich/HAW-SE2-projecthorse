@@ -105,4 +105,6 @@ public interface IGameFieldFuerGameObjectLogic {
 	public void showPopup(GameState greeting);
 
 	public boolean isGreetingButtonPressed();
+	
+	public void setGameOverState(boolean b);
 }
