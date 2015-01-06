@@ -1,6 +1,5 @@
 package com.haw.projecthorse.level.game.applerun;
 
-
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.LootImage;
 
@@ -60,5 +59,5 @@ public class ApplerunLoot extends Loot{
 	@Override
 	public String getCategory() {
 		return "Applerun";
-	}
+	}	
 }
