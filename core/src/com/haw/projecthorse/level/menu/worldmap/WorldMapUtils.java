@@ -8,35 +8,47 @@ import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.actions.Direction;
 
 /**
- * Eine reine Utility Klasse für Methoden und Objekte, die alleine in der WorldMap genutzt werden
+ * Eine reine Utility Klasse für Methoden und Objekte, die alleine in der
+ * WorldMap genutzt werden.
+ * 
+ * @author Viktor
+ * @version 1
  */
-class WorldMapUtils {
-	
-	// Verhindere Instanziierung der Utility Klasse
-	private WorldMapUtils(){	
+final class WorldMapUtils {
+
+	/**
+	 * Verhindere Instanziierung der Utility Klasse.
+	 */
+	private WorldMapUtils() {
 	}
-	
-	
+
 	/**
 	 * Liefert die Richtung für die Animation des Pferdes, die bei Bewegung von
 	 * einem Punkt zum anderen benötogt wird.
-	 * @param source Startpunkt der Bewegung
-	 * @param target Zielpunkt der Bewegung
+	 * 
+	 * @param source
+	 *            Startpunkt der Bewegung
+	 * @param target
+	 *            Zielpunkt der Bewegung
 	 * @return Richtung für die Animation
 	 */
-	protected static Direction getDirection(Vector2 source, Vector2 target){
+	protected static Direction getDirection(final Vector2 source,
+			final Vector2 target) {
 		Vector2 directionVector = new Vector2(target).sub(source);
-		
+
 		float angle = directionVector.angle();
-		
-		/* Die Richtungen sind 8 Kreisteile, die je eine Weite von 45 Grad haben. Rechts liegt zum Beispiel
-		 * zwischen -22,5 (in LibGDX als 360 - 22,5 abgebildet) und +22,5 Grad. Um von den negativen Werten 
-		 * wegzukommen, verschieben wir den Winkel um 22,5 Grad. Nun kann man durch einfache Einteilung 
-		 * in 45 Grad Stücke ablesen, um welchen Kreisteil und somit um welche Richtung es geht.
-		*/
-		
-		int angletype = ((int)(angle + 22.5f) % 360) / 45;
-		
+
+		/*
+		 * Die Richtungen sind 8 Kreisteile, die je eine Weite von 45 Grad
+		 * haben. Rechts liegt zum Beispiel zwischen -22,5 (in LibGDX als 360 -
+		 * 22,5 abgebildet) und +22,5 Grad. Um von den negativen Werten
+		 * wegzukommen, verschieben wir den Winkel um 22,5 Grad. Nun kann man
+		 * durch einfache Einteilung in 45 Grad Stücke ablesen, um welchen
+		 * Kreisteil und somit um welche Richtung es geht.
+		 */
+
+		int angletype = ((int) (angle + 22.5f) % 360) / 45;
+
 		switch (angletype) {
 		case 0:
 			return Direction.RIGHT;
@@ -55,19 +67,21 @@ class WorldMapUtils {
 		case 7:
 			return Direction.DOWNRIGHT;
 		default:
-			return null;	
+			return null;
 		}
-		
+
 	}
-	
+
 	/**
-	 * Gibt die zur letzten Bewegungsrichtung passende IdleDirection zurück
-	 * @param lastDirection Letze Bewegungsrichtung
-	 * @return
+	 * Gibt die zur letzten Bewegungsrichtung passende IdleDirection zurück.
+	 * 
+	 * @param lastDirection
+	 *            Letze Bewegungsrichtung
+	 * @return Idlerichtung
 	 */
-	protected static Direction getIdleDirection(Direction lastDirection){
-		
-		switch (lastDirection){
+	protected static Direction getIdleDirection(final Direction lastDirection) {
+
+		switch (lastDirection) {
 		case LEFT:
 		case UPLEFT:
 		case DOWNLEFT:
@@ -77,28 +91,25 @@ class WorldMapUtils {
 			return Direction.IDLERIGHT;
 		}
 	}
-	
-	
+
 	/**
-	 * Prüft, ob der übergebene Player sich bewegt anhand des Vorhandenseins einer MoveByAction
+	 * Prüft, ob der übergebene Player sich bewegt anhand des Vorhandenseins
+	 * einer MoveByAction.
 	 * 
 	 * @param player
+	 *            Der Spieler
 	 * @return true wenn der Player sich bewegt, sonst false
 	 */
-	
-	protected static boolean isPlayerMoving(Player player){
+	protected static boolean isPlayerMoving(final Player player) {
 		Array<Action> actions = player.getActions();
-		
-		for (Action action : actions){
-			if (action instanceof MoveByAction)
+
+		for (Action action : actions) {
+			if (action instanceof MoveByAction) {
 				return true;
+			}
 		}
-		
+
 		return false;
 	}
-	
-	
-	
-	
-	
+
 }
