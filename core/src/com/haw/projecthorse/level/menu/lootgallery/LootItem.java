@@ -2,50 +2,46 @@ package com.haw.projecthorse.level.menu.lootgallery;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
+import com.esotericsoftware.tablelayout.Cell;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.lootmanager.Lootable;
 
 public class LootItem extends WidgetGroup {
-	private HorizontalGroup group;
-	private VerticalGroup nameAndDescription;
+	private Table group;
+	private Table nameAndDescription;
 	private LabelStyle labelStyle;
+	private Cell<Label> descriptionCell;
 	private Label description;
-	private boolean descriptionIsVisible = false;
+//	private boolean descriptionIsVisible = false;
 	
 	public LootItem(Lootable loot, float width) {
-		createTable(loot);
+		createTable(loot, width);
 		
-		description = new Label(loot.getDescription(), labelStyle);
-		
-		addListener(new ClickListener() {
+		/*addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				toogleDescription();
 			}
-		});
+		});*/
 		
 		addActor(group);
 		toFront();
 	}
 	
-	private void createTable(Lootable loot) {
-		group = new HorizontalGroup();
-		group.align(Align.left + Align.top);
+	private void createTable(Lootable loot, float maxWidth) {
+		group = new Table();
+		
 		Drawable drawable = loot.getImage();
-		ScaleableImage img = new ScaleableImage(drawable);
+		Image img = new Image(drawable, Scaling.fit, Align.center);
 		Label name;
 		
 		// Größe und Position vom Bild normalisieren
@@ -55,31 +51,36 @@ public class LootItem extends WidgetGroup {
 		} else {
 			faktor = 200 / height;
 		}
-		
-		img.setScale(faktor);
-		
+				
 		labelStyle = new LabelStyle(AssetManager.getTextFont(FontSize.FORTY), Color.GRAY);
 		name = new Label(loot.getName(), labelStyle);
 		
-		nameAndDescription = new VerticalGroup();
-		nameAndDescription.align(Align.left + Align.top);
-		nameAndDescription.addActor(name);
-		nameAndDescription.pack();
+		description = new Label(loot.getDescription(), labelStyle);
+		description.setWrap(true);
 		
-		group.addActor(img);
-		group.addActor(nameAndDescription);
-		group.pack();
+		nameAndDescription = new Table();
+		nameAndDescription.align(Align.left + Align.top);
+		nameAndDescription.add(name).expandX().align(Align.left).spaceLeft(10);
+		nameAndDescription.row();
+		descriptionCell = nameAndDescription.add(description).align(Align.left).spaceLeft(10).width(maxWidth-200);
+		
+		group.add(img).size(200);
+		group.add(nameAndDescription);
+		group.left();
 	}
 	
-	private void toogleDescription() {
+	/*private void toogleDescription() {
 		if (descriptionIsVisible) {
-			nameAndDescription.removeActor(description);
+//			nameAndDescription.removeActor(description);
+			descriptionCell.setWidget(null);
 		} else {
-			nameAndDescription.addActor(description);
+//			nameAndDescription.addActor(description);
+			descriptionCell.setWidget(description);
 		}
 		
+		nameAndDescription.layout();
 		descriptionIsVisible = !descriptionIsVisible;
-	}
+	}*/
 	
 	@Override
 	public float getPrefHeight() {
@@ -93,23 +94,6 @@ public class LootItem extends WidgetGroup {
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		Actor a = group.getChildren().first();
 		super.draw(batch, parentAlpha);
-	}
-	
-	private class ScaleableImage extends Image {
-		public ScaleableImage(Drawable drawable) {
-			super(drawable);
-		}
-		
-		@Override
-		public float getPrefHeight() {
-			return super.getPrefHeight() * super.getScaleY();
-		}
-		
-		@Override
-		public float getPrefWidth() {
-			return super.getPrefWidth() * super.getScaleX();
-		}
 	}
 }
