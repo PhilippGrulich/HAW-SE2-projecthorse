@@ -1,5 +1,10 @@
 package com.haw.projecthorse.level.game.parcours;
 
+/**
+ * Das Interface des GameOperator. 
+ * @author Francis
+ * @version 1.0
+ */
 public interface IGameOperator {
 
 	/**
@@ -11,7 +16,7 @@ public interface IGameOperator {
 	 * Prüft ob die GameLogic mitteilt, dass ein Erfolg oder Misserfolg
 	 * eingetreten ist.
 	 * 
-	 * @param delta
+	 * @param delta Die Zeit, die seit dem letzten Frame vergangen ist.
 	 */
 	public void update(float delta);
 

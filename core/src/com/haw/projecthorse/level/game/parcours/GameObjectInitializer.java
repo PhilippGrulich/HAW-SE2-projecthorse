@@ -3,10 +3,16 @@ package com.haw.projecthorse.level.game.parcours;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * ObjectPool-Klasse.
+ * Initialisert und hält GameObjects für weitere Zugriffe bereit.
+ * Erzeugt neue GameObjects, wenn der Pool leer ist.
+ * @author Francis
+ * @version 1.0
+ */
 public class GameObjectInitializer implements
 		IGameObjectInitializerFuerGameObjectLogic {
 
@@ -18,7 +24,11 @@ public class GameObjectInitializer implements
 	private ArrayList<CollidableGameObject> goodCollidables; //Punkte > 0
 	private ArrayList<GameObject> nonCollidables;
 	
-	public GameObjectInitializer(HashMap<String, TextureRegion> r){
+	/**
+	 * Konstruktor.
+	 * @param r TextureRegions aller Assets aus Parcours.
+	 */
+	public GameObjectInitializer(final HashMap<String, TextureRegion> r){
 		regions = r;
 		randomGenerator = new Random();
 		params = new HashMap<String, String>();
@@ -29,24 +39,24 @@ public class GameObjectInitializer implements
 	}
 	
 	@Override
-	public float calcRelativeWidth(float regionHeight, float regionWidth,
-			float desiredWidth) {
+	public float calcRelativeWidth(final float regionHeight, final float regionWidth,
+			final float desiredWidth) {
 
 		return desiredWidth * (regionWidth / regionHeight);
 	}
 
 	@Override
-	public float calcRelativeHeight(float regionHeight, float regionWidth,
-			float desiredHeight) {
+	public float calcRelativeHeight(final float regionHeight, final float regionWidth,
+			final float desiredHeight) {
 
 		return desiredHeight * (regionHeight / regionWidth);
 	}
 
 	//Parameter r entfernen, wenn Objekte hier erzeugt werden.
 	@Override
-	public GameObject initGameObject(TextureRegion r, String name, int points,
-			float height, float width, float duration, float x, float y,
-			boolean collidable, boolean isLoot, boolean isMoveable) {
+	public GameObject initGameObject(final TextureRegion r, final String name, final int points,
+			final float height, final float width, final float duration, final float x, final float y,
+			final boolean collidable, final boolean isLoot, final boolean isMoveable) {
 		
 
 		
@@ -71,12 +81,13 @@ public class GameObjectInitializer implements
 				this.params.put(name, params);
 			}
 			
-			if(points > 0)
+			if(points > 0){
 				goodCollidables.add((CollidableGameObject) o);
+			}
 			
-			if(points < 0)
+			if(points < 0){
 				badCollidables.add((CollidableGameObject) o);
-			
+			}
 			return o;
 		} else {
 			GameObject o = new GameObject();
@@ -97,19 +108,20 @@ public class GameObjectInitializer implements
 		}
 	}
 	
-	public TextureRegion getTextureRegion(String name){
+	/**
+	 * Getter für TextureRegion der entsprechenden Datei "name".
+	 * @param name Name der Datei aus dem TextureAtlas.
+	 * @return r TextureRegion.
+	 */
+	public TextureRegion getTextureRegion(final String name){
 		return regions.get(name);
-	}
-	
-	public void reset(){
-		
 	}
 	
 	/**
 	 * Legt ein benutztes und nicht mehr benötigtes GameObject zurück in den Objektpool.
 	 * @param o GameObject
 	 */
-	public void passBack(CollidableGameObject o){
+	public void passBack(final CollidableGameObject o){
 		o.setX(-1000);
 		if(o.getPoints() < 0){
 			badCollidables.add((CollidableGameObject) o);
@@ -128,6 +140,10 @@ public class GameObjectInitializer implements
 		return (prob < 100 - probability) ? getRandomBadCollidable() : getRandomGoodCollidable();
 	}
 	
+	/**
+	 * Liefert ein zufälliges Hindernis.
+	 * @return g Das CollidableGameObject.
+	 */
 	private CollidableGameObject getRandomBadCollidable(){
 		if(badCollidables.size() == 0){
 			int points = 0;
@@ -168,6 +184,10 @@ public class GameObjectInitializer implements
 		}
 	}
 	
+	/**
+	 * Liefert ein zufälliges GameObject, das bei Berührung den Punktestand erhöht.
+	 * @return g Das GameObject.
+	 */
 	private CollidableGameObject getRandomGoodCollidable(){
 		if(goodCollidables.size() == 0){
 			int points = 0;
@@ -211,15 +231,15 @@ public class GameObjectInitializer implements
 	 * Setzt die Wahrscheinlichkeit mit der gute Collidables bei Aufruf von
 	 * getObject() zurückgegeben werden. Wenn probability < 0% oder probability > 100% wird
 	 * der Default-Wert genommen (50%).
-	 * @param probability
+	 * @param probability Die Wahrscheinlichkeit zw. 0% und 100%.
 	 */
-	public void setProbability(int probability){
+	public void setProbability(final int probability){
 		this.probability = ((probability < 0) || (probability > 100)) ?  50 : probability;
 	}
 	
 	/**
 	 * Liefert alle GameObjects.
-	 * @return
+	 * @return g Alle GameObjects.
 	 */
 	public ArrayList<GameObject> getObjects(){
 		ArrayList<GameObject> g = new ArrayList<GameObject>();
