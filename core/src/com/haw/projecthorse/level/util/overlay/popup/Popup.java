@@ -96,11 +96,11 @@ public class Popup extends OverlayWidgetGroup {
 	}
 
 	/**
-	 * Popup wird eingeblendet
+	 * Popup wird eingeblendet.
 	 */
 	public final void fadeIn() {
 		Color c = contentGroup.getColor();
-		content.setColor(c.r, c.g, c.b, 1.0f);
+		content.setColor(c.r, c.g, c.b, 0.0f);
 		content.addAction(new SequenceAction(Actions.fadeIn(fadeTime)));
 	}
 

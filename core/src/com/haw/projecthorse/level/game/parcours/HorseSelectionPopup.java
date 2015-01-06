@@ -1,20 +1,21 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.race.HorseRace;
 
+/**
+ * Das Popup zeigt die zur Auswahl stehenden Pferde an.
+ * @author Francis
+ * @version 1.0
+ */
 public class HorseSelectionPopup extends Popup{
 
 	Popup selectionPopup;
@@ -22,14 +23,25 @@ public class HorseSelectionPopup extends Popup{
 	Stage stage;
 	HorseRace race;
 	
-	public HorseSelectionPopup(HorseRace[] races, Stage s){
+	/**
+	 * Konstruktor.
+	 * @param races Die Pferderassen mit denen gespielt werden kann.
+	 * @param s Die Stage auf der das Popup erscheinen soll.
+	 */
+	public HorseSelectionPopup(final HorseRace[] races, final Stage s){
 		super();
 		
 		this.stage = s;
 		initHorseSelectionPopup(races, s);
 	}
 	
-	private void initHorseSelectionPopup(HorseRace[] races, Stage s){
+	/**
+	 * Initialisert das Pferdeauswahl-Popup mit Text und Listener.
+	 * Der Listener registriert das Antippen bzw. Klicken auf ein Pferd.
+	 * @param races Die zur Auwahl stehenden Pferderassen.
+	 * @param s Die Stage auf der das Popup erscheinen soll.
+	 */
+	private void initHorseSelectionPopup(final HorseRace[] races, final Stage s){
 		selectionPopup = new Popup();
 		selectionPopup.setName("Popup");
 		selectionLabel = this.createLabel("Tippe auf das Pferd \n"
@@ -54,8 +66,8 @@ public class HorseSelectionPopup extends Popup{
 		
 		selectionPopup.addListener(new InputListener(){
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
+			public boolean touchDown(final InputEvent event, final float x, final float y,
+					final int pointer, final int button) {
 				// TODO Auto-generated method stub
 				Actor result = stage.hit(x, y, false);
 				if(result != null && result instanceof PlayerImpl){
@@ -82,12 +94,12 @@ public class HorseSelectionPopup extends Popup{
 	}
 	
 	@Override
-	public void draw(Batch batch, float parentAlpha){
+	public void draw(final Batch batch, final float parentAlpha){
 		this.selectionPopup.draw(batch, parentAlpha);
 	}
 	
 	@Override
-	public void act(float delta){
+	public void act(final float delta){
 		this.selectionPopup.act(delta);
 	}
 	

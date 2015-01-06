@@ -55,4 +55,9 @@ public class ThimblerigLoot extends Loot{
 		}
 		return true;
 	}
+
+	@Override
+	public String getCategory() {
+		return "Hütchenspiel";
+	}
 }

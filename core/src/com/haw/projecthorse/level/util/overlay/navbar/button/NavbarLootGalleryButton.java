@@ -1,9 +1,10 @@
 package com.haw.projecthorse.level.util.overlay.navbar.button;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.haw.projecthorse.gamemanager.GameManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
 public class NavbarLootGalleryButton extends NavbarButton {
@@ -15,9 +16,13 @@ public class NavbarLootGalleryButton extends NavbarButton {
 		this.addListener(new InputListener() {
 
 			@Override
-			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer,
-					final int button) {
-				Gdx.app.log("Settings Button", "Settings BUTTON CLick");
+			public boolean touchDown(final InputEvent event, final float x,
+					final float y, final int pointer, final int button) {
+
+				GameManager gm = GameManagerFactory.getInstance();
+				if (gm.getCurrentLevelID() != "lootGallery") {
+					gm.navigateToLevel("lootGallery");
+				}
 
 				return true;
 			};

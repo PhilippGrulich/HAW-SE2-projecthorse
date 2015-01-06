@@ -1,6 +1,7 @@
 package com.haw.projecthorse.lootmanager.popups;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,7 +21,7 @@ public class LootPopup extends Popup {
 
 	private int lootPopupHeight = height / 3;
 
-	public LootPopup(ArrayList<Lootable> loots) {
+	public LootPopup(HashSet<Lootable> loots) {
 		super();
 
 		Label label = createLabel("Deine gesammelten Gegenstaende");
@@ -53,7 +54,7 @@ public class LootPopup extends Popup {
 									// ge�ndert hat und somit die Daten daf�r
 									// neu berechnet werden m�ssen
 
-		public LootDisplay(ArrayList<Lootable> loots, int lootHeight, int lootWidth) {
+		public LootDisplay(HashSet<Lootable> loots, int lootHeight, int lootWidth) {
 			// Instanzvariable instazieren
 			lootList = new ArrayList<Lootable>(loots);
 			i = 0;

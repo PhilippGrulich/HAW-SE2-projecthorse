@@ -2,6 +2,12 @@ package com.haw.projecthorse.level.game.parcours;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * Das Interface stellt der GameObjectLogic die Methoden des GameObjectInitializer
+ * zur Verfügung, die die GameObjectLogic benötigt. 
+ * @author Francis
+ * @version 1.0
+ */
 public interface IGameObjectInitializerFuerGameObjectLogic {
 
 	/**
@@ -42,6 +48,7 @@ public interface IGameObjectInitializerFuerGameObjectLogic {
 	 * @param points
 	 *            Punkte, die bei Kollision des Players mit dem GameObject
 	 *            gutgeschrieben oder abgezogen werden.
+	 * @param width Die Breite des GameObjects.
 	 * @param height
 	 *            Gew�nschte H�he des GameObjects. Breite wird automatisch
 	 *            gesetzt, sodass das Bild richtig Skaliert wird.
@@ -55,14 +62,16 @@ public interface IGameObjectInitializerFuerGameObjectLogic {
 	 * @param collidable
 	 *            true, wenn mit dem GameObject kollidiert werden kann. Es wird
 	 *            dann ein Rectangle zur Kollisions-Detektion erzeugt.
+	 * @param isMoveable true, wenn sich das GameObject bewegen können soll, sonst false.
+	 * @param loot true, wenn das GameObject gewonnen werden kann, sonst false.
 	 * @return o Ein initialisertes GameObject wenn preconditions erf�llt sind,
 	 *         sonst null.
 	 * 
 	 * @post Ein initialisertes GameObject wenn alle preconditions erf�llt sind,
 	 *       sonst null.
 	 */
-	public GameObject initGameObject(TextureRegion r, String name, int points,
-			float height, float width, float duration, float x, float y,
-			boolean collidable, boolean loot, boolean isMoveable);
+	public GameObject initGameObject(final TextureRegion r, final String name, final int points,
+			final float height, final float width, final float duration, final float x, final float y,
+			final boolean collidable, final boolean loot, final boolean isMoveable);
 
 }

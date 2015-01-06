@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+/**
+ * Die Klasse stellt Text dar, der direkt auf der Stage angezeigt wird.
+ * @author Francis
+ * @version 1.0
+ */
 public class Text extends Actor {
 
 	private BitmapFont font;
@@ -19,7 +24,7 @@ public class Text extends Actor {
 	 * @param x Die x-Koordinate, an der der Text angezeigt werden soll.
 	 * @param y Die y-Koordinate, an der der Text angezeigt werden soll.
 	 */
-	public Text(BitmapFont f, String message, float x, float y) {
+	public Text(final BitmapFont f, final String message, final float x, final float y) {
 		font = f;
 		this.message = message;
 		this.x = x;
@@ -27,7 +32,7 @@ public class Text extends Actor {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		font.draw(batch, message, x, y);
 	}
 
@@ -45,25 +50,46 @@ public class Text extends Actor {
 		return y;
 	}
 
-	public void setColor(Color c) {
+	/**
+	 * Setzt die Farbe des Texts.
+	 * @param c Die Farbe des Texts.
+	 */
+	public void setColor(final Color c) {
 		font.setColor(c);
 	}
 
-	public void setColor(float r, float g, float b, float a) {
+	/**
+	 * Setzt die Farbe des Texts nach dem rgb-Schema mit Transparenz a.
+	 * @param r Rot-Anteil
+	 * @param g Grün-Anteil
+	 * @param b Blau-Anteil
+	 * @param a Alpha-Anteil.
+	 */
+	public void setColor(final float r, final float g, final float b, final float a) {
 		font.setColor(r, g, b, a);
 	}
 
-	public void setText(String text) {
+	/**
+	 * Setzt den Text der dargestellt werden soll.
+	 * @param text Der drazustellende Text.
+	 */
+	public void setText(final String text) {
 		this.message = text;
 	}
 
 	@Override
-	public void setX(float x) {
+	public void setX(final float x) {
 		this.x = x;
 	}
 
 	@Override
-	public void setY(float y) {
+	public void setY(final float y) {
+		this.y = y;
+	}
+	
+	@Override
+	public void setPosition(final float x, final float y){
+		this.x = x;
 		this.y = y;
 	}
 }

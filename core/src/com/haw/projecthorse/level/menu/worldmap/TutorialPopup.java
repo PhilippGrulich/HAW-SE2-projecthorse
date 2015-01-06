@@ -12,16 +12,28 @@ import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
+/**
+ * Ein Popup, das den USer über die Nutzung der Worldmap aufklärt.
+ * 
+ * @author Philipp
+ * @version 1
+ *
+ */
 public class TutorialPopup extends Popup {
 
 	private float tutorialPopupHeight = height / 3;
-	private String gameTitle = GameManagerFactory.getInstance().getGameConfig().getGameTitle();
+	private String gameTitle = GameManagerFactory.getInstance().getGameConfig()
+			.getGameTitle();
 	private String playerName = SaveGameManager.getLoadedGame().getPlayerName();
 
+	/**
+	 * Der default Konstruktor.
+	 */
 	public TutorialPopup() {
 
 		Label label = createLabel(gennerateText());
-		ScrollPane scollContent = new DefaultScrollPane(label, tutorialPopupHeight, popupWidth * 0.8f);
+		ScrollPane scollContent = new DefaultScrollPane(label,
+				tutorialPopupHeight, popupWidth * 0.8f);
 
 		this.addActor(createLabel("Anleitung :)"));
 
@@ -39,11 +51,17 @@ public class TutorialPopup extends Popup {
 
 	}
 
+	/**
+	 * Erzeugt einen formatieren Tutorial Text.
+	 * 
+	 * @return Gewrappten String
+	 */
 	private String gennerateText() {
 
 		TextWrapper wrapper = new TextWrapper(23);
 		wrapper.appendLine("Hi %s", playerName);
-		wrapper.appendLine("wir hoffen das du viel Spaß mit %s hast.", gameTitle);
+		wrapper.appendLine("wir hoffen das du viel Spaß mit %s hast.",
+				gameTitle);
 		wrapper.appendLine("Auf der Weltkarte kannst du mit deinem Pferd von Stadt"
 				+ " zu Stadt reisen und dort tolle Spiele spielen.");
 		wrapper.appendLine("Je mehr Spiele du spielst, umso schönere Pferde kannst du gewinnen.");

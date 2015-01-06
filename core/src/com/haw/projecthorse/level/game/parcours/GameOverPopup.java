@@ -1,11 +1,15 @@
 package com.haw.projecthorse.level.game.parcours;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 
+/**
+ * Enthält 2 Popups - eines, das beim Spielgewinn angezeigt wird
+ * und eines, das bei einer Spielniederlage angezeigt wird.
+ * @author Francis
+ * @version 1.0
+ */
 public class GameOverPopup extends Popup {
 
 	Popup wonPopup; //Popup das beim Sieg angezeigt wird.
@@ -16,6 +20,9 @@ public class GameOverPopup extends Popup {
 	ImageTextButton lostButtonNo; //no-Button im lostPopup
 	Popup lostPopup; //Popup das bei einer Niederlage angezeigt wird.
 
+	/**
+	 * Konstruktor.
+	 */
 	public GameOverPopup() {
 		super();
 		
@@ -39,12 +46,9 @@ public class GameOverPopup extends Popup {
 		wonPopup = new Popup();
 		wonPopup.setName("Popup");
 
-		Label wonLabel = this.createLabel("Gratulation!\nDu hast gewonnen!");
 		Label labelQuestion = this.createLabel("Möchtest Du nochmal spielen?");
-		wonLabel.setName("Label");
 		labelQuestion.setName("Label");
 
-		wonPopup.addActor(wonLabel);
 		wonPopup.addActor(labelQuestion);
 		wonPopup.addActor(wonButtonYes);
 		wonPopup.addActor(wonButtonNo);
@@ -75,9 +79,10 @@ public class GameOverPopup extends Popup {
 	 * @param g GameState.WON oder GameState.LOST
 	 * @return true, wenn GameState.WON u. wonPopup.yesButton.isPressed, sonst false. Analog GameState.LOST.
 	 */
-	public boolean isButtonYesPressed(GameState g) {
-		if (g == GameState.WON)
+	public boolean isButtonYesPressed(final GameState g) {
+		if (g == GameState.WON){
 			return wonButtonYes.isPressed();
+		}
 
 		return lostButtonYes.isPressed();
 	}
@@ -88,9 +93,10 @@ public class GameOverPopup extends Popup {
 	 * @param g GameState.WON oder GameState.LOST
 	 * @return true, wenn GameState.WON u. wonPopup.noButton.isPressed, sonst false. Analog GameState.LOST.
 	 */
-	public boolean isButtonNoPressed(GameState g) {
-		if (g == GameState.WON)
+	public boolean isButtonNoPressed(final GameState g) {
+		if (g == GameState.WON){
 			return wonButtonNo.isPressed();
+		}
 
 		return lostButtonNo.isPressed();
 	}
@@ -100,7 +106,7 @@ public class GameOverPopup extends Popup {
 	 * @param g GameState.WON oder GameState.LOST
 	 * @return popup Wenn GameState.WON das gewinner Popup, sonst das Verlierer-Popup.
 	 */
-	public Popup getPopup(GameState g) {
+	public Popup getPopup(final GameState g) {
 		if (g == GameState.WON) {
 			return wonPopup;
 		}

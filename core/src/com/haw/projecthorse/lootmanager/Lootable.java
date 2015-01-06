@@ -12,6 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public interface Lootable {
 	/**
+	 * Gibt die Kategorie des Loots an. Die einzelnen Kategorien werden in der
+	 * LootGallery unterschieden.
+	 * 
+	 * @return Die Kategorie des Loots.
+	 */
+	public String getCategory();
+
+	/**
 	 * Gibt einen treffenden, kurzen Namen für den Loot an.
 	 * 
 	 * @return Der Name.

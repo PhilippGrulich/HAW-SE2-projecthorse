@@ -7,6 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
 
+/**
+ * Das Interface stellt der GameObjectLogic die Methoden des GameField
+ * zur Verfügung, die die GameObjectLogic benötigt. 
+ * @author Francis
+ * @version 1.0
+ */
 public interface IGameFieldFuerGameObjectLogic {
 
 	/**
@@ -91,18 +97,45 @@ public interface IGameFieldFuerGameObjectLogic {
 	float getGeneralGameSpeed();
 	
 	/**
-	 * Fügt der Stage ein GameObject hinzu
-	 * @param o
+	 * Fügt der Stage ein GameObject hinzu.
+	 * @param o Das CollidableGameObject.
 	 */
 	public void addCollidableGameObject(CollidableGameObject o);
 
+	/**
+	 * Liefert ein zufälliges CollidableGameObject.
+	 * @return co CollidableGameObject.
+	 */
 	public CollidableGameObject getRandomObject();
 
+	/**
+	 * Legt ein CollidableGameObject in den ObjectPool zurück, wenn dieses berührt wurde
+	 * oder außerhalb des sichtbaren Spielfeldbereichs ist.
+	 * @param o CollidableGameObject.
+	 */
 	void passBack(CollidableGameObject o);
 
+	/**
+	 * Liefert die Actor-Objekte des Spielfelds, die in der Stage sind.
+	 * @return a Array mit allen Actor-Objekten.
+	 */
 	public Array<Actor> getActors();
 
+	/**
+	 * Legt das Popup auf die Stage das dem GameState entspricht.
+	 * @param greeting GameState
+	 */
 	public void showPopup(GameState greeting);
 
+	/**
+	 * Prüft ob der Button des Begrüßungspopups gedrückt wurde.
+	 * @return true, wenn der Button gedrückt wurde, sonst false.
+	 */
 	public boolean isGreetingButtonPressed();
+	
+	/**
+	 * Setzt den Spielstand auf GameOver wenn b = true.
+	 * @param b true oder false.
+	 */
+	public void setGameOverState(boolean b);
 }

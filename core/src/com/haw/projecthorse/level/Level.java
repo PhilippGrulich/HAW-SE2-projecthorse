@@ -14,8 +14,8 @@ import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 
-/**
- * @author Lars Level . Abstract baseclass for Level implementations.
+/** Level . Abstract baseclass for Level implementations.
+ * @author Lars 
  * 
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
@@ -23,10 +23,9 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
  * 
  * 
  *         Jedes level hat ein Overlay. über das Overlay können Popups unter
- *         anderm Popups angezeigt werden. *
- * 
+ *         anderm Popups angezeigt werden. 
+ * @version 17.4
  */
-
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
@@ -34,6 +33,7 @@ public abstract class Level implements Screen {
 	// ####################################
 
 	private Boolean paused = false;
+	private boolean overlayPaused = false;
 	private String levelID = null;
 	private Viewport viewport;
 	private OrthographicCamera cam;
@@ -46,6 +46,9 @@ public abstract class Level implements Screen {
 	protected AudioManager audioManager;
 	private FitViewport overlayViewport;
 
+	/**
+	 * Constructor.
+	 */
 	public Level() {
 		this(Orientation.Portrait);
 	}
@@ -54,9 +57,9 @@ public abstract class Level implements Screen {
 	 * Mittels diesem Konsturcktor kann eine {@link Orientation} übergeben
 	 * werden.
 	 * 
-	 * @param orientation
+	 * @param orientation orientation
 	 */
-	public Level(Orientation orientation) {
+	public Level(final Orientation orientation) {
 		GameManagerFactory.getInstance().getPlatform().SetOrientation(orientation);
 		height = GameManagerFactory.getInstance().getSettings().getVirtualScreenHeight();
 		width = GameManagerFactory.getInstance().getSettings().getVirtualScreenWidth();
@@ -65,7 +68,10 @@ public abstract class Level implements Screen {
 		audioManager = AudioManagerImpl.getInstance();
 		AssetManager.loadSounds("ui");
 	}
-
+	
+	/**
+	 * createViewport.
+	 */
 	public void createViewport() {
 		cam = createCamera();
 		viewport = new FitViewport(width, height, cam);
@@ -77,7 +83,7 @@ public abstract class Level implements Screen {
 	}
 
 	/**
-	 * Erstellt eine OrthographicCamera diese wird f�r die jeweiliegen Viewports
+	 * Erstellt eine OrthographicCamera diese wird für die jeweiliegen Viewports
 	 * gebraucht.
 	 * 
 	 * @return {@link OrthographicCamera}
@@ -90,9 +96,13 @@ public abstract class Level implements Screen {
 		return cam;
 	}
 
-	public final void setLevelID(String newID) {
+	/**
+	 * setLevelID.
+	 * @param newID neue LevelID
+	 */
+	public final void setLevelID(final String newID) {
 		if (levelID != null) {
-			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
+			Gdx.app.log("DEBUG", "ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
 		}
 
 		levelID = newID;
@@ -103,11 +113,20 @@ public abstract class Level implements Screen {
 		return levelID;
 	}
 
+	/**
+	 * doRender.
+	 * @param delta delta
+	 */
 	protected abstract void doRender(float delta); // Called by render() - to be
 													// used in subclasses
 
+	/**
+	 * render.
+	 * @param delta delta
+	 */
 	@Override
-	public final void render(float delta) {
+	public final void render(final float deltaIn) {
+		float delta = deltaIn;
 		// zu schnell Bug Fix
 		delta = delta % 1;
 		paintBackground();
@@ -116,7 +135,7 @@ public abstract class Level implements Screen {
 		// Hierdurch wird sichergestellt das die Interaktionen
 
 		overlay.act(delta);
-		if (paused) {
+		if (paused || overlayPaused) {
 			delta = 0;
 		}
 		doRender(delta);
@@ -129,13 +148,16 @@ public abstract class Level implements Screen {
 	}
 
 	/**
-	 * Male den Hintergrund
+	 * Male den Hintergrund.
 	 */
 	private void paintBackground() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
+	/**
+	 * doDispose.
+	 */
 	protected abstract void doDispose();
 
 	@Override
@@ -147,10 +169,15 @@ public abstract class Level implements Screen {
 
 	}
 
+	/**
+	 * doResize.
+	 * @param width width
+	 * @param height height
+	 */
 	protected abstract void doResize(int width, int height);
 
 	@Override
-	public final void resize(int width, int height) {
+	public final void resize(final int width, final int height) {
 
 		this.getViewport().update(width, height, true);
 		this.overlayViewport.update(width, height, true);
@@ -158,6 +185,9 @@ public abstract class Level implements Screen {
 
 	}
 
+	/**
+	 * doShow.
+	 */
 	protected abstract void doShow();
 
 	@Override
@@ -165,6 +195,9 @@ public abstract class Level implements Screen {
 		doShow();
 	}
 
+	/**
+	 * doHide.
+	 */
 	protected abstract void doHide();
 
 	@Override
@@ -172,6 +205,9 @@ public abstract class Level implements Screen {
 		doHide();
 	}
 
+	/**
+	 * doPause.
+	 */
 	protected abstract void doPause();
 
 	@Override
@@ -179,13 +215,36 @@ public abstract class Level implements Screen {
 		paused = true;
 		doPause();
 	}
+	
+	/**
+	 * pause.
+	 * @param b true == pause
+	 */
+	public final void pause(final boolean b){
+		overlayPaused = true;
+		pause();
+	}
 
+	/**
+	 * doDispose.
+	 */
 	protected abstract void doResume();
 
 	@Override
 	public final void resume() {
-		paused = false;
-		doResume();
+		if(!overlayPaused){
+			paused = false;
+			doResume();
+		}
+	}
+	
+	/**
+	 * resume.
+	 * @param b b
+	 */
+	public final void resume(final boolean b){
+		overlayPaused = b;
+		resume();
 	}
 
 	protected Viewport getViewport() {

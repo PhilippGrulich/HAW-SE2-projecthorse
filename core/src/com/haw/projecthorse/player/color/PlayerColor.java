@@ -189,4 +189,9 @@ public class PlayerColor extends Loot {
 	protected LootImage getLootImage() {
 		return null;
 	}
+
+	@Override
+	public String getCategory() {
+		return "Pferde";
+	}
 }

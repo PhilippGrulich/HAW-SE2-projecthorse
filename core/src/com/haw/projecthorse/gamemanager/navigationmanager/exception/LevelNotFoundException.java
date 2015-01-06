@@ -19,7 +19,7 @@ public class LevelNotFoundException extends Throwable {
 	@Override
 	public void printStackTrace() {
 		
-		Gdx.app.error("LevelNotFoundException", "The Level "+levelID+" can´t Found. Please check the gameConfig.json",this);
+		Gdx.app.error("LevelNotFoundException", "The Level "+levelID+" can't Found. Please check the gameConfig.json",this);
 	}
 	
 	

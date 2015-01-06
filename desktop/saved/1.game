@@ -1,6 +1,23 @@
 {
 lootCollection: [
 	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Haflinger,
+		description: "",
+		race: HAFLINGER
+	},
+	{
+		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		achievedDate: {},
+		name: MiniPferd,
+		image: {
+			level: thimblerig,
+			fileName: WOOD_HORSE
+		},
+		description: "ein putziges Spielzeug"
+	},
+	{
 		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
 		achievedDate: {},
 		name: carrot,
@@ -11,9 +28,41 @@ lootCollection: [
 			fileName: carrot
 		},
 		description: "Eine leckere Möhre für dein Pferd."
+	},
+	{
+		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		achievedDate: {},
+		name: Möhre,
+		image: {
+			level: thimblerig,
+			fileName: 2011-02-15_Cartoon_carrot
+		},
+		description: "eine gesunde Mahlzeit"
+	},
+	{
+		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		achievedDate: {},
+		name: Hufeisen,
+		image: {
+			level: thimblerig,
+			fileName: horseshoe
+		},
+		description: "als Glücksbringer"
+	},
+	{
+		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
+		achievedDate: {},
+		name: carrot,
+		allreadyWon: true,
+		availableAtScore: 5,
+		image: {
+			level: parcours,
+			fileName: carrot
+		},
+		description: "Eine leckere Möhre für dein Pferd."
 	}
 ],
-name: sasdsd,
+name: Maria,
 ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl

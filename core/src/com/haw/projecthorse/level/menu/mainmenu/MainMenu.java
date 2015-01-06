@@ -3,7 +3,6 @@ package com.haw.projecthorse.level.menu.mainmenu;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
@@ -127,9 +127,7 @@ public class MainMenu extends Menu {
 	}
 
 	private void loadCredits() {
-		// TODO: Implement Creditscreen
-
-		Gdx.app.log("DEBUG", "CreditScreen not yet implemented - Todo");
+		GameManagerFactory.getInstance().navigateToLevel("credits");
 	}
 	
 	private void addButtonSpielListener(ImageTextButton button ,int saveGameID) {
@@ -139,7 +137,6 @@ public class MainMenu extends Menu {
 	private void setupEventListeners() {
 		buttonCredits.addListener(new ChangeListener() {
 			public void changed(final ChangeEvent event, final Actor actor) {
-				System.out.println("buttonCredits pressed");
 				loadCredits();
 			}
 
@@ -157,8 +154,6 @@ public class MainMenu extends Menu {
 		table.setHeight((float) (height * 0.5));
 		table.setY((height / 2) - table.getHeight() / 2);
 		table.setWidth(width);
-		System.out.println(table.getHeight());
-		System.out.println(table.getY());
 	}
 	
 	@Override

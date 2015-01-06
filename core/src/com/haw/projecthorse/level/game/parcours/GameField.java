@@ -15,22 +15,16 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.level.game.parcours.GameOverPopup.GameState;
-import com.haw.projecthorse.level.game.parcours.ParcoursLoot;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
-import com.haw.projecthorse.lootmanager.Chest;
-import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.race.HorseRace;
-import com.haw.projecthorse.player.race.Race;
-import com.haw.projecthorse.player.race.RaceLoot;
-import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
- * Container-Klasse für GameObjects.
- * 
+ * Enthält die GameObjects, bietet Methoden für den Zugriff auf GameObjects an
+ * und ermöglicht das Erzeugen von Popups.
  * @author Francis
- *
+ * @version 1.0
  */
 public class GameField implements IGameFieldFuerGameInputListener,
 		IGameFieldFuerGameObjectLogic, IGameFieldFuerGameOperator {
@@ -43,7 +37,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 											// dem Spielfeld
 	private List<ParcoursLoot> loot; // Zu gewinnende Loot-Objekte des Spiels.
 	private Player player; // Das Pferd
-	private float SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP; // Pixel die
+	private float spaceBetweenGroundcavityAndGroundtop; // Pixel die
 															// zwischen den
 															// Mulden des Bodens
 															// u. der Gesamthöhe
@@ -53,7 +47,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	private float generalGameSpeed; // Spielgeschwindigkeit
 	private Text scoreInformation; // Im Spiel angezeigte Punktzahl-
 	private int score; // Punktwert des Spiels.
-	private float grass_ground_height; // Höhe des Gras aus dem Hintergrund.
+	private float grassGroundHeight; // Höhe des Gras aus dem Hintergrund.
 	private GameOverPopup popup; // Popup das erscheint, wenn das Spiel zuende
 									// ist
 	private boolean gameOverState;
@@ -66,7 +60,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	private boolean greetingPopupSet;
 	private GreetingPopup greetingPopup;
 	private HorseSelectionPopup selectionPopup;
-	private String race;
+	//private String race;
 
 	/**
 	 * Erzeugt das Spielfeld, lädt Sound und Musik von Parcours, setzt die
@@ -83,7 +77,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * @param a
 	 *            AudioManager
 	 */
-	public GameField(Stage s, Viewport p, int w, int h, AudioManager a) {
+	public GameField(final Stage s, final Viewport p, final int w, final int h, final AudioManager a) {
 		audioManager = a;
 		greetingPopupSet = false;
 		AssetManager.loadMusic("parcours");
@@ -96,7 +90,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		width = w;
 		height = h;
 		popup = new GameOverPopup();
-		SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP = 5;
+		spaceBetweenGroundcavityAndGroundtop = 5;
 		score = 0;
 		gameOverState = false;
 		gameObjects = new ArrayList<GameObject>();
@@ -114,28 +108,19 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		 */
 	}
 
-	/**
-	 * @return gameOverState true, wenn das Spielende erreicht wurde (zu geringe
-	 *         oder zu erreichende Punktzahl)
-	 */
-	public boolean isGameOverState() {
+	public boolean getGameOverState() {
 		return gameOverState;
 	}
 
-	/**
-	 * @param gameOverState
-	 *            true, wenn das Spielende erreicht wurde (zu geringe oder zu
-	 *            erreichende Punktzahl) sonst false.
-	 */
-	public void setGameOverState(boolean gameOverState) {
+	public void setGameOverState(final boolean gameOverState) {
 		this.gameOverState = gameOverState;
 	}
 
 	/**
-	 * Zeigt das Gewinner-Popup bei GameState.WON und das Verlierer-Popup bei
-	 * GameState.LOST
+	 * Zeigt in Abhängigkeit des GameState das entsprechende Popup an.
+	 * @param g GameState der GREETING, WON oder LOST ist.
 	 */
-	public void showPopup(GameState g) {
+	public void showPopup(final GameState g) {
 		if (g == GameState.GREETING && !greetingPopupSet) {
 			this.greetingPopupSet = true;
 			this.greetingPopup = new GreetingPopup();
@@ -145,16 +130,18 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		} 
 	}
 	
-	public void showPopup(GameState g, HorseRace[] races){
+	/**
+	 * Zeigt ein Popup an bei dem man das Pferd auswählen kann, mit dem man spielen möchte.
+	 * @param races Die Rassen die in dem Spiel ausgewählt werden können.
+	 */
+	public void showPopup(final HorseRace[] races){
 			selectionPopup = new HorseSelectionPopup(races, stage);
 			stage.addActor(selectionPopup.getPopup());
 	}
 
-	/**
-	 * Nur für Begrüßungspopup
-	 */
+
 	@Override
-	public void showPopup(GameState g, String username) {
+	public void showPopup(final GameState g, final String username) {
 		if (g == GameState.GREETING && !greetingPopupSet) {
 			this.greetingPopupSet = true;
 			this.greetingPopup = new GreetingPopup(username);
@@ -169,16 +156,14 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	/**
 	 * Ruft act auf der Stage auf.
+	 * @param delta Die Zeit, die seit dem letzten Frame vergangen ist.
 	 */
-	public void actGameField(float delta) {
+	public void actGameField(final float delta) {
 		stage.act(delta);
 	}
 
 	/**
 	 * Lädt alle Texturen und GameObjects des Spiels.
-	 * 
-	 * @param goi
-	 *            GameObjectInitializer
 	 */
 	public void loadTextureRegions() {
 		// groundHeight setzen vor Objekten die auf dem "Boden" stehen.
@@ -194,29 +179,41 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				0, 0, false, 0, 0, regions, this.goi, false, false);
 
 		TextureRegion cloud = regions.get("cloud_fluffy");
-		addGameObjectWithRelativHeight("cloud_fluffy", cloud.getRegionHeight(),
-				getWidth() - cloud.getRegionWidth(), getHeight() * 40 / 100,
-				false, generalGameSpeed / 5, 0, regions, this.goi, false, true);
+		addGameObjectWithRelativHeight("cloud_fluffy", cloud.getRegionHeight() ,
+				getWidth() + getWidth() * 10 / 100 + cloud.getRegionWidth(), getHeight() * 70 / 100,
+				false, generalGameSpeed / 3f, 0, regions, this.goi, false, true);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
 				cloud.getRegionHeight() / 3,
-				getWidth() - cloud.getRegionWidth(), getHeight() * 30 / 100,
-				false, generalGameSpeed / 6, 0, regions, this.goi, false, true);
+				getWidth() + getWidth() * 20 / 100 + cloud.getRegionWidth(), getHeight() * 50 / 100,
+				false, generalGameSpeed / 5f, 0, regions, this.goi, false, true);
 
 		addGameObjectWithRelativHeight("cloud_fluffy",
 				cloud.getRegionHeight() / 2,
-				getWidth() - cloud.getRegionWidth(), getHeight() * 35 / 100,
-				false, generalGameSpeed / 5.5f, 0, regions, this.goi, false,
+				getWidth() + getWidth() * 30 / 100 + cloud.getRegionWidth(), getHeight() * 60 / 100,
+				false, generalGameSpeed / 4.5f, 0, regions, this.goi, false,
+				true);
+		
+		addGameObjectWithRelativHeight("cloud_fluffy",
+				cloud.getRegionHeight() / 4,
+				getWidth() + getWidth() * 40 / 100 + cloud.getRegionWidth(), getHeight() * 55 / 100,
+				false, generalGameSpeed / 6f, 0, regions, this.goi, false,
+				true);
+		
+		addGameObjectWithRelativHeight("cloud_fluffy",
+				cloud.getRegionHeight() ,
+				getWidth() + getWidth() * 50 / 100 + cloud.getRegionWidth(), getHeight() * 55 / 100,
+				false, generalGameSpeed / 3.5f, 0, regions, this.goi, false,
 				true);
 
 		addGameObjectWithRelativHeight("rainbow", regions.get("rainbow")
 				.getRegionHeight(), 50, getTopOfGroundPosition(), false, 0, 0,
 				regions, this.goi, false, false);
 
-		grass_ground_height = getTopOfGroundPosition()
+		grassGroundHeight = getTopOfGroundPosition()
 				+ (getTopOfGroundPosition() * 160 / 100);
 		addGameObjectFixedWidthHeight("grass_ground", getWidth(),
-				grass_ground_height, 0, 0, false, 0, 0, regions, this.goi,
+				grassGroundHeight, 0, 0, false, 0, 0, regions, this.goi,
 				false, false);
 
 		addBushs(this.goi, regions);
@@ -225,7 +222,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 			addGameObjectWithRelativHeight("Kuerbis" + i,
 					regions.get("Kuerbis" + i).getRegionHeight() * 15 / 50,
 					-10000, getTopOfGroundPosition(), true, generalGameSpeed,
-					1, regions, this.goi, false, true);
+					10, regions, this.goi, false, true);
 		}
 
 		addGameObjectWithRelativHeight("cratetex", regions.get("cratetex")
@@ -233,7 +230,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				true, generalGameSpeed, -10, regions, this.goi, false, true);
 
 		scoreInformation = new Text(AssetManager.getTextFont(FontSize.THIRTY),
-				"Punkte: 0", 10, getHeight() * 50 / 60);
+				"Punkte: 0", 10, getHeight() - FontSize.THIRTY.getVal());
 		scoreInformation.setColor(0, 0, 0, 1);
 		scoreInformation.setName("Score");
 		stage.addActor(scoreInformation);
@@ -253,9 +250,6 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	/**
 	 * Lädt die zu gewinnenden Loots.
-	 * 
-	 * @param regions
-	 *            Enthält alle Texturen des Spiels "Parcours"
 	 */
 	private void initLoot() {
 
@@ -306,11 +300,11 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * @param isMoveable
 	 *            true, wenn speed > 0, sonst false.
 	 */
-	private void addGameObjectWithRelativHeight(String name,
-			float desiredHeight, float x, float y, boolean collidable,
-			float speed, int points, HashMap<String, TextureRegion> regions,
-			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot,
-			boolean isMoveable) {
+	private void addGameObjectWithRelativHeight(final String name,
+			final float desiredHeight, final float x, final float y, final boolean collidable,
+			final float speed, final int points, final HashMap<String, TextureRegion> regions,
+			final IGameObjectInitializerFuerGameObjectLogic goi,final boolean isLoot,
+			final boolean isMoveable) {
 		GameObject o = goi.initGameObject(regions.get(name), name, points,
 				desiredHeight, goi.calcRelativeWidth(regions.get(name)
 						.getRegionHeight(), regions.get(name).getRegionWidth(),
@@ -318,8 +312,9 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				isMoveable);
 
 		// gameObjects.add(o);
-		if (!collidable)
+		if (!collidable){
 			stage.addActor(o);
+		}
 	}
 
 	/**
@@ -332,7 +327,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * @param width
 	 *            Gewünschte Höhe des GameObjects (Breite wird orignalgetreu
 	 *            angepasst).
-	 * @aram height Die tatsächliche Höhe der Texture.
+	 * @param height Die tatsächliche Höhe der Texture.
 	 * @param x
 	 *            x-Koordinate des GameObjects bei Spielstart.
 	 * @param y
@@ -356,17 +351,18 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * @param isMoveable
 	 *            true, wenn speed > 0, sonst false.
 	 */
-	private void addGameObjectFixedWidthHeight(String name, float width,
-			float height, float x, float y, boolean collidable, float speed,
-			int points, HashMap<String, TextureRegion> regions,
-			IGameObjectInitializerFuerGameObjectLogic goi, boolean isLoot,
-			boolean isMoveable) {
+	private void addGameObjectFixedWidthHeight(final String name, final float width,
+			final float height, final float x, final float y, final boolean collidable, final float speed,
+			final int points, final  HashMap<String, TextureRegion> regions,
+			final IGameObjectInitializerFuerGameObjectLogic goi, final boolean isLoot,
+			final boolean isMoveable) {
 		GameObject o = goi.initGameObject(regions.get(name), name, points,
 				height, width, speed, x, y, collidable, isLoot, isMoveable);
 
 		// gameObjects.add(o);
-		if (!collidable)
+		if (!collidable){
 			stage.addActor(o);
+		}
 	}
 
 	/**
@@ -379,8 +375,8 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 *            Enthält alle TextureRegions des Spiels "Parcours" aus dem
 	 *            TextureAtlas.
 	 */
-	private void addBushs(IGameObjectInitializerFuerGameObjectLogic goi,
-			HashMap<String, TextureRegion> regions) {
+	private void addBushs(final IGameObjectInitializerFuerGameObjectLogic goi,
+			final HashMap<String, TextureRegion> regions) {
 		boolean outOfGameField = false;
 		int[] possibleBushs = new int[3];
 		possibleBushs[0] = 1;
@@ -390,7 +386,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		int randomBush;
 		float bushHeight = getWidth() * 3 / 100;
 		float bushWidth;
-		float maxY = grass_ground_height - (grass_ground_height * 5 / 100);
+		float maxY = grassGroundHeight - (grassGroundHeight * 10 / 100);
 
 		float x = 0;
 
@@ -398,7 +394,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 			randomPosY = (float) Math.floor(Math.random()
 					* (maxY - getTopOfGroundPosition())
 					+ getTopOfGroundPosition());
-			;
+			
 			randomBush = (int) Math.floor(Math.random()
 					* (possibleBushs.length));
 			bushWidth = goi.calcRelativeWidth(
@@ -412,7 +408,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 							+ possibleBushs[randomBush], 0, bushHeight,
 					bushWidth, 0, x, randomPosY, false, false, false);
 
-			x = x + bushWidth;
+			x = x + bushWidth - (bushWidth * 30 / 100);
 			gameObjects.add(a);
 			stage.addActor(a);
 
@@ -424,8 +420,9 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	/**
 	 * Addiert points Punkte zur Punktzahl u. passt die Punkteanzeige an.
+	 * @param points Die Punkte, die auf den aktuellen Punktestand addierten werden sollen.
 	 */
-	public void addToScore(int points) {
+	public void addToScore(final int points) {
 		score += points;
 		scoreInformation.setText("Punkte: " + score);
 	}
@@ -437,20 +434,17 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		stage.draw();
 	}
 
-	/**
-	 * Liefert alle GameObjects des Spiels.
-	 */
 	public List<GameObject> getGameObjects() {
 		return goi.getObjects();
 	}
 
 	@Override
-	public void addCollidableGameObject(CollidableGameObject o) {
+	public void addCollidableGameObject(final CollidableGameObject o) {
 		stage.addActor(o);
 	}
 
 	@Override
-	public void passBack(CollidableGameObject o) {
+	public void passBack(final CollidableGameObject o) {
 		goi.passBack(o);
 	}
 
@@ -492,29 +486,16 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		return stage;
 	}
 
-	/**
-	 * Liefert die Oberflächenposition des Bodens auf dem gewisse GameObjects u.
-	 * das Pferd stehen.
-	 */
 	public float getTopOfGroundPosition() {
-		return groundHeight - SPACE_BETWEEN_GROUNDCAVITY_AND_GROUNDTOP;
+		return groundHeight - spaceBetweenGroundcavityAndGroundtop;
 	}
 
-	/**
-	 * Liefert die Spielfeldbreite.
-	 */
 	public float getWidth() {
 		return width;
 	}
 
-	/**
-	 * Initialisert das Pferd.
-	 * 
-	 * @param goi
-	 *            GameObjectInitializer.
-	 */
 	@Override
-	public void initPlayer(HorseRace race) {
+	public void initPlayer(final HorseRace race) {
 		if (race == null) {
 			player = new Player(getWidth(), getHeight());
 		} else {
@@ -558,17 +539,16 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 	@Override
 	public List<ParcoursLoot> getLoot() {
-		// TODO Auto-generated method stub
 		return loot;
 	}
 
 	@Override
-	public boolean isButtonYesPressed(GameState g) {
+	public boolean isButtonYesPressed(final GameState g) {
 		return popup.isButtonYesPressed(g);
 	}
 
 	@Override
-	public boolean isButtonNoPressed(GameState g) {
+	public boolean isButtonNoPressed(final GameState g) {
 		return popup.isButtonNoPressed(g);
 	}
 
@@ -585,7 +565,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				}
 			}
 		}
-		//initPlayer(HorseRace.valueOf(getPlayer().getRace().toUpperCase()));
+		player.setPosition(20, getTopOfGroundPosition() - 25);
 	}
 
 	@Override
@@ -647,15 +627,18 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	}
 
 	@Override
-	public void fadePopup(float delta, GameState g) {
-		if (g == GameState.LOST || g == GameState.WON)
+	public void fadePopup(final float delta, final GameState g) {
+		if (g == GameState.LOST || g == GameState.WON){
 			popup.getPopup(g).act(delta);
+		}
 
-		if (g == GameState.GREETING)
+		if (g == GameState.GREETING){
 			greetingPopup.act(delta);
+		}
 		
-		if(g == GameState.HORSESELECTION)
+		if(g == GameState.HORSESELECTION){
 			selectionPopup.act(delta);
+		}
 	}
 
 	@Override

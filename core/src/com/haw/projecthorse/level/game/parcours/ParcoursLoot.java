@@ -1,8 +1,12 @@
 package com.haw.projecthorse.level.game.parcours;
 
 import com.haw.projecthorse.lootmanager.LootImage;
-import com.haw.projecthorse.player.race.RaceLoot;
 
+/**
+ * Die Klasse stellt Loot-Objekt dar, die im Spiel gewonnen werden können.
+ * @author Francis
+ * @version 1.0
+ */
 public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 
 	private LootImage image;
@@ -28,12 +32,12 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 	 * Legt fest, ob das Objekt im aktuellen Spiel bereits gewonnen wurde.
 	 * @param b true, wenn das Objekt mind. 1 Mal im aktuellen Spiel gewonnen wurde.
 	 */
-	public void setWonStatus(boolean b){
+	public void setWonStatus(final boolean b){
 		this.allreadyWon = b;
 	}
 	
 	/**
-	 * 
+	 * Liefert ein boolean in Abhängigkeit davon, ob das Spiel gewonnen wurde oder nicht.
 	 * @return b true, wenn das Objekt im aktuellen Spiel bereits gewonnen wurde.
 	 */
 	public boolean getWonStatus(){
@@ -46,7 +50,7 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 	 * @param name Name des Bildes, dass dieses Loot-Objekt darstellt.
 	 * @param description Eine kurze beschreibung des Bildes.
 	 */
-	public ParcoursLoot(int availableAtScore, String name, String description) {
+	public ParcoursLoot(final int availableAtScore, final String name, final String description) {
 		super(name, description);
 		image = new LootImage("parcours", ParcoursLoot.this.getName());
 		this.availableAtScore = availableAtScore;
@@ -61,7 +65,7 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 	@Override
 	public int doHashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + availableAtScore;
 		result = prime * result
 				+ (((LootImage) image == null) ? 0 : image.hashCode());
@@ -69,16 +73,23 @@ public class ParcoursLoot extends com.haw.projecthorse.lootmanager.Loot {
 	}
 
 	@Override
-	public boolean doEquals(Object obj) {
+	public boolean doEquals(final Object obj) {
 		ParcoursLoot other = (ParcoursLoot) obj;
-		if (availableAtScore != other.getAvailableAtScore())
+		if (availableAtScore != other.getAvailableAtScore()){
 			return false;
+		}
 		if (image == null) {
-			if (other.getLootImage() != null)
+			if (other.getLootImage() != null){
 				return false;
+			}
 		} else if (!((LootImage) image)
-				.equals((LootImage) other.getLootImage()))
+				.equals((LootImage) other.getLootImage())){
 			return false;
+		}
 		return true;
+	}
+	@Override
+	public String getCategory() {
+		return "Parcours";
 	}
 }

@@ -2,11 +2,19 @@ package com.haw.projecthorse.level.game.applerun;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * Apple Entity.
+ * @author Lars
+ * @version 1.0
+ */
 public class Apple extends Entity {
 
-	public Apple(TextureRegion texture) {
+	/**
+	* Fallender Apfel.
+	* @param texture .
+	*/
+	public Apple(final TextureRegion texture) {
 		super(texture);
-		
 	}	
 
 	/*@Override

@@ -3,20 +3,20 @@ package com.haw.projecthorse.gamemanager.navigationmanager.json;
 import java.util.HashMap;
 
 /**
- * Dieses Object Bildet eine Menü Objekt aus der GameConfig.json ab.
+ * Dieses Object Bildet eine MenÃ¼ Objekt aus der GameConfig.json ab.
  * @author Viktor
  *
  */
 public interface MenuObject {
 
 	/**
-	 * Liefert die LevelID zurück
+	 * Liefert die LevelID zurÃ¼ck
 	 * @return {@link String}
 	 */
 	String getLevelID();
 
 	/**
-	 * Liefert den Klassennamen des Menüs zurück
+	 * Liefert den Klassennamen des MenÃ¼s zurÃ¼ck
 	 * @return {@link String}
 	 */
 	String getClassName();

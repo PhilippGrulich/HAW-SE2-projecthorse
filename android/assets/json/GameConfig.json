@@ -10,6 +10,10 @@
          className:"com.haw.projecthorse.level.menu.playermenu.PlayerMenu"
       },
       {
+         levelID:"lootGallery",
+         className:"com.haw.projecthorse.level.menu.lootgallery.LootGallery"
+      },
+      {
          levelID:"worldmap",
          className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
          parameter:{
@@ -18,6 +22,10 @@
          			   						Muenchen,965,255"
          }
       },
+	  {
+         levelID:"credits",
+         className:"com.haw.projecthorse.level.menu.credits.Credits"
+      }
 
    ],
    cities:[

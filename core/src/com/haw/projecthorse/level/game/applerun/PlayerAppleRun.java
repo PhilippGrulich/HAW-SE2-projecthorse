@@ -7,23 +7,36 @@ import com.haw.projecthorse.audiomanager.AudioManager;
 import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.player.PlayerImpl;
 
+/**
+ * AppleRun implementierung des Players.
+ * @author Lars
+ * @version 1.0
+ */
 public class PlayerAppleRun extends PlayerImpl implements Collidable {
 	private Rectangle hitbox;
 	private final Gamestate gamestate;
-	private final float HITBOX_HEIGTH_REDUCTION = 128; // Hardcoded: To reduce height of the player class
-	private final float HITBOX_WIDTH_REDUCTION = 48;
-	private final float HITBOX_LEFT_ADDITION = HITBOX_WIDTH_REDUCTION / 3.0f; // Additional px from left
-	private final float HITBOX_RIGHT_SUB = HITBOX_WIDTH_REDUCTION / 3.0f * 2.0f;
+	private static final float HITBOX_HEIGTH_REDUCTION = 128; // Hardcoded: To reduce height of the player class
+	private static final float HITBOX_WIDTH_REDUCTION = 48;
+	private static final float HITBOX_LEFT_ADDITION = HITBOX_WIDTH_REDUCTION / 3.0f; // Additional px from left
+	private static final float HITBOX_RIGHT_SUB = HITBOX_WIDTH_REDUCTION / 3.0f * 2.0f;
 	private Sound chewSound, hitSound;
 
-	public PlayerAppleRun(Gamestate gamestate) {
+	/**
+	* Constructor.
+	* @param gamestate gamestate
+	*/
+	public PlayerAppleRun(final Gamestate gamestate) {
 		this.gamestate = gamestate;
 		AudioManager audioManager = AudioManagerImpl.getInstance();
 		chewSound = audioManager.getSound("AppleRun", "chew.mp3");
 		hitSound = audioManager.getSound("AppleRun", "hit.mp3");
 	}
 
-	private void fireHitByEntity(Entity entity) {
+	/**
+	* Wenn der player von einer Entity getroffen wurde.
+	* @param entity Collidierte Entity
+	*/
+	private void fireHitByEntity(final Entity entity) {
 		// If hit by apple
 		// Add score
 		if (entity instanceof Apple) {
@@ -48,8 +61,12 @@ public class PlayerAppleRun extends PlayerImpl implements Collidable {
 		return hitbox;
 	}
 
+	/**
+	* Wenn der player von einer Entity getroffen wurde.
+	* @param otherObject Collidierte Entity
+	*/
 	@Override
-	public void fireIsHit(Collidable otherObject) {
+	public void fireIsHit(final Collidable otherObject) {
 		if (otherObject instanceof Entity) {
 			fireHitByEntity((Entity) otherObject);
 
