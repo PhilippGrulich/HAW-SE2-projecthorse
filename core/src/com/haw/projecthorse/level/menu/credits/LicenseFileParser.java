@@ -5,13 +5,18 @@ import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
 
+/**
+ * Eine Klasse, die einen Paser für die License Files bereit stellt.
+ * 
+ * @author Viktor
+ * @version 1
+ *
+ */
 public class LicenseFileParser {
 
 	/**
 	 * Hierüber kann bestimmt werden, welche Informationen der LicenseFilePaser
 	 * liefern soll.
-	 * 
-	 * @author Viktor
 	 *
 	 */
 	enum LicenseInfo {
@@ -28,30 +33,41 @@ public class LicenseFileParser {
 	 *
 	 */
 	class FileEndException extends Exception {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 6913712433069188209L;
 
 	}
 
 	private final Scanner scanner;
-	private final int ENTRYCOUNT = 5; // Anzahl der Spalten in den License Files
+	private static final int ENTRYCOUNT = 5; // Anzahl der Spalten in den
+												// License Files
 
-	public LicenseFileParser(FileHandle licenseFile) {
+	/**
+	 * Der Default Konstruktor.
+	 * 
+	 * @param licenseFile
+	 *            Das zu lesende License File
+	 */
+	public LicenseFileParser(final FileHandle licenseFile) {
 		scanner = new Scanner(licenseFile.read());
 	}
 
-	// Liest die nächste korrekte Zeile in ein ein StringArray ein, wirft eine
-	// Exception falls die Datei zuende ist
+	/**
+	 * Liest die nächste korrekte Zeile in ein ein StringArray ein.
+	 * 
+	 * @return Das StringArray.
+	 * @throws FileEndException
+	 *             Wird geworfen, wenn die Datei zuende ist
+	 */
+
 	private String[] parseLine() throws FileEndException {
 		String[] entries;
 		while (scanner.hasNextLine()) {
 			entries = scanner.nextLine().split(";");
 
 			// ignoriere Zeile falls sie nicht dem erwarteten Format entspricht
-			if (entries.length == ENTRYCOUNT)
+			if (entries.length == ENTRYCOUNT) {
 				return entries;
+			}
 		}
 		throw new FileEndException();
 	}
@@ -68,10 +84,11 @@ public class LicenseFileParser {
 	 * @return Kommaseparierte Informationszeilen in einem Array, Null falls
 	 *         Parameter ungültig
 	 */
-	public ArrayList<String> getLicenseInfos(LicenseInfo[] types,
-			boolean uniqueEntries) {
-		if (types == null || types.length < 1)
+	public ArrayList<String> getLicenseInfos(final LicenseInfo[] types,
+			final boolean uniqueEntries) {
+		if (types == null || types.length < 1) {
 			return null;
+		}
 
 		ArrayList<String> result = new ArrayList<String>();
 		String[] line;
@@ -90,8 +107,9 @@ public class LicenseFileParser {
 			}
 
 			String infoString = infos.substring(0, infos.length() - 2).trim();
-			if (!uniqueEntries || !result.contains(infoString))
+			if (!uniqueEntries || !result.contains(infoString)) {
 				result.add(infoString);
+			}
 		}
 
 		return result;
