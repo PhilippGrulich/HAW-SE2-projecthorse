@@ -18,12 +18,20 @@ import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.menu.credits.LicenseFileParser.LicenseInfo;
 import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
 
+/**
+ * Stellt einen einfachen Credit Screen dar, bestehend aus einem automatisch
+ * herabscrollenden Scrolleelement. Die Lizenzdanksagungen werden automatsich
+ * aus den Lizenzfiles eingelesen.
+ * 
+ * @author Viktor
+ *
+ */
 public class Credits extends Menu {
 
 	private Music music;
 
 	private final Stage stage;
-	
+
 	private final Image background;
 
 	private final VerticalGroup textContainer;
@@ -41,7 +49,8 @@ public class Credits extends Menu {
 		// stage initialisieren
 		stage = new Stage(getViewport());
 		InputManager.addInputProcessor(stage);
-		background = new Image(AssetManager.getTextureRegion("ui", "panel_beige"));
+		background = new Image(AssetManager.getTextureRegion("ui",
+				"panel_beige"));
 		background.setSize(width, height);
 		stage.addActor(background);
 
@@ -62,29 +71,29 @@ public class Credits extends Menu {
 
 		addHeadLine("\n\n\n\n\nDas Entwicklerteam");
 		addText("Fabian\nFrancis\nHuyen\nLars\nMaria\nOlli\nPhilipp\nViktor\n");
-		
+
 		addHeadLine("\"Projektinitiator\"");
 		addText("Prof. Dr. Olaf Zukunft\n");
-		
+
 		addHeadLine("\n-- Danksagungen --\n");
-		
+
 		addHeadLine("Grafiken (CC-0)");
 		addText(getEntries("pictures/cc-0_license.txt"));
-		
+
 		addHeadLine("Grafiken (CC-BY)");
 		addText(getEntries("pictures/cc-0_license.txt"));
-		
+
 		addHeadLine("Musik");
 		addText(getEntries("music/music.txt"));
-		
+
 		addHeadLine("Sound Effekte");
 		addText(getEntries("sounds/sounds.txt"));
-		
+
 		addHeadLine("Ein besonderer Dank\n geht an das \nLibGDX Team!");
-		
+
 	}
 
-	// fügt eine Formatierte Kopfzeile mit Zeilenumburch davor und danach hinzu
+	// fügt eine formatierte Kopfzeile mit Zeilenumbruch davor und danach hinzu
 	private void addHeadLine(String text) {
 		LabelStyle style = new LabelStyle(
 				AssetManager.getHeadlineFont(FontSize.FORTY), Color.GRAY);
@@ -94,43 +103,49 @@ public class Credits extends Menu {
 		textContainer.addActor(label);
 	}
 
+	// fügt eine formatierte Textzeile mit Zeilenumbruch danach hinzu
 	private void addText(String text) {
 		LabelStyle style = new LabelStyle(
 				AssetManager.getTextFont(FontSize.FORTY), Color.GRAY);
 		Label label = new Label(text, style);
 		label.setAlignment(Align.center);
-		
+
 		textContainer.addActor(label);
 
 	}
-	
-	private String getEntries(String filePath) {		
+
+	// liest die Authoren innerhalb eines License files mit Zeilenumbruch
+	// getrennt in einen String ein
+	private String getEntries(String filePath) {
 		StringBuilder entries = new StringBuilder();
-		LicenseFileParser parser = new LicenseFileParser(Gdx.files.internal(filePath));
+		LicenseFileParser parser = new LicenseFileParser(
+				Gdx.files.internal(filePath));
 		for (String line : parser.getLicenseInfos(
 				new LicenseInfo[] { LicenseInfo.AUTHOR }, true)) {
 			if (line.length() > 1) {
 				entries.append(line);
 				entries.append("\n");
 			}
-			
+
 		}
 
 		return entries.toString();
 	}
-	
-	
+
+	// realisiert automatisches Abwärts Scrollen
+	private void autoScroll(float delta) {
+		if (!scroller.isPanning() && scroller.getScrollY() < scroller.getMaxY()) {
+			scroller.setScrollY(scroller.getScrollY() + delta * 80);
+		}
+	}
 
 	@Override
 	protected void doRender(float delta) {
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		if (!scroller.isPanning() && scroller.getScrollY() < scroller.getMaxY()) {
-			scroller.setScrollY(scroller.getScrollY() + delta * 80);
-		}
-		
-		
+
+		autoScroll(delta);
+
 		stage.act(delta);
 		stage.draw();
 
