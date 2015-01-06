@@ -183,6 +183,7 @@ public abstract class Level implements Screen {
 	
 	public final void pause(boolean b){
 		overlayPaused = true;
+		pause();
 	}
 
 	protected abstract void doResume();

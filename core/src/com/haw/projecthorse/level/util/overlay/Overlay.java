@@ -75,7 +75,6 @@ public class Overlay extends Stage {
 	public final void disposePopup() {
 		this.popup.fadeOut();
 		this.level.resume(false);
-
 	}
 
 }
