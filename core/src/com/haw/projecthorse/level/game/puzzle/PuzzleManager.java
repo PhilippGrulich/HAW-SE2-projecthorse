@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
@@ -54,6 +53,7 @@ public class PuzzleManager extends Game {
 	static Sound win;
 	static Sound click;
 
+	ButtonOwnTextImage button_ok;
 	static int myWidth;
 	static int myHeight;
 
@@ -85,7 +85,11 @@ public class PuzzleManager extends Game {
 
 		AssetManager.loadSounds("puzzle");
 		AssetManager.loadMusic("puzzle");
-		addMusic("bett_pcm.wav", true);
+		
+		musik = audioManager.getMusic("puzzle", "bett_pcm.wav");
+		musik.play();
+		musik.setLooping(true);
+		
 		swipe = audioManager.getSound("puzzle", "swipe.wav");
 		win = audioManager.getSound("puzzle", "win.wav");
 		click = audioManager.getSound("puzzle", "click.wav");
@@ -104,7 +108,12 @@ public class PuzzleManager extends Game {
 
 	}
 
+	/**
+	 * erstelle eine Label und füge die in die zweite Stage, um die Anzahl der
+	 * Schritte beim puzzlen anzuzeigen
+	 */
 	public void addScore() {
+
 		BitmapFont font;
 		font = AssetManager.getTextFont(FontSize.FORTY);
 		label = new Label("", new Label.LabelStyle(font, Color.MAGENTA));
@@ -128,13 +137,19 @@ public class PuzzleManager extends Game {
 		}
 	}
 
+	/**
+	 * erstelle drei Buttons(vor, zurück und ok) setze jeweils die Größe und die
+	 * Position fest rufe die Methode addListener(...) auf füge alle drei in die
+	 * erste Stage
+	 * 
+	 */
 	private void createButtons() {
 		ButtonSmall button_next = new ButtonSmall(ButtonType.RIGHT);
 		ButtonSmall button_prev = new ButtonSmall(ButtonType.LEFT);
 
 		Drawable button_img = new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "panel_brown"));
-		ButtonOwnTextImage button_ok = new ButtonOwnTextImage("OK",
+		this.button_ok = new ButtonOwnTextImage("OK",
 
 		new ImageTextButton.ImageTextButtonStyle(
 				new TextButton.TextButtonStyle(button_img, button_img,
@@ -161,8 +176,10 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
+	 * rufe auf jedes Bild addListener(...) auf
+	 * 
 	 * fügt alle Puzzlebilder an der Position(90,22) mit der Größe(540,960) in
-	 * die Stage, keine Buttons
+	 * erste die Stage, keine Buttons
 	 * 
 	 * @param buttonname
 	 */
@@ -183,8 +200,8 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * Listener für pre-und next-Button, damit man die einzelne Bilder aussuchen
-	 * kann
+	 * Listener für vor-und zurück-Button, damit man die einzelne Bilder
+	 * aussuchen kann
 	 * 
 	 * @param button
 	 */
@@ -197,10 +214,12 @@ public class PuzzleManager extends Game {
 				switch (event.getDirection()) {
 				case LEFT:
 					changeImage(1);
+					blinc(button_ok);
 					swipe.play();
 					break;
 				case RIGHT:
 					changeImage(-1);
+					blinc(button_ok);
 					swipe.play();
 					break;
 				default:
@@ -239,8 +258,6 @@ public class PuzzleManager extends Game {
 				button_ok.removeListener(this);
 				puzzlePlayer.setActorSpeech("Es geht los!");
 				createPuzzle();
-				// firststage.dispose();
-
 			};
 		});
 
@@ -254,10 +271,19 @@ public class PuzzleManager extends Game {
 		});
 	}
 
+	/**
+	 * erzeuge die Klasse Puzzle
+	 */
 	public void createPuzzle() {
 		new Puzzle(this, this.chest);
 	}
 
+	/**
+	 * eine Hilfsmethode, die in addListener(...) benötigt wird, um das nächste
+	 * bzw. das vorherige Bild zu holen
+	 * 
+	 * @param delta
+	 */
 	private void changeImage(int delta) {
 		index = (index + delta) % imagelist.size();
 
@@ -267,17 +293,25 @@ public class PuzzleManager extends Game {
 		imagelist.get(index).toFront();
 	}
 
+	/**
+	 * lade das Hintergrundbild und füge das in die erste Stage
+	 */
 	private void addBackround() {
 
-		Image horse = new Image(AssetManager.getTextureRegion("puzzle",
+		Image backround = new Image(AssetManager.getTextureRegion("puzzle",
 				"bilderrahmen-pferd"));
-		horse.toBack();
-		horse.setName("backround");
+		backround.toBack();
+		backround.setName("backround");
 
-		firststage.addActor(horse);
+		firststage.addActor(backround);
 
 	}
 
+	/**
+	 * füge actor in die stage
+	 * @param stage
+	 * @param actor
+	 */
 	public static void addToStage(Stage stage, Actor actor) {
 		stage.addActor(actor);
 	}
@@ -295,8 +329,6 @@ public class PuzzleManager extends Game {
 	@Override
 	protected void doDispose() {
 		musik.pause();
-		// win.dispose();
-		// swipe.dispose();
 		firststage.dispose();
 		secondstage.dispose();
 
@@ -329,28 +361,23 @@ public class PuzzleManager extends Game {
 	@Override
 	protected void doResume() {
 		// TODO Auto-generated method stub
-		
-		
+
 	}
 
 	public static Stage getSecondstage() {
 		return secondstage;
 	}
 
+	/**
+	 * wird benötigt, um hochgezählte Anzahl der Schritte beim puzzlen anzuzeigen
+	 * @param newText
+	 */
 	public void setLabelText(String newText) {
 		label.setText(newText);
 	}
 
-	private void addMusic(String musicname, boolean loop) {
-
-		musik = audioManager.getMusic("puzzle", musicname);
-		musik.play();
-		musik.setLooping(loop);
-
-	}
-
 	/**
-	 * simuliert ein einmaliges Blinken des ok_button's beim Bilderauswahl
+	 * simuliert ein einmaliges Blinken des ok_button's bei der Bilderauswahl
 	 * 
 	 * @param button
 	 */
@@ -364,7 +391,6 @@ public class PuzzleManager extends Game {
 	 */
 	private void replay() {
 		replay = new Dialog("Du hast gewonnen!!!\n Noch eine Runde?");
-
 		replay.addButton("ja", new ChangeListener() {
 
 			@Override
@@ -410,6 +436,7 @@ public class PuzzleManager extends Game {
 	public static Music getMusik() {
 		return musik;
 	}
+
 	public Overlay getOverlay() {
 		return overlay;
 	}
@@ -417,5 +444,5 @@ public class PuzzleManager extends Game {
 	public static Dialog getReplay() {
 		return replay;
 	}
-	
+
 }
