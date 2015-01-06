@@ -6,7 +6,7 @@ import java.util.Scanner;
 import com.badlogic.gdx.files.FileHandle;
 
 /**
- * Eine Klasse, die einen Paser für die License Files bereit stellt.
+ * Eine Klasse, die einen Parser für die License Files bereit stellt.
  * 
  * @author Viktor
  * @version 1
