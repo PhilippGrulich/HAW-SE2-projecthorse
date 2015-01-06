@@ -93,7 +93,7 @@ public abstract class Level implements Screen {
 
 	public final void setLevelID(String newID) {
 		if (levelID != null) {
-			System.out.println("ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
+			Gdx.app.log("DEBUG", "ACHTUNG Level id: " + levelID + " umbenannt in: " + newID);
 		}
 
 		levelID = newID;

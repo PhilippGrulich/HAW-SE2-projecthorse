@@ -3,7 +3,6 @@ package com.haw.projecthorse.level.menu.mainmenu;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -138,7 +137,6 @@ public class MainMenu extends Menu {
 	private void setupEventListeners() {
 		buttonCredits.addListener(new ChangeListener() {
 			public void changed(final ChangeEvent event, final Actor actor) {
-				System.out.println("buttonCredits pressed");
 				loadCredits();
 			}
 
@@ -156,8 +154,6 @@ public class MainMenu extends Menu {
 		table.setHeight((float) (height * 0.5));
 		table.setY((height / 2) - table.getHeight() / 2);
 		table.setWidth(width);
-		System.out.println(table.getHeight());
-		System.out.println(table.getY());
 	}
 	
 	@Override
