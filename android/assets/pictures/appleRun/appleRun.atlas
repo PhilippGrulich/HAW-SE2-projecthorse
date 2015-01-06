@@ -32,16 +32,30 @@ apple4
   orig: 128, 128
   offset: 0, 0
   index: -1
-branch1
+appleGold
   rotate: false
   xy: 262, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-branch2
+branch1
   rotate: false
   xy: 262, 2
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+branch2
+  rotate: false
+  xy: 392, 132
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+branchGold
+  rotate: false
+  xy: 392, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

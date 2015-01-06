@@ -70,8 +70,6 @@ public class SplashScreen implements Screen {
 		table.setHeight((float) (height * 0.1));
 		table.setY((height / 2) - table.getHeight() / 2);
 		table.setWidth(width);
-		System.out.println(table.getHeight());
-		System.out.println(table.getY());
 	}
 
 	private void CreateButton() {

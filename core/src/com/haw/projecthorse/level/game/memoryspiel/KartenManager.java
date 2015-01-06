@@ -132,6 +132,8 @@ public class KartenManager extends Thread {
 			k2.setState(CardState.TEMPORARILY_CLOSED);
 			j += 2;
 		}
+		
+		setScore(0);
 	}
 
 	public int getScore() {

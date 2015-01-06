@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.haw.projecthorse.assetmanager.AssetManager;
@@ -21,6 +19,7 @@ import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
+import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
 import com.haw.projecthorse.lootmanager.Lootable;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
@@ -156,19 +155,17 @@ public class LootGallery extends Menu {
 	}
 
 	private void initializeUiElements() {
-		ScrollPane tableContainer;
-		ScrollPaneStyle style = new ScrollPaneStyle();
-		// style.background = new TextureRegionDrawable(
-		// AssetManager.getTextureRegion("ui", "panel_beige"));
+		DefaultScrollPane tableContainer;
 
 		tableWidth = width - 150;
 		tableHeight = height - 300;
 		lootTable = new VerticalGroup();
 		lootTable.space(10);
 		lootTable.align(Align.left + Align.top);
+		lootTable.setWidth(tableWidth);
 
-		tableContainer = new ScrollPane(lootTable, style);
-		tableContainer.setBounds(75, 50, tableWidth, tableHeight);
+		tableContainer = new DefaultScrollPane(lootTable, tableHeight, tableWidth);
+		tableContainer.setPosition(75, 50);
 		tableContainer.toFront();
 
 		stage.addActor(tableContainer);

@@ -6,7 +6,7 @@ https://github.com/PhilippGrulich/HAW-SE2-Projekt/wiki
 
 
 
-Copyright 2014 HAW-SE2-Projekt
+Copyright 2014 HAW-SE2-ProjectHorse
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

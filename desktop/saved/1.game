@@ -3,7 +3,9 @@ lootCollection: [
 	{
 		class: com.haw.projecthorse.player.race.RaceLoot,
 		achievedDate: {},
-		race: FRIESE
+		name: Haflinger,
+		description: "",
+		race: HAFLINGER
 	},
 	{
 		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
@@ -60,7 +62,7 @@ lootCollection: [
 		description: "Eine leckere Möhre für dein Pferd."
 	}
 ],
-name: sasdsd,
+name: Maria,
 ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl

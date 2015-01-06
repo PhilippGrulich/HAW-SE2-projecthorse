@@ -14,14 +14,13 @@ public class RaceLoot extends Loot {
 	}
 	
 	public RaceLoot(HorseRace race) {
-		super();
+		super(new Race(race).name(), "");
 		this.race = race;
 	}
 
 	@Override
 	protected LootImage getLootImage() {
-		// TODO Richtiges Bild einbauen
-		return new LootImage("ui", "buttonCancel");
+		return new LootImage("player" + race().name(), "idle-1");
 	}
 
 	@Override

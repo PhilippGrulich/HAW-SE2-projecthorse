@@ -7,6 +7,7 @@ import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.lootmanager.popups.AchievmentPopup;
 import com.haw.projecthorse.lootmanager.popups.LootPopup;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
@@ -55,6 +56,7 @@ public class Chest {
 		String message = loot.getDescription();
 		if (message != null) {
 			// TODO: Erfolg enzeigen
+			overlay.addActor(new AchievmentPopup(loot.getName(), loot.getLootImage().getDrawable(), overlay.getWidth(), overlay.getHeight()));
 		}
 	}
 }

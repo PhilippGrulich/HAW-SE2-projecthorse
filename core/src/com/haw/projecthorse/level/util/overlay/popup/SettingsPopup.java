@@ -79,9 +79,9 @@ public class SettingsPopup extends Popup implements Observer {
 	private void setTextes() {
 		if (accButton != null) {
 			if (setting.getAccelerometerState()) {
-				accButton.setText("Neigungssensoren ist AN");
+				accButton.setText("Neigungssensor ist AN");
 			} else {
-				accButton.setText("Neigungssensoren ist AUS");
+				accButton.setText("Neigungssensor ist AUS");
 			}
 		}
 		if (setting.getMusicState()) {
