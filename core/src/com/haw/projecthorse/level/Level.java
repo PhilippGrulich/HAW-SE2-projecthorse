@@ -34,6 +34,7 @@ public abstract class Level implements Screen {
 	// ####################################
 
 	private Boolean paused = false;
+	private boolean overlayPaused = false;
 	private String levelID = null;
 	private Viewport viewport;
 	private OrthographicCamera cam;
@@ -116,7 +117,7 @@ public abstract class Level implements Screen {
 		// Hierdurch wird sichergestellt das die Interaktionen
 
 		overlay.act(delta);
-		if (paused) {
+		if (paused || overlayPaused) {
 			delta = 0;
 		}
 		doRender(delta);
@@ -179,13 +180,24 @@ public abstract class Level implements Screen {
 		paused = true;
 		doPause();
 	}
+	
+	public final void pause(boolean b){
+		overlayPaused = true;
+	}
 
 	protected abstract void doResume();
 
 	@Override
 	public final void resume() {
-		paused = false;
-		doResume();
+		if(!overlayPaused){
+			paused = false;
+			doResume();
+		}
+	}
+	
+	public final void resume(boolean b){
+		overlayPaused = b;
+		resume();
 	}
 
 	protected Viewport getViewport() {

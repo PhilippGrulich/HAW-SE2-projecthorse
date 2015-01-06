@@ -66,7 +66,7 @@ public class Overlay extends Stage {
 		popup = p;
 
 		this.addActor(p);
-		this.level.pause();
+		this.level.pause(true);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class Overlay extends Stage {
 	 */
 	public final void disposePopup() {
 		this.popup.fadeOut();
-		this.level.resume();
+		this.level.resume(false);
 
 	}
 
