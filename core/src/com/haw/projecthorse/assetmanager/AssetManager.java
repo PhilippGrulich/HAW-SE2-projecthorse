@@ -392,7 +392,7 @@ public final class AssetManager {
 	}
 
 	/**
-	 * Diese Methode läd einen TexturAdlas falls dieser noch nicht geladen
+	 * Diese Methode läd einen TexturAtlas falls dieser noch nicht geladen
 	 * wurde. Es wird nicht auf die Fertigstellung des Ladens gewartet.
 	 * 
 	 * @param levelID LevelID des Levels

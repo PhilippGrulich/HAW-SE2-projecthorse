@@ -10,13 +10,13 @@ import java.util.HashMap;
 public interface GameObject {
 
 	/**
-	 * Liefert die LevelID zurück
+	 * Liefert die LevelID zurÃ¼ck
 	 * @return {@link String}
 	 */
 	String getLevelID();
 
 	/**
-	 * Liefert den Titel des Spiels zurück
+	 * Liefert den Titel des Spiels zurÃ¼ck
 	 * @return {@link String}
 	 */
 	String getGameTitle();

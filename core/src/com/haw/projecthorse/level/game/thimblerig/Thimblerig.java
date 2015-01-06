@@ -34,7 +34,6 @@ import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.race.HorseRace;
-import com.haw.projecthorse.player.race.Race;
 import com.haw.projecthorse.player.race.RaceLoot;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
@@ -142,7 +141,7 @@ public class Thimblerig extends Game{
 		this.choiceCounter = 0;
 		this.roundFinished = false;
 		this.scoreStr = "Score: ";
-		this.wins = 29;
+		this.wins = 0;
 		this.hatIndexList = new ArrayList<Integer>();
 		
 		this.justWonLoots = (List<ThimblerigLoot>) getThimblerigLoots();		
@@ -167,7 +166,6 @@ public class Thimblerig extends Game{
 		addActorsToStage();
 		initProcessorAndGestureDetector();
 		initLoots();
-		System.out.println("num: " + this.rightNum);
 	}
 
 	/**
@@ -265,7 +263,7 @@ public class Thimblerig extends Game{
 		default:
 			break;
 		}
-		
+
 		this.newGame.setVisible(true);
 		this.exitGame.setVisible(true);
 		this.roundFinished = true;
@@ -323,8 +321,7 @@ public class Thimblerig extends Game{
 	 */
 	private void initPlayer(){
 		this.pl = new PlayerImpl();
-		//TODO: this.pl.scaleBy(0.5f);
-		this.pl.setScale(1.2f);
+		this.pl.scaleBy(-0.5f);
 		this.pl.setVisible(false);
 	}
 	
@@ -556,21 +553,21 @@ public class Thimblerig extends Game{
 	private void initLoots(){
 		this.possibleWinLoots = new ArrayList<Loot>();
 		
-		this.possibleWinLoots.add(new ThimblerigLoot("lolli", "kleiner Dauerlutscher"
+		this.possibleWinLoots.add(new ThimblerigLoot("Lolli", "für zwischendurch"
 				, "noonespillow_Lollipop"));
-		this.possibleWinLoots.add(new ThimblerigLoot("suger", "etwas Würfelzucker"
+		this.possibleWinLoots.add(new ThimblerigLoot("Zucker", "etwas süßes fürs Pferd"
 				, "Sugar_cube"));
-		this.possibleWinLoots.add(new ThimblerigLoot("ballon", "leichter Ballon"
+		this.possibleWinLoots.add(new ThimblerigLoot("Ballons", "eine Hand voll davon"
 				, "Balionai"));
-		this.possibleWinLoots.add(new ThimblerigLoot("möhre", "gesunde Möhre"
+		this.possibleWinLoots.add(new ThimblerigLoot("Möhre", "eine gesunde Mahlzeit"
 				, "2011-02-15_Cartoon_carrot"));
-		this.possibleWinLoots.add(new ThimblerigLoot("miniPferd", "süßes Mini-Pferd"
+		this.possibleWinLoots.add(new ThimblerigLoot("MiniPferd", "ein putziges Spielzeug"
 				, "WOOD_HORSE"));
-		this.possibleWinLoots.add(new ThimblerigLoot("hufeisen", "schweres Hufeisen"
+		this.possibleWinLoots.add(new ThimblerigLoot("Hufeisen", "als Glücksbringer"
 				, "horseshoe"));
-		this.possibleWinLoots.add(new ThimblerigLoot("hut", "glückbringender Hut"
+		this.possibleWinLoots.add(new ThimblerigLoot("Hut", "eines frechen Koboldes"
 				, "liftarn_Green_hat"));
-		this.possibleWinLoots.add(new ThimblerigLoot("heu", "kraftbringendes Heu"
+		this.possibleWinLoots.add(new ThimblerigLoot("Heu", "kraftbringendes Futter"
 				, "mcol_haystack"));
 		
 		isMinscored = false;
@@ -596,25 +593,22 @@ public class Thimblerig extends Game{
 	 */
 	private void checkPrize(){
 		/**
-		 * wurden beide Werte auf -2 gesetzt, dann darf entsprechend keine Ausgabe
-		 * oder ein hinzufuegen von Loot/Pferd erfolgen
+		 * wurden indexOfLoot auf -2 gesetzt, dann darf entsprechend keine Ausgabe
+		 * oder ein hinzufuegen eines Loots erfolgen
 		 */
 		int indexOfLoot = -2;
-		//int indexOfHorseLoot = -2;
 		int maxNumberOfLootsMinscore = (this.possibleWinLoots.size() / 2) - 1;
 		switch(this.wins){
 		case MINSCORE:
 			if(!isMinscored){
 				isMinscored = true;
 				indexOfLoot = getLootIndexMinscore(maxNumberOfLootsMinscore);
-				//indexOfHorseLoot = -2;
 			}
 			break;
 		case MIDSCORE:
 			if(!isMidScored){
 				isMidScored = true;
 				indexOfLoot = getLootIndexMidscore(maxNumberOfLootsMinscore);		
-				//indexOfHorseLoot = -2;
 			}
 			break;
 		case MAXSCORE:
@@ -623,14 +617,10 @@ public class Thimblerig extends Game{
 				isMaxScored = true;
 				indexOfLoot = -2;
 				
-				//indexOfHorseLoot = getHorseIndexMaxscore();
-				
-				System.out.println(probability);
 				//eine 20%ige Wahrscheinlichkeit, dass eine Pferderasse gewonnen werden kann
 				//das Pferd darf natuerlich noch nicht gewonnen worden sein
-				if(probability <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.SHETTI)){
+				if(probability <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(new RaceLoot(HorseRace.SHETTI))){
 					this.chest.addLootAndShowAchievment(new RaceLoot(HorseRace.SHETTI));
-					//TODO: pferderasse holen, abspeichern und loot-dialog anzeigen	
 				}
 				else{
 					final Dialog d = new Dialog("Entwerder hattest du\nkein Glück,\noder du bist\nbereits "
@@ -660,10 +650,7 @@ public class Thimblerig extends Game{
 		 * bereits gewonnen und ein entsprechender Dialog erscheint
 		 */
 		if (indexOfLoot > -1){
-			//this.chest.addLoot(this.possibleWinLoots.get(indexOfLoot));
-			//this.chest.showAllLoot();
 			this.chest.addLootAndShowAchievment(this.possibleWinLoots.get(indexOfLoot));
-			//TODO: loot-dialog anzeigen....
 		}
 		else if(indexOfLoot == -1){
 			final Dialog d = new Dialog("Bei dieser Scoregrenze\n kannst du leider\n"
@@ -679,52 +666,6 @@ public class Thimblerig extends Game{
 			d.setVisible(true);
 			this.stage.addActor(d);
 		}
-		
-		/**
-		 * Wenn Maxscore erreicht wurde, dann kann eine Pferderasse gewonnen werden.
-		 * Sonst, erscheint ein Dialog-Fenster mit dem Hinweis, dass keine Pferderasse
-		 * mehr gewonnen werden kann
-		 */
-		/*if(indexOfHorseLoot > -1){
-			float probability = this.rnd.nextFloat();
-			System.out.println(probability);
-			//eine 20%ige Wahrscheinlichkeit, dass eine Pferderasse gewonnen werden kann
-			//das Pferd darf natuerlich noch nicht gewonnen worden sein
-			if(probability <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.SHETTI)){
-				//SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class);
-				this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.SHETTI)));
-				//TODO: pferderasse holen, abspeichern und loot-dialog anzeigen	
-			}
-			else{
-				final Dialog d = new Dialog("Entwerder hattest du kein Glück,\noder du bist bereits "
-						+ "im Besitz eines Shettis.");
-				d.addButton("na gut..", new ChangeListener(){
-					@Override
-					public void changed(final ChangeEvent event, final Actor actor) {
-						if(!isPaused){
-							d.setVisible(false);
-						}
-					}
-				});
-				d.setVisible(true);
-				this.stage.addActor(d);
-			}
-		}
-		else if(indexOfHorseLoot == -1){
-			final Dialog d = new Dialog("Du hast bereits\nalle Pferderassen gewonnen.\n"
-					+ "Aber vielleicht kannst\n du noch weitere Gegenstände\n"
-					+ "in diesem Minispiel gewinnen!");
-			d.addButton("ist ok...", new ChangeListener(){
-				@Override
-				public void changed(final ChangeEvent event, final Actor actor) {
-					if(!isPaused){
-						d.setVisible(false);
-					}
-				}
-			});
-			d.setVisible(true);
-			this.stage.addActor(d);
-		}	*/
 	}
 	
 	/**
@@ -770,20 +711,6 @@ public class Thimblerig extends Game{
 		}
 		return index;
 	}
-	
-	/**
-	 * Wurde der Maxscore erreicht, wird ermittelt, ob eine Pferderasse gewonnen 
-	 * werden kann. 
-	 * @return Index des Pferde, welches gewonnen wurde. -1, sonst, wenn bereits
-	 * alle Pferderassen in der Loot-Galerie vorhanden sind
-	 */
-	/*private int getHorseIndexMaxscore(){
-		int index = -1;
-		//TODO: ueber Lootliste iterieren und pruefen, ob die naechste Pferderasse
-		//bereits vorhanden. -> sind pferde in einer extra liste? oder muss ueber komplette 
-		//liste iteriert werden?
-		return index;
-	}*/
 	
 	/**
 	 * Generiert die ID des Hutes unter der das Pferd versteckt ist.

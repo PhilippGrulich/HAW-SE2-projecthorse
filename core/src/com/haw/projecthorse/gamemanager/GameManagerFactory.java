@@ -3,7 +3,7 @@ package com.haw.projecthorse.gamemanager;
 public abstract class GameManagerFactory {
 
 	/**
-	 * Liefert eine Instanz des Gamemanagers zurück. *
+	 * Liefert eine Instanz des Gamemanagers zurÃ¼ck. *
 	 * 
 	 * @return {@link GameManager}
 	 */

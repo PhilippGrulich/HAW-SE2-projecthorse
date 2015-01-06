@@ -49,8 +49,8 @@ public abstract class Entity extends Image implements Collidable {
 	}
 	
 	public Rectangle getHitbox() {
-		// TODO check if coords are absolute. Wenn coords relativ könnten evtl. Gegenstände collidieren die sich gar nicht überschneiden
-		// weil die Gegenstände beide relativ an pos 10,10 liegen
+		// TODO check if coords are absolute. Wenn coords relativ kÃ¶nnten evtl. GegenstÃ¤nde collidieren die sich gar nicht Ã¼berschneiden
+		// weil die GegenstÃ¤nde beide relativ an pos 10,10 liegen
 		// Evtl. hitbox nur updaten wenn sich was bewegt hat? Schneller?
 		hitbox.x = this.getX();
 		hitbox.y = this.getY();
