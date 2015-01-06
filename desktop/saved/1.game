@@ -60,11 +60,19 @@ lootCollection: [
 		name: Haflinger,
 		race: HAFLINGER,
 		description: ""
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Shetti,
+		race: SHETTI,
+		description: ""
 	}
 ],
 name: Maria,
 ID: 1,
 horse: {
-	class: com.haw.projecthorse.savegame.json.HorseImpl
+	class: com.haw.projecthorse.savegame.json.HorseImpl,
+	race: SHETTI
 }
 }
