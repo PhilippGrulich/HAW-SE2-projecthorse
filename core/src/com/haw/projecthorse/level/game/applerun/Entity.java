@@ -43,10 +43,12 @@ public abstract class Entity extends Image implements Collidable {
 		pos_y = (((float) Math.random()) * 200f) + 1000;
 		this.setPosition(pos_x, pos_y);
 	}
-	// Bounding box for collision detection
-	private void updateBounds() {
-		this.setBounds(getX(), getY(), getImageWidth(), getImageHeight());
-	}
+	
+	// auskommentiert, da ungenutzt 
+//	// Bounding box for collision detection
+//	private void updateBounds() {
+//		this.setBounds(getX(), getY(), getImageWidth(), getImageHeight());
+//	}
 	
 	public Rectangle getHitbox() {
 		// TODO check if coords are absolute. Wenn coords relativ könnten evtl. Gegenstände collidieren die sich gar nicht überschneiden
@@ -66,10 +68,8 @@ public abstract class Entity extends Image implements Collidable {
 
 		// This is hit by "byActor";
 		// If other is pferd -> deal with it / else bla
-		// System.out.println("actor collided");
 		// if(otherObject instanceof PlayerAppleRun){
 		// ((PlayerAppleRun) otherObject).fireHitByEntity(this);
-		// System.out.println("Collided with player object");
 		// }
 
 	}

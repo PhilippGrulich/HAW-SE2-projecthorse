@@ -2,6 +2,7 @@ package com.haw.projecthorse.level.game.applerun;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -20,8 +21,6 @@ public class EntityGroup extends Group{
 			super.addActor(actor);
 		}
 		else{
-//			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
-			//throw new Exception("Only Entities allowed");
 			throw new IllegalArgumentException("Only Entities allowed");
 		}
 		
@@ -39,8 +38,6 @@ public class EntityGroup extends Group{
 			super.addActorAt(index, actor);
 		}
 		else{
-//			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
-
 			throw new IllegalArgumentException("Only Entities allowed");
 		}
 		
@@ -54,8 +51,7 @@ public class EntityGroup extends Group{
 			super.addActorBefore(actorBefore, actor);
 		}
 		else{
-			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
-			//throw new Exception("Only Entities allowed");
+			Gdx.app.log("WARNING", "Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
 		}
 		
 	}
@@ -68,7 +64,6 @@ public class EntityGroup extends Group{
 			super.addActorAfter(actorAfter, actor);
 		}
 		else{
-//			System.out.println("Only entities allowed. Ignored adding of Actor-Element inside this Entity group");
 			throw new IllegalArgumentException("Only Entities allowed");
 		}
 		
@@ -83,7 +78,7 @@ public class EntityGroup extends Group{
 				entityList.add((Entity)elem);
 			}
 			else{
-				System.out.println("Non-Entity inside EntityGroup !!! Shouldn't have happened o.O");
+				Gdx.app.log("WARNING", "Non-Entity inside EntityGroup !!! Shouldn't have happened o.O");
 			}
 				
 		}
