@@ -22,6 +22,10 @@
          			   						Muenchen,965,255"
          }
       },
+	  {
+         levelID:"credits",
+         className:"com.haw.projecthorse.level.menu.credits.Credits"
+      }
 
    ],
    cities:[

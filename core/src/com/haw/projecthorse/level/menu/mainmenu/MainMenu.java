@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
@@ -127,9 +128,7 @@ public class MainMenu extends Menu {
 	}
 
 	private void loadCredits() {
-		// TODO: Implement Creditscreen
-
-		Gdx.app.log("DEBUG", "CreditScreen not yet implemented - Todo");
+		GameManagerFactory.getInstance().navigateToLevel("credits");
 	}
 	
 	private void addButtonSpielListener(ImageTextButton button ,int saveGameID) {
