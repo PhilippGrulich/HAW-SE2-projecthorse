@@ -33,7 +33,7 @@ public class MainMenu extends Menu {
 
 	private ImageTextButton[] buttonsSpiel;
 	private ImageTextButton buttonCredits;
-	
+
 	private Music music;
 
 	private Player player;
@@ -52,45 +52,43 @@ public class MainMenu extends Menu {
 
 		player = new PlayerImpl();
 		player.setPosition(0, 0.13f * height);
-//		player.scaleBy(0.5F);
+		// player.scaleBy(0.5F);
 
 		player.setAnimationSpeed(0.4f);
 		stage.addActor(player);
 
 		ParallelAction toRight = Actions.parallel(Actions.moveTo(width + 50, player.getY(), moveToDuration),
 				new AnimationAction(Direction.RIGHT, moveToDuration));
-		ParallelAction toLeft = Actions.parallel(Actions.moveTo(-100 - player.getWidth(), player.getY(),
-				moveToDuration), new AnimationAction(Direction.LEFT, moveToDuration));
-		
+		ParallelAction toLeft = Actions.parallel(
+				Actions.moveTo(-100 - player.getWidth(), player.getY(), moveToDuration), new AnimationAction(
+						Direction.LEFT, moveToDuration));
+
 		player.addAction(Actions.forever(Actions.sequence(toRight, toLeft)));
-		
+
 		AssetManager.loadMusic("mainMenu");
 		AssetManager.loadSounds("worldmap");
-		
+
 		music = audioManager.getMusic("mainMenu", "belotti.mp3");
-		
+
 		if (!music.isPlaying()) {
 			music.setLooping(true);
 			music.play();
 		}
+
 	}
 
 	private void addBackground() {
 
-		EndlessBackground background = new EndlessBackground(width,
-				AssetManager.getTextureRegion("menu", "sky"), 30);
+		EndlessBackground background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "sky"), 30);
 		stage.addActor(background);
 
-		background = new EndlessBackground(width,
-				AssetManager.getTextureRegion("menu", "second_grass"), 0);
+		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "second_grass"), 0);
 		stage.addActor(background);
 
-		background = new EndlessBackground(width,
-				AssetManager.getTextureRegion("menu", "first_grass"), 0);
+		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "first_grass"), 0);
 		stage.addActor(background);
 
-		background = new EndlessBackground(width,
-				AssetManager.getTextureRegion("menu", "ground"), 0);
+		background = new EndlessBackground(width, AssetManager.getTextureRegion("menu", "ground"), 0);
 		stage.addActor(background);
 
 	}
@@ -102,23 +100,23 @@ public class MainMenu extends Menu {
 		ImageTextButton buttonSpiel;
 		String buttonText;
 		int gameID = 0;
-		
+
 		for (int i = 0; i < 3; i++) {
 			if (gamesIterator.hasNext()) {
 				gameID = gamesIterator.next();
 				buttonText = games.get(gameID);
 			} else {
-				gameID = (games.containsKey(i)) ? 2*i : i; 
-				buttonText = "Spielstand " + (i+1);
+				gameID = (games.containsKey(i)) ? 2 * i : i;
+				buttonText = "Spielstand " + (i + 1);
 			}
-			
+
 			buttonSpiel = new ButtonLarge(buttonText, ButtonLarge.ButtonColor.LIGHT_BROWN);
 			table.addActor(buttonSpiel);
 			buttonSpiel.toFront();
 			addButtonSpielListener(buttonSpiel, gameID);
 			buttonsSpiel[i] = buttonSpiel;
 		}
-		
+
 		// der Credits-Button
 		buttonCredits = new ButtonLarge("Credits", ButtonLarge.ButtonColor.LIGHT_BROWN);
 		table.addActor(buttonCredits);
@@ -131,9 +129,9 @@ public class MainMenu extends Menu {
 
 		Gdx.app.log("DEBUG", "CreditScreen not yet implemented - Todo");
 	}
-	
-	private void addButtonSpielListener(ImageTextButton button ,int saveGameID) {
-		button.addListener(new SavegameButtonListener(saveGameID,overlay));
+
+	private void addButtonSpielListener(ImageTextButton button, int saveGameID) {
+		button.addListener(new SavegameButtonListener(saveGameID, overlay));
 	}
 
 	private void setupEventListeners() {
@@ -160,7 +158,7 @@ public class MainMenu extends Menu {
 		System.out.println(table.getHeight());
 		System.out.println(table.getY());
 	}
-	
+
 	@Override
 	public void doRender(final float delta) {
 

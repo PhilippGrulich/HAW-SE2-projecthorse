@@ -1,7 +1,10 @@
 package com.haw.projecthorse.level.menu.worldmap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -10,10 +13,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -65,6 +70,7 @@ public class WorldMap extends Menu {
 	private HashMap<String, int[]> cityInfos;
 	private boolean cityChanged;
 	private Image[] lines;
+	private BezierPath[] beziers;
 	private ButtonOwnImage[] cityPoints;
 	private float cityScaleMax, cityScaleMin;
 	private boolean cityScaleDirection;
@@ -88,6 +94,8 @@ public class WorldMap extends Menu {
 											// Punkt zum nächsten benötigt
 
 	private Music music;
+
+	private String currentCity;
 
 	public WorldMap() throws LevelNotFoundException {
 		super();
@@ -175,8 +183,8 @@ public class WorldMap extends Menu {
 		pointImg.setScale(0.5f * (width / 720));
 		player.setColor(1, 1, 1, 0);
 		player.scaleBy(-1.0f);
-
-		int[] cityCoordinates = cityInfos.get(prefs.getString("lastCity"));
+		currentCity = prefs.getString("lastCity");
+		int[] cityCoordinates = cityInfos.get(currentCity);
 
 		player.setPosition(cityCoordinates[0] - player.getWidth() / 2 * player.getScaleX(), cityCoordinates[1]);
 
@@ -223,12 +231,18 @@ public class WorldMap extends Menu {
 		cityScaleDirection = true;
 		cityPoints = new ButtonOwnImage[cities.length];
 		lines = new Image[cities.length - 1];
-
+		beziers = new BezierPath[cities.length - 1];
 		// Linien anlegen
 		for (int i = 1; i < cities.length; i++) {
 			Image lineImg = new Image(AssetManager.getTextureRegion("worldmap", "flatLight09"));
 			lineImg.setColor(1, 1, 1, 0);
 
+			BezierPath bezierPath = new BezierPath(lineImg.getDrawable(), new Vector2(cityInfos.get(cities[i - 1])[0],
+					cityInfos.get(cities[i - 1])[1]), new Vector2(cityInfos.get(cities[i])[0],
+					cityInfos.get(cities[i])[1]));
+
+			stage.addActor(bezierPath);
+			beziers[i - 1] = bezierPath;
 			// benötige Größe und Drehwinkel finden und setzen, ausgehend von
 			// einem rechtwinkligen Dreieck
 			double triangleWidth = cityInfos.get(cities[i])[0] - cityInfos.get(cities[i - 1])[0];
@@ -395,33 +409,91 @@ public class WorldMap extends Menu {
 
 	}
 
+	private Action createMoveAction(Vector2 source, Vector2 target, float duration) {
+		MoveByAction movement = new MoveByAction();
+		movement.setAmount(target.x - source.x, target.y - source.y);
+		movement.setDuration(duration);
+		// MoveToAction movement = Actions.moveTo(pathToFollow.get(i +
+		// 1).x, pathToFollow.get(i + 1).y,
+		// PLAYERSPEED / pathToFollow.size());
+		// Direction animationDirection = WorldMapUtils.getDirection(source,
+		// target);
+		// AnimationAction animationRun = new
+		// AnimationAction(animationDirection, duration);
+
+		ParallelAction actionGroup = new ParallelAction();
+		actionGroup.addAction(movement);
+
+		// actionGroup.addAction(animationRun);
+		return actionGroup;
+	}
+
 	private void movePlayer(String city) {
 		int[] cityCoordinates = cityInfos.get(city);
 
-		Vector2 source = new Vector2(player.getX() + player.getWidth() / 2 * player.getScaleX(), player.getY());
+		int[] oldCityCoordinates = cityInfos.get(currentCity);
+		Vector2 source = new Vector2(oldCityCoordinates[0], oldCityCoordinates[1]);
 		Vector2 target = new Vector2(cityCoordinates[0], cityCoordinates[1]);
 
-		Direction animationDirection = WorldMapUtils.getDirection(source, target);
-		AnimationAction animationRun = new AnimationAction(animationDirection, PLAYERSPEED);
+		List<Vector2> pathToFollow = null;
+		for (BezierPath bezier : beziers) {
+			if (source.equals(bezier.getSource()) && target.equals(bezier.getTarget())) {
+				pathToFollow = bezier.getPoins();
+			}
+		}
 
-		// Weggelassen, da alleine schon die Existens einer Idle AnimationAction
-		// während der Abarbeitung einer anderen AnimationAction
-		// stand 14.12.14 zum Fehler führt
-		// AnimationAction animationIdle = new
-		// AnimationAction(WorldMapUtils.getIdleDirection(animationDirection));
-		// SequenceAction animationSequence = new SequenceAction(animationRun,
-		// animationIdle);
-
-		MoveByAction movement = new MoveByAction();
-		movement.setAmount(target.x - source.x, target.y - source.y);
-		movement.setDuration(PLAYERSPEED);
-
+		if (pathToFollow == null) {
+			for (BezierPath bezier : beziers) {
+				if (source.equals(bezier.getTarget()) && target.equals(bezier.getSource())) {
+					pathToFollow = new ArrayList<Vector2>(bezier.getPoins());
+					Collections.reverse(pathToFollow);
+				}
+			}
+		}
 		player.clearActions();
 		player.setAnimationSpeed(1 - PLAYERSPEED / 2.5f);
-		player.addAction(movement);
-		// player.addAction(animationSequence);
-		player.addAction(animationRun);
+		if (pathToFollow != null) {
+			SequenceAction sequence = new SequenceAction();
+			for (int i = 0; i < pathToFollow.size() - 1; i++) {
+				Action action = createMoveAction(pathToFollow.get(i), pathToFollow.get(i + 1), PLAYERSPEED
+						/ pathToFollow.size());
+				sequence.addAction(action);
+			}
+			Action action = Actions.moveTo(target.x - player.getWidth() / 2 * player.getScaleX(), target.y, PLAYERSPEED
+					/ pathToFollow.size());
+			sequence.addAction(action);
+			player.addAction(sequence);
 
+		}
+
+		// Vector2 source = new Vector2(player.getX() + player.getWidth() / 2 *
+		// player.getScaleX(), player.getY());
+		// Vector2 target = new Vector2(cityCoordinates[0], cityCoordinates[1]);
+		//
+		Direction animationDirection = WorldMapUtils.getDirection(source, target);
+		AnimationAction animationRun = new AnimationAction(animationDirection, PLAYERSPEED);
+		player.addAction(animationRun);
+		//
+		// // Weggelassen, da alleine schon die Existens einer Idle
+		// AnimationAction
+		// // während der Abarbeitung einer anderen AnimationAction
+		// // stand 14.12.14 zum Fehler führt
+		// // AnimationAction animationIdle = new
+		// //
+		// AnimationAction(WorldMapUtils.getIdleDirection(animationDirection));
+		// // SequenceAction animationSequence = new
+		// SequenceAction(animationRun,
+		// // animationIdle);
+		//
+		// MoveByAction movement = new MoveByAction();
+		// movement.setAmount(target.x - source.x, target.y - source.y);
+		// movement.setDuration(PLAYERSPEED);
+		//
+		//
+		// player.addAction(movement);
+		// // player.addAction(animationSequence);
+		// player.addAction(animationRun);
+		currentCity = city;
 	}
 
 	private void updateFlag() {
