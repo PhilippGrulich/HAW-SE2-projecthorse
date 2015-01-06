@@ -3,50 +3,60 @@ package com.haw.projecthorse.level.game.parcours;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Klasse zur Reaktion von "Tip"-Berührungen auf dem Bildschirm um
+ * die Sprungfunktion des Pferdes zu initialisieren.
+ * @author Francis
+ * @version 1.0
+ *
+ */
 public class GameInputListener implements GestureListener {
 
 	IGameObjectLogicFuerGameInputListener logic;
 	IGameFieldFuerGameInputListener gameField;
-
-	public GameInputListener(IGameObjectLogicFuerGameInputListener logic,
-			IGameFieldFuerGameInputListener gameField) {
+	
+	/**
+	 * Konstruktor.
+	 * @param logic Die GameLogic von Parcours.
+	 * @param gameField Eine Instanz vom GameField.
+	 */
+	public GameInputListener(final IGameObjectLogicFuerGameInputListener logic,
+			final IGameFieldFuerGameInputListener gameField) {
 		this.logic = logic;
 		this.gameField = gameField;
 	}
 
 	@Override
-	public boolean fling(float velocityX, float velocityY, int button) {
+	public boolean fling(final float velocityX, final float velocityY, final int button) {
+		return false;
+	}
+
+	@Override
+	public boolean longPress(final float x, final float y) {
+		return false;
+	}
+
+	@Override
+	public boolean pan(final float x, final float y, final float deltaX, final float deltaY) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean longPress(float x, float y) {
+	public boolean panStop(final float x, final float y, final int pointer, final int button) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean pan(float x, float y, float deltaX, float deltaY) {
+	public boolean pinch(final Vector2 initialPointer1, final Vector2 initialPointer2,
+			final Vector2 pointer1, final Vector2 pointer2) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean panStop(float x, float y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
-			Vector2 pointer1, Vector2 pointer2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean tap(float x, float y, int count, int button) {
+	public boolean tap(final float x, final float y, final int count, final int button) {
 		// TODO Auto-generated method stub
 		if (!logic.isPlayerJumping()) {
 			logic.setPlayerJump(true);
@@ -57,12 +67,12 @@ public class GameInputListener implements GestureListener {
 	}
 
 	@Override
-	public boolean touchDown(float x, float y, int pointer, int button) {
+	public boolean touchDown(final float x, final float y, final int pointer, final int button) {
 		return false;
 	}
 
 	@Override
-	public boolean zoom(float initialDistance, float distance) {
+	public boolean zoom(final float initialDistance, final float distance) {
 		// TODO Auto-generated method stub
 		return false;
 	}

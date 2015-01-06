@@ -4,16 +4,22 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
-import com.haw.projecthorse.player.PlayerImpl;
-import com.haw.projecthorse.player.actions.AnimationAction;
-import com.haw.projecthorse.player.actions.Direction;
 
+/**
+ * Die Klasse stellt das Begrüßungspopup vor Spielbeginn dar und erklärt
+ * dem Spieler das Spiel.
+ * @author Francis
+ * @version 1.0
+ */
 public class GreetingPopup extends Popup {
 
 	Popup greetingPopup;
 	Label greetingLabel;
 	ImageTextButton readyButton;
 	
+	/**
+	 * Konstruktor.
+	 */
 	public GreetingPopup(){
 		super();
 		this.toFront();
@@ -22,13 +28,20 @@ public class GreetingPopup extends Popup {
 		initGreetingPopup();
 	}
 	
-	public GreetingPopup(String username){
+	/**
+	 * Konstruktor.
+	 * @param username Der Benutzername des Spielers.
+	 */
+	public GreetingPopup(final String username){
 		super();
 		this.toFront();
 		readyButton =  this.createButton("Los geht's!");
 		initGreetingPopup(username);
 	}
 	
+	/**
+	 * Initialisert das Begrüßungs-Popup mit Text und Button.
+	 */
 	private void initGreetingPopup(){
 		greetingPopup = new Popup();
 		greetingPopup.setName("Popup");
@@ -38,7 +51,11 @@ public class GreetingPopup extends Popup {
 		greetingPopup.addActor(readyButton);
 	}
 	
-	private void initGreetingPopup(String username){
+	/**
+	 * Initialisert das Begrüßungs-Popup mit Text und Button.
+	 * @param username Der Benutzername des Spielers.
+	 */
+	private void initGreetingPopup(final String username){
 		greetingPopup = new Popup();
 		greetingPopup.setName("Popup");
 		greetingLabel = this.createLabel("Hallo " + username + "!\n"
@@ -60,12 +77,12 @@ public class GreetingPopup extends Popup {
 	}
 	
 	@Override
-	public void draw(Batch batch, float parentAlpha){
+	public void draw(final Batch batch, final float parentAlpha){
 		this.greetingPopup.draw(batch, parentAlpha);
 	}
 	
 	@Override
-	public void act(float delta){
+	public void act(final float delta){
 		this.greetingPopup.act(delta);
 	}
 	

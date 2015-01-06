@@ -4,6 +4,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+/**
+ * Klasse für GameObjects.
+ * @author Francis
+ * @version 1.0
+ */
 public class GameObject extends Actor {
 
 	private TextureRegion tr; //Die TextureRegion die dieses GameObject darstellt.
@@ -20,7 +25,7 @@ public class GameObject extends Actor {
 		return isMoveable;
 	}
 
-	public void setMoveable(boolean isMoveable) {
+	public void setMoveable(final boolean isMoveable) {
 		this.isMoveable = isMoveable;
 	}
 
@@ -28,12 +33,12 @@ public class GameObject extends Actor {
 		return loot;
 	}
 
-	public void setLoot(boolean loot) {
+	public void setLoot(final boolean loot) {
 		this.loot = loot;
 	}
 
 	@Override
-	public void act(float delta) {
+	public void act(final float delta) {
 		if (duration > 0) {
 			
 			setX(this.getX() - duration * delta);
@@ -44,17 +49,17 @@ public class GameObject extends Actor {
 	}
 	
 	@Override
-	public void setX(float x){
+	public void setX(final float x){
 		this.x = x;
 	}
 	
 	@Override
-	public void setY(float y){
+	public void setY(final float y){
 		this.y = y;
 	}
 	
 	@Override
-	public void setPosition(float x, float y){
+	public void setPosition(final float x, final float y){
 		this.x = x;
 		this.y = y;
 	}
@@ -70,7 +75,7 @@ public class GameObject extends Actor {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		/*
 		 * batch.draw(tr, getX(), getY(), this.getScaleX() * this.getWidth(),
 		 * this.getScaleY() * this.getHeight());
@@ -90,19 +95,19 @@ public class GameObject extends Actor {
 		return collidable;
 	}
 
-	public void setCollidable(boolean b) {
+	public void setCollidable(final boolean b) {
 		collidable = b;
 	}
 
-	public void setDuration(float d) {
+	public void setDuration(final float d) {
 		duration = d;
 	}
 
-	public void setPoints(int p) {
+	public void setPoints(final int p) {
 		points = p;
 	}
 
-	public void setTextureRegion(TextureRegion t) {
+	public void setTextureRegion(final TextureRegion t) {
 		tr = t;
 	}
 

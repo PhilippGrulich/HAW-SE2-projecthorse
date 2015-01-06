@@ -1,25 +1,28 @@
 package com.haw.projecthorse.level.game.parcours;
 
 import com.badlogic.gdx.Input.Orientation;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.game.Game;
 
 /**
- * 
+ * Die Klasse Parcours enthält die Methoden, die das Framework auf der von Screen
+ * ableitenden Klasse aufruft. Level leitet die Aufrufe in unserem Fall an die Klassen weiter,
+ * die von Game ableiten.
  * @author Francis
- *
+ * @version 1.0
  */
 public class Parcours extends Game {
 
 	private IGameOperatorFuerParcours gameOperator;
 
+	/**
+	 * Konstruktor.
+	 */
 	public Parcours() {
 		super(Orientation.Landscape);
 		gameOperator = new GameOperator(new Stage(this.getViewport(),
-				this.getSpriteBatch()), this.getViewport(), this.width,
-				this.height, chest, this.audioManager, this.overlay);
+				 this.getSpriteBatch()), this.getViewport(), this.width,
+				this.height, chest, this.audioManager, Parcours.overlay);
 	}
 
 	@Override
@@ -41,21 +44,22 @@ public class Parcours extends Game {
 	}
 
 	@Override
-	protected void doRender(float delta) {
-		if (gameOperator != null)
+	protected void doRender(final float delta) {
+		if (gameOperator != null){
 			gameOperator.update(delta);
+		}
 
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	protected void doResume() {
-		gameOperator.setPause(false);
+			gameOperator.setPause(false);
 	}
 
 	@Override
