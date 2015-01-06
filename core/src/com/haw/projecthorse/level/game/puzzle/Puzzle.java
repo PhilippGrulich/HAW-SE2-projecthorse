@@ -1,37 +1,19 @@
 package com.haw.projecthorse.level.game.puzzle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.inputmanager.InputManager;
-import com.haw.projecthorse.level.game.Game;
-import com.haw.projecthorse.level.util.swipehandler.ControlMode;
-import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
+import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.lootmanager.Chest;
-
-//className:"com.haw.projecthorse.level.menu.worldmap.WorldMap",
-//className:"com.haw.projecthorse.level.game.puzzle.Puzzle"
-//in assets/json/GameConfig.json Zeile 15 wieder ersetzen
-//einkommentieren zeile 113 in level
 
 public class Puzzle {
 
@@ -45,7 +27,7 @@ public class Puzzle {
 	private static Image emptyImage;
 	static TextureRegion texture;
 
-	private static int SHUFFLE = 2;
+	private static int SHUFFLE = 4;
 	private static int COL = 3;
 	private static int ROW = 3;
 	private static PuzzleManager puzzleManager;
@@ -53,12 +35,12 @@ public class Puzzle {
 
 	public Puzzle(PuzzleManager puzzleManager, Chest chest2) {
 
-		this.puzzleManager = puzzleManager;
+		Puzzle.setPuzzleManager(puzzleManager);
 
 		puzzleWidth = puzzleManager.getMyWidth() / COL; // 270
 		puzzleHeight = puzzleManager.getMyHeight() / ROW; // 480
 
-		this.chest = chest2;
+		Puzzle.setChest(chest2);
 
 		createButtons();
 		createEmptyImage();
@@ -72,7 +54,9 @@ public class Puzzle {
 	}
 
 	/**
-	 * splitte das gewählte Bild,
+	 * teile das gewählte Bild in COL*ROW gleichförmige Teile erstelle jeweils
+	 * die neue Klasse PuzzlePart erstelle an einer zufälligen Stelle ein
+	 * "leeres" Bild und merke das fehlende in der Instanzvariable missingImage
 	 */
 	private void createImageArr() {
 		TextureRegion[][] puzzleTexRegArrOrigin = texture
@@ -95,7 +79,7 @@ public class Puzzle {
 				Image im = new Image(puzzleTexRegArrOrigin[i][j]);
 
 				PuzzlePart puzzlePart = new PuzzlePart(im, xPos, yPos,
-						puzzleManager);
+						getPuzzleManager());
 
 				if (i == zzRow && j == zzCol) {
 
@@ -120,6 +104,10 @@ public class Puzzle {
 		}
 	}
 
+	/**
+	 * rufe auf jeden Puzzleteil die Methode addListener(...) und füde den in
+	 * die erste Stage
+	 */
 	private void addPuzzlePartsToStage() {
 
 		for (int i = 0; i < COL; i++) {
@@ -134,6 +122,9 @@ public class Puzzle {
 		}
 	}
 
+	/**
+	 * vermische die Puzzleteile
+	 */
 	private void shuffle() {
 		int count = 0;
 		while (count < SHUFFLE) {
@@ -143,7 +134,7 @@ public class Puzzle {
 					Image im = imageArr[i][j];
 					int xKoor = (int) im.getX();
 					int yKoor = (int) im.getY();
-
+					
 					if (PuzzlePart.checkImage(xKoor, yKoor)) {
 
 						imageArr[i][j].setPosition(emptyImage.getX(),
@@ -157,6 +148,11 @@ public class Puzzle {
 		}
 	}
 
+	/**
+	 * prüfe, ob alle Puzzleteile an den richtigen Stellen sind
+	 * 
+	 * @return
+	 */
 	public static boolean check() {
 		for (int i = 0; i < COL; i++) {
 			for (int j = 0; j < ROW; j++) {
@@ -171,6 +167,10 @@ public class Puzzle {
 		return true;
 	}
 
+	/**
+	 * erstelle ein leeres Bild, von der größe der Puzzleteils wird für das
+	 * "leere" Bild benötigt
+	 */
 	private void createEmptyImage() {
 		Pixmap pixel = new Pixmap(puzzleWidth, puzzleHeight, Format.RGB888);
 		pixel.setColor(Color.MAGENTA);
@@ -181,6 +181,10 @@ public class Puzzle {
 		pixel.dispose();
 	}
 
+	/**
+	 * lösche für alle Puzzleteile die Clicklistener wird am Ende des Spiels
+	 * aufgerufen
+	 */
 	public static void removeClickListener() {
 		for (int i = 0; i < ROW; i++) {
 			for (int j = 0; j < COL; j++) {
@@ -205,8 +209,11 @@ public class Puzzle {
 		return emptyImage;
 	}
 
-	// falls ich zurück zur bilderauswahl möchte
-	// GameManagerFactory.getInstance().navigateToLevel("puzzleGame");
+	/**
+	 * erstelle ein Zurückbutton, um zurück zur Bilderauswahl gelangen zu können
+	 * rufe die Methode addListener(...) auf, füge den Button in die zweite
+	 * Stage
+	 */
 	private void createButtons() {
 		ImageButton button_back = new ImageButton(new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "backIcon")));
@@ -214,17 +221,22 @@ public class Puzzle {
 		button_back.setHeight(95);
 		button_back.setWidth(95);
 
-		button_back.setPosition(
-				PuzzleManager.getMyXPos() + puzzleManager.getMyWidth()
-						- button_back.getWidth(), PuzzleManager.getMyYPos()
-						+ puzzleManager.getMyHeight());
-		// button_back.setPosition(0, 0);
+		button_back.setPosition(PuzzleManager.getMyXPos()
+				+ getPuzzleManager().getMyWidth() - button_back.getWidth(),
+				PuzzleManager.getMyYPos() + getPuzzleManager().getMyHeight());
+
 		addListener(button_back);
 
 		PuzzleManager.addToStage(PuzzleManager.getSecondstage(), button_back);
 
 	}
 
+	/**
+	 * füge ein ClickListener für Zurückbutton navigiere bei einem Klick zur
+	 * Bilderauswahl zurück
+	 * 
+	 * @param back
+	 */
 	private void addListener(final ImageButton back) {
 
 		back.addListener(new ClickListener() {
@@ -237,19 +249,46 @@ public class Puzzle {
 
 	}
 
+	/**
+	 * am Ende des Spiels je nach Anzahl der benötigten Schritte werden Loots
+	 * vergeben, gespeichert und kurz angezeigt
+	 * 
+	 * @param score
+	 */
 	public static void getAndShowLoot(int score) {
 
 		if (score <= SHUFFLE * 3) {
-			chest.addLoot(new PuzzleLoot("croissant", "Die beste Leckerei für dein Pferd", "croissant"));
+			getChest().addLoot(
+					new PuzzleLoot("croissant",
+							"Die beste Leckerei für dein Pferd", "croissant"));
 		} else if (score > SHUFFLE * 3 && score <= SHUFFLE * 4) {
-			chest.addLoot(new PuzzleLoot("brezel", "Eine Brezel", "brezel"));
+			getChest().addLoot(
+					new PuzzleLoot("brezel", "Eine Brezel", "brezel"));
 		} else {
-			chest.addLoot(new PuzzleLoot("brötchen", "Ein Brötchen", "buns"));
+			getChest().addLoot(
+					new PuzzleLoot("brötchen", "Ein Brötchen", "buns"));
 		}
-		//chest.saveAllLoot();
-		chest.showAllLoot();
-		puzzleManager.getOverlay().showPopup(puzzleManager.getReplay());
-		
+		// chest.saveAllLoot();
+		getChest().showAllLoot();
+		Overlay overlay = getPuzzleManager().getOverlay();
+		overlay.showPopup(PuzzleManager.getReplay());
+
+	}
+
+	public static PuzzleManager getPuzzleManager() {
+		return puzzleManager;
+	}
+
+	public static void setPuzzleManager(PuzzleManager puzzleManager) {
+		Puzzle.puzzleManager = puzzleManager;
+	}
+
+	public static Chest getChest() {
+		return chest;
+	}
+
+	public static void setChest(Chest chest) {
+		Puzzle.chest = chest;
 	}
 
 }
