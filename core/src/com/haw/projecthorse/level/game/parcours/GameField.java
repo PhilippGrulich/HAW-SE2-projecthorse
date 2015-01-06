@@ -565,6 +565,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				}
 			}
 		}
+		player.setPosition(20, getTopOfGroundPosition() - 25);
 	}
 
 	@Override

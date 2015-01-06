@@ -171,7 +171,9 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				if (gameField.isButtonYesPressed(gameStatus)) {
 					inputMultiplexer.addProcessor(listener);
 					Gdx.input.setInputProcessor(inputMultiplexer);
+					logic.setPlayerJump(false);
 					gameField.restart();
+					
 					gameField.removePopup();
 					gameField.playGallop();
 					this.gameStatus = GameState.START;

@@ -29,4 +29,14 @@ public interface IGameObjectLogicFuerGameOperator {
 	 * @param y Der Neigungswinkel des Devices zwischen -10 u. +10.
 	 */
 	public void movePlayerL(float delta, float y);
+	
+
+	/**
+	 * Setzt eine Variable auf b, welche darüber entscheidet,
+	 * ob die GameLogic in der Funktion die den Sprung berechnet,
+	 * die neue y-Position des Pferds berechnet. Dies ist genau dann
+	 * erforderlich, wenn das Pferd noch in der Luft ist.
+	 * @param b true, wenn das Pferd springt, sonst false.
+	 */
+	public void setPlayerJump(boolean b);
 }
