@@ -22,9 +22,14 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot;
 import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.Race;
+import com.haw.projecthorse.player.race.RaceLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 //TODO seperate this class into Gamestate & Gamelogic
 
@@ -75,7 +80,8 @@ public class Gamestate {
 	private int width;
 	private int height;
 
-	private int score;
+	private int score; // Punktzahl
+	private int hitByBranch; // Anzahl vom ast getroffen
 	private int appleCatchSeries; // Äpfel nacheinander gefangen.
 
 	private boolean lastAnimationDirectionLeft = false;
@@ -113,6 +119,7 @@ public class Gamestate {
 		InputManager.addInputProcessor(stage);
 
 		score = 0;
+		hitByBranch = 0;
 		appleCatchSeries = 0;
 		currentAccelerometerDirection = Direction.IDLELEFT;
 	}
@@ -186,12 +193,12 @@ public class Gamestate {
 		moveToDuration = convertDistanceToTime(distance);
 
 		if (lastAnimationDirectionLeft != previousAnimationLeft || horse.getActions().size == 1) {
-			//Animation hat sich geändert, bzw. es war nur IDLE aktiv
+			// Animation hat sich geändert, bzw. es war nur IDLE aktiv
 			horse.clearActions(); // Alte bewegungen etc. entfernen
 			horse.addAction(animationAction); // Nur bei Richtungsänderung Animation neu starten
 			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration);
 			horse.addAction(move);
-		} else { //Richtung beibehalten. Animation bleibt, bewegung bekommt neues Ziel
+		} else { // Richtung beibehalten. Animation bleibt, bewegung bekommt neues Ziel
 			Action actionToDelete = null;
 			for (Action action : horse.getActions()) {
 				if (action instanceof AnimationAction) {
@@ -359,14 +366,50 @@ public class Gamestate {
 	}
 
 	private void endThisGame() {
-		// TODO BUGFIX, derzeit stürzt er noch ab wenn einmal ein Friese im savegame drin ist.
-		/*
-		 * double roll = Math.random(); if(roll <= 0.2f &&
-		 * !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)){
-		 * this.chest.addLootAndShowAchievment(new RaceLoot(new Race(HorseRace.FRIESE))); }
-		 * 
-		 * this.chest.showAllLoot(); this.chest.saveAllLoot();
-		 */
+		double roll = Math.random();
+		if (roll <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)) {
+			this.chest.addLootAndShowAchievment(new RaceLoot(HorseRace.FRIESE));
+		}
+
+		if (score >= 2000) {
+			// Gewinne golden apple
+			this.chest.addLootAndShowAchievment(new ApplerunLoot("Goldener Apfel",
+					"- verliehen für herausragende Leistungen beim Äpfel fangen", "appleGold"));
+
+		} else if (score >= 1500) {
+			roll = Math.random();
+			if (roll <= 0.5) {
+				this.chest.addLootAndShowAchievment(new ApplerunLoot("Roter Apfel",
+						"- verliehen für sehr gute Leistungen beim Äpfel fangen", "apple2"));
+				// Gewinne apple1
+			}
+		}
+		 else if (score >= 750) {
+				roll = Math.random();
+				if (roll <= 0.25) {
+					this.chest.addLootAndShowAchievment(new ApplerunLoot("Roter Apfel",
+							"- verliehen für sehr gute Leistungen beim Äpfel fangen", "apple2"));
+					// Gewinne apple1
+				}
+			}
+
+		if (hitByBranch >= 6) {
+			this.chest
+					.addLootAndShowAchievment(new ApplerunLoot("Goldener Ast", "- verliehen für das Talent sehr viele Äste zu fangen und die Kopfschmerzen auszuhalten.", "branchGold"));
+			// Gewinne goldener Ast
+		}
+
+		else if (hitByBranch >= 3) {
+			roll = Math.random();
+			if (roll <= 0.25) {
+				this.chest.addLootAndShowAchievment(new ApplerunLoot("Ast", "- verliehen für ausgehaltene Kopfschmerzen durchs Äste fangen..",
+						"branch1"));
+			}
+			// Gewinne Ast
+		}
+
+		this.chest.showAllLoot();
+		this.chest.saveAllLoot();
 
 		endThisGame = true;
 	}
@@ -408,6 +451,7 @@ public class Gamestate {
 
 	void playerHitByBranch() {
 		appleCatchSeries = appleCatchSeries / 2;
+		hitByBranch++;
 		Gdx.input.vibrate(200);
 		timeLeftSeconds -= TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	}
