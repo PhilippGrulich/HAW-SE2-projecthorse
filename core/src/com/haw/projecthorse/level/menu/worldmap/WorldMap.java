@@ -82,6 +82,7 @@ public class WorldMap extends Menu {
 
 	private State state;
 
+	private FitViewport uiViewport;
 	private Image uiBackground;
 	private ImageButton leftButton, rightButton, flagButton;
 	private ImageButtonStyle flagStyle;
@@ -111,11 +112,14 @@ public class WorldMap extends Menu {
 		super();
 
 		stage = new Stage(getViewport());
-		uiStage = new Stage(new FitViewport(width, height));
+		camera = getCam();
+		
+		uiViewport = new FitViewport(width, height);
+		uiStage = new Stage(uiViewport);
 		InputManager.addInputProcessor(uiStage);
 		InputManager.addInputProcessor(stage);
 
-		camera = getCam();
+		
 
 		player = new PlayerImpl();
 
@@ -225,7 +229,6 @@ public class WorldMap extends Menu {
 			prefs.flush();
 		}
 		showedTutorial = true;
-
 	}
 
 	/**
@@ -687,8 +690,7 @@ public class WorldMap extends Menu {
 
 	@Override
 	protected void doResize(final int width, final int height) {
-		// TODO Auto-generated method stub
-
+		uiViewport.update(width, height, true);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
  * 
  * 
  *         Jedes level hat ein Overlay. über das Overlay können Popups unter
- *         anderm Popups angezeigt werden. *
+ *         anderm Popups angezeigt werden. 
  * 
  */
 
@@ -78,7 +78,7 @@ public abstract class Level implements Screen {
 	}
 
 	/**
-	 * Erstellt eine OrthographicCamera diese wird f�r die jeweiliegen Viewports
+	 * Erstellt eine OrthographicCamera diese wird für die jeweiliegen Viewports
 	 * gebraucht.
 	 * 
 	 * @return {@link OrthographicCamera}
