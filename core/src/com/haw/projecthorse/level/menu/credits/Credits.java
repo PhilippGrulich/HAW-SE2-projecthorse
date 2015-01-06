@@ -24,6 +24,7 @@ import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
  * aus den Lizenzfiles eingelesen.
  * 
  * @author Viktor
+ * @version 1
  *
  */
 public class Credits extends Menu {
@@ -37,6 +38,9 @@ public class Credits extends Menu {
 	private final VerticalGroup textContainer;
 	private final ScrollPane scroller;
 
+	/**
+	 * Default Konstruktor.
+	 */
 	public Credits() {
 		// Laden und Abspielen der Hintergrundmusik
 		AssetManager.loadMusic("mainMenu");
@@ -66,7 +70,9 @@ public class Credits extends Menu {
 
 	}
 
-	// Liest den Inhalt der Licensefiles ein und erzeugt den credit Text
+	/**
+	 * Liest den Inhalt der Licensefiles ein und erzeugt den credit Text.
+	 */
 	private void initializeText() {
 
 		addHeadLine("\n\n\n\n\nDas Entwicklerteam");
@@ -93,8 +99,13 @@ public class Credits extends Menu {
 
 	}
 
-	// fügt eine formatierte Kopfzeile mit Zeilenumbruch davor und danach hinzu
-	private void addHeadLine(String text) {
+	/**
+	 * Fügt eine formatierte Kopfzeile mit Zeilenumbruch davor und danach hinzu.
+	 * 
+	 * @param text
+	 *            Der Text
+	 */
+	private void addHeadLine(final String text) {
 		LabelStyle style = new LabelStyle(
 				AssetManager.getHeadlineFont(FontSize.FORTY), Color.GRAY);
 		Label label = new Label("\n" + text + "\n\n", style);
@@ -103,8 +114,13 @@ public class Credits extends Menu {
 		textContainer.addActor(label);
 	}
 
-	// fügt eine formatierte Textzeile mit Zeilenumbruch danach hinzu
-	private void addText(String text) {
+	/**
+	 * Fügt eine formatierte Textzeile mit anschließendem Zeilenumbruch hinzu.
+	 * 
+	 * @param text
+	 *            Der Text
+	 */
+	private void addText(final String text) {
 		LabelStyle style = new LabelStyle(
 				AssetManager.getTextFont(FontSize.FORTY), Color.GRAY);
 		Label label = new Label(text, style);
@@ -114,14 +130,20 @@ public class Credits extends Menu {
 
 	}
 
-	// liest die Authoren innerhalb eines License files mit Zeilenumbruch
-	// getrennt in einen String ein
-	private String getEntries(String filePath) {
+	/**
+	 * Liest die Authoren innerhalb eines License files mit Zeilenumbruch
+	 * getrennt in einen String ein.
+	 * 
+	 * @param filePath
+	 *            Der Pfad zum License File.
+	 * @return Ausgabestring
+	 */
+	private String getEntries(final String filePath) {
 		StringBuilder entries = new StringBuilder();
 		LicenseFileParser parser = new LicenseFileParser(
 				Gdx.files.internal(filePath));
 		for (String line : parser.getLicenseInfos(
-				new LicenseInfo[] { LicenseInfo.AUTHOR }, true)) {
+				new LicenseInfo[] {LicenseInfo.AUTHOR}, true)) {
 			if (line.length() > 1) {
 				entries.append(line);
 				entries.append("\n");
@@ -132,15 +154,20 @@ public class Credits extends Menu {
 		return entries.toString();
 	}
 
-	// realisiert automatisches Abwärts Scrollen
-	private void autoScroll(float delta) {
+	/**
+	 * Realisiert automatisches Abwärts Scrollen.
+	 * 
+	 * @param delta
+	 *            Das Zeitdelta seit der letzten Aktualisierung.
+	 */
+	private void autoScroll(final float delta) {
 		if (!scroller.isPanning() && scroller.getScrollY() < scroller.getMaxY()) {
 			scroller.setScrollY(scroller.getScrollY() + delta * 80);
 		}
 	}
 
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -158,7 +185,7 @@ public class Credits extends Menu {
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
 
 	}

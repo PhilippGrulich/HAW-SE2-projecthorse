@@ -7,15 +7,18 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.game.Game;
 
 /**
- * @author Lars: Stage und Input listener auslagern in die Level.abstract?
- * 
- * 
+ * AppleRun Game.
+ * @author Lars
+ * @version 1.0
  */
 
 public class AppleRun extends Game {
 	private Gamestate gamestate;
 	private Music music;
 
+	/**
+	 * Constructor.
+	 */
 	public AppleRun() {
 		AssetManager.loadMusic("AppleRun");
 		AssetManager.loadSounds("AppleRun");
@@ -26,7 +29,7 @@ public class AppleRun extends Game {
 	}
 
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
 		Gdx.gl.glClearColor(0.8f, 0.9f, 0.99f, 1); // Hintergrund malen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gamestate.update(delta);
@@ -39,7 +42,7 @@ public class AppleRun extends Game {
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
 
 	}

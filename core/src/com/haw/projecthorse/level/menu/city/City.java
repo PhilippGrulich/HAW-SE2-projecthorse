@@ -113,7 +113,7 @@ public class City extends Menu {
 
 		imgTextButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Spiel " + gameObject.getGameTitle() + " soll gestartet werden");
+				Gdx.app.log("DEBUG", "Spiel " + gameObject.getGameTitle() + " soll gestartet werden");
 				GameManagerFactory.getInstance().navigateToLevel(gameObject.getLevelID());
 
 			}

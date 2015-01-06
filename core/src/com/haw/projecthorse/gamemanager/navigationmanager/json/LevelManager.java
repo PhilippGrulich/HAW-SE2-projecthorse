@@ -11,8 +11,8 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.level.Level;
 
 /**
- * Der Level Manager das Laden eines Levels zust‰ndig.
- * Auﬂerdem liefert er Information anhand der LevelID
+ * Der Level Manager das Laden eines Levels zust√§ndig.
+ * Au√üerdem liefert er Information anhand der LevelID
  */
 public class LevelManager {
 
@@ -40,7 +40,7 @@ public class LevelManager {
 			config = json.fromJson(GameConfigtImpl.class, jsonText);
 			Gdx.app.log("LevelManager", "Fertig");
 		} catch (IOException e) {
-			System.err.println("!!!Die GameConfig.json Datei konnte nicht geladen werden!!! \n Verzeichnis pr¸fen");
+			System.err.println("!!!Die GameConfig.json Datei konnte nicht geladen werden!!! \n Verzeichnis pr√ºfen");
 			e.printStackTrace();
 		}
 	}

@@ -12,7 +12,7 @@ public class LevelLoadException extends Exception {
 	
 	@Override
 	public void printStackTrace() {
-		Gdx.app.error("LevelLoadException", "The Level can´t be loaded");
+		Gdx.app.error("LevelLoadException", "The Level can't be loaded");
 		e.printStackTrace();
 	};	
 	
