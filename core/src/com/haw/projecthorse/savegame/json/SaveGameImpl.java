@@ -8,6 +8,7 @@ import java.util.List;
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.Lootable;
 import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.RaceLoot;
 
 public class SaveGameImpl implements SaveGame {
 	private int ID = -1, ep = 0;
@@ -19,8 +20,10 @@ public class SaveGameImpl implements SaveGame {
 	}
 	
 	public SaveGameImpl(int ID) {
-		this();
 		this.ID = ID;
+		
+		// Pferderasse intialisieren
+		lootCollection.add(new RaceLoot(HorseRace.HAFLINGER));
 	}
 	
 	@Override
