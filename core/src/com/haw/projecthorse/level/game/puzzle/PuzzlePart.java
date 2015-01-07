@@ -1,13 +1,13 @@
 package com.haw.projecthorse.level.game.puzzle;
 
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 /**
  * 
  * @author Masha
- *@version 1.0
+ * @version 1.0
  */
 public class PuzzlePart extends Image {
 
@@ -16,14 +16,17 @@ public class PuzzlePart extends Image {
 
 	private static PuzzleManager puzzleManager;
 	private static int score = 0;
-/**
- * Konstruktor.
- * @param im
- * @param x
- * @param y
- * @param puzzleManager
- */
-	public PuzzlePart(final Image im, final int x, final int y, final PuzzleManager puzzleManager) {
+
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param im
+	 * @param x
+	 * @param y
+	 * @param puzzleManager
+	 */
+	public PuzzlePart(final Image im, final int x, final int y,
+			final PuzzleManager puzzleManager) {
 		super();
 		PuzzlePart.puzzleManager = puzzleManager;
 		this.xPos = x;
@@ -43,8 +46,7 @@ public class PuzzlePart extends Image {
 	}
 
 	/**
-	 * jeder Puzzle Teil reagiert auf ein Click.
-	 * und bewegt sich, falls erlaubt,
+	 * jeder Puzzle Teil reagiert auf ein Click. und bewegt sich, falls erlaubt,
 	 * nach leere Stelle hier wird die Anzahl der Schritte hochgezählt
 	 * 
 	 * @param image
@@ -54,16 +56,18 @@ public class PuzzlePart extends Image {
 		image.addListener(new ClickListener() {
 
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y) {
-
-				Counter.setCounter(1);
-				puzzleManager.setLabelText("Anzahl: "
-						+ String.valueOf(Counter.getCounter()));
+			public void clicked(final InputEvent event, final float x,
+					final float y) {
 
 				int lokX = (int) image.getX();
 				int lokY = (int) image.getY();
 
-				if (checkImage(lokX, lokY)) {
+				if (checkImage(lokX, lokY)
+						&& !image.getName().equals("emptyImage")) {
+
+					Counter.setCounter(1);
+					puzzleManager.setLabelText("Anzahl: "
+							+ String.valueOf(Counter.getCounter()));
 
 					PuzzleManager.swipe.play();
 					image.setPosition(Puzzle.getEmptyImage().getX(), Puzzle
@@ -110,14 +114,14 @@ public class PuzzlePart extends Image {
 		if ((yKoor - Puzzle.getPuzzleHeight() == Puzzle.getEmptyImage().getY() & xKoor == Puzzle
 				.getEmptyImage().getX())
 				|| (yKoor + Puzzle.getPuzzleHeight() == Puzzle.getEmptyImage()
-				.getY() & xKoor == Puzzle.getEmptyImage().getX())
+						.getY() & xKoor == Puzzle.getEmptyImage().getX())
 				|| (xKoor - Puzzle.getPuzzleWidth() == Puzzle.getEmptyImage()
-				.getX() && yKoor == Puzzle.getEmptyImage().getY())
+						.getX() && yKoor == Puzzle.getEmptyImage().getY())
 				|| (xKoor + Puzzle.getPuzzleWidth() == Puzzle.getEmptyImage()
-				.getX() && yKoor == Puzzle.getEmptyImage().getY())) {
-				return true;
-				}
-				return false;
+						.getX() && yKoor == Puzzle.getEmptyImage().getY())) {
+			return true;
+		}
+		return false;
 
 	}
 
