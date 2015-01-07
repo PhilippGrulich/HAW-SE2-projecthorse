@@ -21,6 +21,7 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
+import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.actions.AnimationAction;
 import com.haw.projecthorse.player.actions.Direction;
@@ -32,6 +33,7 @@ import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
  * Mainclass. / Spielstatus
+ * 
  * @author Lars
  * @version 1.0
  */
@@ -51,25 +53,30 @@ public class Gamestate {
 
 	Direction currentAccelerometerDirection;
 
-	private boolean endThisGame = false; // if true -> Nächster render aufruf delta > 0 -> navigate back
-	private static final float BASIS_GAME_TIME_SECONDS = 70; // Basis spiellaufzeit
-	private float totalGameTime; // Basis laufzeit + Modifikator durch Pferderasse
+	private boolean endThisGame = false; // if true -> Nächster render aufruf
+											// delta > 0 -> navigate back
+	private static final float BASIS_GAME_TIME_SECONDS = 70; // Basis
+																// spiellaufzeit
+	private float totalGameTime; // Basis laufzeit + Modifikator durch
+									// Pferderasse
 	private float timeLeftSeconds;// Time to play left
 	private final float TIME_LOST_PER_BRANCH_HIT_SECONDS;
 	private static final int MAX_FALLING_ENTITIES = 5;
-	private static final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis zum
-													// nächsten entity spawn
-	private static final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time between two
-													// spawns
+	private static final float MAX_SPAWN_DELAY_SEC = 1.5f; // Maximale zeit bis
+															// zum
+	// nächsten entity spawn
+	private static final float MIN_SPAWN_DELAY_SEC = 0.2f; // Minimum time
+															// between two
+	// spawns
 	private float spawndelay = -1; // Delay until next spawn allowed - (Initiate
 									// with -1 for first spawn = instant)
 
 	private int branchSpawnChance = 20; // 20%:: Prozent Chance, das statt
-											// einem Apfel ein Ast spawnt
+										// einem Apfel ein Ast spawnt
 	private int currentFallingEntities = 0; // Um unnötige abfragen wahrend
-												// doRender zu vermeiden wird
-												// hier laufend die anzahl
-												// mitgeschrieben.
+											// doRender zu vermeiden wird
+											// hier laufend die anzahl
+											// mitgeschrieben.
 
 	private EntityGroup fallingEntities; // Falling entities
 	private Stage stage;// = new Stage(this.getViewport(),
@@ -80,7 +87,7 @@ public class Gamestate {
 	private TimeBar timeBar; // Init in background
 
 	private int width;
-//	private int height;
+	// private int height;
 
 	private int score; // Punktzahl
 	private int hitByBranch; // Anzahl vom ast getroffen
@@ -92,20 +99,30 @@ public class Gamestate {
 	private final Chest chest; // referenz auf Chest aus der Game class
 
 	private Label scoreAnzeige;
+	private Overlay overlay;
 
 	/**
 	 * Constructor.
-	 * @param viewport viewport
-	 * @param batch batch
-	 * @param width width
-	 * @param heigth heigth
-	 * @param chest chest
+	 * 
+	 * @param viewport
+	 *            viewport
+	 * @param batch
+	 *            batch
+	 * @param width
+	 *            width
+	 * @param heigth
+	 *            heigth
+	 * @param chest
+	 *            chest
+	 * @param overlay
 	 */
-	public Gamestate(final Viewport viewport, final Batch batch, final int width, final int heigth, final Chest chest) {
+	public Gamestate(final Viewport viewport, final Batch batch, final int width, final int heigth, final Chest chest,
+			final Overlay overlay) {
 		this.chest = chest;
 		stage = new Stage(viewport, batch);
 		this.width = width;
-//		this.height = heigth;
+		this.overlay = overlay;
+		// this.height = heigth;
 
 		initBackground();
 		initHorse();
@@ -113,10 +130,18 @@ public class Gamestate {
 
 		initTimer(); // Calc: Intelligenz BonusZeit
 
-		float speedModifikator = 1 + (horse.getAthletic() * 10 / 100); // Bis zu 10% schneller durch Stärke
+		float speedModifikator = 1 + (horse.getAthletic() * 10 / 100); // Bis zu
+																		// 10%
+																		// schneller
+																		// durch
+																		// Stärke
 		MOVEMENT_PER_SECOND = (this.width / 2.2f) * speedModifikator;
 
-		float loseModifikator = 1 - (horse.getObedience() * 50 / 100); // Bis zu 50% weniger verlorene Zeit
+		float loseModifikator = 1 - (horse.getObedience() * 50 / 100); // Bis zu
+																		// 50%
+																		// weniger
+																		// verlorene
+																		// Zeit
 		TIME_LOST_PER_BRANCH_HIT_SECONDS = 5 * loseModifikator;
 
 		fallingEntities = new EntityGroup();
@@ -138,7 +163,14 @@ public class Gamestate {
 	 * initTimer.
 	 */
 	private void initTimer() {
-		float bonusTimeFactorByInt = 1 + horse.getIntelligence() * 20 / 100; // Je nach intelligenz bis zu 20% längere Spielzeit
+		float bonusTimeFactorByInt = 1 + horse.getIntelligence() * 20 / 100; // Je
+																				// nach
+																				// intelligenz
+																				// bis
+																				// zu
+																				// 20%
+																				// längere
+																				// Spielzeit
 		totalGameTime = BASIS_GAME_TIME_SECONDS * bonusTimeFactorByInt;
 		timeLeftSeconds = totalGameTime;
 	}
@@ -152,14 +184,14 @@ public class Gamestate {
 		scoreAnzeige = new Label("Score: " + score, labelStyle);
 		scoreAnzeige.setPosition(50, 50);
 	}
-	
+
 	/**
 	 * updateScore.
 	 */
 	protected void updateScore() {
 		scoreAnzeige.setText("Score: " + score);
 	}
-	
+
 	/**
 	 * initHorse.
 	 */
@@ -172,7 +204,8 @@ public class Gamestate {
 		// stage.addActor(horse); //Done inside constructor
 		stage.addListener(new InputListener() {
 			@Override
-			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer, final int button) {
+			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer,
+					final int button) {
 				moveHorseTo(x);
 				return true;
 			}
@@ -187,7 +220,9 @@ public class Gamestate {
 
 	/**
 	 * moveHorseTo.
-	 * @param xIn X Coord zum hinbewegen
+	 * 
+	 * @param xIn
+	 *            X Coord zum hinbewegen
 	 */
 	private void moveHorseTo(final float xIn) {
 		float x = xIn;
@@ -222,20 +257,25 @@ public class Gamestate {
 		if (lastAnimationDirectionLeft != previousAnimationLeft || horse.getActions().size == 1) {
 			// Animation hat sich geändert, bzw. es war nur IDLE aktiv
 			horse.clearActions(); // Alte bewegungen etc. entfernen
-			horse.addAction(animationAction); // Nur bei Richtungsänderung Animation neu starten
+			horse.addAction(animationAction); // Nur bei Richtungsänderung
+												// Animation neu starten
 			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration);
 			horse.addAction(move);
-		} else { // Richtung beibehalten. Animation bleibt, bewegung bekommt neues Ziel
+		} else { // Richtung beibehalten. Animation bleibt, bewegung bekommt
+					// neues Ziel
 			Action actionToDelete = null;
 			for (Action action : horse.getActions()) {
 				if (action instanceof AnimationAction) {
-					//wont fix warning -.-
+					// wont fix warning -.-
 					// do nothing //Animation action drin behalten
 				} else {
 					actionToDelete = action;
 				}
 			}
-			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration, null); // Instant movement (keine Interpolation)
+			Action move = new MoveToActionAcceleration(x, horse.getY(), moveToDuration, null); // Instant
+																								// movement
+																								// (keine
+																								// Interpolation)
 			horse.removeAction(actionToDelete);
 			horse.addAction(move);
 		}
@@ -244,8 +284,11 @@ public class Gamestate {
 
 	/**
 	 * convertDistanceToTime. Zeit die für diese Distanz benötigt wird.
-	 * @param distanceIn distance
-	 * @return float Zeit die für diese Distanz benötigt wird. (In der bewegung/animation)
+	 * 
+	 * @param distanceIn
+	 *            distance
+	 * @return float Zeit die für diese Distanz benötigt wird. (In der
+	 *         bewegung/animation)
 	 */
 	private float convertDistanceToTime(final float distanceIn) {
 		float distance = distanceIn;
@@ -258,7 +301,9 @@ public class Gamestate {
 
 	/**
 	 * spawnEntities.
-	 * @param delta delta
+	 * 
+	 * @param delta
+	 *            delta
 	 */
 	private void spawnEntities(final float delta) {
 		spawndelay -= delta;
@@ -289,7 +334,9 @@ public class Gamestate {
 
 	/**
 	 * spawnEntities.
-	 * @param entity entity zum entfernen
+	 * 
+	 * @param entity
+	 *            entity zum entfernen
 	 */
 	public void removeFallingEntity(final Entity entity) {
 		// TODO check if entity is really inside this group. Otherwise maxing
@@ -312,7 +359,9 @@ public class Gamestate {
 
 	/**
 	 * update.
-	 * @param delta delta
+	 * 
+	 * @param delta
+	 *            delta
 	 */
 	public void update(final float delta) {
 		stage.act(delta);
@@ -326,7 +375,17 @@ public class Gamestate {
 
 		updateAccelerometer();
 
-		if (!lastAnimationActionIdle && horse.getActions().size == 1) { // Player ist nicht schon auf IDLE und bewegt sich gerade nicht
+		if (!lastAnimationActionIdle && horse.getActions().size == 1) { // Player
+																		// ist
+																		// nicht
+																		// schon
+																		// auf
+																		// IDLE
+																		// und
+																		// bewegt
+																		// sich
+																		// gerade
+																		// nicht
 			setPlayerActionToIdle();
 		}
 	}
@@ -369,7 +428,8 @@ public class Gamestate {
 			}
 
 			else {
-				if (currentAccelerometerDirection != Direction.RIGHT && horse.getX() < (this.width - horse.getWidth() * horse.getScaleX())) {
+				if (currentAccelerometerDirection != Direction.RIGHT
+						&& horse.getX() < (this.width - horse.getWidth() * horse.getScaleX())) {
 					changedDirection = true;
 					currentAccelerometerDirection = Direction.RIGHT;
 					targetX = this.width;
@@ -402,7 +462,9 @@ public class Gamestate {
 
 	/**
 	 * updateTimer.
-	 * @param delta delta
+	 * 
+	 * @param delta
+	 *            delta
 	 */
 	private void updateTimer(final float delta) {
 		if (delta == 0) {
@@ -410,9 +472,8 @@ public class Gamestate {
 		}
 		timeLeftSeconds -= delta;
 		if (endThisGame) {
-			GameManagerFactory.getInstance().navigateBack();
-		}
-		if (timeLeftSeconds < 0) {
+			this.overlay.showPopup(new GameOverDialog(this.score));
+		} else if (timeLeftSeconds < 0) {
 			endThisGame();
 		}
 
@@ -428,7 +489,8 @@ public class Gamestate {
 	 */
 	private void endThisGame() {
 		double roll = Math.random();
-		if (roll <= 0.2f && !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)) {
+		if (roll <= 0.2f
+				&& !SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class).contains(HorseRace.FRIESE)) {
 			this.chest.addLootAndShowAchievment(new RaceLoot(HorseRace.FRIESE));
 		}
 
@@ -444,27 +506,27 @@ public class Gamestate {
 						"- verliehen für sehr gute Leistungen beim Äpfel fangen", "apple2"));
 				// Gewinne apple1
 			}
-		}
-		 else if (score >= 750) {
-				roll = Math.random();
-				if (roll <= 0.25) {
-					this.chest.addLootAndShowAchievment(new ApplerunLoot("Roter Apfel",
-							"- verliehen für sehr gute Leistungen beim Äpfel fangen", "apple2"));
-					// Gewinne apple1
-				}
+		} else if (score >= 750) {
+			roll = Math.random();
+			if (roll <= 0.25) {
+				this.chest.addLootAndShowAchievment(new ApplerunLoot("Roter Apfel",
+						"- verliehen für sehr gute Leistungen beim Äpfel fangen", "apple2"));
+				// Gewinne apple1
 			}
+		}
 
 		if (hitByBranch >= 6) {
-			this.chest
-					.addLootAndShowAchievment(new ApplerunLoot("Goldener Ast", "- verliehen für das Talent sehr viele Äste zu fangen und die Kopfschmerzen auszuhalten.", "branchGold"));
+			this.chest.addLootAndShowAchievment(new ApplerunLoot("Goldener Ast",
+					"- verliehen für das Talent sehr viele Äste zu fangen und die Kopfschmerzen auszuhalten.",
+					"branchGold"));
 			// Gewinne goldener Ast
 		}
 
 		else if (hitByBranch >= 3) {
 			roll = Math.random();
 			if (roll <= 0.25) {
-				this.chest.addLootAndShowAchievment(new ApplerunLoot("Ast", "- verliehen für ausgehaltene Kopfschmerzen durchs Äste fangen..",
-						"branch1"));
+				this.chest.addLootAndShowAchievment(new ApplerunLoot("Ast",
+						"- verliehen für ausgehaltene Kopfschmerzen durchs Äste fangen..", "branch1"));
 			}
 			// Gewinne Ast
 		}
@@ -475,22 +537,24 @@ public class Gamestate {
 		endThisGame = true;
 	}
 
-//	/**
-//	 * drawCollisionRectangles.
-//	 * @param delta delta
-//	 */
-//	private void drawCollisionRectangles(final float delta) {
-//		shapeRenderer.begin(ShapeType.Line);
-//		shapeRenderer.setColor(Color.CYAN);
-//		shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
-//		for (Actor actor : fallingEntities.getChildren()) {
-//			Entity entity = (Entity) actor;
-//			shapeRenderer.rect(entity.getHitbox().x, entity.getHitbox().y, entity.getHitbox().width, entity.getHitbox().height);
-//		}
-//		shapeRenderer.rect(horse.getHitbox().x, horse.getHitbox().y, horse.getHitbox().width, horse.getHitbox().height);
-//		shapeRenderer.end();
-//	}
-	
+	// /**
+	// * drawCollisionRectangles.
+	// * @param delta delta
+	// */
+	// private void drawCollisionRectangles(final float delta) {
+	// shapeRenderer.begin(ShapeType.Line);
+	// shapeRenderer.setColor(Color.CYAN);
+	// shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+	// for (Actor actor : fallingEntities.getChildren()) {
+	// Entity entity = (Entity) actor;
+	// shapeRenderer.rect(entity.getHitbox().x, entity.getHitbox().y,
+	// entity.getHitbox().width, entity.getHitbox().height);
+	// }
+	// shapeRenderer.rect(horse.getHitbox().x, horse.getHitbox().y,
+	// horse.getHitbox().width, horse.getHitbox().height);
+	// shapeRenderer.end();
+	// }
+
 	/**
 	 * initBackground.
 	 */

@@ -5,9 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.haw.projecthorse.level.game.Game;
 
 /**
- * Die Klasse Parcours enthält die Methoden, die das Framework auf der von Screen
- * ableitenden Klasse aufruft. Level leitet die Aufrufe in unserem Fall an die Klassen weiter,
- * die von Game ableiten.
+ * Die Klasse Parcours enthält die Methoden, die das Framework auf der von
+ * Screen ableitenden Klasse aufruft. Level leitet die Aufrufe in unserem Fall
+ * an die Klassen weiter, die von Game ableiten.
+ * 
  * @author Francis
  * @version 1.0
  */
@@ -20,9 +21,8 @@ public class Parcours extends Game {
 	 */
 	public Parcours() {
 		super(Orientation.Landscape);
-		gameOperator = new GameOperator(new Stage(this.getViewport(),
-				 this.getSpriteBatch()), this.getViewport(), this.width,
-				this.height, chest, this.audioManager, Parcours.overlay);
+		gameOperator = new GameOperator(new Stage(this.getViewport(), this.getSpriteBatch()), this.getViewport(),
+				this.width, this.height, chest, this.audioManager, this.overlay);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class Parcours extends Game {
 
 	@Override
 	protected void doRender(final float delta) {
-		if (gameOperator != null){
+		if (gameOperator != null) {
 			gameOperator.update(delta);
 		}
 
@@ -59,7 +59,7 @@ public class Parcours extends Game {
 
 	@Override
 	protected void doResume() {
-			gameOperator.setPause(false);
+		gameOperator.setPause(false);
 	}
 
 	@Override

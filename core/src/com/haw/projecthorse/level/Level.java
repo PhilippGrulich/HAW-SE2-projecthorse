@@ -14,8 +14,10 @@ import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 
-/** Level . Abstract baseclass for Level implementations.
- * @author Lars 
+/**
+ * Level . Abstract baseclass for Level implementations.
+ * 
+ * @author Lars
  * 
  *         ACHTUNG: Um Sicherzustellen das hier alle Methoden wie z.B. dispose()
  *         auch aufgerufen werden sind alle Methoden final. Ableitende Klassen
@@ -23,13 +25,13 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
  * 
  * 
  *         Jedes level hat ein Overlay. über das Overlay können Popups unter
- *         anderm Popups angezeigt werden. 
+ *         anderm Popups angezeigt werden.
  * @version 17.4
  */
 public abstract class Level implements Screen {
 
 	// ########### DEBUG ##################
-	//private FPSLogger fpsLogger = new FPSLogger();
+	// private FPSLogger fpsLogger = new FPSLogger();
 	// ####################################
 
 	private Boolean paused = false;
@@ -38,7 +40,7 @@ public abstract class Level implements Screen {
 	private Viewport viewport;
 	private OrthographicCamera cam;
 	private SpriteBatch spriteBatch;
-	protected static Overlay overlay;
+	protected Overlay overlay;
 
 	protected int height;
 	protected int width;
@@ -57,7 +59,8 @@ public abstract class Level implements Screen {
 	 * Mittels diesem Konsturcktor kann eine {@link Orientation} übergeben
 	 * werden.
 	 * 
-	 * @param orientation orientation
+	 * @param orientation
+	 *            orientation
 	 */
 	public Level(final Orientation orientation) {
 		GameManagerFactory.getInstance().getPlatform().SetOrientation(orientation);
@@ -68,7 +71,7 @@ public abstract class Level implements Screen {
 		audioManager = AudioManagerImpl.getInstance();
 		AssetManager.loadSounds("ui");
 	}
-	
+
 	/**
 	 * createViewport.
 	 */
@@ -98,7 +101,9 @@ public abstract class Level implements Screen {
 
 	/**
 	 * setLevelID.
-	 * @param newID neue LevelID
+	 * 
+	 * @param newID
+	 *            neue LevelID
 	 */
 	public final void setLevelID(final String newID) {
 		if (levelID != null) {
@@ -115,14 +120,18 @@ public abstract class Level implements Screen {
 
 	/**
 	 * doRender.
-	 * @param delta delta
+	 * 
+	 * @param delta
+	 *            delta
 	 */
 	protected abstract void doRender(float delta); // Called by render() - to be
 													// used in subclasses
 
 	/**
 	 * render.
-	 * @param delta delta
+	 * 
+	 * @param delta
+	 *            delta
 	 */
 	@Override
 	public final void render(final float deltaIn) {
@@ -140,9 +149,9 @@ public abstract class Level implements Screen {
 		}
 		doRender(delta);
 		overlay.draw();
-		
+
 		// ########### DEBUG ##################
-		//fpsLogger.log();
+		// fpsLogger.log();
 		// ####################################
 
 	}
@@ -171,8 +180,11 @@ public abstract class Level implements Screen {
 
 	/**
 	 * doResize.
-	 * @param width width
-	 * @param height height
+	 * 
+	 * @param width
+	 *            width
+	 * @param height
+	 *            height
 	 */
 	protected abstract void doResize(int width, int height);
 
@@ -215,12 +227,14 @@ public abstract class Level implements Screen {
 		paused = true;
 		doPause();
 	}
-	
+
 	/**
 	 * pause.
-	 * @param b true == pause
+	 * 
+	 * @param b
+	 *            true == pause
 	 */
-	public final void pause(final boolean b){
+	public final void pause(final boolean b) {
 		overlayPaused = true;
 		pause();
 	}
@@ -232,17 +246,19 @@ public abstract class Level implements Screen {
 
 	@Override
 	public final void resume() {
-		if(!overlayPaused){
+		if (!overlayPaused) {
 			paused = false;
 			doResume();
 		}
 	}
-	
+
 	/**
 	 * resume.
-	 * @param b b
+	 * 
+	 * @param b
+	 *            b
 	 */
-	public final void resume(final boolean b){
+	public final void resume(final boolean b) {
 		overlayPaused = b;
 		resume();
 	}
