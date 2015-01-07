@@ -10,19 +10,30 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.haw.projecthorse.assetmanager.AssetManager;
-import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.lootmanager.Lootable;
 
+/**
+ * Popup, das alle gesammelten Loots aus der {@link Chest}Chest anzeigt.
+ * 
+ * @author Oliver
+ * @version 1.0
+ */
+
 public class LootPopup extends Popup {
 
 	private int lootPopupHeight = height / 3;
 
-	public LootPopup(HashSet<Lootable> loots) {
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param loots
+	 *            Liste alles Loots, die angezeigt werden sollen.
+	 */
+	public LootPopup(final HashSet<Lootable> loots) {
 		super();
 
 		Label label = createLabel("Deine gesammelten Gegenstaende");
@@ -31,14 +42,15 @@ public class LootPopup extends Popup {
 		// label.layout();
 		addActor(label);
 
-		LootDisplay button = new LootDisplay(loots, lootPopupHeight, popupWidth - 80);
+		LootDisplay button = new LootDisplay(loots, lootPopupHeight,
+				popupWidth - 80);
 		addActor(button);
 
 		Button ok = createButton("OK");
 		ok.addListener(new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				LootPopup.this.getOverlay().disposePopup();
 				event.cancel();
 			}
@@ -46,6 +58,12 @@ public class LootPopup extends Popup {
 		addActor(ok);
 	}
 
+	/**
+	 * Display in dem jeweils ein Loot dargestellt wird. Man kann zwischen den
+	 * einzelnen Loots hin und her wechseln.
+	 * 
+	 * @author Oliver
+	 */
 	private class LootDisplay extends Group {
 		private ArrayList<Lootable> lootList;
 		private int i, max;
@@ -56,7 +74,18 @@ public class LootPopup extends Popup {
 									// geändert hat und somit die Daten dafür
 									// neu berechnet werden müssen
 
-		public LootDisplay(HashSet<Lootable> loots, int lootHeight, int lootWidth) {
+		/**
+		 * Konstruktor.
+		 * 
+		 * @param loots
+		 *            Alle Loots, die angezeigt werden sllen
+		 * @param lootHeight
+		 *            Höhe des Displays
+		 * @param lootWidth
+		 *            Breite es Displays
+		 */
+		public LootDisplay(final HashSet<Lootable> loots, final int lootHeight,
+				final int lootWidth) {
 			// Instanzvariable instazieren
 			lootList = new ArrayList<Lootable>(loots);
 			i = 0;
@@ -71,16 +100,19 @@ public class LootPopup extends Popup {
 			addSwipeListener();
 		}
 
+		/**
+		 * Fügt die Swipe-Steuerung hinzu.
+		 */
 		private void addSwipeListener() {
 			addListener(new SwipeListener() {
 				@Override
-				protected boolean handleSwiped(SwipeEvent event, Actor actor) {
+				protected boolean handleSwiped(final SwipeEvent event, final Actor actor) {
 					swiped(event, actor);
 					return true;
 				}
 
 				@Override
-				public void swiped(SwipeEvent event, Actor actor) {
+				public void swiped(final SwipeEvent event, final Actor actor) {
 					switch (event.getDirection()) {
 					case LEFT:
 						nextLoot();
@@ -95,21 +127,27 @@ public class LootPopup extends Popup {
 					// Da wir das Popup sind, sollten wir das Event canceln, um
 					// ein Weiterreichen an die unterliegendes Stages zu
 					// vermeiden
-					event.cancel(); // TODO: Funktioniert so leider noch nicht!
+					event.cancel();
 				}
 			});
 		}
-		
+
+		/**
+		 * Erstellt das Name-Label.
+		 */
 		private void createNameLabel() {
 			lootName = createLabel("");
 			addActor(lootName);
 		}
 
+		/**
+		 * Erstellt die Pfeil-Buttons zum Wechseln.
+		 */
 		private void createArrowButtons() {
 			ButtonSmall left = new ButtonSmall(ButtonType.LEFT);
 			left.addListener(new ChangeListener() {
 				@Override
-				public void changed(ChangeEvent event, Actor actor) {
+				public void changed(final ChangeEvent event, final Actor actor) {
 					prevLoot();
 				}
 			});
@@ -122,35 +160,48 @@ public class LootPopup extends Popup {
 			ButtonSmall right = new ButtonSmall(ButtonType.RIGHT);
 			right.addListener(new ChangeListener() {
 				@Override
-				public void changed(ChangeEvent event, Actor actor) {
+				public void changed(final ChangeEvent event, final Actor actor) {
 					nextLoot();
 				}
 			});
 			right.setHeight(getHeight() / 4);
 			right.setWidth(getHeight() / 4);
 
-			right.setPosition(getWidth() - right.getWidth(), (getHeight() - right.getHeight()) / 2);
+			right.setPosition(getWidth() - right.getWidth(),
+					(getHeight() - right.getHeight()) / 2);
 			addActor(right);
 		}
 
+		/**
+		 * Wechselt zum nächsten Loot.
+		 */
 		private void nextLoot() {
 			i = (i + 1) % max;
 			refreshed = false;
 		}
 
+		/**
+		 * Wechselt zum vorherigen Loot.
+		 */
 		private void prevLoot() {
 			i = (i == 0) ? max - 1 : i - 1;
 			refreshed = false;
 		}
 
-		private void refreshImage() {
+		/**
+		 * Aktualisiert das Bild und den Namen des Loots.
+		 */
+		private void refreshLoot() {
 			lootName.setText(lootList.get(i).getName());
-			lootName.setPosition((getWidth() - lootName.getPrefWidth()) / 2f, 10);
-			
+			lootName.setPosition((getWidth() - lootName.getPrefWidth()) / 2f,
+					10);
+
 			currentImage = lootList.get(i).getImage();
 
-			imageWidth = (currentImage.getMinWidth() > getWidth()) ? getWidth() : currentImage.getMinWidth();
-			imageHeight = (currentImage.getMinHeight() > getHeight()) ? getHeight() : currentImage.getMinHeight();
+			imageWidth = (currentImage.getMinWidth() > getWidth()) ? getWidth()
+					: currentImage.getMinWidth();
+			imageHeight = (currentImage.getMinHeight() > getHeight()) ? getHeight()
+					: currentImage.getMinHeight();
 
 			imageX = getX() + ((getWidth() - imageWidth) / 2);
 			imageY = getY() + ((getHeight() - imageHeight) / 2);
@@ -159,9 +210,9 @@ public class LootPopup extends Popup {
 		}
 
 		@Override
-		public void draw(Batch batch, float parentAlpha) {
+		public void draw(final Batch batch, final float parentAlpha) {
 			if (!refreshed) {
-				refreshImage();
+				refreshLoot();
 			}
 
 			currentImage.draw(batch, imageX, imageY, imageWidth, imageHeight);

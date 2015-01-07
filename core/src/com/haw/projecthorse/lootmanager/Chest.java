@@ -11,15 +11,35 @@ import com.haw.projecthorse.lootmanager.popups.AchievmentPopup;
 import com.haw.projecthorse.lootmanager.popups.LootPopup;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
+/**
+ * Truhe, die die gesammlten Loots für ein Spiel enthält und Funktionen zum
+ * Anzeigen und Speichern des Loots anbietet.
+ * 
+ * @author Oliver
+ * @version 1.0
+ */
+
 public class Chest {
 	private HashSet<Lootable> content = null;
 	private Overlay overlay;
 
-	public Chest(Overlay overlay) {
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param overlay
+	 *            Das Overlay, auf dem die Popups angezeigt werden sollen.
+	 */
+	public Chest(final Overlay overlay) {
 		this.overlay = overlay;
 	}
 
-	public void addLoot(Lootable loot) {
+	/**
+	 * Fügt der Truhe ein Loot hinzu.
+	 * 
+	 * @param loot
+	 *            Das hinzuzufügende Loot.
+	 */
+	public void addLoot(final Lootable loot) {
 		if (content == null) {
 			content = new HashSet<Lootable>();
 		}
@@ -50,13 +70,21 @@ public class Chest {
 		}
 	}
 
-	public void addLootAndShowAchievment(Loot loot) {
+	/**
+	 * Fügt der Truhe ein Loot hinzu und zeigt ein kleines,
+	 * selbstverschwindendes Popup dazu an.
+	 * 
+	 * @param loot
+	 *            Das hinzuzufügende Loot.
+	 */
+	public void addLootAndShowAchievment(final Loot loot) {
 		addLoot(loot);
 
-		String message = loot.getDescription();
-		if (message != null) {
-			// TODO: Erfolg enzeigen
-			overlay.addActor(new AchievmentPopup(loot.getName(), loot.getLootImage().getDrawable(), overlay.getWidth(), overlay.getHeight()));
+		String name = loot.getName();
+		if (name != null) {
+			overlay.addActor(new AchievmentPopup(loot.getName(), loot
+					.getLootImage().getDrawable(), overlay.getWidth(), overlay
+					.getHeight()));
 		}
 	}
 }
