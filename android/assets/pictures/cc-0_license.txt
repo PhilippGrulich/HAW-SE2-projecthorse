@@ -11,6 +11,8 @@ appleRun;apple4.png; CC-0; Lars;
 appleRun;branch1.png; CC-0; Lars; 
 appleRun;branch2.png; CC-0; Lars; 
 appleRun;tree.png; CC-0; Lars;
+appleRun;appleGold.png; CC-0; Lars;
+appleRun;branchGold.png; CC-0; Lars;
 thimblerig;purple-witch-hat.png; cc-0; Pippi2011; https://openclipart.org/image/300px/svg_to_png/181468/purple-witch-hat.png
 thimblerig;obj_trees1.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/
 thimblerig;obj_trees2.png;cc-0;Chris Hildenbrand;http://2dgameartforfree.blogspot.de/

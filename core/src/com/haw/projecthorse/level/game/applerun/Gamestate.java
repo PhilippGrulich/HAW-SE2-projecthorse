@@ -339,7 +339,7 @@ public class Gamestate {
 	 *            entity zum entfernen
 	 */
 	public void removeFallingEntity(final Entity entity) {
-		// TODO check if entity is really inside this group. Otherwise maxing
+		// TODo check if entity is really inside this group. Otherwise maxing
 		// out available slots for new entities
 		fallingEntities.removeActor(entity);
 		GameObjectFactory.giveBackEntity(entity);
@@ -451,7 +451,6 @@ public class Gamestate {
 	 * removeDroppedDownEntities.
 	 */
 	private void removeDroppedDownEntities() {
-		// TODO remove with actor as ground object.
 		// Splatter on ground contact?
 		for (Actor actor : fallingEntities.getChildren()) {
 			if (actor.getY() < (1 - (actor.getHeight() * actor.getScaleY()))) {
