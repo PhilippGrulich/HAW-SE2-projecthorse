@@ -7,8 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
+/**
+ * Dieser Button öffnet das PlayerMenu.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class NavbarStableButton extends NavbarButton {
-
+	/**
+	 * Konstruktor.
+	 */
 	public NavbarStableButton() {
 		ImageButton imageButton = new ButtonSmall(ButtonSmall.ButtonType.HOME);
 

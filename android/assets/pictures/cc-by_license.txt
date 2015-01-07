@@ -7,16 +7,9 @@ parcours;Kuerbis6.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-go
 parcours;Kuerbis7.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
 parcours;Kuerbis8.png;CC-by;Justin Nichol;http://opengameart.org/content/fall-gourd-icons
 parcours;grass.png;CC-by;draconx;http://opengameart.org/node/10485
-playerHannover;playerHannover.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon) 
 ui;buttonLoot.png;CC-BY;Freepik;http://www.flaticon.com
-ui;buttonLoot.png;CC-BY;Freepik;http://www.flaticon.com
-playerHannover;playerHannover.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon) 
-
-
-
-
-
-
-
-
-CityTexte;berlinText;CC-BY,http://grundschulwiki.zum.de/wiki/Berlin
+playerHannoveraner;playerHannoveraner.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
+playerFriese;playerFriese.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
+playerHaflinger;playerHaflinger.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
+playerShetti;playerShetti.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
+CityTexte;berlinText;CC-BY;;http://grundschulwiki.zum.de/wiki/Berlin

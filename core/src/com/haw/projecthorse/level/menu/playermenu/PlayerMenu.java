@@ -29,7 +29,7 @@ import com.haw.projecthorse.player.race.RaceLoot;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class PlayerMenu extends Menu {
-	private final float SCALEBYFACTOR = 1f;
+	private static final float SCALEBYFACTOR = 1f;
 	private Stage stage;
 	private Player active;
 	private Label label;
@@ -57,8 +57,6 @@ public class PlayerMenu extends Menu {
 
 	private void updatePlayer(boolean right) {
 		Player inActive = new PlayerImpl(races.get(curRaceIndex).getRace());
-		inActive.setScale(1.75f); // TODO: Wieso ist setScale nicht im
-									// PlayerImpl-Konstruktor?
 		inActive.scaleBy(SCALEBYFACTOR);
 		stage.addActor(inActive);
 

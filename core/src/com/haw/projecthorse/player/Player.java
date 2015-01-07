@@ -21,7 +21,6 @@ import com.haw.projecthorse.player.race.Race;
 public abstract class Player extends Actor {
 	protected Race race;
 
-	/**
 	 * Verändert die Geschwindigkeit der Bewegungsanimation um ein angegegbenes
 	 * Delta, die Richtung wird hierbei berücksichtigt.
 	 * 

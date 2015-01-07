@@ -20,11 +20,12 @@ import com.haw.projecthorse.savegame.json.SaveGame;
  */
 
 public class PlayerImpl extends Player {
-	// private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;
+	private static final float SCALEFACTOR = 1.2f; // hiermit wird erreicht,
+													// dass nicht alle Spiele an
+													// das neue Scaling
+													// angepasst werden müseen
 
-	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
-	// desto schneller
-
+	
 	private String imgFolder;
 	private Map<String, TextureRegion> spriteMap;
 	private TextureRegion activeSprite;
@@ -53,7 +54,6 @@ public class PlayerImpl extends Player {
 	 */
 	public PlayerImpl() {
 		this(getSaveGameRace());
-		// this.scaleBy(-0.12f);
 		this.setScale(1.75f);
 	}
 
@@ -69,10 +69,9 @@ public class PlayerImpl extends Player {
 		spriteMap = AssetManager.getAllTextureRegions(imgFolder);
 		activeSprite = spriteMap.get("side-1");
 
-		flipX = true;
+		this.setScale(race.size() * SCALEFACTOR);
 
-		setBounds(getX(), getY(), activeSprite.getRegionWidth(),
-				activeSprite.getRegionHeight());
+		flipX = true;
 	}
 
 	/**
@@ -111,6 +110,7 @@ public class PlayerImpl extends Player {
 		batch.setColor(batchColor);
 	}
 
+	@Override
 	@Override
 	public void changeAnimationSpeed(final float delta) {
 		speed = Math.min(1, Math.max(0, speed + delta));

@@ -7,8 +7,16 @@ import com.haw.projecthorse.gamemanager.GameManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
+/**
+ * Dieser Button öffnet die LootGallery.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class NavbarLootGalleryButton extends NavbarButton {
-
+	/**
+	 * Konstruktor.
+	 */
 	public NavbarLootGalleryButton() {
 		ImageButton imageButton = new ButtonSmall(ButtonSmall.ButtonType.LOOT);
 
@@ -16,8 +24,8 @@ public class NavbarLootGalleryButton extends NavbarButton {
 		this.addListener(new InputListener() {
 
 			@Override
-			public boolean touchDown(final InputEvent event, final float x,
-					final float y, final int pointer, final int button) {
+			public boolean touchDown(final InputEvent event, final float x, final float y, final int pointer,
+					final int button) {
 
 				GameManager gm = GameManagerFactory.getInstance();
 				if (gm.getCurrentLevelID() != "lootGallery") {
