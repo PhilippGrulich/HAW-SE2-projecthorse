@@ -10,16 +10,29 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 
 /**
- * @author Viktor Diese Klasse ist stellt das Standarddesign eines kleinen
- *         Buttons dar wie er zum Beispiel für die Navigationsmenüs genutzt
- *         wird.
+ * Diese Klasse ist stellt das Standarddesign eines kleinen Buttons dar wie er
+ * zum Beispiel für die Navigationsmenüs genutzt wird.
+ * 
+ * @author Viktor
+ * @version 1
  */
-
 public class ButtonSmall extends ImageButton {
 
+	/**
+	 * Ein Enum für die Art des Buttons.
+	 * 
+	 * @author Viktor
+	 *
+	 */
 	public enum ButtonType {
 		BACK, APPLY, CANCEL, LEFT, RIGHT, START, PAUSE, SETTINGS, LOOT, HOME, INFO;
 
+		/**
+		 * Liefert den zur Button Art passenden Dateinamen der zugehörigen
+		 * Grafik.
+		 * 
+		 * @return Der Dateiname
+		 */
 		String getFileName() {
 			switch (this) {
 			case BACK:
@@ -45,26 +58,46 @@ public class ButtonSmall extends ImageButton {
 			case INFO:
 				return "buttonCityInfo";
 			default:
-				Gdx.app.log("ERROR", "Missing Filename string for " + this.name() + " in ButtonType enum!");
+				Gdx.app.log("ERROR",
+						"Missing Filename string for " + this.name()
+								+ " in ButtonType enum!");
 				return this.name();
 			}
 		}
 	}
 
-	public ButtonSmall(ButtonType type) {
+	/**
+	 * Der Default Konstruktor.
+	 * 
+	 * @param type
+	 *            Die Art des Buttons
+	 */
+	public ButtonSmall(final ButtonType type) {
 		super(getDrawable(type));
 		addFeedback();
 	}
 
-	private static Drawable getDrawable(ButtonType type) {
-		return new TextureRegionDrawable(AssetManager.getTextureRegion("ui", type.getFileName()));
+	/**
+	 * Gibt das zur Button Art gehörige Drawable zurück.
+	 * 
+	 * @param type
+	 *            Die Button Art
+	 * @return Das Drawable
+	 */
+	private static Drawable getDrawable(final ButtonType type) {
+		return new TextureRegionDrawable(AssetManager.getTextureRegion("ui",
+				type.getFileName()));
 	}
 
+	/**
+	 * Fügt dem Button ein akustisches und haptisches Feedback hinzu.
+	 */
 	private void addFeedback() {
 		this.addListener(new ChangeListener() {
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				AudioManagerImpl.getInstance().getSound("ui", "click.ogg").play();
+			public void changed(final ChangeEvent event, final Actor actor) {
+				AudioManagerImpl.getInstance().getSound("ui", "click.ogg")
+						.play();
 				Gdx.input.vibrate(50);
 			}
 		});

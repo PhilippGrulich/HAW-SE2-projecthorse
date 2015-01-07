@@ -12,29 +12,42 @@ import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 
 /**
+ * Diese Klasse ist stellt das Standarddesign eines breiten Buttons dar.
+ * 
  * @author Viktor
- *	Diese Klasse ist stellt das Standarddesign eines breiten Buttons dar.
+ * @version 1
  */
 
-public class ButtonLarge extends ImageTextButton{
-	
+public class ButtonLarge extends ImageTextButton {
+
+	/**
+	 * Enum für Button Stile.
+	 * 
+	 * @author Viktor
+	 *
+	 */
 	public enum ButtonColor {
 		LIGHT_GRAY, LIGHT_BROWN;
-		
-		
-		protected static ButtonColor getDefaultButtonColor(){
+
+		protected static ButtonColor getDefaultButtonColor() {
 			return LIGHT_GRAY;
 		}
-		
-		protected static FontSize getDefaultFontSize(){
+
+		protected static FontSize getDefaultFontSize() {
 			return FontSize.FORTY;
 		}
-		
-		protected static Color getDefaultFontColor(){
+
+		protected static Color getDefaultFontColor() {
 			return Color.GRAY;
 		}
-		
-		protected String getFileName(){
+
+		/**
+		 * Liefert den zum Stil passenden Dateinamen der zugehörigen Button
+		 * Grafik.
+		 * 
+		 * @return Der Dateiname
+		 */
+		protected String getFileName() {
 			switch (this) {
 			case LIGHT_GRAY:
 				return "popup_button";
@@ -47,55 +60,93 @@ public class ButtonLarge extends ImageTextButton{
 				return this.name();
 			}
 		}
-		
-		protected Color getFontColor(){
+
+		/**
+		 * Liefert die zum Stil passende Textfarbe.
+		 * 
+		 * @return Die Textfarbe
+		 */
+		protected Color getFontColor() {
 			switch (this) {
 			case LIGHT_GRAY:
 				return Color.GRAY;
 			case LIGHT_BROWN:
 				return Color.GRAY;
 			default:
-				Gdx.app.log("ERROR",
-						"Missing FontColor for " + this.name()
-								+ " in ButtonColor enum!");
+				Gdx.app.log("ERROR", "Missing FontColor for " + this.name()
+						+ " in ButtonColor enum!");
 				return getDefaultFontColor();
 			}
 		}
-			
-		protected FontSize getFontSize(){
+
+		/**
+		 * Liefert die zum Stil passende Textgröße.
+		 * 
+		 * @return Die Textgröße
+		 */
+		protected FontSize getFontSize() {
 			switch (this) {
 			case LIGHT_GRAY:
 				return FontSize.FORTY;
 			case LIGHT_BROWN:
 				return FontSize.FORTY;
 			default:
-				Gdx.app.log("ERROR",
-						"Missing FontSize for " + this.name()
-								+ " in ButtonColor enum!");
+				Gdx.app.log("ERROR", "Missing FontSize for " + this.name()
+						+ " in ButtonColor enum!");
 				return getDefaultFontSize();
 			}
 		}
 	}
-	
-	public ButtonLarge(String label, ButtonColor btnColor){
+
+	/**
+	 * Default Konstruktor. Liefert einen Button im Default Stil (Hellgrau).
+	 * 
+	 * @param label
+	 *            Der Text, der auf dem Button stehen soll
+	 */
+
+	public ButtonLarge(final String label) {
+		this(label, ButtonColor.getDefaultButtonColor());
+	}
+
+	/**
+	 * Erweiterter Konstruktor.
+	 * 
+	 * @param label
+	 *            Der Text, der auf dem Button stehen soll
+	 * @param btnColor
+	 *            Der Button Stil
+	 */
+	public ButtonLarge(final String label, final ButtonColor btnColor) {
 		super(label, getImageButtonStyle(btnColor));
 		addFeedback();
 	}
-	
-	public ButtonLarge(String label){
-		this(label, ButtonColor.getDefaultButtonColor());		
-	}
-	
-	public ButtonLarge(String label, ChangeListener inputListener){
+
+	/**
+	 * Erweiterter Konstruktor.
+	 * 
+	 * @param label
+	 *            Der Text, der auf dem Button stehen soll
+	 * @param inputListener
+	 *            Der Listener, der dem Button hinzugefügt werden soll
+	 */
+	public ButtonLarge(final String label, final ChangeListener inputListener) {
 		this(label, ButtonColor.getDefaultButtonColor());
 		addListener(inputListener);
 	}
-	
-	
-	
-	private static ImageTextButtonStyle getImageButtonStyle(ButtonColor color) {
-		
-		Drawable drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", color.getFileName()));
+
+	/**
+	 * Erstellt einen ImageTextButtonStyle anhand eines Button Stils.
+	 * 
+	 * @param color
+	 *            Der Button Stil
+	 * @return Das ImageTextButtonStyle Objekt
+	 */
+	private static ImageTextButtonStyle getImageButtonStyle(
+			final ButtonColor color) {
+
+		Drawable drawable = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", color.getFileName()));
 
 		ImageTextButtonStyle imageButtonStyle = new ImageTextButton.ImageTextButtonStyle();
 		imageButtonStyle.down = drawable;
@@ -106,13 +157,17 @@ public class ButtonLarge extends ImageTextButton{
 
 		return imageButtonStyle;
 	}
-	
-	private void addFeedback(){
+
+	/**
+	 * Fügt dem Button ein akustisches und haptisches Feedback hinzu.
+	 */
+	private void addFeedback() {
 		this.addListener(new ChangeListener() {
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-			AudioManagerImpl.getInstance().getSound("ui", "click.ogg").play();
-			Gdx.input.vibrate(50);
+			public void changed(final ChangeEvent event, final Actor actor) {
+				AudioManagerImpl.getInstance().getSound("ui", "click.ogg")
+						.play();
+				Gdx.input.vibrate(50);
 			}
 		});
 	}
