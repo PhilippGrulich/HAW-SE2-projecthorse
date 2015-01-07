@@ -321,7 +321,14 @@ public class Thimblerig extends Game{
 	 */
 	private void initPlayer(){
 		this.pl = new PlayerImpl();
-		this.pl.scaleBy(-0.5f);
+		//Abhaengig des scalings, darf nicht zu viel herunter gescalet werden,
+		//da sonst die Pferde zu klein geraten
+		if(this.pl.getScaleX() < 1.7f){
+			this.pl.scaleBy(-0.3f);
+		}
+		else{
+			this.pl.scaleBy(-0.7f);
+		}
 		this.pl.setVisible(false);
 	}
 	

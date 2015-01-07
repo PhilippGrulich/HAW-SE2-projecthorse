@@ -3,17 +3,30 @@ package com.haw.projecthorse.player.race;
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.LootImage;
 
+/**
+ * Loot-Klasse für die Pferderassen.
+ * 
+ * @author Oliver
+ * @version 1.0
+ */
+
 public class RaceLoot extends Loot {
 	private HorseRace race;
 
 	/**
-	 * NUR zum Laden aus der JSON-Datei
+	 * Konstruktor NUR zum Laden aus der JSON-Datei.
 	 */
 	public RaceLoot() {
 		super();
 	}
-	
-	public RaceLoot(HorseRace race) {
+
+	/**
+	 * Konsturktor.
+	 * 
+	 * @param race
+	 *            Die Rasse, die gelootet werden soll.
+	 */
+	public RaceLoot(final HorseRace race) {
 		super(new Race(race).name(), "");
 		this.race = race;
 	}
@@ -29,13 +42,15 @@ public class RaceLoot extends Loot {
 	}
 
 	@Override
-	protected boolean doEquals(Object other) {
+	protected boolean doEquals(final Object other) {
 		RaceLoot o = (RaceLoot) other;
 		if (race == null) {
-			if (o.race != null)
+			if (o.race != null) {
 				return false;
-		} else if (!race.equals(o.race))
+			}
+		} else if (!race.equals(o.race)) {
 			return false;
+		}
 		return true;
 	}
 

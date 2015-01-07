@@ -13,15 +13,35 @@ import com.badlogic.gdx.utils.Scaling;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 
+/**
+ * Kleines Popup für die Methode addLootAndShowAchievment der Klasse
+ * {@link Chest}Chest.
+ * 
+ * @author Oliver
+ * @version 1.0
+ */
+
 public class AchievmentPopup extends WidgetGroup {
 	private float width, height;
 
-	public AchievmentPopup(String description, Drawable img, float parentWidth,
-			float parentHeight) {
+	/**
+	 * Konsturktor.
+	 * 
+	 * @param name
+	 *            Name des Loots
+	 * @param img
+	 *            Bild des Loots
+	 * @param parentWidth
+	 *            maximale Breite des Popups
+	 * @param parentHeight
+	 *            Y-Position des Popups
+	 */
+	public AchievmentPopup(final String name, final Drawable img,
+			final float parentWidth, final float parentHeight) {
 		height = 100;
 		width = parentWidth * 0.7f;
 
-		createLabelAndImg(description, img);
+		createLabelAndImg(name, img);
 		setBounds((parentWidth - width) / 2, parentHeight + 10, width, height);
 
 		addAction(Actions.sequence(Actions.moveBy(0, -height, 0.8f),
@@ -29,7 +49,15 @@ public class AchievmentPopup extends WidgetGroup {
 				Actions.removeActor()));
 	}
 
-	private void createLabelAndImg(String description, Drawable img) {
+	/**
+	 * Erzeugt die Elemente für den Namen und das Bild des Loots.
+	 * 
+	 * @param name
+	 *            Name des Loots
+	 * @param img
+	 *            Bild des Loots
+	 */
+	private void createLabelAndImg(final String name, final Drawable img) {
 		Table table = new Table();
 		table.setFillParent(true);
 		table.left().top();
@@ -39,7 +67,7 @@ public class AchievmentPopup extends WidgetGroup {
 		Image icon = new Image(img, Scaling.fit);
 		table.add(icon).height(70).maxWidth(120).pad(15, 0, 15, 0);
 
-		Label desc = new Label(description, new LabelStyle(
+		Label desc = new Label(name, new LabelStyle(
 				AssetManager.getTextFont(FontSize.FORTY), Color.DARK_GRAY));
 		desc.setEllipse(true);
 		table.add(desc).expandX().left();

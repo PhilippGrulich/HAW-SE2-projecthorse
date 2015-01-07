@@ -1,6 +1,6 @@
 
 playerHannoveraner.png
-size: 1694,784
+size: 1690,390
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -149,13 +149,6 @@ jump-7
   xy: 912, 262
   size: 128, 128
   orig: 128, 128
-  offset: 0, 0
-  index: -1
-playerHannover
-  rotate: false
-  xy: 2, 392
-  size: 1692, 392
-  orig: 1692, 392
   offset: 0, 0
   index: -1
 side-1

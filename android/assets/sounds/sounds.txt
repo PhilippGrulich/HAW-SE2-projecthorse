@@ -2,7 +2,10 @@ thimblerig;jingles_SAX04.ogg;cc-0;Kenney;http://www.kenney.nl
 thimblerig;jingles_SAX07.ogg;cc-0;Kenney;http://www.kenney.nl
 thimblerig;jingles_SAX10.ogg;cc-0;Kenney;http://www.kenney.nl
 thimblerig;Wiehern.ogg;cc-0;Hü;http://commons.wikimedia.org/wiki/File:Wiehern.ogg
-parcours;eat.wav;cc-0; -;http://www.freesound.org/people/phatcorns/sounds/250106/
+parcours;eat.wav;cc-0;-;http://www.freesound.org/people/phatcorns/sounds/250106/
 puzzle;click.wav;cc-0;OtisJames;http://www.freesound.org/people/OtisJames/sounds/215772/
 puzzle;swipe.wav;cc-0;qubodup;http://www.freesound.org/people/qubodup/sounds/60007/
 puzzle;win.wav;cc-0;fins;http://www.freesound.org/people/fins/sounds/171671/
+AppleRun;chew.mp3;cc-0;-;http://www.freesound.org/
+AppleRun;hit.mp3;cc-0;-;http://www.freesound.org/
+ui;click.ogg;cc-0;-;http://www.freesound.org/

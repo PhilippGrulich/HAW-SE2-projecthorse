@@ -5,15 +5,36 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 
+/**
+ * Ein Scrollpane im Einheitsdesign.
+ * 
+ * @author Philipp
+ * @version 1
+ *
+ */
 public class DefaultScrollPane extends ScrollPane {
 	private final float height, width;
 
-	public DefaultScrollPane(Actor widget, float height, float width) {
+	/**
+	 * Der Default Konstruktor.
+	 * 
+	 * @param widget
+	 *            Das Container Objekt, dass gescrollt werden soll
+	 * @param height
+	 *            Die gewünschte Höhe
+	 * @param width
+	 *            Die gewünschte Breite
+	 */
+	public DefaultScrollPane(final Actor widget, final float height,
+			final float width) {
 		super(widget);
 		ScrollPaneStyle paneStyle = new ScrollPaneStyle();
-		paneStyle.vScroll = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "vScroll"));
-		paneStyle.vScrollKnob = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "vScrollKnob"));
-		paneStyle.corner = new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "vScrollKnob"));
+		paneStyle.vScroll = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "vScroll"));
+		paneStyle.vScrollKnob = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "vScrollKnob"));
+		paneStyle.corner = new TextureRegionDrawable(
+				AssetManager.getTextureRegion("ui", "vScrollKnob"));
 		setStyle(paneStyle);
 
 		setScrollingDisabled(true, false);

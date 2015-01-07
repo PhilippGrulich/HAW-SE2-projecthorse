@@ -607,9 +607,10 @@ public final class AssetManager {
 
 		try {
 			BufferedReader bufRead = new BufferedReader(new FileReader(licenseDir));
-			String fileLine = null;
-			while ((fileLine = bufRead.readLine()) != null) {
+			String fileLine = bufRead.readLine();
+			while (fileLine != null && !fileLine.isEmpty()) {
 				stringList.add(fileLine);
+				fileLine = bufRead.readLine();
 			}
 			bufRead.close();
 		} catch (FileNotFoundException e) {

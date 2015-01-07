@@ -3,36 +3,62 @@ package com.haw.projecthorse.audiomanager;
 import com.badlogic.gdx.audio.Music;
 import com.haw.projecthorse.assetmanager.AssetManager;
 
-public class ManagedMusic implements Music{
+/**
+ * Diese Klasse stellt einen Wrapper für die LibGDX interne Music Klasse dar.
+ * 
+ * @author Viktor
+ * @version 1
+ */
+public class ManagedMusic implements Music {
 
 	private Music internal;
 	private float desiredVolume;
 	boolean muted;
-	private AudioManagerImpl manager; 
-	
-	public ManagedMusic(String levelId, String name, boolean muted, AudioManagerImpl manager) {
+	private AudioManagerImpl manager;
+
+	/**
+	 * Default Konstruktor.
+	 * 
+	 * @param levelId
+	 *            Der Level bzw. Ordnername in dem das Musikstück liegt
+	 * @param name
+	 *            Der Dateiname
+	 * @param muted
+	 *            Ton aus, wenn true, sonst ton an
+	 * @param manager
+	 *            Die AudioManager Instanz
+	 */
+	public ManagedMusic(final String levelId, final String name,
+			final boolean muted, final AudioManagerImpl manager) {
 		internal = AssetManager.getMusic(levelId, name);
 		this.muted = muted;
 		desiredVolume = 1f;
 		this.manager = manager;
 		setMuted(muted);
 	}
-	
-	void setMuted(boolean state) {
+
+	/**
+	 * Stellt den Ton an oder aus.
+	 * 
+	 * @param state
+	 *            An, wenn true, sonst aus.
+	 */
+	void setMuted(final boolean state) {
 		muted = state;
-		if (muted)
+		if (muted) {
 			internal.setVolume(0f);
-		else
+		} else {
 			internal.setVolume(desiredVolume);
-		
+		}
+
 	}
 
 	@Override
 	public void play() {
 		internal.play();
-		
+
 	}
-	
+
 	@Override
 	public void stop() {
 		internal.stop();
@@ -45,16 +71,15 @@ public class ManagedMusic implements Music{
 
 	}
 
-
 	@Override
 	public boolean isPlaying() {
 		return internal.isPlaying();
 	}
 
 	@Override
-	public void setLooping(boolean isLooping) {
+	public void setLooping(final boolean isLooping) {
 		internal.setLooping(isLooping);
-		
+
 	}
 
 	@Override
@@ -63,11 +88,12 @@ public class ManagedMusic implements Music{
 	}
 
 	@Override
-	public void setVolume(float volume) {
+	public void setVolume(final float volume) {
 		desiredVolume = volume;
-		if (!muted)
+		if (!muted) {
 			internal.setVolume(volume);
-		
+		}
+
 	}
 
 	@Override
@@ -76,12 +102,13 @@ public class ManagedMusic implements Music{
 	}
 
 	@Override
-	public void setPan(float pan, float volume) {
+	public void setPan(final float pan, final float volume) {
 		desiredVolume = volume;
-		if (muted)
+		if (muted) {
 			internal.setPan(pan, 0f);
-		else
+		} else {
 			internal.setPan(pan, volume);
+		}
 	}
 
 	@Override
@@ -93,11 +120,11 @@ public class ManagedMusic implements Music{
 	public void dispose() {
 		manager.remove(this);
 		internal.dispose();
-		
+
 	}
 
 	@Override
-	public void setOnCompletionListener(OnCompletionListener listener) {
+	public void setOnCompletionListener(final OnCompletionListener listener) {
 		internal.setOnCompletionListener(listener);
 	}
 
@@ -111,22 +138,25 @@ public class ManagedMusic implements Music{
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ManagedMusic other = (ManagedMusic) obj;
 		if (internal == null) {
-			if (other.internal != null)
+			if (other.internal != null) {
 				return false;
-		} else if (!internal.equals(other.internal))
+			}
+		} else if (!internal.equals(other.internal)) {
 			return false;
+		}
 		return true;
 	}
-	
-	
 
 }

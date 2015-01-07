@@ -109,7 +109,7 @@ public class MainMenu extends Menu {
 				buttonText = games.get(gameID);
 			} else {
 				gameID = (games.containsKey(i)) ? 2*i : i; 
-				buttonText = "Spielstand " + (i+1);
+				buttonText = "Neue Spielerin";
 			}
 			
 			buttonSpiel = new ButtonLarge(buttonText, ButtonLarge.ButtonColor.LIGHT_BROWN);

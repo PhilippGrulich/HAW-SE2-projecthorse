@@ -1,18 +1,23 @@
 package com.haw.projecthorse.gamemanager.settings;
 
-import java.util.Observable;
-
 import com.badlogic.gdx.utils.Disposable;
+
+import java.util.Observable;
 
 /**
  * Die Klasse Settings stellt gerätespezifische Informationen bereit und
  * speichert zudem Einstellungen des Users. Die Klasse selbst nutzt das
  * Singleton Pattern. Sie ist darüberhinaus Observable, um andere Klassen über
  * Veränderungen der Einstellungen benachrichtigen zu können.
+ * 
+ * @author Viktor
+ * @version 1
  */
 public abstract class Settings extends Observable implements Disposable {
 
-	// Umsetzung Singleton
+	/**
+	 * Umsetzung Singleton.
+	 */
 	protected Settings() {
 	}
 
@@ -75,16 +80,17 @@ public abstract class Settings extends Observable implements Disposable {
 	public abstract int getVirtualScreenHeight();
 
 	/**
-	 * Gibt an ob das Accelerometer activiert ist.
+	 * Gibt an ob das Accelerometer aktiviert ist.
 	 * 
-	 * @return {@link Boolean}.
+	 * @return true wenn aktiv, sonst false
 	 */
 	public abstract boolean getAccelerometerState();
 
 	/**
 	 * setzt den Accelerometer status.
 	 * 
-	 * @return {@link Boolean}.
+	 * @param state
+	 *            true für ein, false für aus
 	 */
 	public abstract void setAccelerometerState(boolean state);
 

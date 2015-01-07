@@ -7,32 +7,46 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.audiomanager.AudioManagerImpl;
 
-public class ButtonOwnTextImage extends ImageTextButton{
-	
-	/**
-	 * @author Viktor
-	 *	Diese Klasse ist kapselt den LibGDX ImageTextButton und erweitert ihn sinnvoll.
-	 */
+/**
+ * Diese Klasse ist kapselt den LibGDX ImageTextButton und erweitert ihn
+ * sinnvoll.
+ * 
+ * @author Viktor
+ * @version 1
+ */
+public class ButtonOwnTextImage extends ImageTextButton {
 
-	
-	public ButtonOwnTextImage(String text, Skin skin){
+	/**
+	 * Ein Konstruktor.
+	 * @param text Der Text für den Button
+	 * @param skin Ein Skin Objekt, dass die Images für den Button enthält
+	 */
+	public ButtonOwnTextImage(final String text, final Skin skin) {
 		super(text, skin);
 		addFeedback();
 	}
-	
-	public ButtonOwnTextImage(String text, ImageTextButtonStyle style){
+
+	/**
+	 * Ein Konstruktor.
+	 * @param text Der Text für den Button
+	 * @param style Ein ImageTextButtonStyle Objekt, dass die Images für den Button enthält
+	 */
+	public ButtonOwnTextImage(final String text, final ImageTextButtonStyle style) {
 		super(text, style);
 		addFeedback();
 	}
-	
-	private void addFeedback(){
+
+	/**
+	 * Fügt dem Button ein akustisches und haptisches Feedback hinzu.
+	 */
+	private void addFeedback() {
 		this.addListener(new ChangeListener() {
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-			AudioManagerImpl.getInstance().getSound("ui", "click.ogg").play();
-			Gdx.input.vibrate(50);	
+			public void changed(final ChangeEvent event, final Actor actor) {
+				AudioManagerImpl.getInstance().getSound("ui", "click.ogg")
+						.play();
+				Gdx.input.vibrate(50);
 			}
 		});
 	}
-
 }
