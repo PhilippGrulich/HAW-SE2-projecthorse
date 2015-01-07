@@ -27,7 +27,7 @@ shadedLight28
   index: -1
 
 worldmap2.png
-size: 1444,1282
+size: 722,1282
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -36,12 +36,5 @@ erde-und-sterne
   xy: 2, 2
   size: 720, 1280
   orig: 720, 1280
-  offset: 0, 0
-  index: -1
-germanymap_scaled - Kopie
-  rotate: false
-  xy: 724, 277
-  size: 720, 1005
-  orig: 720, 1005
   offset: 0, 0
   index: -1

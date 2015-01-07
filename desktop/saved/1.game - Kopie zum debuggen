@@ -94,7 +94,7 @@ lootCollection: [
 	}
 ],
 name: AllePferde,
-ID: 1,
+id: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
 	race: SHETTI
