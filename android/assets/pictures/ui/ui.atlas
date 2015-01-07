@@ -34,42 +34,42 @@ buttonCancel
   index: -1
 buttonCityInfo
   rotate: false
-  xy: 1012, 330
-  size: 80, 78
-  orig: 80, 78
-  offset: 0, 0
-  index: -1
-buttonHome
-  rotate: false
-  xy: 1094, 412
-  size: 80, 78
-  orig: 80, 78
-  offset: 0, 0
-  index: -1
-buttonLeft
-  rotate: false
   xy: 930, 328
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-buttonLoot
+buttonHome
   rotate: false
   xy: 1012, 410
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-buttonRight
+buttonLeft
   rotate: false
   xy: 1157, 1561
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-buttonStart
+buttonLoot
   rotate: false
   xy: 1239, 1643
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+buttonRight
+  rotate: false
+  xy: 1358, 1734
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+buttonStart
+  rotate: false
+  xy: 930, 246
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -111,7 +111,7 @@ panel_brown
   index: -1
 pauseIcon
   rotate: false
-  xy: 1358, 1734
+  xy: 1012, 328
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
@@ -125,7 +125,7 @@ popup_button
   index: -1
 settingsIcon
   rotate: false
-  xy: 930, 246
+  xy: 1094, 410
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
