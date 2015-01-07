@@ -12,12 +12,20 @@ import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
+/**
+ * 
+ * @author Masha
+ *@version 1.0
+ */
 public class PuzzlePlayer {
 
 	private Player player;
 	private static Image speechBalloon;
 	private static Label label;
 
+	/**
+	 * 
+	 */
 	public PuzzlePlayer() {
 
 		player = new PlayerImpl();
@@ -33,7 +41,8 @@ public class PuzzlePlayer {
 	}
 
 	/**
-	 * lade das Sprechballonbild, setze die Größe und die Position, füge dann
+	 * lade das Sprechballonbild.
+	 * setze die Größe und die Position, füge dann
 	 * das Bild in die zweite Stage
 	 */
 	private void addSpeechBalloon() {
@@ -50,7 +59,8 @@ public class PuzzlePlayer {
 	}
 
 	/**
-	 * erstelle eine Label, positioniere die in das Sprrechballonbild, füge die
+	 * erstelle eine Label.
+	 *  positioniere die in das Sprrechballonbild, füge die
 	 * dann in die zweite Stage
 	 */
 	private void addTextLabel() {
@@ -66,7 +76,8 @@ public class PuzzlePlayer {
 	}
 
 	/**
-	 * eine Hilfsmethode, die das Sprechballonbild und die Label ein- und nach
+	 * eine Hilfsmethode.
+	 * die das Sprechballonbild und die Label ein- und nach
 	 * kurzer Zeit wieder ausblendet
 	 */
 	private static void getActorSpeech() {
@@ -83,10 +94,10 @@ public class PuzzlePlayer {
 	}
 
 	/**
-	 * setzt den neuen Text in die Sprechblase
-	 * @param str
+	 * setzt den neuen Text in die Sprechblase.
+	 * @param String
 	 */
-	public static void setActorSpeech(String str) {
+	public static void setActorSpeech(final String str) {
 		getActorSpeech();
 		label.setText(str);
 	}

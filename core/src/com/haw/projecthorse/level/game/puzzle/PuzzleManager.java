@@ -35,7 +35,11 @@ import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
-
+/**
+ * 
+ * @author Masha
+ *@version 1.0
+ */
 public class PuzzleManager extends Game {
 
 	private static Stage firststage;
@@ -53,7 +57,7 @@ public class PuzzleManager extends Game {
 	static Sound win;
 	static Sound click;
 
-	ButtonOwnTextImage button_ok;
+	ButtonOwnTextImage buttonOk;
 	static int myWidth;
 	static int myHeight;
 
@@ -62,7 +66,9 @@ public class PuzzleManager extends Game {
 	private static Dialog replay;
 
 	private PuzzlePlayer puzzlePlayer;
-
+/**
+ * 
+ */
 	public PuzzleManager() {
 
 		super();
@@ -109,8 +115,8 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * erstelle eine Label und füge die in die zweite Stage, um die Anzahl der
-	 * Schritte beim puzzlen anzuzeigen
+	 * erstelle eine Label und füge die in die zweite Stage.
+	 * um die Anzahl der Schritte beim puzzlen anzuzeigen
 	 */
 	public void addScore() {
 
@@ -124,8 +130,7 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * speichert alle Bilder aus asset/pictures/puzzleImageManager in die
-	 * imagelist
+	 * speichert alle Bilder puzzleImageManager in die imagelist.
 	 */
 
 	private void fillImagelist() {
@@ -138,45 +143,45 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * erstelle drei Buttons(vor, zurück und ok) setze jeweils die Größe und die
-	 * Position fest rufe die Methode addListener(...) auf füge alle drei in die
+	 * erstelle drei Buttons(vor, zurück und ok) setze jeweils die Größe und die Position fest.
+	 * srufe die Methode addListener(...) auf füge alle drei in die
 	 * erste Stage
 	 * 
 	 */
 	private void createButtons() {
-		ButtonSmall button_next = new ButtonSmall(ButtonType.RIGHT);
-		ButtonSmall button_prev = new ButtonSmall(ButtonType.LEFT);
+		ButtonSmall buttonNext = new ButtonSmall(ButtonType.RIGHT);
+		ButtonSmall buttonPrev = new ButtonSmall(ButtonType.LEFT);
 
-		Drawable button_img = new TextureRegionDrawable(
+		Drawable buttonImg = new TextureRegionDrawable(
 				AssetManager.getTextureRegion("ui", "panel_brown"));
-		this.button_ok = new ButtonOwnTextImage("OK",
+		this.buttonOk = new ButtonOwnTextImage("OK",
 
 		new ImageTextButton.ImageTextButtonStyle(
-				new TextButton.TextButtonStyle(button_img, button_img,
-						button_img, AssetManager.getTextFont(FontSize.FORTY))));
+				new TextButton.TextButtonStyle(buttonImg, buttonImg,
+						buttonImg, AssetManager.getTextFont(FontSize.FORTY))));
 
-		button_ok.setHeight(80);
-		button_ok.setWidth(300);
+		buttonOk.setHeight(80);
+		buttonOk.setWidth(300);
 
-		button_next.setPosition(width - button_next.getWidth() - 5, height / 2);
-		button_prev.setPosition(5, height / 2);
+		buttonNext.setPosition(width - buttonNext.getWidth() - 5, height / 2);
+		buttonPrev.setPosition(5, height / 2);
 
-		button_ok.setPosition(myXPos + myWidth / 2 - button_ok.getWidth() / 2,
+		buttonOk.setPosition(myXPos + myWidth / 2 - buttonOk.getWidth() / 2,
 				myYPos + myHeight + 5);
-		blinc(button_ok);
-		button_next.setName("next");
-		button_prev.setName("prev");
-		button_prev.setName("ok");
+		blinc(buttonOk);
+		buttonNext.setName("next");
+		buttonPrev.setName("prev");
+		buttonPrev.setName("ok");
 
-		addListener(button_next, button_ok, button_prev);
+		addListener(buttonNext, buttonOk, buttonPrev);
 
-		firststage.addActor(button_next);
-		firststage.addActor(button_prev);
-		firststage.addActor(button_ok);
+		firststage.addActor(buttonNext);
+		firststage.addActor(buttonPrev);
+		firststage.addActor(buttonOk);
 	}
 
 	/**
-	 * rufe auf jedes Bild addListener(...) auf
+	 * rufe auf jedes Bild addListener(...) auf.
 	 * 
 	 * fügt alle Puzzlebilder an der Position(90,22) mit der Größe(540,960) in
 	 * erste die Stage, keine Buttons
@@ -200,8 +205,8 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * Listener für vor-und zurück-Button, damit man die einzelne Bilder
-	 * aussuchen kann
+	 * Listener für vor-und zurück-Button.
+	 *  damit man die einzelne Bilder aussuchen kann
 	 * 
 	 * @param button
 	 */
@@ -210,16 +215,16 @@ public class PuzzleManager extends Game {
 		im.addListener(new SwipeListener() {
 
 			@Override
-			public void swiped(SwipeEvent event, Actor actor) {
+			public void swiped(final SwipeEvent event, final Actor actor) {
 				switch (event.getDirection()) {
 				case LEFT:
 					changeImage(1);
-					blinc(button_ok);
+					blinc(buttonOk);
 					swipe.play();
 					break;
 				case RIGHT:
 					changeImage(-1);
-					blinc(button_ok);
+					blinc(buttonOk);
 					swipe.play();
 					break;
 				default:
@@ -230,32 +235,32 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * Listener für pre-und next-Button, damit man die einzelne Bilder aussuchen
-	 * kann
+	 * Listener für pre-und next-Button.
+	 * damit man die einzelne Bilder aussuchen kann
 	 * 
 	 * @param button
 	 */
 	private void addListener(final ImageButton next,
-			final ButtonOwnTextImage button_ok, final ImageButton prev) {
+			final ButtonOwnTextImage buttonok, final ImageButton prev) {
 
 		next.addListener(new ClickListener() {
 
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(final InputEvent event, final float x, final float y) {
 				click.play();
 				changeImage(1);
-				blinc(button_ok);
+				blinc(buttonok);
 			}
 		});
-		button_ok.addListener(new ClickListener() {
+		buttonok.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(final InputEvent event, final float x, final float y) {
 				click.play();
 				Puzzle.texture = regionsmap.get(imagelist.get(index).getName());
 				next.setVisible(false);
 				prev.setVisible(false);
-				button_ok.setVisible(false);
-				button_ok.removeListener(this);
+				buttonok.setVisible(false);
+				buttonok.removeListener(this);
 				puzzlePlayer.setActorSpeech("Es geht los!");
 				createPuzzle();
 			};
@@ -263,38 +268,40 @@ public class PuzzleManager extends Game {
 
 		prev.addListener(new ClickListener() {
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(final InputEvent event, final float x, final float y) {
 				click.play();
 				changeImage(-1);
-				blinc(button_ok);
+				blinc(buttonok);
 			};
 		});
 	}
 
 	/**
-	 * erzeuge die Klasse Puzzle
+	 * erzeuge die Klasse Puzzle.
 	 */
 	public void createPuzzle() {
 		new Puzzle(this, this.chest);
 	}
 
 	/**
-	 * eine Hilfsmethode, die in addListener(...) benötigt wird, um das nächste
+	 * eine Hilfsmethode.
+	 * die in addListener(...) benötigt wird, um das nächste
 	 * bzw. das vorherige Bild zu holen
 	 * 
 	 * @param delta
 	 */
-	private void changeImage(int delta) {
+	private void changeImage(final int delta) {
 		index = (index + delta) % imagelist.size();
 
-		if (index < 0)
+		if (index < 0) {
 			index = imagelist.size() - 1;
+		}
 
 		imagelist.get(index).toFront();
 	}
 
 	/**
-	 * lade das Hintergrundbild und füge das in die erste Stage
+	 * lade das Hintergrundbild und füge das in die erste Stage.
 	 */
 	private void addBackround() {
 
@@ -308,16 +315,16 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * füge actor in die stage
+	 * füge actor in die stage.
 	 * @param stage
 	 * @param actor
 	 */
-	public static void addToStage(Stage stage, Actor actor) {
+	public static void addToStage(final Stage stage, final Actor actor) {
 		stage.addActor(actor);
 	}
 
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
 
 		firststage.act();
 		firststage.draw();
@@ -335,7 +342,7 @@ public class PuzzleManager extends Game {
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
 
 	}
@@ -369,32 +376,32 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * wird benötigt, um hochgezählte Anzahl der Schritte beim puzzlen anzuzeigen
+	 * wird benötigt, um hochgezählte Anzahl der Schritte beim puzzlen anzuzeigen.
 	 * @param newText
 	 */
-	public void setLabelText(String newText) {
+	public void setLabelText(final String newText) {
 		label.setText(newText);
 	}
 
 	/**
-	 * simuliert ein einmaliges Blinken des ok_button's bei der Bilderauswahl
+	 * simuliert ein einmaliges Blinken des ok_button's bei der Bilderauswahl.
 	 * 
 	 * @param button
 	 */
-	private void blinc(ButtonOwnTextImage button) {
+	private void blinc(final ButtonOwnTextImage button) {
 		button.addAction(Actions.sequence(Actions.fadeIn(0.2f),
 				Actions.fadeOut(0.2f), Actions.fadeIn(0.2f)));
 	}
 
 	/**
-	 * Overlay mit zwei Buttons, fürs Weiterspielen oder Zurückgehen
+	 * Overlay mit zwei Buttons, fürs Weiterspielen oder Zurückgehen.
 	 */
 	private void replay() {
 		replay = new Dialog("Du hast gewonnen!!!\n Noch eine Runde?");
 		replay.addButton("ja", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				click.play();
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
 			}
@@ -404,7 +411,7 @@ public class PuzzleManager extends Game {
 		replay.addButton("nein", new ChangeListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				click.play();
 				GameManagerFactory.getInstance().navigateBack();
 			}
