@@ -1,2 +1,3 @@
 thimblerig;hintergrund.png;selfmade;fabian
 thimblerig;table.png;selfmade;fabian
+puzzle;bilderrahmen-pferd.png;selfmade;maria
