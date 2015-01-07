@@ -114,7 +114,7 @@ public class Gamestate {
 	 *            heigth
 	 * @param chest
 	 *            chest
-	 * @param overlay
+	 * @param overlay overlay
 	 */
 	public Gamestate(final Viewport viewport, final Batch batch, final int width, final int heigth, final Chest chest,
 			final Overlay overlay) {

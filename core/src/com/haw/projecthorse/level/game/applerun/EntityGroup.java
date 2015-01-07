@@ -24,6 +24,7 @@ public class EntityGroup extends Group{
 	
 	/**
 	 * Actor als child hinzufügen. Actor wird vorher aus parent group entfernt, falls vorhanden.
+	 * @param actor actor
 	 */
 	@Override
 	public void addActor(final Actor actor) {
@@ -45,7 +46,9 @@ public class EntityGroup extends Group{
 	}
 	
 	/** Adds an actor as a child of this group, at a specific index. The actor is first removed from its parent group, if any.
-	 * @param index May be greater than the number of children. */
+	 * @param index May be greater than the number of children. 
+	 * @param actor actor 
+	 * */
 	@Override
 	public void addActorAt(final int index, final Actor actor) {
 		if(actor instanceof Entity){
@@ -58,7 +61,10 @@ public class EntityGroup extends Group{
 	}
 	
 	/** Adds an actor as a child of this group, immediately before another child actor. The actor is first removed from its parent
-	 * group, if any. */
+	 * group, if any. 
+	 * @param actorBefore actor
+	 * @param actor actor
+	 * */
 	@Override
 	public void addActorBefore(final Actor actorBefore, final Actor actor) {
 		if(actor instanceof Entity){
@@ -71,7 +77,10 @@ public class EntityGroup extends Group{
 	}
 
 	/** Adds an actor as a child of this group, immediately after another child actor. The actor is first removed from its parent
-	 * group, if any. */
+	 * group, if any. 
+	 * @param actorAfter actor
+	 * @param actor actor
+	 * */
 	@Override
 	public void addActorAfter(final Actor actorAfter, final Actor actor) {
 		if(actor instanceof Entity){
