@@ -111,7 +111,6 @@ public class PlayerImpl extends Player {
 	}
 
 	@Override
-	@Override
 	public void changeAnimationSpeed(final float delta) {
 		speed = Math.min(1, Math.max(0, speed + delta));
 	}
