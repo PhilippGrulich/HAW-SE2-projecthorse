@@ -7,8 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.haw.projecthorse.level.util.overlay.popup.SettingsPopup;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
+/**
+ * Dieser Button öffnet das Settings Menü.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class NavbarSettingsButton extends NavbarButton {
-
+	/**
+	 * Konstruktor.
+	 */
 	public NavbarSettingsButton() {
 		ImageButton imageButton = new ButtonSmall(ButtonSmall.ButtonType.SETTINGS);
 
