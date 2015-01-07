@@ -1,3 +1,6 @@
 thimblerig;Little_Bits.mp3;cc-0;Jimmy Blythe;http://openmusicarchive.org/browse_tag.php?tag=Little%20Bits
 parcours;gallop.wav;cc-0; -;http://www.freesound.org/people/StephenSaldanha/sounds/165532/
 puzzle;bett_pcm.wav;cc-0;brudelarge;http://www.freesound.org/people/brudelarge/sounds/111072/
+mainMenu;belotti.ogg;cc-0;-;https://www.freesound.org
+AppleRun;musicloop.mp3;cc-0;-;https://www.freesound.org
+
