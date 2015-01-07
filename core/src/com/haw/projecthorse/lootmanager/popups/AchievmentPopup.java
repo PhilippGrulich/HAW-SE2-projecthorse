@@ -37,7 +37,7 @@ public class AchievmentPopup extends WidgetGroup {
 				.getTextureRegion("ui", "buttonBackground")));
 
 		Image icon = new Image(img, Scaling.fit);
-		table.add(icon).height(80).pad(10, 0, 10, 0);
+		table.add(icon).height(70).maxWidth(120).pad(15, 0, 15, 0);
 
 		Label desc = new Label(description, new LabelStyle(
 				AssetManager.getTextFont(FontSize.FORTY), Color.DARK_GRAY));
