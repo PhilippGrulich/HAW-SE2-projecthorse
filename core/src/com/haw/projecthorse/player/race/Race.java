@@ -97,6 +97,11 @@ public class Race {
 		return name;
 	}
 
+	/**
+	 * Liefert die Größe eines Pferdes dieser Rasse.
+	 * 
+	 * @return die Größe
+	 */
 	public float size() {
 		return size;
 	}
