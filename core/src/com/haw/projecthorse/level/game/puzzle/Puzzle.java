@@ -41,7 +41,7 @@ public class Puzzle {
 	private static Chest chest;
 
 	/**
-	 * construktor.
+	 * Konstruktor.
 	 * 
 	 * @param puzzleManager2
 	 * @param chest2
@@ -89,7 +89,7 @@ public class Puzzle {
 						+ PuzzleManager.myYPos;
 
 				Image im = new Image(puzzleTexRegArrOrigin[i][j]);
-
+				im.setName("");
 				PuzzlePart puzzlePart = new PuzzlePart(im, xPos, yPos,
 						getPuzzleManager());
 
@@ -294,7 +294,6 @@ public class Puzzle {
 		getChest().saveAllLoot();
 		PuzzleManager.setEndgame(true);
 	}
-
 
 	public static PuzzleManager getPuzzleManager() {
 		return puzzleManager;

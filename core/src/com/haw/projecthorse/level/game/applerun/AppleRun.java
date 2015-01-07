@@ -8,6 +8,7 @@ import com.haw.projecthorse.level.game.Game;
 
 /**
  * AppleRun Game.
+ * 
  * @author Lars
  * @version 1.0
  */
@@ -24,7 +25,7 @@ public class AppleRun extends Game {
 		AssetManager.loadSounds("AppleRun");
 		music = audioManager.getMusic("AppleRun", "musicloop.mp3");
 		music.setLooping(true);
-		gamestate = new Gamestate(this.getViewport(), this.getSpriteBatch(), width, height, this.chest);
+		gamestate = new Gamestate(this.getViewport(), this.getSpriteBatch(), width, height, this.chest, this.overlay);
 		music.play();
 	}
 

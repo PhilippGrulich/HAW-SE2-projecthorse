@@ -23,7 +23,6 @@ import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
-import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 
 public class MemorySpiel extends Game {
 
@@ -50,8 +49,8 @@ public class MemorySpiel extends Game {
 		InputManager.addInputProcessor(stage);
 
 		// Hintergrund
-		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Background" + getBackground()));
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel", "Background"
+				+ getBackground()));
 		backgroundImage = new Image(drawable);
 		backgroundImage.toFront();
 		stage.addActor(backgroundImage);
@@ -71,8 +70,7 @@ public class MemorySpiel extends Game {
 
 	private void initMusic() {
 		AssetManager.loadMusic("memorySpiel");
-		this.music = this.audioManager.getMusic("memorySpiel",
-				"Happy Ukulele(edited).mp3");
+		this.music = this.audioManager.getMusic("memorySpiel", "Happy Ukulele(edited).mp3");
 		this.music.setLooping(true);
 		playMusic();
 	}
@@ -92,7 +90,7 @@ public class MemorySpiel extends Game {
 		replay.addButton("Ja, gerne", new ChangeListener() {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
-				MemorySpiel.getOverlay().disposePopup();
+				getOverlay().disposePopup();
 				restart();
 			}
 		});
@@ -155,7 +153,7 @@ public class MemorySpiel extends Game {
 		if (i == karten.size()) {
 			music.stop();
 			state = GameState.END;
-			MemorySpiel.getOverlay().showPopup(replay);
+			getOverlay().showPopup(replay);
 			return;
 		}
 		manager.checkChanged(delta);
@@ -171,8 +169,8 @@ public class MemorySpiel extends Game {
 	}
 
 	protected void restart() {
-		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Background" + getBackground()));
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel", "Background"
+				+ getBackground()));
 		backgroundImage.setDrawable(drawable);
 		manager.restart();
 		state = GameState.READY;
@@ -215,7 +213,7 @@ public class MemorySpiel extends Game {
 
 	}
 
-	public static Overlay getOverlay() {
+	public Overlay getOverlay() {
 		return overlay;
 	}
 

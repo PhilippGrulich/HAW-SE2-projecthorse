@@ -49,6 +49,7 @@ public class LootItem extends WidgetGroup {
 		
 		labelStyle.font = AssetManager.getTextFont(FontSize.FORTY);
 		description = new Label(loot.getDescription(), labelStyle);
+		description.setWidth(maxWidth - 260);
 		description.setWrap(true);
 		
 		nameAndDescription = new Table();
@@ -56,9 +57,11 @@ public class LootItem extends WidgetGroup {
 		nameAndDescription.add(name).expandX().align(Align.left).spaceLeft(10);
 		nameAndDescription.row();
 		nameAndDescription.add(description).align(Align.left).spaceLeft(10).width(maxWidth-260);
+		nameAndDescription.setSize(nameAndDescription.getPrefWidth(), nameAndDescription.getPrefHeight());
 		
 		group.add(img).size(200).pad(10, 0, 10, 10);
-		group.add(nameAndDescription);
+		group.add(nameAndDescription).pad(10, 0, 10, 0);
+		group.pad(0);
 		
 		contentHeight = group.getPrefHeight() + 10;
 		
