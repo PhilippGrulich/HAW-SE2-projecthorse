@@ -20,7 +20,7 @@ public class RaceLoot extends Loot {
 
 	@Override
 	protected LootImage getLootImage() {
-		return new LootImage("player" + race().name(), "idle-1");
+		return new LootImage("player" + new Race(race).name(), "idle-1");
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class RaceLoot extends Loot {
 		return true;
 	}
 
-	public Race race() {
-		return new Race(race);
+	public HorseRace getRace() {
+		return race;
 	}
 
 	@Override
