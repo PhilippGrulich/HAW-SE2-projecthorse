@@ -72,6 +72,7 @@ public class PlayerImpl extends Player {
 		this.setScale(race.size() * SCALEFACTOR);
 
 		flipX = true;
+		setBounds(getX(), getY(), activeSprite.getRegionWidth(), activeSprite.getRegionHeight());
 	}
 
 	/**
