@@ -1,46 +1,28 @@
 {
 lootCollection: [
 	{
-		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
-		achievedDate: {},
-		name: brötchen,
-		image: {
-			level: puzzle,
-			fileName: buns
-		},
-		description: "Leckere Brötchen"
-	},
-	{
-		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
-		achievedDate: {},
-		name: brezel,
-		image: {
-			level: puzzle,
-			fileName: brezel
-		},
-		description: "Eine leckere Brezel"
-	},
-	{
-		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
-		achievedDate: {},
-		name: carrot,
-		allreadyWon: true,
-		availableAtScore: 10,
-		image: {
-			level: parcours,
-			fileName: carrot
-		},
-		description: "Eine leckere Möhre für dein Pferd."
-	},
-	{
 		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
 		achievedDate: {},
-		name: Möhre,
+		name: Hufeisen,
 		image: {
 			level: thimblerig,
-			fileName: 2011-02-15_Cartoon_carrot
+			fileName: horseshoe
 		},
-		description: "eine gesunde Mahlzeit"
+		description: "als Glücksbringer"
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Friese,
+		race: FRIESE,
+		description: ""
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Shetti,
+		race: SHETTI,
+		description: ""
 	},
 	{
 		class: com.haw.projecthorse.player.race.RaceLoot,
@@ -50,14 +32,11 @@ lootCollection: [
 		description: ""
 	},
 	{
-		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		class: com.haw.projecthorse.player.race.RaceLoot,
 		achievedDate: {},
-		name: Hufeisen,
-		image: {
-			level: thimblerig,
-			fileName: horseshoe
-		},
-		description: "als Glücksbringer"
+		name: Hannoveraner,
+		race: HANNOVERANER,
+		description: ""
 	},
 	{
 		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
@@ -82,6 +61,18 @@ lootCollection: [
 		description: "Ein wunderschöner Hannoveraner :-)"
 	},
 	{
+		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
+		achievedDate: {},
+		name: carrot,
+		allreadyWon: true,
+		availableAtScore: 10,
+		image: {
+			level: parcours,
+			fileName: carrot
+		},
+		description: "Eine leckere Möhre für dein Pferd."
+	},
+	{
 		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
 		achievedDate: {},
 		name: MiniPferd,
@@ -92,24 +83,20 @@ lootCollection: [
 		description: "ein putziges Spielzeug"
 	},
 	{
-		class: com.haw.projecthorse.player.race.RaceLoot,
+		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
 		achievedDate: {},
-		name: Shetti,
-		race: SHETTI,
-		description: ""
-	},
-	{
-		class: com.haw.projecthorse.player.race.RaceLoot,
-		achievedDate: {},
-		name: Friese,
-		race: FRIESE,
-		description: ""
+		name: Möhre,
+		image: {
+			level: thimblerig,
+			fileName: 2011-02-15_Cartoon_carrot
+		},
+		description: "eine gesunde Mahlzeit"
 	}
 ],
-name: Maria,
+name: AllePferde,
 ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
-	race: SHETTI
+	race: HANNOVERANER
 }
 }
