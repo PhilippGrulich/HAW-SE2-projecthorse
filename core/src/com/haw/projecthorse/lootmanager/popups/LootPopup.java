@@ -7,14 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.lootmanager.Lootable;
 
 public class LootPopup extends Popup {
@@ -50,9 +51,10 @@ public class LootPopup extends Popup {
 		private int i, max;
 		private float imageX, imageY, imageWidth, imageHeight;
 		private Drawable currentImage = null;
+		private Label lootName = null;
 		private boolean refreshed; // zeigt an, ob sich der Index vom Image
-									// ge�ndert hat und somit die Daten daf�r
-									// neu berechnet werden m�ssen
+									// geändert hat und somit die Daten dafür
+									// neu berechnet werden müssen
 
 		public LootDisplay(HashSet<Lootable> loots, int lootHeight, int lootWidth) {
 			// Instanzvariable instazieren
@@ -62,7 +64,10 @@ public class LootPopup extends Popup {
 			refreshed = false;
 
 			setBounds(getX(), getY(), lootWidth, lootHeight);
-			createArrowButtons();
+			if (max > 1) {
+				createArrowButtons();
+			}
+			createNameLabel();
 			addSwipeListener();
 		}
 
@@ -94,10 +99,14 @@ public class LootPopup extends Popup {
 				}
 			});
 		}
+		
+		private void createNameLabel() {
+			lootName = createLabel("");
+			addActor(lootName);
+		}
 
 		private void createArrowButtons() {
-			ImageButton left = new ImageButton(new TextureRegionDrawable(AssetManager.getTextureRegion("loot",
-					"arrow_left")));
+			ButtonSmall left = new ButtonSmall(ButtonType.LEFT);
 			left.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -110,8 +119,7 @@ public class LootPopup extends Popup {
 			left.setPosition(0, (getHeight() - left.getHeight()) / 2);
 			addActor(left);
 
-			ImageButton right = new ImageButton(new TextureRegionDrawable(AssetManager.getTextureRegion("loot",
-					"arrow_right")));
+			ButtonSmall right = new ButtonSmall(ButtonType.RIGHT);
 			right.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -136,6 +144,9 @@ public class LootPopup extends Popup {
 		}
 
 		private void refreshImage() {
+			lootName.setText(lootList.get(i).getName());
+			lootName.setPosition((getWidth() - lootName.getPrefWidth()) / 2f, 10);
+			
 			currentImage = lootList.get(i).getImage();
 
 			imageWidth = (currentImage.getMinWidth() > getWidth()) ? getWidth() : currentImage.getMinWidth();
