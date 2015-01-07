@@ -76,7 +76,7 @@ public class Credits extends Menu {
 	private void initializeText() {
 
 		addHeadLine("\n\n\n\n\nDas Entwicklerteam");
-		addText("Fabian\nFrancis\nHuyen\nLars\nMaria\nOlli\nPhilipp\nViktor\n");
+		addText("Fabian\nFrancis\nHuyen\nLars\nMaria\nOliver\nPhilipp\nViktor\n");
 
 		addHeadLine("\"Projektinitiator\"");
 		addText("Prof. Dr. Olaf Zukunft\n");
