@@ -16,6 +16,7 @@ import com.haw.projecthorse.level.util.overlay.popup.Popup;
  * diesem Interagieren kann.
  * 
  * @author Philipp
+ * @version 1.0
  * 
  */
 public class Overlay extends Stage {
@@ -24,6 +25,16 @@ public class Overlay extends Stage {
 	private Level level;
 	private NavBar navBar;
 
+	/**
+	 * Dies ist der Konstruktor für ein neues Overlay.
+	 * 
+	 * @param viewport
+	 *            Viewport
+	 * @param spriteBatch
+	 *            .
+	 * @param levelPara
+	 *            dies ist eine Reference auf das Level
+	 */
 	public Overlay(final Viewport viewport, final SpriteBatch spriteBatch, final Level levelPara) {
 		super(viewport, spriteBatch);
 		InputManager.addInputProcessor(this, Integer.MAX_VALUE);
@@ -35,6 +46,8 @@ public class Overlay extends Stage {
 	 * deren Unterklassen Implementiert wurde.
 	 * 
 	 * @param nav
+	 *            Navbar
+	 * 
 	 */
 	public final void setNavigationBar(final NavBar nav) {
 		this.navBar = nav;
@@ -46,9 +59,9 @@ public class Overlay extends Stage {
 	}
 
 	/**
-	 * Liefert die Referenz auf das Level über welchem das Overlay liegt
+	 * Liefert die Referenz auf das Level über welchem das Overlay liegt.
 	 * 
-	 * @return
+	 * @return level
 	 */
 	public final Level getLevel() {
 		return level;
@@ -57,7 +70,8 @@ public class Overlay extends Stage {
 	/**
 	 * Zeigt ein neues Popup und lässt das Lavel Pausieren.
 	 * 
-	 * @param Popup
+	 * @param p
+	 *            Popup
 	 */
 	public final void showPopup(final Popup p) {
 		if (popup != null) {

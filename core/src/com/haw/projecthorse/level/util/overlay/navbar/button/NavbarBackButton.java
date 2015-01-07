@@ -11,10 +11,17 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
+/**
+ * Dieser Button ermöglicht es zurück zu navigieren.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class NavbarBackButton extends NavbarButton {
 
-	private Overlay overlay;
-
+	/**
+	 * Konstruktor.
+	 */
 	public NavbarBackButton() {
 		ImageButton imageButton = new ButtonSmall(ButtonSmall.ButtonType.BACK);
 		this.setWidth(imageButton.getHeight());
@@ -27,7 +34,7 @@ public class NavbarBackButton extends NavbarButton {
 				Gdx.app.log("NavbarBackButton Button", "NavbarBackButton BUTTON CLick");
 				if (GameManagerFactory.getInstance().getCurrentLevelID().equals("mainMenu")) {
 
-					NavbarBackButton.this.init();
+					final Overlay overlay = NavbarBackButton.this.getNavigationBar().getOverlay();
 
 					Dialog beendenDialog = new Dialog("Möchtest du deine\nReise wirklich beenden?");
 					beendenDialog.addButton("jaa, ich komme ja wieder", new ChangeListener() {
@@ -43,7 +50,7 @@ public class NavbarBackButton extends NavbarButton {
 
 						@Override
 						public void changed(final ChangeEvent event, final Actor actor) {
-							NavbarBackButton.this.overlay.disposePopup();
+							overlay.disposePopup();
 							event.cancel();
 						}
 
@@ -60,9 +67,5 @@ public class NavbarBackButton extends NavbarButton {
 			};
 
 		});
-	}
-
-	private void init() {
-		this.overlay = this.getNavigationBar().getOverlay();
 	}
 }
