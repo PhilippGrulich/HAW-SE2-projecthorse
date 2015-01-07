@@ -15,85 +15,91 @@ import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.lootmanager.Lootable;
 
+/**
+ * Klasse für die einzelnen Loots in der LootGallery.
+ * 
+ * @author Oliver
+ * @version 1.0
+ */
+
 public class LootItem extends WidgetGroup {
 	private Table group;
 	private Table nameAndDescription;
 	private LabelStyle labelStyle;
 	private Label description;
-	
+
 	private float contentHeight;
-	
-	public LootItem(Lootable loot, float width) {
+
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param loot
+	 *            das zugrunde liegende Loot
+	 * @param width
+	 *            die Breite
+	 */
+	public LootItem(final Lootable loot, final float width) {
 		createTable(loot, width);
-		
-		/*addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				toogleDescription();
-			}
-		});*/
-		
 		addActor(group);
 		toFront();
 	}
-	
-	private void createTable(Lootable loot, float maxWidth) {
+
+	/**
+	 * Erstellt die Tabelle.
+	 * 
+	 * @param loot
+	 *            das Loot
+	 * @param maxWidth
+	 *            die Breite
+	 */
+	private void createTable(final Lootable loot, final float maxWidth) {
 		group = new Table();
-		
+
 		Drawable drawable = loot.getImage();
 		Image img = new Image(drawable, Scaling.fit, Align.center);
 		Label name;
-				
-		labelStyle = new LabelStyle(AssetManager.getHeadlineFont(FontSize.FORTY), Color.GRAY);
+
+		labelStyle = new LabelStyle(
+				AssetManager.getHeadlineFont(FontSize.FORTY), Color.GRAY);
 		name = new Label(loot.getName(), labelStyle);
-		
+
 		labelStyle.font = AssetManager.getTextFont(FontSize.FORTY);
 		description = new Label(loot.getDescription(), labelStyle);
 		description.setWidth(maxWidth - 260);
 		description.setWrap(true);
-		
+
 		nameAndDescription = new Table();
 		nameAndDescription.align(Align.left + Align.top);
 		nameAndDescription.add(name).expandX().align(Align.left).spaceLeft(10);
 		nameAndDescription.row();
-		nameAndDescription.add(description).align(Align.left).spaceLeft(10).width(maxWidth-260);
-		nameAndDescription.setSize(nameAndDescription.getPrefWidth(), nameAndDescription.getPrefHeight());
-		
+		nameAndDescription.add(description).align(Align.left).spaceLeft(10)
+				.width(maxWidth - 260);
+		nameAndDescription.setSize(nameAndDescription.getPrefWidth(),
+				nameAndDescription.getPrefHeight());
+
 		group.add(img).size(200).pad(10, 0, 10, 10);
 		group.add(nameAndDescription).pad(10, 0, 10, 0);
 		group.pad(0);
-		
+
 		contentHeight = group.getPrefHeight() + 10;
-		
+
 		group.setSize(maxWidth, contentHeight);
-		group.setBackground(new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "panel_beige")));
+		group.setBackground(new TextureRegionDrawable(AssetManager
+				.getTextureRegion("ui", "panel_beige")));
 	}
-	
-	/*private void toogleDescription() {
-		if (descriptionIsVisible) {
-//			nameAndDescription.removeActor(description);
-			descriptionCell.setWidget(null);
-		} else {
-//			nameAndDescription.addActor(description);
-			descriptionCell.setWidget(description);
-		}
-		
-		nameAndDescription.layout();
-		descriptionIsVisible = !descriptionIsVisible;
-	}*/
-	
+
 	@Override
 	public float getPrefHeight() {
 		return contentHeight;
 	}
-	
+
 	@Override
 	public float getPrefWidth() {
 		return group.getPrefWidth();
 	}
-	
+
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw(final Batch batch, final float parentAlpha) {
 		super.draw(batch, parentAlpha);
 	}
 }

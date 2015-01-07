@@ -23,6 +23,13 @@ import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
 import com.haw.projecthorse.lootmanager.Lootable;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
+/**
+ * Die LootGallery in der alle gesammelten Loots betrachtet werden können.
+ * 
+ * @author Oliver
+ * @version 1.0
+ */
+
 public class LootGallery extends Menu {
 	private Stage stage;
 	private HashMap<String, List<Lootable>> loots;
@@ -31,6 +38,9 @@ public class LootGallery extends Menu {
 	private VerticalGroup lootTable;
 	private float tableWidth, tableHeight;
 
+	/**
+	 * Erzeugt den Hintergrund.
+	 */
 	private void createBackground() {
 		EndlessBackground background = new EndlessBackground(width,
 				AssetManager.getTextureRegion("menu", "sky"), 30);
@@ -49,6 +59,12 @@ public class LootGallery extends Menu {
 		stage.addActor(background);
 	}
 
+	/**
+	 * Erzeugt die Buttons zum Wechseln der Kategorie.
+	 * 
+	 * @return Die Gruppe in der sich alle Elemente zum Kategoriewechsel
+	 *         befinden.
+	 */
 	private Group createSwitchButton() {
 		Group switchBtn = new Group();
 		float switchWidth = width * 0.8f;
@@ -70,8 +86,8 @@ public class LootGallery extends Menu {
 		left.setBounds(25, 20, 60, 60);
 		left.addListener(new InputListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
+			public boolean touchDown(final InputEvent event, final float x,
+					final float y, final int pointer, final int button) {
 				curCat = getPrevCategory();
 				fillLootTable();
 				return true;
@@ -84,8 +100,8 @@ public class LootGallery extends Menu {
 		right.setBounds(switchWidth - 85, 20, 60, 60);
 		right.addListener(new InputListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
+			public boolean touchDown(final InputEvent event, final float x,
+					final float y, final int pointer, final int button) {
 				curCat = getNextCategory();
 				fillLootTable();
 				return true;
@@ -96,6 +112,9 @@ public class LootGallery extends Menu {
 		return switchBtn;
 	}
 
+	/**
+	 * Intialisiert die Liste der Loot-Objekte.
+	 */
 	private void initializeLootList() {
 		loots = new HashMap<String, List<Lootable>>();
 		List<Lootable> allLoot = SaveGameManager.getLoadedGame()
@@ -111,6 +130,11 @@ public class LootGallery extends Menu {
 		}
 	}
 
+	/**
+	 * Findet die erste Kategorie.
+	 * 
+	 * @return die erste Kategorie
+	 */
 	private String getFirstCategory() {
 		for (String c : loots.keySet()) {
 			return c;
@@ -118,6 +142,11 @@ public class LootGallery extends Menu {
 		return null;
 	}
 
+	/**
+	 * Liefert die nächste Kategorie.
+	 * 
+	 * @return die nächste Kategorie
+	 */
 	private String getNextCategory() {
 		String next = null;
 		boolean found = false;
@@ -135,6 +164,11 @@ public class LootGallery extends Menu {
 		return next == null ? getFirstCategory() : next;
 	}
 
+	/**
+	 * Liefert die vorherige Kategorie.
+	 * 
+	 * @return die vorherige Kategorie
+	 */
 	private String getPrevCategory() {
 		String prev = null;
 
@@ -144,7 +178,7 @@ public class LootGallery extends Menu {
 			}
 			prev = c;
 		}
-		
+
 		if (prev == null) {
 			for (String c : loots.keySet()) {
 				prev = c;
@@ -154,6 +188,9 @@ public class LootGallery extends Menu {
 		return prev;
 	}
 
+	/**
+	 * Initialisiert die UI-Elemente.
+	 */
 	private void initializeUiElements() {
 		DefaultScrollPane tableContainer;
 
@@ -164,7 +201,8 @@ public class LootGallery extends Menu {
 		lootTable.align(Align.left + Align.top);
 		lootTable.setWidth(tableWidth);
 
-		tableContainer = new DefaultScrollPane(lootTable, tableHeight, tableWidth);
+		tableContainer = new DefaultScrollPane(lootTable, tableHeight,
+				tableWidth);
 		tableContainer.setPosition(75, 50);
 		tableContainer.toFront();
 
@@ -174,6 +212,9 @@ public class LootGallery extends Menu {
 		stage.addActor(createSwitchButton());
 	}
 
+	/**
+	 * Füllt die Liste der Lootobjekte (z.B. nach dem Wechsel der Kategorie).
+	 */
 	private void fillLootTable() {
 		lootTable.clear();
 		for (Lootable l : loots.get(curCat)) {
@@ -186,7 +227,7 @@ public class LootGallery extends Menu {
 	}
 
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
 		stage.act(delta);
 		stage.draw();
 	}
@@ -198,7 +239,7 @@ public class LootGallery extends Menu {
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
 
 	}
@@ -211,9 +252,7 @@ public class LootGallery extends Menu {
 		initializeLootList();
 		curCat = getFirstCategory();
 
-		if (curCat == null) {
-			// TODO: What to do here?
-		} else {
+		if (curCat != null) {
 			// Yeah :D
 			initializeUiElements();
 			fillLootTable();
