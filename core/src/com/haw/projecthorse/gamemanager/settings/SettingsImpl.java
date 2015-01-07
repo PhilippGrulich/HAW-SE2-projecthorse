@@ -1,13 +1,18 @@
 package com.haw.projecthorse.gamemanager.settings;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Input.Orientation;
 import com.badlogic.gdx.Input.Peripheral;
-import com.haw.projecthorse.gamemanager.GameManager;
+import com.badlogic.gdx.Preferences;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
 
-public class SettingsImpl extends Settings {
+/**
+ * Implementierung der Settings Klasse.
+ * 
+ * @author Viktor
+ * @version 1
+ */
+public final class SettingsImpl extends Settings {
 
 	// Konstanten für virtuelle Bildschirmgröße
 	private static final int VIRTUALHIGHT = 1280;
@@ -19,18 +24,22 @@ public class SettingsImpl extends Settings {
 	// Singleton Umsetzung
 	private static SettingsImpl settingsInstance;
 
+	/**
+	 * Singleton Umsetzung Konstruktor.
+	 */
 	private SettingsImpl() {
 		prefs = Gdx.app.getPreferences("SettingsPrefs");
 	};
 
 	/**
-	 * Liefert eine Instanz der Klasse Settings
+	 * Liefert eine Instanz der Klasse Settings.
 	 * 
 	 * @return Settings Ein Settings Object nach dem Singleton Pattern.
 	 */
 	public static SettingsImpl getInstance() {
-		if (settingsInstance == null)
+		if (settingsInstance == null) {
 			settingsInstance = new SettingsImpl();
+		}
 		return settingsInstance;
 	};
 
@@ -43,10 +52,11 @@ public class SettingsImpl extends Settings {
 	}
 
 	@Override
-	public void setSoundState(boolean state) {
-		if (prefs.contains("SoundState"))
-			if (prefs.getBoolean("SoundState") != state)
-				setChanged();
+	public void setSoundState(final boolean state) {
+		if (prefs.contains("SoundState")
+				&& prefs.getBoolean("SoundState") != state) {
+			setChanged();
+		}
 		prefs.putBoolean("SoundState", state);
 		prefs.flush();
 		notifyObservers();
@@ -61,10 +71,11 @@ public class SettingsImpl extends Settings {
 	}
 
 	@Override
-	public void setMusicState(boolean state) {
-		if (prefs.contains("MusicState"))
-			if (prefs.getBoolean("MusicState") != state)
-				setChanged();
+	public void setMusicState(final boolean state) {
+		if (prefs.contains("MusicState")
+				&& prefs.getBoolean("MusicState") != state) {
+			setChanged();
+		}
 		prefs.putBoolean("MusicState", state);
 		prefs.flush();
 		notifyObservers();
@@ -83,40 +94,45 @@ public class SettingsImpl extends Settings {
 
 	@Override
 	public int getVirtualScreenWidth() {
-		if(GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait)
+		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait) {
 			return VIRTUALWIDTH;
-		else
+		} else {
 			return VIRTUALHIGHT;
-		
+		}
+
 	}
 
-	
 	/**
-	 * Wenn Sich die Orientation gedreht hat ändert sich ändert sich auch die Höhe
+	 * Wenn Sich die Orientation gedreht hat ändert sich ändert sich auch die
+	 * Höhe.
 	 */
 	@Override
 	public int getVirtualScreenHeight() {
-		if(GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait)
+		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait) {
 			return VIRTUALHIGHT;
-		else
+		} else {
 			return VIRTUALWIDTH;
+		}
 	}
 
 	@Override
 	public boolean getAccelerometerState() {
-		if (prefs.contains("Accelerometer"))
+		if (prefs.contains("Accelerometer")) {
 			return prefs.getBoolean("Accelerometer");
-		boolean isPossible = Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer);
+		}
+		boolean isPossible = Gdx.input
+				.isPeripheralAvailable(Peripheral.Accelerometer);
 		prefs.putBoolean("Accelerometer", isPossible);
 		prefs.flush();
 		return isPossible;
 	}
 
 	@Override
-	public void setAccelerometerState(boolean state) {
-		if (prefs.contains("Accelerometer"))
-			if (prefs.getBoolean("Accelerometer") != state)
-				setChanged();
+	public void setAccelerometerState(final boolean state) {
+		if (prefs.contains("Accelerometer")
+				&& prefs.getBoolean("Accelerometer") != state) {
+			setChanged();
+		}
 		prefs.putBoolean("Accelerometer", state);
 		prefs.flush();
 		notifyObservers();
