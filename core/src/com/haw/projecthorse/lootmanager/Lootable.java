@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  * Interface für alle Klasse, die eine Art von Beute realisieren.
  * 
  * @author Oliver
+ * @version 1.0
  */
 
 public interface Lootable {
@@ -42,6 +43,9 @@ public interface Lootable {
 
 	/**
 	 * Setzt den Zeitpunkt des Erhalts der Beute auf das übergebene Datum.
+	 * 
+	 * @param date
+	 *            der Zeitpunkt des Erhalts
 	 */
 	public void setAchievedDate(Date date);
 
