@@ -8,17 +8,24 @@ import com.haw.projecthorse.lootmanager.LootImage;
  * @author Masha
  * @version 1.0
  */
-public class PuzzleLoot extends Loot {
+public final class PuzzleLoot extends Loot {
 
 	private LootImage image;
-	
 /**
- * 
- * @param name
- * @param description
- * @param imageName
+ * defaultkonstruktor.
  */
-	public PuzzleLoot(final String name, final String description, final String imageName) {
+	protected PuzzleLoot() {
+	};
+
+	/**
+	 * construktor.
+	 * 
+	 * @param name
+	 * @param description
+	 * @param imageName
+	 */
+	protected PuzzleLoot(final String name, final String description,
+			final String imageName) {
 		super(name, description);
 		this.image = new LootImage("puzzle", imageName);
 	}
@@ -35,8 +42,6 @@ public class PuzzleLoot extends Loot {
 
 	@Override
 	protected boolean doEquals(final Object other) {
-		// PuzzleLoot o = (PuzzleLoot)other;
-		// return imageName.equals(o.imageName);
 		if (this.image == null) {
 			if (((PuzzleLoot) other).image != null) {
 				return false;

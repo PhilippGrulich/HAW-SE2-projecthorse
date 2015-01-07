@@ -1,6 +1,47 @@
 {
 lootCollection: [
 	{
+		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		achievedDate: {},
+		name: Hufeisen,
+		image: {
+			level: thimblerig,
+			fileName: horseshoe
+		},
+		description: "als Glücksbringer"
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Friese,
+		race: FRIESE,
+		description: ""
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Shetti,
+		race: SHETTI,
+		description: ""
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Haflinger,
+		race: HAFLINGER,
+		description: ""
+	},
+	{
+		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
+		achievedDate: {},
+		name: croissant,
+		image: {
+			level: puzzle,
+			fileName: croissant
+		},
+		description: "Die beste Leckerei für dein Pferd"
+	},
+	{
 		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
 		achievedDate: {},
 		name: hannoveraner,
@@ -43,30 +84,6 @@ lootCollection: [
 			fileName: 2011-02-15_Cartoon_carrot
 		},
 		description: "eine gesunde Mahlzeit"
-	},
-	{
-		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
-		achievedDate: {},
-		name: Hufeisen,
-		image: {
-			level: thimblerig,
-			fileName: horseshoe
-		},
-		description: "als Glücksbringer"
-	},
-	{
-		class: com.haw.projecthorse.player.race.RaceLoot,
-		achievedDate: {},
-		name: Haflinger,
-		race: HAFLINGER,
-		description: ""
-	},
-	{
-		class: com.haw.projecthorse.player.race.RaceLoot,
-		achievedDate: {},
-		name: Shetti,
-		race: SHETTI,
-		description: ""
 	}
 ],
 name: Maria,

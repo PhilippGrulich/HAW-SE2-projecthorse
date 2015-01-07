@@ -24,7 +24,7 @@ public class PuzzlePlayer {
 	private static Label label;
 
 	/**
-	 * 
+	 * Konstruktor.
 	 */
 	public PuzzlePlayer() {
 

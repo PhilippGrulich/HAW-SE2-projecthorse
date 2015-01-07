@@ -1,6 +1,5 @@
 package com.haw.projecthorse.level.game.puzzle;
 
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -13,13 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
-import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.lootmanager.Chest;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.RaceLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
  * 
  * @author Masha
- *@version 1.0
+ * @version 1.0
  */
 public class Puzzle {
 
@@ -33,20 +34,20 @@ public class Puzzle {
 	private static Image emptyImage;
 	static TextureRegion texture;
 
-	final static int SHUFFLE = 4;
+	final static int SHUFFLE = 2;
 	final static int COL = 3;
 	final static int ROW = 3;
 	private static PuzzleManager puzzleManager;
 	private static Chest chest;
 
 	/**
+	 * construktor.
 	 * 
-	 * @param puzzleManager
+	 * @param puzzleManager2
 	 * @param chest2
 	 */
-	public Puzzle(final PuzzleManager puzzleManager, final Chest chest2) {
-
-		Puzzle.setPuzzleManager(puzzleManager);
+	protected Puzzle(final PuzzleManager puzzleManager2, final Chest chest2) {
+		Puzzle.setPuzzleManager(puzzleManager2);
 
 		puzzleWidth = puzzleManager.getMyWidth() / COL; // 270
 		puzzleHeight = puzzleManager.getMyHeight() / ROW; // 480
@@ -65,8 +66,8 @@ public class Puzzle {
 	}
 
 	/**
-	 * teile das gewählte Bild in COL*ROW gleichförmige Teile.
-	 * erstelle jeweils die neue Klasse PuzzlePart erstelle an einer zufälligen Stelle ein
+	 * teile das gewählte Bild in COL*ROW gleichförmige Teile. erstelle jeweils
+	 * die neue Klasse PuzzlePart erstelle an einer zufälligen Stelle ein
 	 * "leeres" Bild und merke das fehlende in der Instanzvariable missingImage
 	 */
 	private void createImageArr() {
@@ -116,8 +117,8 @@ public class Puzzle {
 	}
 
 	/**
-	 * rufe auf jeden Puzzleteil die Methode addListener(...).
-	 * füde den in die erste Stage
+	 * rufe auf jeden Puzzleteil die Methode addListener(...). füde den in die
+	 * erste Stage
 	 */
 	private void addPuzzlePartsToStage() {
 
@@ -145,7 +146,7 @@ public class Puzzle {
 					Image im = imageArr[i][j];
 					int xKoor = (int) im.getX();
 					int yKoor = (int) im.getY();
-					
+
 					if (PuzzlePart.checkImage(xKoor, yKoor)) {
 
 						imageArr[i][j].setPosition(emptyImage.getX(),
@@ -179,8 +180,7 @@ public class Puzzle {
 	}
 
 	/**
-	 * erstelle ein leeres Bild.
-	 * von der größe der Puzzleteils wird für das
+	 * erstelle ein leeres Bild. von der größe der Puzzleteils wird für das
 	 * "leere" Bild benötigt
 	 */
 	private void createEmptyImage() {
@@ -194,8 +194,8 @@ public class Puzzle {
 	}
 
 	/**
-	 * lösche für alle Puzzleteile die Clicklistener.
-	 * wird am Ende des Spiels aufgerufen
+	 * lösche für alle Puzzleteile die Clicklistener. wird am Ende des Spiels
+	 * aufgerufen
 	 */
 	public static void removeClickListener() {
 		for (int i = 0; i < ROW; i++) {
@@ -222,8 +222,7 @@ public class Puzzle {
 	}
 
 	/**
-	 * erstelle ein Zurückbutton.
-	 * um zurück zur Bilderauswahl gelangen zu können
+	 * erstelle ein Zurückbutton. um zurück zur Bilderauswahl gelangen zu können
 	 * rufe die Methode addListener(...) auf, füge den Button in die zweite
 	 * Stage
 	 */
@@ -245,8 +244,7 @@ public class Puzzle {
 	}
 
 	/**
-	 * füge ein ClickListener für Zurückbutton.
-	 * avigiere bei einem Klick zur
+	 * füge ein ClickListener für Zurückbutton. avigiere bei einem Klick zur
 	 * Bilderauswahl zurück
 	 * 
 	 * @param back
@@ -255,7 +253,8 @@ public class Puzzle {
 
 		back.addListener(new ClickListener() {
 			@Override
-			public void clicked(final InputEvent event, final float x, final float y) {
+			public void clicked(final InputEvent event, final float x,
+					final float y) {
 				PuzzleManager.click.play();
 				Counter.setCounter(0);
 				GameManagerFactory.getInstance().navigateToLevel("Puzzle");
@@ -265,13 +264,20 @@ public class Puzzle {
 	}
 
 	/**
-	 * am Ende des Spiels.
-	 * je nach Anzahl der benötigten Schritte werden Loots
+	 * am Ende des Spiels. je nach Anzahl der benötigten Schritte werden Loots
 	 * vergeben, gespeichert und kurz angezeigt
 	 * 
 	 * @param score
 	 */
 	public static void getAndShowLoot(final int score) {
+
+		double roll = Math.random();
+		if (roll <= 0.2f
+				&& !SaveGameManager.getLoadedGame()
+						.getSpecifiedLoot(RaceLoot.class)
+						.contains(HorseRace.FRIESE)) {
+			getChest().addLootAndShowAchievment(new RaceLoot(HorseRace.FRIESE));
+		}
 
 		if (score <= SHUFFLE * 3) {
 			getChest().addLootAndShowAchievment(
@@ -279,18 +285,16 @@ public class Puzzle {
 							"Die beste Leckerei für dein Pferd", "croissant"));
 		} else if (score > SHUFFLE * 3 && score <= SHUFFLE * 4) {
 			getChest().addLootAndShowAchievment(
-					new PuzzleLoot("brezel", "Eine Brezel", "brezel"));
+					new PuzzleLoot("brezel", "Eine leckere Brezel", "brezel"));
 		} else {
 			getChest().addLootAndShowAchievment(
-					new PuzzleLoot("brötchen", "Ein Brötchen", "buns"));
+					new PuzzleLoot("brötchen", "Leckere Brötchen", "buns"));
 		}
 		getChest().showAllLoot();
-	//	getChest().saveAllLoot();
-		
-		Overlay overlay = getPuzzleManager().getOverlay();
-		overlay.showPopup(PuzzleManager.getReplay());
-
+		getChest().saveAllLoot();
+		PuzzleManager.setEndgame(true);
 	}
+
 
 	public static PuzzleManager getPuzzleManager() {
 		return puzzleManager;
