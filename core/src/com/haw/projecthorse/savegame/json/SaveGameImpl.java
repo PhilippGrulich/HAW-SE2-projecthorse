@@ -10,17 +10,32 @@ import com.haw.projecthorse.lootmanager.Lootable;
 import com.haw.projecthorse.player.race.HorseRace;
 import com.haw.projecthorse.player.race.RaceLoot;
 
+/**
+ * Konkrete Implementierung des {@link SaveGame}SaveGame-Interfaces.
+ * 
+ * @author Oliver
+ * @version 1.3
+ */
+
 public class SaveGameImpl implements SaveGame {
-	private int ID = -1, ep = 0;
+	private int id = -1, ep = 0;
 	private String name;
 	private Horse horse = new HorseImpl();
 	private ArrayList<Lootable> lootCollection = new ArrayList<Lootable>();
 
+	/**
+	 * Default-Konstruktor zum Laden aus des JSON-Datei.
+	 */
 	public SaveGameImpl() {
 	}
 	
-	public SaveGameImpl(int ID) {
-		this.ID = ID;
+	/**
+	 * Legt einen neuen Spielstand mit der Standard-Pferde-Rasse als erstes Loot an.
+	 * 
+	 * @param id id des neuen Spielstands
+	 */
+	public SaveGameImpl(final int id) {
+		this.id = id;
 		
 		// Pferderasse intialisieren
 		lootCollection.add(new RaceLoot(HorseRace.HAFLINGER));
@@ -28,7 +43,7 @@ public class SaveGameImpl implements SaveGame {
 	
 	@Override
 	public int getID() {
-		return ID;
+		return id;
 	}
 
 	@Override
@@ -38,18 +53,19 @@ public class SaveGameImpl implements SaveGame {
 
 	@Override
 	public String getPlayerName() {
-		if (name == null)
+		if (name == null) {
 			return "NoName";
+		}
 		return name;
 	}
 	
 	@Override
-	public void setPlayerName(String name) {
+	public void setPlayerName(final String name) {
 		this.name = name;
 	}
 
 	@Override
-	public void addEP(int toAdd) {
+	public void addEP(final int toAdd) {
 		ep += toAdd;
 	}
 
@@ -59,19 +75,19 @@ public class SaveGameImpl implements SaveGame {
 	}
 
 	@Override
-	public void setHorseRace(HorseRace race) {
+	public void setHorseRace(final HorseRace race) {
 		horse.setRace(race);
 	}
 
 	@Override
-	public void addCollectedLoot(Loot loot) {
+	public void addCollectedLoot(final Loot loot) {
 		if (!lootCollection.contains(loot)) {
 			lootCollection.add(loot);			
 		}
 	}
 	
 	@Override
-	public void addCollectedLootList(Collection<Lootable> loots) {
+	public void addCollectedLootList(final Collection<Lootable> loots) {
 		lootCollection.addAll(loots);
 		// Doppelte Elemente entfernen
 		lootCollection = new ArrayList<Lootable>(new HashSet<Lootable>(lootCollection));
@@ -79,7 +95,7 @@ public class SaveGameImpl implements SaveGame {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Lootable> List<T> getSpecifiedLoot(Class<T> c) {
+	public <T extends Lootable> List<T> getSpecifiedLoot(final Class<T> c) {
 		ArrayList<T> loots = new ArrayList<T>();
 		for (Lootable l : lootCollection) {
 			if (c.isInstance(l)) {
@@ -90,7 +106,7 @@ public class SaveGameImpl implements SaveGame {
 	}
 
 	@Override
-	public List<Lootable> getSpecifiedLoot(String category) {
+	public List<Lootable> getSpecifiedLoot(final String category) {
 		ArrayList<Lootable> loots = new ArrayList<Lootable>();
 		for (Lootable l : lootCollection) {
 			if (l.getCategory().equals(category)) {
