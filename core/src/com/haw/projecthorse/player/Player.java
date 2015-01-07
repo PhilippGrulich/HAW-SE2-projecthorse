@@ -2,7 +2,6 @@ package com.haw.projecthorse.player;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.haw.projecthorse.player.actions.Direction;
-import com.haw.projecthorse.player.color.PlayerColor;
 import com.haw.projecthorse.player.race.Race;
 
 /**
@@ -14,25 +13,17 @@ import com.haw.projecthorse.player.race.Race;
  * http://www.gamefromscratch.com/post/2013/12/09/LibGDX-Tutorial-9-Scene2D
  * -Part-2-Actions.aspx https://github.com/libgdx/libgdx/wiki/Scene2d
  * 
- * @author Olli, Viktor
+ * @author Oliver und Viktor
  * 
+ * @version 1.3
  */
 
 public abstract class Player extends Actor {
 	protected Race race;
 
 	/**
-	 * Verändert die Färbung des Spielers
-	 * 
-	 * @param color
-	 *            Die neue Farbe
-	 */
-	@Deprecated
-	public abstract void setPlayerColor(PlayerColor color);
-
-	/**
 	 * Verändert die Geschwindigkeit der Bewegungsanimation um ein angegegbenes
-	 * Delta, die Richtung wird hierbei berücksichtigt
+	 * Delta, die Richtung wird hierbei berücksichtigt.
 	 * 
 	 * @param delta
 	 *            zwischen -1 und 1, negative Werte bremsen, positive Werte
@@ -41,12 +32,14 @@ public abstract class Player extends Actor {
 	public abstract void changeAnimationSpeed(float delta);
 
 	/**
+	 * Liefert die Geschwindigkeit des Players.
+	 * 
 	 * @return Geschwindigkeit der aktuellen Bewegungsanimation
 	 */
 	public abstract float getAnimationSpeed();
 
 	/**
-	 * Setzt die Geschwindigkeit der aktuellen Bewegungsanimation
+	 * Setzt die Geschwindigkeit der aktuellen Bewegungsanimation.
 	 * 
 	 * @param speed
 	 *            Geschwindigkeit zwischen 0 und 1
@@ -54,12 +47,15 @@ public abstract class Player extends Actor {
 	public abstract void setAnimationSpeed(float speed);
 
 	/**
+	 * Gibt an, ob sich der Player bewegt.
 	 * 
 	 * @return True bei Bewegung, ansonsten False
 	 */
 	public abstract boolean isMoving();
 
 	/**
+	 * Liefert die Richtung des Players.
+	 * 
 	 * @return Die aktuelle Richtung des Spielers
 	 */
 	public abstract Direction getDirection();
@@ -95,6 +91,8 @@ public abstract class Player extends Actor {
 	}
 
 	/**
+	 * Liefert die Rasse des Players.
+	 * 
 	 * @return Der Name der Rasse des Pferdes.
 	 */
 	public String getRace() {
