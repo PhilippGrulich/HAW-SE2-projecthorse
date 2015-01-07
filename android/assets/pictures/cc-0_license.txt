@@ -1,5 +1,7 @@
 worldmap;worldmap.png; CC-0; San Jose; http://commons.wikimedia.org/wiki/File:Blank_political_map_Europe_in_2006_WF.svg
 city;Sankt-Michaelis-Kirche_Hamburg.jpg;CC-0;Thomas Wolf; www.foto-tw.de
+city;Biergarten.png;CC-0;tomwieden;http://pixabay.com/de/bier-biergarten-bayern-gemütlich-101316/
+city;Brandenburger_Tor.png;cc-0;rcc-ffm;http://pixabay.com/de/brandenburger-tor-berlin-himmel-450894/
 worldmap;germanymap_scaled.png; CC-0; Nemo; http://pixabay.com/de/karte-deutschland-staaten-304071/
 worldmap;erde-und-sterne.png;cc-0;OpenClips & Nikiko;http://pixabay.com/de/welt-globus-erde-blauer-planet-157115/ & http://pixabay.com/de/sterne-nacht-himmel-sternenhimmel-465189/
 menu;Background.png; CC-0;Sam; http://opengameart.org/content/country-field
@@ -52,4 +54,5 @@ puzzle;croissant.png;cc-0;Nemo;http://pixabay.com/de/croissant-franz%C3%B6sisch-
 puzzle;speechballoon.png;cc-0;sandra_schoen;http://pixabay.com/de/sprechblase-grau-sprechen-341435/
 flaggen;Berlin.png;cc-0;Nemo;http://pixabay.com/de/flagge-berlin-hauptstadt-stadt-28539/
 flaggen;Hamburg.png;cc-0;Nemo;http://pixabay.com/de/hamburg-flagge-deutschland-zeichen-28533/
-flaggen;Muenchen.png;
+flaggen;Muenchen.png;public domain;BRD;http://de.wikipedia.org/wiki/Datei:Großes_Stadtwappen_München.svg
+
