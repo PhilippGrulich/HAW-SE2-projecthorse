@@ -54,7 +54,6 @@ public class PlayerImpl extends Player {
 	 */
 	public PlayerImpl() {
 		this(getSaveGameRace());
-		this.setScale(1.75f);
 	}
 
 	/**
