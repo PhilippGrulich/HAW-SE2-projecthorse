@@ -12,14 +12,25 @@ import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
+/**
+ * 
+ * @author Masha
+ *@version 1.0
+ */
 public class PuzzlePlayer {
+
 	private Player player;
 	private static Image speechBalloon;
 	private static Label label;
 
+	/**
+	 * Konstruktor.
+	 */
 	public PuzzlePlayer() {
+
 		player = new PlayerImpl();
-		player.setPosition(-30, PuzzleManager.getMyXPos()-player.getHeight()*0.65f);
+		player.setPosition(-30, PuzzleManager.getMyXPos() - player.getHeight()
+				* 0.65f);
 		player.scaleBy(0.5F);
 		addSpeechBalloon();
 		addTextLabel();
@@ -29,6 +40,11 @@ public class PuzzlePlayer {
 
 	}
 
+	/**
+	 * lade das Sprechballonbild.
+	 * setze die Größe und die Position, füge dann
+	 * das Bild in die zweite Stage
+	 */
 	private void addSpeechBalloon() {
 		TextureRegion speechBalloonReg = AssetManager.getTextureRegion(
 				"puzzle", "speechballoon");
@@ -42,6 +58,11 @@ public class PuzzlePlayer {
 
 	}
 
+	/**
+	 * erstelle eine Label.
+	 *  positioniere die in das Sprrechballonbild, füge die
+	 * dann in die zweite Stage
+	 */
 	private void addTextLabel() {
 		label = new Label(" ", new LabelStyle(
 				AssetManager.getTextFont(FontSize.FORTY), Color.MAGENTA));
@@ -54,18 +75,29 @@ public class PuzzlePlayer {
 
 	}
 
+	/**
+	 * eine Hilfsmethode.
+	 * die das Sprechballonbild und die Label ein- und nach
+	 * kurzer Zeit wieder ausblendet
+	 */
 	private static void getActorSpeech() {
-		float fade = 2.5f;
+		float fade1 = 1;
+		float fade2 = 2.5f;
+		SequenceAction act1 = Actions.sequence(Actions.fadeIn(fade1),
+				Actions.delay(2), Actions.fadeOut(fade2));
+		SequenceAction act2 = Actions.sequence(Actions.fadeIn(fade1),
+				Actions.delay(2), Actions.fadeOut(fade2));
 
-		SequenceAction act = Actions.sequence(Actions.fadeIn(fade),
-				Actions.delay(2), Actions.fadeOut(fade));
-
-		// speechBalloon.addAction(act);
-		label.addAction(act);
+		speechBalloon.addAction(act1);
+		label.addAction(act2);
 
 	}
 
-	public static void setActorSpeech(String str) {
+	/**
+	 * setzt den neuen Text in die Sprechblase.
+	 * @param String
+	 */
+	public static void setActorSpeech(final String str) {
 		getActorSpeech();
 		label.setText(str);
 	}

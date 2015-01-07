@@ -15,6 +15,7 @@ public class KartenManager extends Thread {
 	private Karte karteA;
 	private Karte karteB;
 	public boolean canOpen = true;
+	private Drawable[] pictures = new Drawable[6];
 	private Drawable picture1;
 	private Drawable picture2;
 	private Drawable picture3;
@@ -27,61 +28,48 @@ public class KartenManager extends Thread {
 		setUpKarten();
 	}
 
-	public void setUpKarten() {
-		int y = 75;
-		Karte karte1 = new Karte(40, 75+y);
-		Karte karte2 = new Karte(265, 75+y);
-		Karte karte3 = new Karte(490, 75+y);
-		Karte karte4 = new Karte(40, 300+y);
-		Karte karte5 = new Karte(265, 300+y);
-		Karte karte6 = new Karte(490, 300+y);
-		Karte karte7 = new Karte(40, 525+y);
-		Karte karte8 = new Karte(265, 525+y);
-		Karte karte9 = new Karte(490, 525+y);
-		Karte karte10 = new Karte(40, 750+y);
-		Karte karte11 = new Karte(265, 750+y);
-		Karte karte12 = new Karte(490, 750+y);
+	public void setUpKarten() {		
 		
-		karten.add(karte1);
-		karten.add(karte2);
-		karten.add(karte3);
-		karten.add(karte4);
-		karten.add(karte5);
-		karten.add(karte6);
-		karten.add(karte7);
-		karten.add(karte8);
-		karten.add(karte9);
-		karten.add(karte10);
-		karten.add(karte11);
-		karten.add(karte12);
+		for(int i =0; i<12; i++){
+//			Karte k = new Karte();
+			karten.add(null);
+		}
+		
+		int y = 75;
+		karten.set(0, new Karte(40, 75 + y));
+		karten.set(1, new Karte(265, 75 + y));
+		karten.set(2, new Karte(490, 75 + y));
+		karten.set(3, new Karte(40, 300 + y));
+		karten.set(4, new Karte(265, 300 + y));
+		karten.set(5, new Karte(490, 300 + y));
+		karten.set(6, new Karte(40, 525 + y));
+		karten.set(7, new Karte(265, 525 + y));
+		karten.set(8, new Karte(490, 525 + y));
+		karten.set(9, new Karte(40, 750 + y));
+		karten.set(10, new Karte(265, 750 + y));
+		karten.set(11, new Karte(490, 750 + y));
 
 		Collections.shuffle(karten);
 
-		picture1 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+		pictures[0] = new TextureRegionDrawable(AssetManager.getTextureRegion(
 				"memorySpiel", "Foto" + 1));
-		picture2 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+		pictures[1] = new TextureRegionDrawable(AssetManager.getTextureRegion(
 				"memorySpiel", "Foto" + 2));
-		picture3 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+		pictures[2] = new TextureRegionDrawable(AssetManager.getTextureRegion(
 				"memorySpiel", "Foto" + 3));
-		picture4 = new TextureRegionDrawable(AssetManager.getTextureRegion(
+		pictures[3] = new TextureRegionDrawable(AssetManager.getTextureRegion(
 				"memorySpiel", "Foto" + 4));
-		picture5 = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Foto" + 10));
-		picture6 = new TextureRegionDrawable(AssetManager.getTextureRegion(
-				"memorySpiel", "Foto" + 9));
-		
-		((Karte) karten.get(0)).setPicture(picture1);
-		((Karte) karten.get(1)).setPicture(picture1);
-		((Karte) karten.get(2)).setPicture(picture2);
-		((Karte) karten.get(3)).setPicture(picture2);
-		((Karte) karten.get(4)).setPicture(picture3);
-		((Karte) karten.get(5)).setPicture(picture3);
-		((Karte) karten.get(6)).setPicture(picture4);
-		((Karte) karten.get(7)).setPicture(picture4);
-		((Karte) karten.get(8)).setPicture(picture5);
-		((Karte) karten.get(9)).setPicture(picture5);
-		((Karte) karten.get(10)).setPicture(picture6);
-		((Karte) karten.get(11)).setPicture(picture6);
+		pictures[4] = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 5));
+		pictures[5] = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Foto" + 6));
+
+		int j = 0;
+		for (int i = 0; i < pictures.length; i++) {
+			((Karte) karten.get(j)).setPicture(pictures[i]);
+			((Karte) karten.get(j + 1)).setPicture(pictures[i]);
+			j += 2;
+		}
 
 	}
 
@@ -132,22 +120,20 @@ public class KartenManager extends Thread {
 
 		Collections.shuffle(karten);
 
-		karten.get(0).setPicture(picture1);
-		karten.get(1).setPicture(picture1);
-		karten.get(2).setPicture(picture2);
-		karten.get(3).setPicture(picture2);
-		karten.get(4).setPicture(picture3);
-		karten.get(5).setPicture(picture3);
-		karten.get(6).setPicture(picture4);
-		karten.get(7).setPicture(picture4);
-		karten.get(8).setPicture(picture5);
-		karten.get(9).setPicture(picture5);
-		karten.get(10).setPicture(picture6);
-		karten.get(11).setPicture(picture6);
-
-		for(int i = 0; i<12; i++){
-			karten.get(i).setState(CardState.TEMPORARILY_CLOSED);
+		Karte k1;
+		Karte k2;
+		int j = 0;
+		for (int i = 0; i < pictures.length; i++) {
+			k1 = karten.get(j);
+			k2 = karten.get(j + 1);
+			k1.setPicture(pictures[i]);
+			k2.setPicture(pictures[i]);
+			k1.setState(CardState.TEMPORARILY_CLOSED);
+			k2.setState(CardState.TEMPORARILY_CLOSED);
+			j += 2;
 		}
+		
+		setScore(0);
 	}
 
 	public int getScore() {

@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
-import com.esotericsoftware.tablelayout.Cell;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.lootmanager.Lootable;
@@ -19,9 +19,9 @@ public class LootItem extends WidgetGroup {
 	private Table group;
 	private Table nameAndDescription;
 	private LabelStyle labelStyle;
-	private Cell<Label> descriptionCell;
 	private Label description;
-//	private boolean descriptionIsVisible = false;
+	
+	private float contentHeight;
 	
 	public LootItem(Lootable loot, float width) {
 		createTable(loot, width);
@@ -43,18 +43,11 @@ public class LootItem extends WidgetGroup {
 		Drawable drawable = loot.getImage();
 		Image img = new Image(drawable, Scaling.fit, Align.center);
 		Label name;
-		
-		// Größe und Position vom Bild normalisieren
-		float width = drawable.getMinWidth(), height = drawable.getMinHeight(), faktor;
-		if (width > height) {
-			faktor = 200 / width;
-		} else {
-			faktor = 200 / height;
-		}
 				
-		labelStyle = new LabelStyle(AssetManager.getTextFont(FontSize.FORTY), Color.GRAY);
+		labelStyle = new LabelStyle(AssetManager.getHeadlineFont(FontSize.FORTY), Color.GRAY);
 		name = new Label(loot.getName(), labelStyle);
 		
+		labelStyle.font = AssetManager.getTextFont(FontSize.FORTY);
 		description = new Label(loot.getDescription(), labelStyle);
 		description.setWrap(true);
 		
@@ -62,11 +55,15 @@ public class LootItem extends WidgetGroup {
 		nameAndDescription.align(Align.left + Align.top);
 		nameAndDescription.add(name).expandX().align(Align.left).spaceLeft(10);
 		nameAndDescription.row();
-		descriptionCell = nameAndDescription.add(description).align(Align.left).spaceLeft(10).width(maxWidth-200);
+		nameAndDescription.add(description).align(Align.left).spaceLeft(10).width(maxWidth-260);
 		
-		group.add(img).size(200);
+		group.add(img).size(200).pad(10, 0, 10, 10);
 		group.add(nameAndDescription);
-		group.left();
+		
+		contentHeight = group.getPrefHeight() + 10;
+		
+		group.setSize(maxWidth, contentHeight);
+		group.setBackground(new TextureRegionDrawable(AssetManager.getTextureRegion("ui", "panel_beige")));
 	}
 	
 	/*private void toogleDescription() {
@@ -84,7 +81,7 @@ public class LootItem extends WidgetGroup {
 	
 	@Override
 	public float getPrefHeight() {
-		return group.getPrefHeight();
+		return contentHeight;
 	}
 	
 	@Override

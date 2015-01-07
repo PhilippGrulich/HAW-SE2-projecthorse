@@ -1,21 +1,24 @@
 {
 lootCollection: [
 	{
-		class: com.haw.projecthorse.player.race.RaceLoot,
+		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
 		achievedDate: {},
-		name: Haflinger,
-		description: "",
-		race: HAFLINGER
+		name: brötchen,
+		image: {
+			level: puzzle,
+			fileName: buns
+		},
+		description: "Leckere Brötchen"
 	},
 	{
-		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
 		achievedDate: {},
-		name: MiniPferd,
+		name: brezel,
 		image: {
-			level: thimblerig,
-			fileName: WOOD_HORSE
+			level: puzzle,
+			fileName: brezel
 		},
-		description: "ein putziges Spielzeug"
+		description: "Eine leckere Brezel"
 	},
 	{
 		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
@@ -40,6 +43,13 @@ lootCollection: [
 		description: "eine gesunde Mahlzeit"
 	},
 	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Haflinger,
+		race: HAFLINGER,
+		description: ""
+	},
+	{
 		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
 		achievedDate: {},
 		name: Hufeisen,
@@ -50,21 +60,56 @@ lootCollection: [
 		description: "als Glücksbringer"
 	},
 	{
+		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
+		achievedDate: {},
+		name: croissant,
+		image: {
+			level: puzzle,
+			fileName: croissant
+		},
+		description: "Die beste Leckerei für dein Pferd"
+	},
+	{
 		class: com.haw.projecthorse.level.game.parcours.ParcoursLoot,
 		achievedDate: {},
-		name: carrot,
+		name: hannoveraner,
 		allreadyWon: true,
 		availableAtScore: 5,
 		image: {
 			level: parcours,
-			fileName: carrot
+			fileName: hannoveraner
 		},
-		description: "Eine leckere Möhre für dein Pferd."
+		description: "Ein wunderschöner Hannoveraner :-)"
+	},
+	{
+		class: com.haw.projecthorse.level.game.thimblerig.ThimblerigLoot,
+		achievedDate: {},
+		name: MiniPferd,
+		image: {
+			level: thimblerig,
+			fileName: WOOD_HORSE
+		},
+		description: "ein putziges Spielzeug"
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Shetti,
+		race: SHETTI,
+		description: ""
+	},
+	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Friese,
+		race: FRIESE,
+		description: ""
 	}
 ],
 name: Maria,
 ID: 1,
 horse: {
-	class: com.haw.projecthorse.savegame.json.HorseImpl
+	class: com.haw.projecthorse.savegame.json.HorseImpl,
+	race: SHETTI
 }
 }

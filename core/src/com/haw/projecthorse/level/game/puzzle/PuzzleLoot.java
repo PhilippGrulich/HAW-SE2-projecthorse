@@ -3,28 +3,54 @@ package com.haw.projecthorse.level.game.puzzle;
 import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.LootImage;
 
-public class PuzzleLoot extends Loot {
-	private String imageName;
-	
-	public PuzzleLoot(String name, String description, String imageName) {
+/**
+ * 
+ * @author Masha
+ * @version 1.0
+ */
+public final class PuzzleLoot extends Loot {
+
+	private LootImage image;
+/**
+ * defaultkonstruktor.
+ */
+	protected PuzzleLoot() {
+	};
+
+	/**
+	 * construktor.
+	 * 
+	 * @param name
+	 * @param description
+	 * @param imageName
+	 */
+	protected PuzzleLoot(final String name, final String description,
+			final String imageName) {
 		super(name, description);
-		this.imageName = imageName;
+		this.image = new LootImage("puzzle", imageName);
 	}
 
 	@Override
 	protected LootImage getLootImage() {
-		return new LootImage("puzzle", imageName);
+		return image;
 	}
 
 	@Override
 	protected int doHashCode() {
-		return imageName.hashCode();
+		return ((this.image == null) ? 0 : this.image.hashCode());
 	}
 
 	@Override
-	protected boolean doEquals(Object other) {
-		PuzzleLoot o = (PuzzleLoot)other;
-		return imageName.equals(o.imageName);
+	protected boolean doEquals(final Object other) {
+		if (this.image == null) {
+			if (((PuzzleLoot) other).image != null) {
+				return false;
+			}
+		} else if (!this.image.equals(((PuzzleLoot) other).image)) {
+			return false;
+		}
+		return true;
+
 	}
 
 	@Override
