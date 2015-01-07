@@ -25,6 +25,13 @@ import com.haw.projecthorse.level.util.overlay.navbar.button.NavbarCityInfoButto
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge.ButtonColor;
 
+/**
+ * Dies ist ein Generisches City Level. Es wird immer mit den jeweiliegen City
+ * Informationen Befüllt die für die gerade aktive Stadt wichtig sind.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class City extends Menu {
 
 	private Stage stage;
@@ -36,6 +43,9 @@ public class City extends Menu {
 
 	private Music music;
 
+	/**
+	 * Konstruktor.
+	 */
 	public City() {
 		AssetManager.loadMusic("mainMenu");
 		AssetManager.loadSounds("city");
@@ -56,7 +66,6 @@ public class City extends Menu {
 			}
 		};
 		overlay.getNavBar().addButtonAt(button, 3);
-		;
 	}
 
 	@Override
@@ -127,7 +136,7 @@ public class City extends Menu {
 	};
 
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
 		stage.draw();
 	}
 
@@ -138,7 +147,7 @@ public class City extends Menu {
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
 
 	}
