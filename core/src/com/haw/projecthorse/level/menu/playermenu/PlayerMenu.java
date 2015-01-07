@@ -29,7 +29,7 @@ import com.haw.projecthorse.player.race.RaceLoot;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class PlayerMenu extends Menu {
-	private final float SCALEBYFACTOR = 1f;
+	private static final float SCALEBYFACTOR = 1f;
 	private Stage stage;
 	private Player active;
 	private Label label;
@@ -57,10 +57,9 @@ public class PlayerMenu extends Menu {
 
 	private void updatePlayer(boolean right) {
 		Player inActive = new PlayerImpl(races.get(curRaceIndex).getRace());
-		inActive.setScale(1.75f);		// TODO: Wieso ist setScale nicht im PlayerImpl-Konstruktor?
 		inActive.scaleBy(SCALEBYFACTOR);
 		stage.addActor(inActive);
-		
+
 		inActive.setPosition((right ? invisiblePositionX : width
 				- invisiblePositionX), playerPositionY);
 		inActive.setAnimationSpeed(0.3f);
@@ -70,32 +69,37 @@ public class PlayerMenu extends Menu {
 			inActive.addAction(Actions.parallel(
 					Actions.moveTo(playerPositionX, playerPositionY, DURATION),
 					new AnimationAction(Direction.RIGHT)));
-			active.addAction(Actions.sequence(Actions.parallel(
+			active.addAction(Actions.sequence(
 					Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION),
-					new AnimationAction(Direction.RIGHT)), Actions.removeActor()));
+					Actions.removeActor()));
 		} else {
 			inActive.clearActions();
 			active.clearActions();
 			inActive.addAction(Actions.sequence(
-					Actions.parallel(new AnimationAction(Direction.LEFT, DURATION),
-					Actions.moveTo(playerPositionX, playerPositionY, DURATION)),
-					new AnimationAction(Direction.RIGHT)));
+					Actions.parallel(new AnimationAction(Direction.LEFT,
+							DURATION), Actions.moveTo(playerPositionX,
+							playerPositionY, DURATION)), new AnimationAction(
+							Direction.RIGHT)));
 			active.addAction(Actions.sequence(
-					Actions.parallel(new AnimationAction(Direction.LEFT, DURATION),
-					Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION)),
-					Actions.removeActor(), new AnimationAction(Direction.RIGHT)));
+					Actions.parallel(new AnimationAction(Direction.LEFT,
+							DURATION), Actions.moveBy(width
+							* (right ? 1.5f : -1.5f), 0, DURATION)), Actions
+							.removeActor()));
 		}
-		
+
 		active = inActive;
 		updateNameLabel();
 	}
 
 	private void createBackground() {
-		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "sky"), 30));
-		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "second_grass"), 11));
-		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "first_grass"), 8));
-		stage.addActor(new EndlessBackground(width, AssetManager.getTextureRegion("menu", "ground"),
-				4));
+		stage.addActor(new EndlessBackground(width, AssetManager
+				.getTextureRegion("menu", "sky"), 30));
+		stage.addActor(new EndlessBackground(width, AssetManager
+				.getTextureRegion("menu", "second_grass"), 11));
+		stage.addActor(new EndlessBackground(width, AssetManager
+				.getTextureRegion("menu", "first_grass"), 8));
+		stage.addActor(new EndlessBackground(width, AssetManager
+				.getTextureRegion("menu", "ground"), 4));
 	}
 
 	private void createButtons() {
@@ -151,12 +155,13 @@ public class PlayerMenu extends Menu {
 	}
 
 	private void createLabel() {
-		label = new Label("", new LabelStyle(AssetManager.getTextFont(FontSize.SIXTY), Color.BLACK));
+		label = new Label("", new LabelStyle(
+				AssetManager.getTextFont(FontSize.SIXTY), Color.BLACK));
 
 		updateNameLabel();
 		stage.addActor(label);
 	}
-	
+
 	private void initRaceListIndex() {
 		HorseRace curRace = SaveGameManager.getLoadedGame().getHorseRace();
 		for (int i = 0; i < races.size(); i++) {
@@ -176,7 +181,8 @@ public class PlayerMenu extends Menu {
 	@Override
 	protected void doDispose() {
 		// Alles speichern, bevor das Menü verlassen wird
-		SaveGameManager.getLoadedGame().setHorseRace(races.get(curRaceIndex).getRace());
+		SaveGameManager.getLoadedGame().setHorseRace(
+				races.get(curRaceIndex).getRace());
 		SaveGameManager.saveLoadedGame();
 	}
 
@@ -190,18 +196,19 @@ public class PlayerMenu extends Menu {
 		stage = new Stage(getViewport(), getSpriteBatch());
 
 		createBackground();
-		races = new ArrayList<RaceLoot>(SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class));
+		races = new ArrayList<RaceLoot>(SaveGameManager.getLoadedGame()
+				.getSpecifiedLoot(RaceLoot.class));
 		if (races.size() > 1) {
-			InputManager.addInputProcessor(new StageGestureDetector(stage, true,
-					ControlMode.HORIZONTAL));
-			
+			InputManager.addInputProcessor(new StageGestureDetector(stage,
+					true, ControlMode.HORIZONTAL));
+
 			createButtons();
-			
+
 			initRaceListIndex();
 		} else {
 			curRaceIndex = 0;
 		}
-		
+
 		createPlayer();
 		createLabel();
 	}

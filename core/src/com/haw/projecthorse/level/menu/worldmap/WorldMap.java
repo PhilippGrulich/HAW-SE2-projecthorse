@@ -240,7 +240,7 @@ public class WorldMap extends Menu {
 		pointImg.setColor(1, 1, 1, 0);
 		pointImg.setScale(0.5f * (width / 720));
 		player.setColor(1, 1, 1, 0);
-		player.scaleBy(-1.0f);
+		player.scaleBy(-0.6f);
 
 		int[] cityCoordinates = cityInfos.get(prefs.getString("lastCity"));
 
