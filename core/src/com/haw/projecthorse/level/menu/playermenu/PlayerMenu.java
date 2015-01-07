@@ -1,75 +1,78 @@
 package com.haw.projecthorse.level.menu.playermenu;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.haw.projecthorse.assetmanager.AssetManager;
+import com.haw.projecthorse.assetmanager.FontSize;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.menu.Menu;
 import com.haw.projecthorse.level.util.background.EndlessBackground;
 import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall;
+import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
-import com.haw.projecthorse.player.actions.Direction;
 import com.haw.projecthorse.player.actions.AnimationAction;
+import com.haw.projecthorse.player.actions.Direction;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.RaceLoot;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class PlayerMenu extends Menu {
+	private final float SCALEBYFACTOR = 1f;
 	private Stage stage;
-	private Player active, player1, player2;
+	private Player active;
 	private Label label;
 	private float playerPositionX, playerPositionY = 120, invisiblePositionX;
-	private String playerName;
-//	private TextureAtlas atlas, buttonAtlas;
+	private ArrayList<RaceLoot> races;
+	private int curRaceIndex;
 
 	private final int DURATION = 2;
 
 	private void updateNameLabel() {
-		label.setText(playerName);
+		label.setText(races.get(curRaceIndex).getName());
 		label.setWidth(label.getTextBounds().width);
 		label.setPosition((width - label.getWidth()) / 2, height - 200);
 	}
 
 	private void incIndex() {
+		curRaceIndex = (curRaceIndex == 0 ? races.size() : curRaceIndex) - 1;
 		updatePlayer(true);
 	}
 
 	private void decIndex() {
+		curRaceIndex = (curRaceIndex + 1) % races.size();
 		updatePlayer(false);
 	}
 
 	private void updatePlayer(boolean right) {
-		Player inActive;
-
-		if (active == player1) {
-			inActive = player2;
-		} else {
-			inActive = player1;
-		}
-
+		Player inActive = new PlayerImpl(races.get(curRaceIndex).getRace());
+		inActive.setScale(1.75f);		// TODO: Wieso ist setScale nicht im PlayerImpl-Konstruktor?
+		inActive.scaleBy(SCALEBYFACTOR);
+		stage.addActor(inActive);
+		
 		inActive.setPosition((right ? invisiblePositionX : width
 				- invisiblePositionX), playerPositionY);
 		inActive.setAnimationSpeed(0.3f);
-		active.setAnimationSpeed(0.6f);
+		active.setAnimationSpeed(0.45f);
 
 		if (right) {
-			inActive.addAction(Actions.sequence(
+			inActive.addAction(Actions.parallel(
 					Actions.moveTo(playerPositionX, playerPositionY, DURATION),
 					new AnimationAction(Direction.RIGHT)));
-			active.addAction(Actions.sequence(
+			active.addAction(Actions.sequence(Actions.parallel(
 					Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION),
-					new AnimationAction(Direction.RIGHT)));
+					new AnimationAction(Direction.RIGHT)), Actions.removeActor()));
 		} else {
 			inActive.clearActions();
 			active.clearActions();
@@ -80,10 +83,11 @@ public class PlayerMenu extends Menu {
 			active.addAction(Actions.sequence(
 					Actions.parallel(new AnimationAction(Direction.LEFT, DURATION),
 					Actions.moveBy(width * (right ? 1.5f : -1.5f), 0, DURATION)),
-					new AnimationAction(Direction.RIGHT)));
+					Actions.removeActor(), new AnimationAction(Direction.RIGHT)));
 		}
 		
 		active = inActive;
+		updateNameLabel();
 	}
 
 	private void createBackground() {
@@ -95,11 +99,10 @@ public class PlayerMenu extends Menu {
 	}
 
 	private void createButtons() {
-		Image next, prev;
+		ButtonSmall next, prev;
 
-		prev = new Image(AssetManager.getTextureRegion("selfmade", "button_prev"));
+		prev = new ButtonSmall(ButtonType.LEFT);
 		prev.setPosition(10, 300);
-		prev.setScale(2);
 		prev.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
@@ -110,9 +113,8 @@ public class PlayerMenu extends Menu {
 		});
 		stage.addActor(prev);
 
-		next = new Image(AssetManager.getTextureRegion("selfmade", "button_next"));
-		next.setPosition(width - 70, 300);
-		next.setScale(2);
+		next = new ButtonSmall(ButtonType.RIGHT);
+		next.setPosition(width - 10 - next.getWidth(), 300);
 		next.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
@@ -124,17 +126,17 @@ public class PlayerMenu extends Menu {
 		stage.addActor(next);
 	}
 
-	private void createPlayers() {
-		player1 = new PlayerImpl();
-		player1.setScale(3);
+	private void createPlayer() {
+		active = new PlayerImpl();
+		active.scaleBy(SCALEBYFACTOR);
 
-		playerPositionX = (width - 3 * player1.getWidth()) / 2;
-		invisiblePositionX = player1.getWidth() * -5;
+		playerPositionX = (width - active.getWidth() * active.getScaleX()) / 2;
+		invisiblePositionX = active.getWidth() * -5;
 
-		player1.setPosition(playerPositionX, playerPositionY);
-		player1.setAnimationSpeed(0.3f);
-		player1.addAction(new AnimationAction(Direction.RIGHT));
-		player1.addListener(new SwipeListener() {
+		active.setPosition(playerPositionX, playerPositionY);
+		active.setAnimationSpeed(0.3f);
+		active.addAction(new AnimationAction(Direction.RIGHT));
+		active.addListener(new SwipeListener() {
 			@Override
 			public void swiped(SwipeEvent event, Actor actor) {
 				if (event.getDirection() == Direction.RIGHT) {
@@ -145,45 +147,24 @@ public class PlayerMenu extends Menu {
 
 			}
 		});
-		active = player1;
-		stage.addActor(player1);
-
-		player2 = new PlayerImpl();
-		player2.setScale(3);
-		player2.setPosition(invisiblePositionX, playerPositionY);
-		player2.setAnimationSpeed(0.3f);
-		player2.addAction(new AnimationAction(Direction.RIGHT));
-		stage.addActor(player2);
+		stage.addActor(active);
 	}
 
 	private void createLabel() {
-		BitmapFont textFont = new BitmapFont();
-		textFont.setScale(3);
-
-		label = new Label("", new LabelStyle(textFont, Color.BLACK));
+		label = new Label("", new LabelStyle(AssetManager.getTextFont(FontSize.SIXTY), Color.BLACK));
 
 		updateNameLabel();
-
-		label.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				Gdx.input.getTextInput(new TextInputListener() {
-					@Override
-					public void input(String text) {
-						playerName = text;
-						updateNameLabel();
-					}
-
-					@Override
-					public void canceled() {
-						// nichts zu tun
-					}
-				}, "Neuer Name deines Pferdes", playerName);
-				return true;
-			}
-		});
 		stage.addActor(label);
+	}
+	
+	private void initRaceListIndex() {
+		HorseRace curRace = SaveGameManager.getLoadedGame().getHorseRace();
+		for (int i = 0; i < races.size(); i++) {
+			if (races.get(i).getRace() == curRace) {
+				curRaceIndex = i;
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -194,8 +175,8 @@ public class PlayerMenu extends Menu {
 
 	@Override
 	protected void doDispose() {
-		// Alles speichern, bevor das Men� verlassen wird
-		SaveGameManager.getLoadedGame().setPlayerName(playerName);
+		// Alles speichern, bevor das Menü verlassen wird
+		SaveGameManager.getLoadedGame().setHorseRace(races.get(curRaceIndex).getRace());
 		SaveGameManager.saveLoadedGame();
 	}
 
@@ -206,20 +187,22 @@ public class PlayerMenu extends Menu {
 
 	@Override
 	protected void doShow() {
-		SaveGameManager.loadSavedGame(1); // TODO: zum testen
-
-		playerName = SaveGameManager.getLoadedGame().getPlayerName();
-		if (playerName.length() == 0) {
-			playerName = "Name deines Pferdes";
-		}
-
 		stage = new Stage(getViewport(), getSpriteBatch());
-		InputManager.addInputProcessor(new StageGestureDetector(stage, true,
-				ControlMode.HORIZONTAL));
 
 		createBackground();
-		createButtons();
-		createPlayers();
+		races = new ArrayList<RaceLoot>(SaveGameManager.getLoadedGame().getSpecifiedLoot(RaceLoot.class));
+		if (races.size() > 1) {
+			InputManager.addInputProcessor(new StageGestureDetector(stage, true,
+					ControlMode.HORIZONTAL));
+			
+			createButtons();
+			
+			initRaceListIndex();
+		} else {
+			curRaceIndex = 0;
+		}
+		
+		createPlayer();
 		createLabel();
 	}
 
