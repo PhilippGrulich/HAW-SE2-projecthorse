@@ -67,7 +67,10 @@ build/
 local.properties
 
 #logfiles
-logfile.txt
+**/logfile.txt
 
 #savegames
 *.game
+
+#checkstyle local configs
+*.checkstyle
