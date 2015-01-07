@@ -54,5 +54,5 @@ puzzle;croissant.png;cc-0;Nemo;http://pixabay.com/de/croissant-franz%C3%B6sisch-
 puzzle;speechballoon.png;cc-0;sandra_schoen;http://pixabay.com/de/sprechblase-grau-sprechen-341435/
 flaggen;Berlin.png;cc-0;Nemo;http://pixabay.com/de/flagge-berlin-hauptstadt-stadt-28539/
 flaggen;Hamburg.png;cc-0;Nemo;http://pixabay.com/de/hamburg-flagge-deutschland-zeichen-28533/
-flaggen;Muenchen.png;public domain;BRD;http://de.wikipedia.org/wiki/Datei:Großes_Stadtwappen_München.svg
+flaggen;Muenchen.png;cc-0;BRD;http://de.wikipedia.org/wiki/Datei:Großes_Stadtwappen_München.svg
 
