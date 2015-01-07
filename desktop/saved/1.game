@@ -32,6 +32,13 @@ lootCollection: [
 		description: ""
 	},
 	{
+		class: com.haw.projecthorse.player.race.RaceLoot,
+		achievedDate: {},
+		name: Hannoveraner,
+		race: HANNOVERANER,
+		description: ""
+	},
+	{
 		class: com.haw.projecthorse.level.game.puzzle.PuzzleLoot,
 		achievedDate: {},
 		name: croissant,
@@ -86,10 +93,10 @@ lootCollection: [
 		description: "eine gesunde Mahlzeit"
 	}
 ],
-name: Maria,
+name: AllePferde,
 ID: 1,
 horse: {
 	class: com.haw.projecthorse.savegame.json.HorseImpl,
-	race: SHETTI
+	race: HANNOVERANER
 }
 }

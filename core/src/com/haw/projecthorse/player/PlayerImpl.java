@@ -7,23 +7,22 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.player.actions.Direction;
-import com.haw.projecthorse.player.color.PlayerColor;
 import com.haw.projecthorse.player.race.HorseRace;
 import com.haw.projecthorse.player.race.Race;
 import com.haw.projecthorse.savegame.SaveGameManager;
 import com.haw.projecthorse.savegame.json.SaveGame;
 
 public class PlayerImpl extends Player {
-//	private static final int DEFAULT_WIDTH = 115, DEFAULT_HEIGHT = 140;
+	private static final float SCALEFACTOR = 1.2f; // hiermit wird erreicht,
+													// dass nicht alle Spiele an
+													// das neue Scaling
+													// angepasst werden müseen
 
-	// Dieser Wert reguliert die maximale Animationsgeschwindigkeit, je kleiner
-	// desto schneller
-	
 	private String imgFolder;
 	private Map<String, TextureRegion> spriteMap;
 	private TextureRegion activeSprite;
 	private float speed = 0;
-//	private int spriteStartX, spriteStartY;
+	// private int spriteStartX, spriteStartY;
 	private Direction direction = Direction.RIGHT;
 	private boolean flipX = false;
 
@@ -38,10 +37,8 @@ public class PlayerImpl extends Player {
 
 	public PlayerImpl() {
 		this(getSaveGameRace());
-//		this.scaleBy(-0.12f);
-		this.setScale(1.75f);
 	}
-	
+
 	/**
 	 * @param horseRace
 	 *            Die Rasse des Pferdes, welchen den Spieler darstellt.
@@ -51,27 +48,26 @@ public class PlayerImpl extends Player {
 		imgFolder = "player" + race.name();
 		spriteMap = AssetManager.getAllTextureRegions(imgFolder);
 		activeSprite = spriteMap.get("side-1");
-		
+
+		this.setScale(race.size() * SCALEFACTOR);
+
 		flipX = true;
-		
-		setBounds(getX(), getY(), activeSprite.getRegionWidth(), activeSprite.getRegionHeight());
+
+		setBounds(getX(), getY(), activeSprite.getRegionWidth(),
+				activeSprite.getRegionHeight());
 	}
 
-	@Deprecated
-	public PlayerImpl(PlayerColor color) {
-		this(getSaveGameRace());
-	}
-	
 	public void chageDirection(Direction newDirection) {
 		direction = newDirection;
 	}
 
-	public void changeSprite(String spriteName, Direction direction, boolean flipX) {
+	public void changeSprite(String spriteName, Direction direction,
+			boolean flipX) {
 		activeSprite = spriteMap.get(spriteName);
 		this.flipX = flipX;
 		this.direction = direction;
 	}
-	
+
 	@Override
 	public void act(float delta) {
 		super.act(delta);
@@ -89,11 +85,6 @@ public class PlayerImpl extends Player {
 				activeSprite.getRegionHeight(), flipX, false);
 
 		batch.setColor(batchColor);
-	}
-
-	@Override
-	@Deprecated
-	public void setPlayerColor(PlayerColor color) {
 	}
 
 	@Override

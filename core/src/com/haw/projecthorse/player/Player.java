@@ -2,7 +2,6 @@ package com.haw.projecthorse.player;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.haw.projecthorse.player.actions.Direction;
-import com.haw.projecthorse.player.color.PlayerColor;
 import com.haw.projecthorse.player.race.Race;
 
 /**
@@ -21,14 +20,14 @@ import com.haw.projecthorse.player.race.Race;
 public abstract class Player extends Actor {
 	protected Race race;
 
-	/**
-	 * Verändert die Färbung des Spielers
-	 * 
-	 * @param color
-	 *            Die neue Farbe
-	 */
-	@Deprecated
-	public abstract void setPlayerColor(PlayerColor color);
+//	/**
+//	 * Verändert die Färbung des Spielers
+//	 * 
+//	 * @param color
+//	 *            Die neue Farbe
+//	 */
+//	@Deprecated
+//	public abstract void setPlayerColor(PlayerColor color);
 
 	/**
 	 * Verändert die Geschwindigkeit der Bewegungsanimation um ein angegegbenes

@@ -17,7 +17,6 @@ import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 import com.haw.projecthorse.player.actions.AnimationAction;
-import com.haw.projecthorse.player.color.PlayerColor;
 
 /**
  * Klasse zum Simulieren und Testen von Wisch-Bewegungen (Swipe-Gesten)
@@ -36,7 +35,7 @@ public class MovementTest extends Level {
 
 	@Override
 	protected void doRender(float delta) {
-		player1.setPlayerColor(new PlayerColor(black, color.r, color.g, color.b, ""));
+//		player1.setPlayerColor(new PlayerColor(black, color.r, color.g, color.b, ""));
 //		player2.setColor(color);
 		
 		Gdx.gl.glClearColor(0.7f, 0.2f, 0.2f, 1);
@@ -127,7 +126,7 @@ public class MovementTest extends Level {
 		});
 		
 		
-		player1 = new PlayerImpl(PlayerColor.WHITE);
+		player1 = new PlayerImpl();
 		
 		player1.addListener(listener);
 		player1.addListener(new InputListener() {
@@ -139,7 +138,6 @@ public class MovementTest extends Level {
 					return false;
 				}
 				
-				PlayerImpl p = (PlayerImpl) a;
 				black = !black;
 				return true;
 			}
