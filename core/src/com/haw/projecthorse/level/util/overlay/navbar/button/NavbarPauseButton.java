@@ -10,8 +10,16 @@ import com.haw.projecthorse.level.util.overlay.popup.GamePausePopup;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
 
+/**
+ * Dieser Button öffnet das Pause Menü.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class NavbarPauseButton extends NavbarButton {
-
+	/**
+	 * Konstruktor.
+	 */
 	public NavbarPauseButton() {
 		ImageButton imageButton = new ButtonSmall(ButtonSmall.ButtonType.PAUSE);
 		this.setWidth(imageButton.getHeight());

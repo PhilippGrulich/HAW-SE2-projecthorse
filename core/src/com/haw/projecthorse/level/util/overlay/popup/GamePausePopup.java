@@ -16,7 +16,7 @@ import com.haw.projecthorse.level.util.uielements.ButtonLarge;
  * Weiter Spielen
  * 
  * @author Philipp
- *
+ * @version 1.0
  */
 public class GamePausePopup extends Popup implements Observer {
 
@@ -24,6 +24,9 @@ public class GamePausePopup extends Popup implements Observer {
 	private ImageTextButton musicButton;
 	private ImageTextButton soundButton;
 
+	/**
+	 * Konstruktor.
+	 */
 	public GamePausePopup() {
 
 		musicButton = createButton("", new ChangeListener() {
@@ -73,6 +76,9 @@ public class GamePausePopup extends Popup implements Observer {
 
 	}
 
+	/**
+	 * Updatet die Texte der Buttons.
+	 */
 	private void setTextes() {
 		if (setting.getMusicState()) {
 			musicButton.setText("Musik ist AN");
@@ -87,6 +93,15 @@ public class GamePausePopup extends Popup implements Observer {
 		}
 	}
 
+	/**
+	 * Diese Methode erzeugt einen Button.
+	 * 
+	 * @param label
+	 *            Button Text
+	 * @param inputListener
+	 *            {@link ChangeListener} um auf den Button Klick zu reagieren
+	 * @return button
+	 */
 	private ImageTextButton createButton(final String label, final ChangeListener inputListener) {
 		ImageTextButton btn = new ButtonLarge(label, inputListener);
 		btn.addListener(inputListener);

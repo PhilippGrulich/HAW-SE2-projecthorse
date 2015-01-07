@@ -30,21 +30,20 @@ import com.haw.projecthorse.level.util.overlay.OverlayWidgetGroup;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 
 /**
- * @author Philipp
+ * Dies ist ein grundlegendes Popup und alle weiteren Popops können ein
+ * spezielles Verhalten in Supklassen implementieren. Außerdem bittet es
+ * Implementierungen für Standart-Komponenten. (createButton,createLabel) Diese
+ * sollten von dem Erbenen Popup verwendet werden um ein Einheitliches Look and
+ * Feel zu erhalten. Damit alle Popups immer ähnlich aussehen werden in dieser
+ * Klasse mehrere gennerelle Settings gesetzt. Popups werden immer zental auf
+ * dem Bildschirm dargestellt und haben ein {@link VerticalGroup} Layout. Des
+ * weiteren ist die addActor Methode so überschrieben das alle {@link Actor} zur
+ * {@link VerticalGroup} hinzugefügt werden. Das {@link VerticalGroup} Layout
+ * ordnet alle Elemente Vertikal untereinander an. Weitere Informationen zum
+ * Layout unter https://github.com/libgdx/libgdx/wiki/Scene2d.ui#verticalgroup
  * 
- *         Dies ist ein grundlegendes Popup und alle weiteren Popops können ein
- *         spezielles Verhalten in Supklassen implementieren. Außerdem bittet es
- *         Implementierungen für Standart-Komponenten.
- *         (createButton,createLabel) Diese sollten von dem Erbenen Popup
- *         verwendet werden um ein Einheitliches Look and Feel zu erhalten.
- *         Damit alle Popups immer ähnlich aussehen werden in dieser Klasse
- *         mehrere gennerelle Settings gesetzt. Popups werden immer zental auf
- *         dem Bildschirm dargestellt und haben ein {@link VerticalGroup}
- *         Layout. Des weiteren ist die addActor Methode so überschrieben das
- *         alle {@link Actor} zur {@link VerticalGroup} hinzugefügt werden. Das
- *         {@link VerticalGroup} Layout ordnet alle Elemente Vertikal
- *         untereinander an. Weitere Informationen zum Layout unter
- *         https://github.com/libgdx/libgdx/wiki/Scene2d.ui#verticalgroup
+ * @author Philipp
+ * @version 1.0
  */
 public class Popup extends OverlayWidgetGroup {
 
@@ -55,6 +54,9 @@ public class Popup extends OverlayWidgetGroup {
 	private Image backgroundImage;
 	private final float fadeTime = 0.2F;
 
+	/**
+	 * Konstruktor.
+	 */
 	public Popup() {
 
 		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Landscape) {
@@ -155,6 +157,9 @@ public class Popup extends OverlayWidgetGroup {
 	/**
 	 * Die addActor Methode wird überschrieben damit alle Kind Elemente immer
 	 * auf das Vertical Layout gelegt werden.
+	 * 
+	 * @param actor
+	 *            Actor
 	 */
 	@Override
 	public final void addActor(final Actor actor) {
@@ -171,7 +176,7 @@ public class Popup extends OverlayWidgetGroup {
 	/**
 	 * Methode um auf das Parent Overlay zuzugreifen.
 	 * 
-	 * @return
+	 * @return Overlay
 	 */
 	protected final Overlay getOverlay() {
 		if (this.getParent() == null) {
@@ -189,6 +194,7 @@ public class Popup extends OverlayWidgetGroup {
 	 * es noch dem Popup mit AddActor hinzugefügt werden.
 	 * 
 	 * @param message
+	 *            String Label Text
 	 * @return {@link Label}
 	 */
 	protected final Label createLabel(final String message) {
@@ -209,19 +215,21 @@ public class Popup extends OverlayWidgetGroup {
 	 * Standart Image gesetzt.
 	 * 
 	 * @param text
+	 *            Button Text
 	 * @return {@link ImageTextButton}
 	 */
-	protected ImageTextButton createButton(String text) {
+	protected ImageTextButton createButton(final String text) {
 		return new ButtonLarge(text);
 	}
 
 	/**
-	 * Diese Methode erstellt eine Standard Checkbox
+	 * Diese Methode erstellt eine Standard Checkbox.
 	 * 
 	 * @param text
+	 *            Checkbox Text
 	 * @return {@link CheckBox}
 	 */
-	protected CheckBox createCheckbox(String text) {
+	protected CheckBox createCheckbox(final String text) {
 		CheckBoxStyle style = createCheckboxStyle();
 		CheckBox box = new CheckBox(text, style);
 
