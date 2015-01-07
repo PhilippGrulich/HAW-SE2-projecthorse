@@ -17,6 +17,7 @@ public class DesktopLauncher implements Platform {
 	    config = new LwjglApplicationConfiguration();
 		config.height = 640;
 		config.width = 360;
+		config.title = "Mein Pferdeabenteuer";
 		
 		app = new LwjglApplication(new CoreGameMain(this), config);
 	}
