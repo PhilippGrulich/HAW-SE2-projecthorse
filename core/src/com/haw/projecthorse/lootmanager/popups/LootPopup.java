@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.haw.projecthorse.level.util.overlay.popup.Popup;
 import com.haw.projecthorse.level.util.swipehandler.SwipeListener;
 import com.haw.projecthorse.level.util.uielements.ButtonSmall;
@@ -17,7 +19,7 @@ import com.haw.projecthorse.level.util.uielements.ButtonSmall.ButtonType;
 import com.haw.projecthorse.lootmanager.Lootable;
 
 /**
- * Popup, das alle gesammelten Loots aus der {@link Chest}Chest anzeigt.
+ * Popup, das alle gesammelten Loots aus der {@link com.haw.projecthorse.lootmanager.Chest}Chest anzeigt.
  * 
  * @author Oliver
  * @version 1.0
@@ -36,7 +38,7 @@ public class LootPopup extends Popup {
 	public LootPopup(final HashSet<Lootable> loots) {
 		super();
 
-		Label label = createLabel("Deine gesammelten Gegenstaende");
+		Label label = createLabel("Deine gesammelten Gegenstände");
 		// label.setWidth(popupWidth - 80);
 		// label.setWrap(true);
 		// label.layout();
@@ -68,7 +70,7 @@ public class LootPopup extends Popup {
 		private ArrayList<Lootable> lootList;
 		private int i, max;
 		private float imageX, imageY, imageWidth, imageHeight;
-		private Drawable currentImage = null;
+		private Image currentImage = null;
 		private Label lootName = null;
 		private boolean refreshed; // zeigt an, ob sich der Index vom Image
 									// geändert hat und somit die Daten dafür
@@ -96,6 +98,11 @@ public class LootPopup extends Popup {
 			if (max > 1) {
 				createArrowButtons();
 			}
+			
+			currentImage = new Image();
+			currentImage.setScaling(Scaling.fit);
+			addActor(currentImage);
+			
 			createNameLabel();
 			addSwipeListener();
 		}
@@ -106,7 +113,8 @@ public class LootPopup extends Popup {
 		private void addSwipeListener() {
 			addListener(new SwipeListener() {
 				@Override
-				protected boolean handleSwiped(final SwipeEvent event, final Actor actor) {
+				protected boolean handleSwiped(final SwipeEvent event,
+						final Actor actor) {
 					swiped(event, actor);
 					return true;
 				}
@@ -196,16 +204,19 @@ public class LootPopup extends Popup {
 			lootName.setPosition((getWidth() - lootName.getPrefWidth()) / 2f,
 					10);
 
-			currentImage = lootList.get(i).getImage();
+			Drawable d = lootList.get(i).getImage();
+			currentImage.setDrawable(d);
 
-			imageWidth = (currentImage.getMinWidth() > getWidth()) ? getWidth()
-					: currentImage.getMinWidth();
-			imageHeight = (currentImage.getMinHeight() > getHeight()) ? getHeight()
-					: currentImage.getMinHeight();
+			imageWidth = (d.getMinWidth() > (getWidth() - 200)) ? (getWidth() - 200)
+					: d.getMinWidth();
+			imageHeight = (d.getMinHeight() > (getHeight() - 60)) ? (getHeight() - 60)
+					: d.getMinHeight();
 
-			imageX = getX() + ((getWidth() - imageWidth) / 2);
-			imageY = getY() + ((getHeight() - imageHeight) / 2);
+			imageX = (getWidth() - imageWidth) / 2;
+			imageY = (getHeight() - 60 - imageHeight) / 2;
 
+			currentImage.setBounds(imageX, imageY, imageWidth, imageHeight);
+			
 			refreshed = true;
 		}
 
@@ -214,8 +225,6 @@ public class LootPopup extends Popup {
 			if (!refreshed) {
 				refreshLoot();
 			}
-
-			currentImage.draw(batch, imageX, imageY, imageWidth, imageHeight);
 
 			super.draw(batch, parentAlpha);
 		}
