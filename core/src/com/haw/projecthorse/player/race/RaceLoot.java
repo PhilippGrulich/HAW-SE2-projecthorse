@@ -27,7 +27,7 @@ public class RaceLoot extends Loot {
 	 *            Die Rasse, die gelootet werden soll.
 	 */
 	public RaceLoot(final HorseRace race) {
-		super(new Race(race).name(), "");
+		super(new Race(race).name(), new Race(race).description());
 		this.race = race;
 	}
 
