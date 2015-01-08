@@ -189,7 +189,7 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				if (l.getAvailableAtScore() <= gameField.getScore()
 						&& !l.getWonStatus()) {
 					if(l.getName().equals("Hannoveraner")){
-						if(randomGenerator.nextInt(100) <= 101){
+						if(randomGenerator.nextInt(100) <= 19){
 							chestToShow.addLoot(new RaceLoot(HorseRace.HANNOVERANER));
 							l.setWonStatus(true);
 							isChestEmpty = false;
