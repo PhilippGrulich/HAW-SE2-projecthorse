@@ -18,7 +18,9 @@ import com.haw.projecthorse.player.race.RaceLoot;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
- * 
+ * Hier beginnt das eigentliche Puzzlespiel.
+ * das gewählte Bild wird aufgeteilt, vermischt und PuzzlePart erstellt,
+ * hier wird auch geprüft, ob das Bild fertig gepuzzelt wurde.
  * @author Masha
  * @version 1.0
  */
@@ -43,8 +45,8 @@ public class Puzzle {
 	/**
 	 * Konstruktor.
 	 * 
-	 * @param puzzleManager2
-	 * @param chest2
+	 * @param puzzleManager2 Instanz der Klasse PuzzleManager
+	 * @param chest2 Instanz der Klasse Chest
 	 */
 	protected Puzzle(final PuzzleManager puzzleManager2, final Chest chest2) {
 		Puzzle.setPuzzleManager(puzzleManager2);
@@ -244,10 +246,10 @@ public class Puzzle {
 	}
 
 	/**
-	 * füge ein ClickListener für Zurückbutton. avigiere bei einem Klick zur
+	 * füge ein ClickListener für Zurückbutton. navigiere bei einem Klick zur
 	 * Bilderauswahl zurück
 	 * 
-	 * @param back
+	 * @param back Button
 	 */
 	private void addListener(final ImageButton back) {
 
@@ -267,7 +269,7 @@ public class Puzzle {
 	 * am Ende des Spiels. je nach Anzahl der benötigten Schritte werden Loots
 	 * vergeben, gespeichert und kurz angezeigt
 	 * 
-	 * @param score
+	 * @param score Anzahl der benötigte Schritte
 	 */
 	public static void getAndShowLoot(final int score) {
 
