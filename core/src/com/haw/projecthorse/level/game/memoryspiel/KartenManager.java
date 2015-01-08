@@ -2,12 +2,15 @@ package com.haw.projecthorse.level.game.memoryspiel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
+import com.haw.projecthorse.level.game.puzzle.Puzzle;
+import com.haw.projecthorse.lootmanager.Chest;
 
-public class KartenManager extends Thread {
+public class KartenManager{
 
 	private ArrayList<Karte> karten = new ArrayList<Karte>();
 	private float delta = 0;
@@ -16,13 +19,8 @@ public class KartenManager extends Thread {
 	private Karte karteB;
 	public boolean canOpen = true;
 	private Drawable[] pictures = new Drawable[6];
-	private Drawable picture1;
-	private Drawable picture2;
-	private Drawable picture3;
-	private Drawable picture4;
-	private Drawable picture5;
-	private Drawable picture6;
 	private int score = 0;
+	private static Chest chest;
 
 	public KartenManager() {
 		setUpKarten();
@@ -143,5 +141,12 @@ public class KartenManager extends Thread {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	
+	public static Chest getChest() {
+		return chest;
+	}
 
+	public static void setChest(final Chest chest) {
+		KartenManager.chest = chest;
+	}
 }

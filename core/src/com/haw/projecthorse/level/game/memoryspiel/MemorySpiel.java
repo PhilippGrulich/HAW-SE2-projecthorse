@@ -21,8 +21,13 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
+import com.haw.projecthorse.level.game.puzzle.Puzzle;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
+import com.haw.projecthorse.lootmanager.Chest;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.RaceLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
 
 public class MemorySpiel extends Game {
 
@@ -49,8 +54,8 @@ public class MemorySpiel extends Game {
 		InputManager.addInputProcessor(stage);
 
 		// Hintergrund
-		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel", "Background"
-				+ getBackground()));
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Background" + getBackground()));
 		backgroundImage = new Image(drawable);
 		backgroundImage.toFront();
 		stage.addActor(backgroundImage);
@@ -62,7 +67,7 @@ public class MemorySpiel extends Game {
 
 		initKarten();
 
-		initReplay();
+		initReplayPopUp();
 
 		initMusic();
 
@@ -70,7 +75,8 @@ public class MemorySpiel extends Game {
 
 	private void initMusic() {
 		AssetManager.loadMusic("memorySpiel");
-		this.music = this.audioManager.getMusic("memorySpiel", "Happy Ukulele(edited).mp3");
+		this.music = this.audioManager.getMusic("memorySpiel",
+				"Happy Ukulele(edited).mp3");
 		this.music.setLooping(true);
 		playMusic();
 	}
@@ -83,7 +89,7 @@ public class MemorySpiel extends Game {
 		}
 	}
 
-	protected void initReplay() {
+	protected void initReplayPopUp() {
 
 		replay = new Dialog("Neue Runde?");
 
@@ -126,8 +132,7 @@ public class MemorySpiel extends Game {
 		font.setScale(1f, 1f);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		Label label = new Label("Score: 0", labelStyle);
-		// label.setPosition(this.width / 2.2f, this.height * 0.75f);
-		label.setPosition(1.5f, this.height * 0.93f);
+		label.setPosition(2f, this.height * 0.93f);
 		return label;
 	}
 
@@ -151,13 +156,20 @@ public class MemorySpiel extends Game {
 			}
 		}
 		if (i == karten.size()) {
-			music.stop();
-			state = GameState.END;
-			getOverlay().showPopup(replay);
+			endGame();
 			return;
 		}
 		manager.checkChanged(delta);
 		setScore(manager.getScore());
+	}
+
+	protected void endGame() {
+		music.stop();
+		state = GameState.END;
+		showLoot();
+		chest.showAllLoot();
+		chest.saveAllLoot();
+		getOverlay().showPopup(replay);
 	}
 
 	@Override
@@ -169,12 +181,12 @@ public class MemorySpiel extends Game {
 	}
 
 	protected void restart() {
-		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel", "Background"
-				+ getBackground()));
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Background" + getBackground()));
 		backgroundImage.setDrawable(drawable);
 		manager.restart();
 		state = GameState.READY;
-		initReplay();
+		initReplayPopUp();
 		playMusic();
 	}
 
@@ -217,4 +229,45 @@ public class MemorySpiel extends Game {
 		return overlay;
 	}
 
+	public void showLoot() {
+		// double roll = Math.random();
+		// if (!SaveGameManager.getLoadedGame()
+		// .getSpecifiedLoot(RaceLoot.class)
+		// .contains(HorseRace.FRIESE)) {
+		// chest.addLootAndShowAchievment(new RaceLoot(HorseRace.FRIESE));
+		// }
+		int score = manager.getScore();
+		if (score > 0 && score < 20) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Eichel",
+					"Süße kleine Eichel", "Loot1"));
+		} else if (20 <= score && score < 30) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot(
+					"vierblättriges Kleeblatt", "Bringt dir Glück", "Loot2"));
+		} else if (score == 30) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Trauben",
+					"Süße Trauben", "Loot3"));
+		} else if (score == 35) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Pfirsich",
+					"Ein leckere Trauben", "Loot4"));
+		} else if (score == 40) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Kirschen",
+					"Rote Kirschen", "Loot5"));
+		} else if (score == 45) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Erdbeere",
+					"Eine süße Erdbeere", "Loot6"));
+		} else if (score == 50) {
+			Random r = new Random();
+			int rand = r.nextInt(2) + 7;
+			if (rand == 7) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Rose",
+						"Eine schöne Rose", "Loot7"));
+			} else if (rand == 8) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Stern",
+						"Brillantes Stern", "Loot8"));
+			}
+		} else if (score > 50) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Diamant",
+					"Toller Blauer Diamant", "Loot9"));
+		}
+	}
 }
