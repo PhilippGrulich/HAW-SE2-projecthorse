@@ -30,7 +30,7 @@ public abstract class Loot implements Lootable {
 	 *            Beschreibung des Loots
 	 */
 	public Loot(final String name, final String description) {
-		this.name = name;
+		this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
 		this.description = description;
 	}
 
