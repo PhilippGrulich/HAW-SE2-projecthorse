@@ -186,8 +186,20 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	 */
 	public void setPlayerJump(final boolean a) {
 		if (a) {
+			gameField.getPlayer().clearActions();
+			if(gameField.getPlayer().getJumpDirection().equals(Direction.RIGHT)){
+			gameField.getPlayer().addAction(new AnimationAction(Direction.JUMPRIGHT));
+			}else{
+				gameField.getPlayer().addAction(new AnimationAction(Direction.JUMPLEFT));
+			}
 			gameField.pauseGallop();
 		} else {
+			gameField.getPlayer().clearActions();
+			if(gameField.getPlayer().getJumpDirection().equals(Direction.RIGHT)){
+				gameField.getPlayer().addAction(new AnimationAction(Direction.RIGHT));
+				}else{
+					gameField.getPlayer().addAction(new AnimationAction(Direction.LEFT));
+				}
 			gameField.playGallop();
 		}
 		this.shouldPlayerJump = a;

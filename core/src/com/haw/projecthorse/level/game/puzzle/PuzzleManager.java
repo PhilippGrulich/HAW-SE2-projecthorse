@@ -37,7 +37,7 @@ import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
 
 /**
- * 
+ * Die Klasse repräsentiert die Bilderauswahl vor dem Spielanfang.
  * @author Masha
  * @version 1.0
  */
@@ -207,10 +207,10 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * Listener für vor-und zurück-Button. damit man die einzelne Bilder
-	 * aussuchen kann
+	 * SwipeListener für einzelne Bilder. damit man die einzelne Bilder
+	 * wischen kann
 	 * 
-	 * @param button
+	 * @param im  
 	 */
 	private void addListener(final Image im) {
 
@@ -237,10 +237,11 @@ public class PuzzleManager extends Game {
 	}
 
 	/**
-	 * Listener für pre-und next-Button. damit man die einzelne Bilder aussuchen
+	 * Listener für vor-und zurück-Button. damit man die einzelne Bilder aussuchen
 	 * kann
-	 * 
-	 * @param button
+	 * @param next Button zum nächsten Bild
+	 * @param buttonok Button, um das aktuelle Bild auszuwählen
+	 * @param prev Buttonum das vorherige Bild auszuwählen
 	 */
 	private void addListener(final ImageButton next,
 			final ButtonOwnTextImage buttonok, final ImageButton prev) {
@@ -292,7 +293,7 @@ public class PuzzleManager extends Game {
 	 * eine Hilfsmethode. die in addListener(...) benötigt wird, um das nächste
 	 * bzw. das vorherige Bild zu holen
 	 * 
-	 * @param delta
+	 * @param delta Index, nach dem unterschieden wird, ob das nächste oder vorherige Bild ausgewählt wurde
 	 */
 	private void changeImage(final int delta) {
 		index = (index + delta) % imagelist.size();
@@ -321,8 +322,8 @@ public class PuzzleManager extends Game {
 	/**
 	 * füge actor in die stage.
 	 * 
-	 * @param stage
-	 * @param actor
+	 * @param stage Stage,in die Aktor hingefügt werden soll
+	 * @param actor Actor 
 	 */
 	public static void addToStage(final Stage stage, final Actor actor) {
 		stage.addActor(actor);
@@ -392,7 +393,7 @@ public class PuzzleManager extends Game {
 	 * wird benötigt, um hochgezählte Anzahl der Schritte beim puzzlen
 	 * anzuzeigen.
 	 * 
-	 * @param newText
+	 * @param newText steht für die Anzahl der Schritte
 	 */
 	public void setLabelText(final String newText) {
 		label.setText(newText);
@@ -401,7 +402,7 @@ public class PuzzleManager extends Game {
 	/**
 	 * simuliert ein einmaliges Blinken des ok_button's bei der Bilderauswahl.
 	 * 
-	 * @param button
+	 * @param button hier wird okButton übergeben
 	 */
 	private void blinc(final ButtonOwnTextImage button) {
 		button.addAction(Actions.sequence(Actions.fadeIn(0.2f),

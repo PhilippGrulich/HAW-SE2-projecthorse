@@ -13,7 +13,7 @@ import com.haw.projecthorse.player.Player;
 import com.haw.projecthorse.player.PlayerImpl;
 
 /**
- * 
+ * Die Klasse PuzzlePlayer präsentiert das Pferd auf dem Bildschirm.
  * @author Masha
  *@version 1.0
  */
@@ -95,7 +95,7 @@ public class PuzzlePlayer {
 
 	/**
 	 * setzt den neuen Text in die Sprechblase.
-	 * @param String
+	 * @param str ein neuer Text für die Sprechblase.
 	 */
 	public static void setActorSpeech(final String str) {
 		getActorSpeech();

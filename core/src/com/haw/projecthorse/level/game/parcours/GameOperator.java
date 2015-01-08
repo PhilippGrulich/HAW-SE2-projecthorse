@@ -17,6 +17,7 @@ import com.haw.projecthorse.level.util.swipehandler.ControlMode;
 import com.haw.projecthorse.level.util.swipehandler.StageGestureDetector;
 import com.haw.projecthorse.lootmanager.Chest;
 import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.RaceLoot;
 import com.haw.projecthorse.savegame.SaveGameManager;
 
 /**
@@ -37,8 +38,6 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	GestureDetector listener;
 	private InputMultiplexer inputMultiplexer;
 	private boolean greeting = true;
-	private boolean selectHorse = false;
-	private boolean isHorseChosen = false;
 	private Random randomGenerator;
 
 	/**
@@ -89,7 +88,6 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	@Override
 	public void update(final float delta) {
 		if (gameStatus == GameState.GREETING) {
-			// Begin Test
 			if (greeting) {
 				//Begrüßungspopup
 				String userName = SaveGameManager.getLoadedGame()
@@ -102,63 +100,23 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 				this.pause();
 				greeting = false;
 			}
-			// Ende Test
+		
 
-			if (gameField.isGreetingButtonPressed() && !selectHorse) {
+			if (gameField.isGreetingButtonPressed() /*&& !selectHorse*/) {
 	
 				gameField.removePopup();
-			
-				List<ParcoursLoot> loot = SaveGameManager.getLoadedGame().getSpecifiedLoot(ParcoursLoot.class);
-				
-				boolean set = false;
-				for(ParcoursLoot l : loot){
-					if(l.getName().equals("hannoveraner")){
-						//gameField.initPlayer(HorseRace.HANNOVERANER);
-						HorseRace[] races = new HorseRace[2];
-						races[0] = HorseRace.HAFLINGER;
-						races[1] = HorseRace.HANNOVERANER;
-						gameField.showPopup(races);
-						set = true;
-						selectHorse = true;
-					}
-				}
-				if(!set){
-					gameField.initPlayer(null);
-				}
-				
-				if(!selectHorse){
+				gameField.initPlayer(SaveGameManager.getLoadedGame().getHorseRace());
+				gameStatus = GameState.START;
 				inputMultiplexer.addProcessor(listener);
 				//gameField.getPlayer().addSwipeListener();
 				Gdx.input.setInputProcessor(inputMultiplexer);
-				gameField.playGallop();
-				this.gameStatus = GameState.START;
 				this.setPause(false);
-				}
+				gameField.playGallop();
 				
 			} else {
 				gameField.fadePopup(delta, gameStatus);
 				gameField.drawGameField();
 			}
-			
-			if(selectHorse){
-				if(gameField.isHorseSelected()){
-					gameField.initPlayer(gameField.getSelectedRace());
-					isHorseChosen = true;
-					selectHorse = false;
-				}else {
-					gameField.fadePopup(delta, GameState.HORSESELECTION);
-					gameField.drawGameField();
-				}
-			}else if(isHorseChosen){
-				gameField.removePopup();
-				inputMultiplexer.addProcessor(listener);
-				//gameField.getPlayer().addSwipeListener();
-				Gdx.input.setInputProcessor(inputMultiplexer);
-				gameField.playGallop();
-				this.gameStatus = GameState.START;
-				this.setPause(false);
-			}
-			
 		} else {
 			if(!paused && gameField.getGameOverState()){
 				verifyGameState(delta);
@@ -184,7 +142,12 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 					List<ParcoursLoot> loot = gameField.getLoot();
 					for (ParcoursLoot pl : loot) {
 						if (!allreadyWon.contains(pl) && pl.getWonStatus()) {
+							if(pl.getName().equals("Hannoveraner")){
+								chest.addLoot(new RaceLoot(HorseRace.HANNOVERANER));
+								//chest.addLoot(pl);
+							}else{
 							chest.addLoot(pl);
+							}
 						}
 					}
 					chest.saveAllLoot();
@@ -225,9 +188,9 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 			for (ParcoursLoot l : loot) {
 				if (l.getAvailableAtScore() <= gameField.getScore()
 						&& !l.getWonStatus()) {
-					if(l.getName().equals("hannoveraner")){
-						if(randomGenerator.nextInt(100) <= 19){
-							chestToShow.addLoot(l);
+					if(l.getName().equals("Hannoveraner")){
+						if(randomGenerator.nextInt(100) <= 101){
+							chestToShow.addLoot(new RaceLoot(HorseRace.HANNOVERANER));
 							l.setWonStatus(true);
 							isChestEmpty = false;
 						}
@@ -272,6 +235,20 @@ public class GameOperator implements IGameOperator, IGameOperatorFuerParcours {
 	 * Disposed die disposables.
 	 */
 	public void dispose() {
+		@SuppressWarnings("unchecked")
+		List<ParcoursLoot> allreadyWon = (List<ParcoursLoot>) getLoots();
+		List<ParcoursLoot> loot = gameField.getLoot();
+		for (ParcoursLoot pl : loot) {
+			if (!allreadyWon.contains(pl) && pl.getWonStatus()) {
+				if(pl.getName().equals("Hannoveraner")){
+					chest.addLoot(new RaceLoot(HorseRace.HANNOVERANER));
+					//chest.addLoot(pl);
+				}else{
+				chest.addLoot(pl);
+				}
+			}
+		}
+		chest.saveAllLoot();
 		gameField.dispose();
 	}
 

@@ -1,9 +1,15 @@
 package com.haw.projecthorse.gamemanager;
 
+/**
+ * Factory Klasse für den GameManager.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public abstract class GameManagerFactory {
 
 	/**
-	 * Liefert eine Instanz des Gamemanagers zurück. *
+	 * Liefert eine Instanz des {@link GameManager} zurück.
 	 * 
 	 * @return {@link GameManager}
 	 */

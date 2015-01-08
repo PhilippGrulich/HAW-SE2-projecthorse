@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
+ * Die Klasse PuzzlePart präsentiert das einzelne Puzzlestück.
  * 
  * @author Masha
  * @version 1.0
@@ -21,9 +22,13 @@ public class PuzzlePart extends Image {
 	 * Konstruktor.
 	 * 
 	 * @param im
+	 *            Bild, das Puzzlestück präsentieren soll
 	 * @param x
+	 *            x-Koordinate auf dem Bildschirm
 	 * @param y
+	 *            y-Koordinate auf dem Bildschirm
 	 * @param puzzleManager
+	 *            Instanz der Klasse PuzzleManager
 	 */
 	public PuzzlePart(final Image im, final int x, final int y,
 			final PuzzleManager puzzleManager) {
@@ -50,6 +55,7 @@ public class PuzzlePart extends Image {
 	 * nach leere Stelle hier wird die Anzahl der Schritte hochgezählt
 	 * 
 	 * @param image
+	 *            Bild, das Puzzlestück präsentieren soll
 	 */
 	public static void addListener(final Image image) {
 
@@ -106,7 +112,9 @@ public class PuzzlePart extends Image {
 	 * prüfe ob das geklickte Bild eine leere Nachbarstelle hat.
 	 * 
 	 * @param xKoor
+	 *            x-Koordinate auf dem Bildschirm
 	 * @param yKoor
+	 *            y-Koordinate auf dem Bildschirm
 	 * @return boolean
 	 */
 	public static boolean checkImage(final int xKoor, final int yKoor) {

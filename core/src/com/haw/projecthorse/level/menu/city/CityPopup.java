@@ -11,8 +11,20 @@ import com.haw.projecthorse.level.util.textWrapper.TextWrapper;
 import com.haw.projecthorse.level.util.uielements.ButtonLarge;
 import com.haw.projecthorse.level.util.uielements.DefaultScrollPane;
 
+/**
+ * Das City Info Popup.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 public class CityPopup extends Popup {
-	public CityPopup(CityObject cityObject) {
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param cityObject
+	 *            CityInfos.
+	 */
+	public CityPopup(final CityObject cityObject) {
 		Label label = createLabel(gennerateText(cityObject.getCityInfo()));
 		ScrollPane scollContent = new DefaultScrollPane(label, height / 3, popupWidth * 0.8f);
 
@@ -31,7 +43,14 @@ public class CityPopup extends Popup {
 		this.addActor(btn);
 	}
 
-	private String gennerateText(String text) {
+	/**
+	 * Erstellt den Text für den Dialog.
+	 * 
+	 * @param text
+	 *            der angezeigt werden soll.
+	 * @return Formatierter Text.
+	 */
+	private String gennerateText(final String text) {
 		TextWrapper wrapper = new TextWrapper(23);
 		wrapper.appendLine(text);
 		return wrapper.toString();

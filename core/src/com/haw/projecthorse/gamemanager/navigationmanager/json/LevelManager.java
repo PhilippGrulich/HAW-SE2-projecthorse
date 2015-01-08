@@ -11,24 +11,32 @@ import com.haw.projecthorse.gamemanager.navigationmanager.exception.LevelNotFoun
 import com.haw.projecthorse.level.Level;
 
 /**
- * Der Level Manager das Laden eines Levels zuständig.
- * Außerdem liefert er Information anhand der LevelID
+ * Der Level Manager das Laden eines Levels zuständig. Außerdem liefert er
+ * Information anhand der LevelID.
+ * 
+ * @author Philipp Grulich
+ * @version 1.0
  */
 public class LevelManager {
 
 	private GameConfigtImpl config = null;
-	
 
+	/**
+	 * Konstruktor für den LevelManager.
+	 */
 	public LevelManager() {
 		loadJson();
-		
+
 	}
 
 	public final GameConfig getGameConfig() {
 		return config;
 	}
-	
-	
+
+	/**
+	 * Mit dieser Methode wird die GameConfig.json geladen. Diese muss sich im
+	 * Android Ordner "asset/json" befinden.
+	 */
 	private void loadJson() {
 		Json json = new Json();
 
@@ -45,14 +53,33 @@ public class LevelManager {
 		}
 	}
 
+	/**
+	 * Liest den GameConfig.json ein.
+	 * 
+	 * @return String
+	 * @throws IOException
+	 *             falls die Datei nicht gefundne wird.
+	 */
 	private String readGameConfigFile() throws IOException {
-		FileHandle file = Gdx.files.internal("json/GameConfig.json");	
+		FileHandle file = Gdx.files.internal("json/GameConfig.json");
 		return file.readString();
 	}
 
+	/**
+	 * Mit dieser Methode wird ein {@link Screen} anhand einer LevelID geladen.
+	 * Erst wird der Klassennamen ermittelt und dann wird eine neue Instance des
+	 * Levels erstellt. Da in diesem Spiel alle Level von der Klasse
+	 * {@link Level} erben können wir auf diese Carsten.
+	 * 
+	 * @param levelID
+	 *            Gesuchte level ID
+	 * @return {@link Screen} des geladenen Levels
+	 * @throws LevelLoadException
+	 *             Falls die LevelID nicht in der {@link GameConfig} ist.
+	 */
 	public final Screen getScreenByLevelID(final String levelID) throws LevelLoadException {
 		String className = getClassByLevelID(levelID);
-		
+
 		try {
 			Class<?> clazz = Class.forName(className);
 			Level level = (Level) clazz.newInstance();
@@ -63,19 +90,24 @@ public class LevelManager {
 			throw new LevelLoadException(e);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
-		
+
 			throw new LevelLoadException(e);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			
+
 			throw new LevelLoadException(new LevelNotFoundException(className));
 		}
 
-		
 	}
 
-	
-
+	/**
+	 * Versucht den Java Klassennamen zu finden. Falls dieser nicht vorhanden
+	 * ist wird der Default Klassen namen geladen. == MainMenu
+	 * 
+	 * @param levelID
+	 *            gesuchte LevelID
+	 * @return Klassennamen
+	 */
 	private String getClassByLevelID(final String levelID) {
 		try {
 			return config.getClassNameByLevelID(levelID);
@@ -84,17 +116,43 @@ public class LevelManager {
 		}
 	}
 
+	/**
+	 * Delegiert den Aufruf an die {@link GameConfig}.
+	 * 
+	 * @param levelID
+	 *            LevelID
+	 * @return {@link CityObject}
+	 * @throws LevelNotFoundException
+	 *             falls die LevelID nicht vergeben ist.
+	 */
 	public final CityObject getCityObject(final String levelID) throws LevelNotFoundException {
 		return config.getCityByLevelID(levelID);
 	}
 
-	public final GameObject getGameObject(final String levelID) throws LevelNotFoundException {		
+	/**
+	 * Delegiert den Aufruf an die {@link GameConfig}.
+	 * 
+	 * @param levelID
+	 *            LevelID
+	 * @return {@link CityObject}
+	 * @throws LevelNotFoundException
+	 *             falls die LevelID nicht vergeben ist.
+	 */
+	public final GameObject getGameObject(final String levelID) throws LevelNotFoundException {
 		return config.getGameByLevelID(levelID);
 	}
-	
-	public final MenuObject getMenuObject(final String levelID) throws LevelNotFoundException {		
-		return  config.getMenuByLevelID(levelID);
+
+	/**
+	 * Delegiert den Aufruf an die {@link GameConfig}.
+	 * 
+	 * @param levelID
+	 *            LevelID
+	 * @return {@link CityObject}
+	 * @throws LevelNotFoundException
+	 *             falls die LevelID nicht vergeben ist.
+	 */
+	public final MenuObject getMenuObject(final String levelID) throws LevelNotFoundException {
+		return config.getMenuByLevelID(levelID);
 	}
-	
 
 }

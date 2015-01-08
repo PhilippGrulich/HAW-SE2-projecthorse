@@ -11,45 +11,50 @@ import com.haw.projecthorse.gamemanager.settings.Settings;
 import com.haw.projecthorse.gamemanager.settings.SettingsImpl;
 import com.haw.projecthorse.platform.Platform;
 
+/**
+ * Dies ist die Implementierung des {@link GameManager} Interfaces.
+ * 
+ * @author Philipp
+ * @version 1.0
+ */
 final class GameManagerImpl implements GameManager {
 	private NavigationManager navigationManager;
 	private Platform platform;
 	private static GameManagerImpl instance;
 
-	private GameManagerImpl(){
+	/**
+	 * Privater Konstruktor.
+	 */
+	private GameManagerImpl() {
+
 	}
-	
-	public static GameManagerImpl getInstance(){
-		if (instance == null){
+
+	/**
+	 * Liefert eine Instanz des Singletons.
+	 * 
+	 * @return {@link GameManagerImpl}
+	 */
+	public static GameManagerImpl getInstance() {
+		if (instance == null) {
 			instance = new GameManagerImpl();
 		}
 		return instance;
 	}
-	
-	/**
-	 * Navigiert zu einer Stadt oder einem Spiel welches anhand der LevelID
-	 * (String) identifiziert wird.
-	 * 
-	 * @param String
-	 *            leveLID
-	 */
+
 	@Override
 	public void navigateToLevel(final String levelID) {
 		navigationManager.navigateToLevel(levelID);
 	}
 
-	/**
-	 * Navigiert zur Weltkarte
-	 */
 	@Override
 	public void navigateToWorldMap() {
 		navigationManager.navigateToWorldMap();
 	}
-	
+
 	@Override
 	public void navigateToMainMenu() {
 		navigationManager.navigateToMainMenu();
-		
+
 	}
 
 	@Override
@@ -57,68 +62,29 @@ final class GameManagerImpl implements GameManager {
 		return navigationManager.getGameConfig();
 	}
 
-	/**
-	 * Liefert das CityObject zur�ck falls die LevelID existiert. Wenn nicht
-	 * wird eine LevelNotFoundException geworfen.
-	 * 
-	 * @param levelID
-	 * @return {@link CityObjectImpl}
-	 * @throws LevelNotFoundException
-	 */
 	@Override
-	public CityObject getCityObject(final String levelID)
-			throws LevelNotFoundException {
+	public CityObject getCityObject(final String levelID) throws LevelNotFoundException {
 		return navigationManager.getCityObject(levelID);
 	}
 
-	/**
-	 * Liefert das GameObject zur�ck falls die LevelID existiert. Wenn nicht
-	 * wird eine LevelNotFoundException geworfen.
-	 * 
-	 * @param levelID
-	 * @return {@link GameObjecttImpl}
-	 * @throws LevelNotFoundException
-	 */
 	@Override
-	public GameObject getGameObject(final String levelID)
-			throws LevelNotFoundException {
+	public GameObject getGameObject(final String levelID) throws LevelNotFoundException {
 		return navigationManager.getGameObject(levelID);
 	}
-	
-	/**
-	 * Liefert das MenuObject zur�ck falls die LevelID existiert. Wenn nicht
-	 * wird eine LevelNotFoundException geworfen.
-	 * 
-	 * @param levelID
-	 * @return {@link GameObjecttImpl}
-	 * @throws LevelNotFoundException
-	 */
-	
+
 	@Override
-	public MenuObject getMenuObject(final String levelID)
-			throws LevelNotFoundException {
+	public MenuObject getMenuObject(final String levelID) throws LevelNotFoundException {
 		return navigationManager.getMenuObject(levelID);
 	}
 
-
-	/**
-	 * Liefert eine Referenz auf das Spielstand Modul. *
-	 * 
-	 * @return Spielstand
-	 */
 	@Override
 	public Object getScoreManager() {
 		// TODO Spielstand muss zur�ck gegeben werden.
 		return null;
 	}
 
-	public void setNavigationManager(
-			final NavigationManagerImpl newNaviationManager) {
+	public void setNavigationManager(final NavigationManagerImpl newNaviationManager) {
 		this.navigationManager = newNaviationManager;
-	}
-
-	public void setScoreManager() {
-		// TODO
 	}
 
 	@Override
@@ -134,18 +100,16 @@ final class GameManagerImpl implements GameManager {
 	@Override
 	public void navigateBack() {
 		navigationManager.navigateBack();
-		
+
 	}
-	
-	void setPlatform(Platform platform){
+
+	void setPlatform(final Platform platform) {
 		this.platform = platform;
 	}
 
 	@Override
-	public Platform getPlatform() {		
+	public Platform getPlatform() {
 		return platform;
 	}
-
-
 
 }

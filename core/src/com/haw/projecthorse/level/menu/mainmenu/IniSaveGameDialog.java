@@ -1,7 +1,6 @@
 package com.haw.projecthorse.level.menu.mainmenu;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.haw.projecthorse.gamemanager.GameManagerFactory;
@@ -11,6 +10,13 @@ import com.haw.projecthorse.level.util.uielements.TextInputField;
 import com.haw.projecthorse.savegame.SaveGameManager;
 import com.haw.projecthorse.savegame.json.SaveGame;
 
+/**
+ * Über diesen Dialog wird ein neues SaveGame angelegt.
+ * 
+ * @author Philipp
+ * @version 1.0
+ *
+ */
 public class IniSaveGameDialog extends Dialog {
 
 	private TextInputField textInput;
@@ -61,12 +67,13 @@ public class IniSaveGameDialog extends Dialog {
 	}
 
 	@Override
-	protected void setStage(Stage stage) {
+	protected void setStage(final Stage stage) {
 		// TODO Auto-generated method stub
 		super.setStage(stage);
 		Overlay o = getOverlay();
-		if (o != null)
+		if (o != null) {
 			o.setKeyboardFocus(textInput);
+		}
 	}
 
 }

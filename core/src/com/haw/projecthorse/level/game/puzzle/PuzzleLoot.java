@@ -4,7 +4,7 @@ import com.haw.projecthorse.lootmanager.Loot;
 import com.haw.projecthorse.lootmanager.LootImage;
 
 /**
- * 
+ * Die Klasse PuzzleLoot präsentiert, was der Spieler gewinnen kann.
  * @author Masha
  * @version 1.0
  */
@@ -18,11 +18,11 @@ public final class PuzzleLoot extends Loot {
 	};
 
 	/**
-	 * construktor.
+	 * Konstruktor.
 	 * 
-	 * @param name
-	 * @param description
-	 * @param imageName
+	 * @param name ein Name für den zu gewinnene Teil
+	 * @param description Beschreibung für den Teil
+	 * @param imageName Bildname für den Teil
 	 */
 	protected PuzzleLoot(final String name, final String description,
 			final String imageName) {

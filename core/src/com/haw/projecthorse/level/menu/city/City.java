@@ -86,7 +86,13 @@ public class City extends Menu {
 
 	}
 
-	private void createCityLabel(String cityName) {
+	/**
+	 * Erstellt ein neues City Label.
+	 * 
+	 * @param cityName
+	 *            City Name
+	 */
+	private void createCityLabel(final String cityName) {
 		BitmapFont textFont = AssetManager.getHeadlineFont(FontSize.SIXTY);
 		Label cityLabel = new Label(cityName, new LabelStyle(textFont, Color.MAGENTA));
 		cityLabel.setPosition(this.width / 2 - cityLabel.getWidth() / 2, this.height - cityLabel.getHeight() - 180);
@@ -94,7 +100,13 @@ public class City extends Menu {
 		stage.addActor(cityLabel);
 	}
 
-	private void addBackground(String backgroundImage) {
+	/**
+	 * Erstellt den Hintergrund.
+	 * 
+	 * @param backgroundImage
+	 *            Name des Hintergrund Bilds.
+	 */
+	private void addBackground(final String backgroundImage) {
 		Image background = new Image(AssetManager.getTextureRegion("city", backgroundImage));
 
 		float scaleFactor = height / background.getHeight();
@@ -108,6 +120,12 @@ public class City extends Menu {
 		background.toBack();
 	}
 
+	/**
+	 * Fügt Buttons zu dem Spiel Hinzu.
+	 * 
+	 * @throws LevelNotFoundException
+	 *             E
+	 */
 	private void addGameButtons() throws LevelNotFoundException {
 
 		GameObject[] games = cityObject.getGames();
@@ -116,12 +134,18 @@ public class City extends Menu {
 		}
 	}
 
+	/**
+	 * Fügt einen neuen Button für ein Spiel hinzu.
+	 * 
+	 * @param gameObject
+	 *            Spiel Infos.
+	 */
 	private void addGameButton(final GameObject gameObject) {
 
 		ImageTextButton imgTextButton = new ButtonLarge(gameObject.getGameTitle(), ButtonColor.LIGHT_BROWN);
 
 		imgTextButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
+			public void changed(final ChangeEvent event, final Actor actor) {
 				Gdx.app.log("DEBUG", "Spiel " + gameObject.getGameTitle() + " soll gestartet werden");
 				GameManagerFactory.getInstance().navigateToLevel(gameObject.getLevelID());
 

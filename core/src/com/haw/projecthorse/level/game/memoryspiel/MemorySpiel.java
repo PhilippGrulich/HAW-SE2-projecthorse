@@ -21,18 +21,14 @@ import com.haw.projecthorse.gamemanager.GameManagerFactory;
 import com.haw.projecthorse.inputmanager.InputManager;
 import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
-import com.haw.projecthorse.level.game.puzzle.Puzzle;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
-import com.haw.projecthorse.lootmanager.Chest;
-import com.haw.projecthorse.player.race.HorseRace;
-import com.haw.projecthorse.player.race.RaceLoot;
-import com.haw.projecthorse.savegame.SaveGameManager;
+
 
 public class MemorySpiel extends Game {
 
 	public enum GameState {
-		READY, END;
+		READY, END, REPLAY;
 	}
 
 	private SpriteBatch batcher;
@@ -167,9 +163,6 @@ public class MemorySpiel extends Game {
 		music.stop();
 		state = GameState.END;
 		showLoot();
-		chest.showAllLoot();
-		chest.saveAllLoot();
-		getOverlay().showPopup(replay);
 	}
 
 	@Override
@@ -178,6 +171,12 @@ public class MemorySpiel extends Game {
 		if (state == GameState.READY) {
 			updateKarten(delta);
 		}
+		if(delta==0){
+			state = GameState.REPLAY;
+		}
+		if (state == GameState.REPLAY && delta!= 0) {
+			getOverlay().showPopup(replay);
+		}	
 	}
 
 	protected void restart() {
@@ -230,25 +229,23 @@ public class MemorySpiel extends Game {
 	}
 
 	public void showLoot() {
-		// double roll = Math.random();
-		// if (!SaveGameManager.getLoadedGame()
-		// .getSpecifiedLoot(RaceLoot.class)
-		// .contains(HorseRace.FRIESE)) {
-		// chest.addLootAndShowAchievment(new RaceLoot(HorseRace.FRIESE));
-		// }
 		int score = manager.getScore();
-		if (score > 0 && score < 20) {
-			chest.addLootAndShowAchievment(new MemorySpielLoot("Eichel",
-					"Süße kleine Eichel", "Loot1"));
-		} else if (20 <= score && score < 30) {
-			chest.addLootAndShowAchievment(new MemorySpielLoot(
-					"vierblättriges Kleeblatt", "Bringt dir Glück", "Loot2"));
+		if (20 <= score && score < 30) {
+			Random r = new Random();
+			int rand = r.nextInt(2) + 1;
+			if (rand == 1) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Eichel",
+						"Süße kleine Eichel", "Loot1"));
+			} else if (rand == 2) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot(
+						"Kleeblatt", "Bringt dir Glück", "Loot2"));
+			}
 		} else if (score == 30) {
 			chest.addLootAndShowAchievment(new MemorySpielLoot("Trauben",
 					"Süße Trauben", "Loot3"));
 		} else if (score == 35) {
-			chest.addLootAndShowAchievment(new MemorySpielLoot("Pfirsich",
-					"Ein leckere Trauben", "Loot4"));
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Pfirsiche",
+					"Leckere Pfirsiche", "Loot4"));
 		} else if (score == 40) {
 			chest.addLootAndShowAchievment(new MemorySpielLoot("Kirschen",
 					"Rote Kirschen", "Loot5"));
@@ -263,11 +260,13 @@ public class MemorySpiel extends Game {
 						"Eine schöne Rose", "Loot7"));
 			} else if (rand == 8) {
 				chest.addLootAndShowAchievment(new MemorySpielLoot("Stern",
-						"Brillantes Stern", "Loot8"));
+						"Brillanter Stern", "Loot8"));
 			}
 		} else if (score > 50) {
 			chest.addLootAndShowAchievment(new MemorySpielLoot("Diamant",
 					"Toller Blauer Diamant", "Loot9"));
-		}
+		}	
+		chest.showAllLoot();
+		chest.saveAllLoot();
 	}
 }

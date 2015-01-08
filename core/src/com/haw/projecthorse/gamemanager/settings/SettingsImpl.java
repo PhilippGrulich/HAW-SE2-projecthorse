@@ -53,8 +53,7 @@ public final class SettingsImpl extends Settings {
 
 	@Override
 	public void setSoundState(final boolean state) {
-		if (prefs.contains("SoundState")
-				&& prefs.getBoolean("SoundState") != state) {
+		if (prefs.contains("SoundState") && prefs.getBoolean("SoundState") != state) {
 			setChanged();
 		}
 		prefs.putBoolean("SoundState", state);
@@ -72,8 +71,7 @@ public final class SettingsImpl extends Settings {
 
 	@Override
 	public void setMusicState(final boolean state) {
-		if (prefs.contains("MusicState")
-				&& prefs.getBoolean("MusicState") != state) {
+		if (prefs.contains("MusicState") && prefs.getBoolean("MusicState") != state) {
 			setChanged();
 		}
 		prefs.putBoolean("MusicState", state);
@@ -92,6 +90,12 @@ public final class SettingsImpl extends Settings {
 		return Gdx.graphics.getHeight();
 	}
 
+	/**
+	 * Wenn Sich die Orientation gedreht hat ändert sich ändert sich auch die
+	 * Breite.
+	 * 
+	 * @return Breite
+	 */
 	@Override
 	public int getVirtualScreenWidth() {
 		if (GameManagerFactory.getInstance().getPlatform().getOrientation() == Orientation.Portrait) {
@@ -105,6 +109,8 @@ public final class SettingsImpl extends Settings {
 	/**
 	 * Wenn Sich die Orientation gedreht hat ändert sich ändert sich auch die
 	 * Höhe.
+	 * 
+	 * @return Höhe
 	 */
 	@Override
 	public int getVirtualScreenHeight() {
@@ -120,8 +126,7 @@ public final class SettingsImpl extends Settings {
 		if (prefs.contains("Accelerometer")) {
 			return prefs.getBoolean("Accelerometer");
 		}
-		boolean isPossible = Gdx.input
-				.isPeripheralAvailable(Peripheral.Accelerometer);
+		boolean isPossible = Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer);
 		prefs.putBoolean("Accelerometer", isPossible);
 		prefs.flush();
 		return isPossible;
@@ -129,8 +134,7 @@ public final class SettingsImpl extends Settings {
 
 	@Override
 	public void setAccelerometerState(final boolean state) {
-		if (prefs.contains("Accelerometer")
-				&& prefs.getBoolean("Accelerometer") != state) {
+		if (prefs.contains("Accelerometer") && prefs.getBoolean("Accelerometer") != state) {
 			setChanged();
 		}
 		prefs.putBoolean("Accelerometer", state);

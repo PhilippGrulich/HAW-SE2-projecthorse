@@ -7,6 +7,8 @@ public class MemorySpielLoot extends Loot{
 
 	private LootImage image;
 
+	public MemorySpielLoot(){}
+	
 	public MemorySpielLoot(final String name, final String description,final String imageName) {
 		super(name, description);
 		this.image = new LootImage("memorySpielLoot", imageName);

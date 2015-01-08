@@ -2,6 +2,12 @@ package com.haw.projecthorse.gamemanager.navigationmanager.json;
 
 import java.util.HashMap;
 
+/**
+ * Implementierung des CityObject Interfaces.
+ * 
+ * @author Philipp Grulich
+ * @version 1.0
+ */
 class CityObjectImpl implements CityObject {
 	private String name = "";
 	private String className = "";
@@ -26,6 +32,13 @@ class CityObjectImpl implements CityObject {
 
 	}
 
+	/**
+	 * Liefert die {@link GameObjecttImpl} zu einer LevelID.
+	 * 
+	 * @param otherLevelID
+	 *            gesuchte LevelID
+	 * @return {@link GameObjecttImpl}
+	 */
 	public final GameObjecttImpl getGameByLevelID(final String otherLevelID) {
 		for (GameObjecttImpl game : games) {
 			if (game.getLevelID().equals(otherLevelID)) {
@@ -35,6 +48,13 @@ class CityObjectImpl implements CityObject {
 		return null;
 	}
 
+	/**
+	 * Liefert den Klassennamen zu einer LevelID.
+	 * 
+	 * @param otherLevelID
+	 *            gesuchte LevelID
+	 * @return String java Klassennamen
+	 */
 	public final String getClassByLevelID(final String otherLevelID) {
 		if (this.levelID.equals(otherLevelID)) {
 			return this.className;

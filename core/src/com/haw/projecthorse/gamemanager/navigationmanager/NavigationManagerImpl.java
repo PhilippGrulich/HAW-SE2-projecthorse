@@ -15,14 +15,23 @@ import com.haw.projecthorse.gamemanager.navigationmanager.json.MenuObject;
 import com.haw.projecthorse.inputmanager.InputManager;
 
 /**
- * Navigation Manager. über den NavigationManager wird von einem Level zum
- * N�chsten navigiert. Er Verwaltet den aktuellen Screen.
+ * Implementierung des {@link NavigationManager} Interfaces.
+ * 
+ * @version 1.0
+ * @author Philipp Grulich
  */
 public class NavigationManagerImpl implements NavigationManager {
 	private Game game;
 	private Stack<String> levelIDHistory = new Stack<String>();
 	private LevelManager levelManager;
 
+	/**
+	 * Konstruktor für den Navigation Manager.
+	 * 
+	 * @param newGame
+	 *            um eine Referenz auf das Spiel zu erhalten um die neuen Level
+	 *            Instanzen zu setzen.
+	 */
 	public NavigationManagerImpl(final Game newGame) {
 		this.game = newGame;
 		levelManager = new LevelManager();
@@ -40,8 +49,9 @@ public class NavigationManagerImpl implements NavigationManager {
 				game.getScreen().dispose();
 				game.setScreen(null);
 			}
-			if (levelIDHistory.isEmpty() || !levelIDHistory.peek().equals(levelID))
+			if (levelIDHistory.isEmpty() || !levelIDHistory.peek().equals(levelID)) {
 				levelIDHistory.push(levelID);
+			}
 			Screen screen = levelManager.getScreenByLevelID(levelID);
 			game.setScreen(screen);
 
@@ -90,10 +100,12 @@ public class NavigationManagerImpl implements NavigationManager {
 
 	@Override
 	public void navigateBack() {
-		if ((levelIDHistory.size() > 1))
+		if ((levelIDHistory.size() > 1)) {
 			levelIDHistory.pop();
-		if (!levelIDHistory.isEmpty())
+		}
+		if (!levelIDHistory.isEmpty()) {
 			navigateToLevel(levelIDHistory.peek());
+		}
 
 	}
 

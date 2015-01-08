@@ -1,0 +1,1 @@
+CityTexte;berlinText.txt;CC-BY;;http://grundschulwiki.zum.de/wiki/Berlin

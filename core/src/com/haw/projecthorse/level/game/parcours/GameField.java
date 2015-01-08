@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -175,8 +177,8 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		endlessBackground.setName("crosssection_long");
 		groundHeight = r.getRegionHeight();
 
-		addGameObjectFixedWidthHeight("Hintergrund", getWidth(), getHeight(),
-				0, 0, false, 0, 0, regions, this.goi, false, false);
+		/*addGameObjectFixedWidthHeight("Hintergrund", getWidth(), getHeight(),
+				0, 0, false, 0, 0, regions, this.goi, false, false);*/
 
 		TextureRegion cloud = regions.get("cloud_fluffy");
 		addGameObjectWithRelativHeight("cloud_fluffy", cloud.getRegionHeight() ,
@@ -257,10 +259,10 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		// RaceLoot horse1 = new RaceLoot(new Race(HorseRace.HANNOVERANER));
 		// ParcoursLoot hannoveraner = new ParcoursLoot(10, horse1,
 		// "Wow! Du hast ein neues Pferd gewonnen!");
-		ParcoursLoot carrot = new ParcoursLoot(5, "carrot",
+		ParcoursLoot carrot = new ParcoursLoot(5, "Möhre",
 				"Eine leckere Möhre für dein Pferd.");
 		// loot.add(hannoveraner);
-		ParcoursLoot hannoveraner = new ParcoursLoot(5, "hannoveraner",
+		ParcoursLoot hannoveraner = new ParcoursLoot(5, "Hannoveraner",
 				"Ein wunderschöner Hannoveraner :-)");
 
 		loot.add(carrot);
@@ -431,6 +433,8 @@ public class GameField implements IGameFieldFuerGameInputListener,
 	 * Ruft draw auf der Stage auf.
 	 */
 	public void drawGameField() {
+		Gdx.gl.glClearColor(0.765f, 0.765f, 1f, 1); 
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.draw();
 	}
 
@@ -500,13 +504,18 @@ public class GameField implements IGameFieldFuerGameInputListener,
 			player = new Player(getWidth(), getHeight());
 		} else {
 			player = new Player(getWidth(), getHeight(), race);
-			player.setScale(1.75f);
+			//player.setScale(1.75f);
 		}
-		player.setHeight((getHeight() / 5f));
 		com.haw.projecthorse.player.Player p = new com.haw.projecthorse.player.PlayerImpl();
+		player.setHeight(p.getHeight());
+		player.setWidth(p.getWidth());
+		/*player.setHeight((getHeight() / 5f));
+		
 		player.setWidth(goi.calcRelativeWidth(p.getHeight(), p.getWidth(),
-				getHeight() / 5f));
-		player.setPosition(20, getTopOfGroundPosition() - 25);
+				getHeight() / 5f));*/
+		//Da bei den Pferdebildern der Abstand vom unteren Bildrand bis zum
+		//Anfang des Pferdes 15 Pixel beträgt
+		player.setPosition(20, getTopOfGroundPosition() - 15*player.getScaleY());
 		player.setName("Player");
 		// Sprunghöhe u. Sprungweite auf 5% über maximale Höhe von Hindernissen
 		// setzen
@@ -565,7 +574,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 				}
 			}
 		}
-		player.setPosition(20, getTopOfGroundPosition() - 25);
+		player.setPosition(20, getTopOfGroundPosition() - 15*player.getScaleY());
 	}
 
 	@Override
