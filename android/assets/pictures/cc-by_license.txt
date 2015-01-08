@@ -12,4 +12,3 @@ playerHannoveraner;playerHannoveraner.png;CC-BY;_canyon(Base 3D Model), VWolfdog
 playerFriese;playerFriese.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
 playerHaflinger;playerHaflinger.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
 playerShetti;playerShetti.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
-CityTexte;berlinText;CC-BY;;http://grundschulwiki.zum.de/wiki/Berlin

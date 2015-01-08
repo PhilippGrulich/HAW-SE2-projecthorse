@@ -15,7 +15,17 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Disable standbye mode
 
+		AndroidPlatform platform = new AndroidPlatform(this);
+		
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		initialize(new CoreGameMain(platform), config);
+	}
+	
+	@Override
+	protected void onResume() {
 		// Hiermit wird die Android Navigation Bar ausgeblendet, zur�ckholen
 		// geht ab Android 4.4 mit einem Swipe vom oberen Bildschirmrand nach unten
 		if (Build.VERSION.SDK_INT >= 19) {
@@ -31,12 +41,7 @@ public class AndroidLauncher extends AndroidApplication {
 			
 			}
 		}
-		
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Disable standbye mode
 
-		AndroidPlatform platform = new AndroidPlatform(this);
-		
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new CoreGameMain(platform), config);
+		super.onResume();
 	}
 }

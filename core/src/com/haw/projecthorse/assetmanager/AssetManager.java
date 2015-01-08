@@ -43,6 +43,7 @@ public final class AssetManager {
 	private static final String FOLDERNAME_MUSIC = "music";
 	private static final String FOLDERNAME_PICTURES = "pictures";
 	private static final String FOLDERNAME_FONTS = "fonts";
+	private static final String FOLDERNAME_TEXTS = "texts";
 	private static String directorySounds;
 	private static String directoryMusic;
 	private static String directoryPictures;
@@ -590,6 +591,13 @@ public final class AssetManager {
 
 		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_FONTS + FILESEPARATOR + FOLDERNAME_FONTS + ".txt");
 		stringMap.put(FOLDERNAME_FONTS, createSeperatedEntries(stringList));
+		
+		// **************************************************
+		// Texte LizenzenfolderName
+		// **************************************************
+
+		stringList = readLicense(licenseDir + FILESEPARATOR + FOLDERNAME_TEXTS + FILESEPARATOR + FOLDERNAME_TEXTS + ".txt");
+		stringMap.put(FOLDERNAME_TEXTS, createSeperatedEntries(stringList));
 
 		
 		return stringMap;
@@ -648,7 +656,7 @@ public final class AssetManager {
 	 * Geht durch die jeweiligen Level Ordner und prueft, ob die Dateien, welche
 	 * in den Lizenztextdateien aufgelistet sind, vorhanden sind. Weiterhin wird
 	 * geprueft, ob ein Lizenzeintrag in den Lizenztextdateien enthalten ist.
-	 * Die Ergebnisse werden in einer logfile.txt im pictures Ordner gespeichert
+	 * Die Ergebnisse werden in einer logfile.txt im Asset-Ordner gespeichert
 	 * 
 	 * @param stringMap
 	 *            Key:=licenseType Values:=2D Array das die Zeilen im txt-File
@@ -662,6 +670,7 @@ public final class AssetManager {
 		String[][] sounds = stringMap.get(FOLDERNAME_SOUNDS);
 		String[][] music = stringMap.get(FOLDERNAME_MUSIC);
 		String[][] fonts = stringMap.get(FOLDERNAME_FONTS);
+		String[][] texts = stringMap.get(FOLDERNAME_TEXTS);
 
 		File checkFile = null;
 
@@ -717,6 +726,18 @@ public final class AssetManager {
 						+ FILESEPARATOR + fonts[i][0] + FILESEPARATOR + fonts[i][1]);
 				writeFile(FOLDERNAME_FONTS, fonts, checkFile, bWriter, i);
 			}
+			
+			bWriter.write("***TEXTS***");
+			bWriter.newLine();
+			
+			// **************************************************
+			// InfoTexte Eintraege
+			// **************************************************
+			for (int i = 0; i < texts.length; i++) {
+				checkFile = new File(licenseDir + FILESEPARATOR + FOLDERNAME_TEXTS
+						+ FILESEPARATOR + texts[i][0] + FILESEPARATOR + texts[i][1]);
+				writeFile(FOLDERNAME_TEXTS, texts, checkFile, bWriter, i);
+			}
 
 			bWriter.close();
 			fWriter.close();
@@ -753,7 +774,7 @@ public final class AssetManager {
 			bWriter.newLine();
 
 			// Lizensierung pruefen
-			if (stringFile[i][2].toLowerCase().matches("cc-0|cc-by|selfmade")) {
+			if (stringFile[i][2].toLowerCase().matches("cc-0|cc-by|cc-by-sa 3.0|selfmade")) {
 				bWriter.write(stringFile[i][2] + " ENTRY OK!");
 			} else {
 				bWriter.write(stringFile[i][2] + " NOT VALID!");
