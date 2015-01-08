@@ -4,13 +4,6 @@ size: 1808,1407
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Hannoveraner
-  rotate: false
-  xy: 433, 379
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
 Kuerbis1
   rotate: false
   xy: 596, 341
@@ -121,6 +114,13 @@ grass_ground
   xy: 2, 1103
   size: 1504, 304
   orig: 1504, 304
+  offset: 0, 0
+  index: -1
+hannoveraner
+  rotate: false
+  xy: 433, 379
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
 rainbow

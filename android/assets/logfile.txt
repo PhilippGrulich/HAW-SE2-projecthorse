@@ -1,6 +1,6 @@
 Logfile for license check of assets
 ***PICTURES***
-worldmap.png FILE OK!
+worldmap.png NOT EXISTS!
 CC-0 ENTRY OK!
 Sankt-Michaelis-Kirche_Hamburg.jpg FILE OK!
 CC-0 ENTRY OK!
@@ -62,10 +62,6 @@ mcol_haystack.png FILE OK!
 cc-0 ENTRY OK!
 cratetex.png FILE OK!
 CC-0 ENTRY OK!
-birdhouse1.png FILE OK!
-CC-0 ENTRY OK!
-wildmushrooms1.png FILE OK!
-CC-0 ENTRY OK!
 rainbow.png FILE OK!
 CC-0 ENTRY OK!
 bush1.png FILE OK!
@@ -74,17 +70,9 @@ bush2.png FILE OK!
 CC-0 ENTRY OK!
 bush3.png FILE OK!
 CC-0 ENTRY OK!
-cliff_cover_1.png FILE OK!
-CC-0 ENTRY OK!
-cliff_cover_3.png FILE OK!
-CC-0 ENTRY OK!
 cloud_fluffy_2.png FILE OK!
 CC-0 ENTRY OK!
-dirt_mountain_dirt_cap_1.png FILE OK!
-CC-0 ENTRY OK!
 grass_ground.png FILE OK!
-CC-0 ENTRY OK!
-Hintergrund.png FILE OK!
 CC-0 ENTRY OK!
 horse1.jpg FILE OK!
 CC-0 ENTRY OK!
@@ -130,7 +118,7 @@ Kuerbis7.png FILE OK!
 CC-by ENTRY OK!
 Kuerbis8.png FILE OK!
 CC-by ENTRY OK!
-grass.png FILE OK!
+grass.png NOT EXISTS!
 CC-by ENTRY OK!
 buttonLoot.png FILE OK!
 CC-BY ENTRY OK!

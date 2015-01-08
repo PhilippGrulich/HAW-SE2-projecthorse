@@ -17,7 +17,7 @@ public class AnimationAction extends Action {
 	private float deltaSum, duration, time;
 	private Direction direction;
 	private boolean infinity;
-	private static String imagePrefix; // z.B. "idle-" für idle-1.png,
+	private String imagePrefix; // z.B. "idle-" für idle-1.png,
 										// idle-2.png. Wird automatisch gesetzt
 										// anhand der Direction
 
