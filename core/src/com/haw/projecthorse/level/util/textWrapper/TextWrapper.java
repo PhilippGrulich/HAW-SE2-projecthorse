@@ -2,13 +2,32 @@ package com.haw.projecthorse.level.util.textWrapper;
 
 import com.badlogic.gdx.utils.StringBuilder;
 
+/**
+ * Über diese Klasse kann ein Text so Formatiert werden das er immer nur n
+ * Zeichen pro Zeile hat.
+ * 
+ * @author Philipp Grulich
+ * @version 1.0
+ */
 public class TextWrapper extends StringBuilder {
 	private int charPerLine;
 
+	/**
+	 * Erstellt einen neuen TextWrappt der n Zeichen pro Zeile hat.
+	 * 
+	 * @param charPerLinePara
+	 *            CharPerLine.
+	 */
 	public TextWrapper(final int charPerLinePara) {
 		this.charPerLine = charPerLinePara;
 	}
 
+	/**
+	 * Fügt eine neue Zeile zum den Text an.
+	 * 
+	 * @param s
+	 *            neue Zeile
+	 */
 	public void appendLine(final String s) {
 
 		String[] words = s.split(" ");
@@ -27,7 +46,15 @@ public class TextWrapper extends StringBuilder {
 
 	}
 
-	public void appendLine(final String s, Object... args) {
+	/**
+	 * Fügt eine formatierte Zeile zu dem Text.
+	 * 
+	 * @param s
+	 *            Zeile
+	 * @param args
+	 *            Formatierung.
+	 */
+	public void appendLine(final String s, final Object... args) {
 		String formatetString = String.format(s, args);
 		appendLine(formatetString);
 	}

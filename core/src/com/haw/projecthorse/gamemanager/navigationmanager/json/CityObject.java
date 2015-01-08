@@ -3,34 +3,46 @@ package com.haw.projecthorse.gamemanager.navigationmanager.json;
 import java.util.HashMap;
 
 /**
- * Dieses Object representiert ein City Element aus der GameConfig.json
+ * Dieses Object repräsentiert ein City Element aus der GameConfig.json.
  * 
- * @author Philipp
- *
+ * @author Philipp Grulich
+ * @version 1.0
  */
 public interface CityObject {
+
 	/**
-	 * @return Name der Stadt als {@link String}
+	 * Name der Stadt.
+	 * 
+	 * @return {@link String}
 	 */
 	String getCityName();
 
+	/**
+	 * Text der Stadt Info.
+	 * 
+	 * @return {@link String}
+	 */
 	String getCityInfo();
 
 	/**
+	 * LevelID.
 	 * 
-	 * @return LevelID als {@link String}
+	 * @return {@link String}.
 	 */
 	String getLevelID();
 
 	/**
+	 * GameObject Array mit alles GameObject der Spiele dieser Stadt.
 	 * 
-	 * @return GameObject Array mit alles GameObject der Spiele dieser Stadt
+	 * @return Array von GameObject
 	 */
 	GameObject[] getGames();
 
 	/**
-	 * @return Liefert eine {@link HashMap} aus den in der GameConfig.json
-	 *         definierten Parametern.
+	 * Liefert eine {@link HashMap} aus den in der GameConfig.json definierten
+	 * Parametern.
+	 * 
+	 * @return Hashmap
 	 */
 	HashMap<String, String> getParameter();
 

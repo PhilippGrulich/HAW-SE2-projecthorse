@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-
 /**
- * Eine Spezielle lieste welche ihre Elemente �ber eine Priorit�t sortiert
- * @author Philipp
+ * Eine spezielle Liste welche ihre Elemente über eine Priorität sortiert.
+ * 
+ * @author Philipp Grulich
+ * @version 1.0
  *
  * @param <E>
  */
@@ -17,11 +18,26 @@ public class PriorityArray<E> implements Iterable<E> {
 	List<Content<E>> list = new ArrayList<Content<E>>();
 	int prio = 0;
 
+	/**
+	 * Die Elemente dieser Liste werden in diesem Object gespeichert.
+	 * 
+	 * @author Philipp
+	 * @version 1.0
+	 * @param <T>
+	 */
 	private class Content<T> implements Comparable<Content<T>> {
 		private T content;
 		public Integer priority;
 
-		public Content(int prio, T element) {
+		/**
+		 * Konstruktor für ein neues Element.
+		 * 
+		 * @param prio
+		 *            Prioriät
+		 * @param element
+		 *            Object.
+		 */
+		public Content(final int prio, final T element) {
 			priority = prio;
 			content = element;
 		}
@@ -31,16 +47,28 @@ public class PriorityArray<E> implements Iterable<E> {
 		}
 
 		@Override
-		public int compareTo(Content<T> o) {
+		public int compareTo(final Content<T> o) {
 			return o.priority.compareTo(priority);
 		}
 
 	}
 
-	public boolean add(E e, int prio) {
+	/**
+	 * Fügt ein neues Element in die Liste.
+	 * 
+	 * @param e
+	 *            neues Element von Typ E
+	 * @param prio
+	 *            Priorität
+	 * @return boolean
+	 */
+	public boolean add(final E e, final int prio) {
 		return list.add(new Content<E>(prio, e));
 	}
 
+	/**
+	 * Leert die Liste.
+	 */
 	public void clear() {
 		list.clear();
 
@@ -73,6 +101,11 @@ public class PriorityArray<E> implements Iterable<E> {
 		return i;
 	}
 
+	/**
+	 * Liefert die Listen Länge.
+	 * 
+	 * @return Länge.
+	 */
 	public int size() {
 		return list.size();
 	}
