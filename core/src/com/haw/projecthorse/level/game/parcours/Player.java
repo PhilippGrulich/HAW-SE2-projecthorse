@@ -71,7 +71,6 @@ public class Player extends PlayerImpl {
 	public Player(final float gameWidth, final float gameHeight, final HorseRace race) {
 		super(race);
 		toFront();
-		defaultAnimationSpeed = this.getAnimationSpeed();
 		shouldMove = 0;
 		velocityInc = 1;
 		jumpDirection = Direction.RIGHT;
@@ -88,6 +87,10 @@ public class Player extends PlayerImpl {
 	
 	public float getDefaultAnimationSpeed(){
 		return defaultAnimationSpeed;
+	}
+	
+	public void setDefaultAnimationSpeed(float f){
+		this.defaultAnimationSpeed = f;
 	}
 	
 	/**
@@ -139,12 +142,14 @@ public class Player extends PlayerImpl {
 	public void setX(final float x){
 		r.x = x;
 		this.x = x;
+		super.setX(x);
 	}
 	
 	@Override
 	public void setY(final float y){
 		r.y = y;
 		this.y = y;
+		super.setY(y);
 	}
 	
 	/**
@@ -298,7 +303,7 @@ public class Player extends PlayerImpl {
 								getY(), swipeDuration));
 					}
 				} else {
-					setAnimationSpeed(0.3f);
+					setAnimationSpeed(getDefaultAnimationSpeed());
 					clearActions();
 					addAction(new AnimationAction(event.getDirection()));
 					setJumpDirection(event.getDirection());
@@ -403,7 +408,7 @@ public class Player extends PlayerImpl {
 		r.y = y;
 		this.x = x;
 		this.y = y;
-
+		super.setPosition(x, y);
 	}
 
 	/**
