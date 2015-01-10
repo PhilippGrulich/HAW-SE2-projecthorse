@@ -15,7 +15,6 @@ hs_err_pid*
 
 
 #built application files
-*.apk
 *.ap_
 
 # files for the dex VM
