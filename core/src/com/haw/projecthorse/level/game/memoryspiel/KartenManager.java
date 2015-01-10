@@ -2,37 +2,57 @@ package com.haw.projecthorse.level.game.memoryspiel;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.haw.projecthorse.assetmanager.AssetManager;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
-import com.haw.projecthorse.level.game.puzzle.Puzzle;
-import com.haw.projecthorse.lootmanager.Chest;
 
-public class KartenManager{
+/**
+ * Karten erzeugen, konfigurieren und deren Zustände aktualisieren.
+ * 
+ * @author Ngoc Huyen Nguyen
+ * @version 1.0
+ */
 
+public class KartenManager {
+
+	// alle Karten
 	private ArrayList<Karte> karten = new ArrayList<Karte>();
+
+	// Helfen dabei, das falsche Paar für wenige Zeit aufgedeckt zu halten,
+	// bevor
+	// sie wieder zugedeckt werden.
 	private float delta = 0;
 	private boolean timeDelay = false;
+
 	private Karte karteA;
 	private Karte karteB;
-	public boolean canOpen = true;
-	private Drawable[] pictures = new Drawable[6];
-	private int score = 0;
-	private static Chest chest;
 
+	// Sorgt dafür, dass jedes Mal maximal 2 Karten aufgedeckt werden können.
+	public boolean canOpen = true;
+
+	// alle Bilder
+	private Drawable[] pictures = new Drawable[6];
+
+	private int score = 0;
+
+	/**
+	 * Konstruktor.
+	 * 
+	 */
 	public KartenManager() {
 		setUpKarten();
 	}
 
-	public void setUpKarten() {		
-		
-		for(int i =0; i<12; i++){
-//			Karte k = new Karte();
+	/**
+	 * Hier werden die Karten mit Koordinaten erzeugt und Bilder zugewiesen.
+	 */
+	public void setUpKarten() {
+
+		for (int i = 0; i < 12; i++) {
 			karten.add(null);
 		}
-		
+
 		int y = 75;
 		karten.set(0, new Karte(40, 75 + y));
 		karten.set(1, new Karte(265, 75 + y));
@@ -71,12 +91,23 @@ public class KartenManager{
 
 	}
 
+	/**
+	 * Karten Getter.
+	 * 
+	 * @return alle Karten
+	 */
 	public ArrayList<Karte> getKarten() {
 		return karten;
 	}
 
-	public void checkChanged(float delta) {
-		if (timeDelay == false) {
+	/**
+	 * Zustände von Karten aktualisieren.
+	 * 
+	 * @param delta
+	 *            Delta von Methode doRender beim MemorySpiel
+	 */
+	public void checkChanged(final float delta) {
+		if (!timeDelay) {
 			for (Karte karte1 : karten) {
 				if (karte1.getState() == CardState.TEMPORARILY_OPENED) {
 					for (Karte karte2 : karten) {
@@ -91,10 +122,11 @@ public class KartenManager{
 							} else {
 								karteA = karte1;
 								karteB = karte2;
-								if (timeDelay == false) {
+								if (!timeDelay) {
 									score -= 5;
-									if (score < 0)
+									if (score < 0) {
 										score = 0;
+									}
 								}
 								timeDelay = true;
 							}
@@ -114,7 +146,11 @@ public class KartenManager{
 		}
 	}
 
-	protected void restart() {
+	/**
+	 * Reihenfolge von Karten shuffeln. Karten bekommen neue Bilder und werden
+	 * wieder zugedeckt.
+	 */
+	public void restart() {
 
 		Collections.shuffle(karten);
 
@@ -130,23 +166,32 @@ public class KartenManager{
 			k2.setState(CardState.TEMPORARILY_CLOSED);
 			j += 2;
 		}
-		
+
 		setScore(0);
 	}
 
+	/**
+	 * Score Getter.
+	 * 
+	 * @return Score
+	 */
 	public int getScore() {
 		return score;
 	}
 
-	public void setScore(int score) {
+	/**
+	 * Score Setter.
+	 * 
+	 * @param score
+	 *            zu setzende Score
+	 */
+	public void setScore(final int score) {
 		this.score = score;
 	}
-	
-	public static Chest getChest() {
-		return chest;
-	}
 
-	public static void setChest(final Chest chest) {
-		KartenManager.chest = chest;
-	}
+	/**
+	 * Score Setter.
+	 * 
+	 * @return Score
+	 */
 }
