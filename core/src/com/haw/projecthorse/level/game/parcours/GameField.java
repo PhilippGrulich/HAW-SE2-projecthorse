@@ -259,7 +259,7 @@ public class GameField implements IGameFieldFuerGameInputListener,
 		// RaceLoot horse1 = new RaceLoot(new Race(HorseRace.HANNOVERANER));
 		// ParcoursLoot hannoveraner = new ParcoursLoot(10, horse1,
 		// "Wow! Du hast ein neues Pferd gewonnen!");
-		ParcoursLoot carrot = new ParcoursLoot(5, "Möhre",
+		ParcoursLoot carrot = new ParcoursLoot(5, "Moehre",
 				"Eine leckere Möhre für dein Pferd.");
 		// loot.add(hannoveraner);
 		ParcoursLoot hannoveraner = new ParcoursLoot(5, "Hannoveraner",
