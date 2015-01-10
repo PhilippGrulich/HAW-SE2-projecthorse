@@ -12,3 +12,4 @@ playerHannoveraner;playerHannoveraner.png;CC-BY;_canyon(Base 3D Model), VWolfdog
 playerFriese;playerFriese.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
 playerHaflinger;playerHaflinger.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
 playerShetti;playerShetti.png;CC-BY;_canyon(Base 3D Model), VWolfdog, Lars; Based on 3D Model http://opengameart.org/content/flare-model-horse (VWolfdog) + http://opengameart.org/content/3d-horse-rigged-laking-textures (_canyon)
+worldmap;germanymap_scaled.png; CC-BY; Lencer; http://upload.wikimedia.org/wikipedia/commons/9/9d/Karte_Nationalparks_Deutschland_high.png
