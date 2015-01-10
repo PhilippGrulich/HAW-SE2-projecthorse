@@ -537,10 +537,11 @@ public class GameField implements IGameFieldFuerGameInputListener,
 
 		player.setJumpHeight(maxHeight);
 		player.setJumpWitdh(maxWidth);
-		player.setJumpSpeed(15);
+		player.setJumpSpeed(15f);
 		player.setupJumpFunction();
 		player.setName("Player");
-		player.setAnimationSpeed(0.3f);
+		player.setDefaultAnimationSpeed(0.5f);
+		player.setAnimationSpeed(player.getDefaultAnimationSpeed());
 		player.setDuration(generalGameSpeed * 1.5f);
 		player.addAction(new AnimationAction(Direction.RIGHT));
 		stage.addActor(player);

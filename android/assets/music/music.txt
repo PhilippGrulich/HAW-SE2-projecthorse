@@ -3,4 +3,5 @@ parcours;gallop.wav;cc-0; -;http://www.freesound.org/people/StephenSaldanha/soun
 puzzle;bett_pcm.wav;cc-0;brudelarge;http://www.freesound.org/people/brudelarge/sounds/111072/
 mainMenu;belotti.mp3;cc-by-sa 3.0;Bruno Belotti;http://opengameart.org/content/sea-travel-music-benvenuta-estate-mazurka-short-loop
 AppleRun;musicloop.mp3;cc-0;-;http://opengameart.org/
+MemorySpiel;Happy_Ukulele.mp3;cc-0;http://www.dl-sounds.com/
 

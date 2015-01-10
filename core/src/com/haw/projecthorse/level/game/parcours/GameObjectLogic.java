@@ -44,9 +44,9 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	 * Prüft ob das Pferd springt und ruft die Methode auf, die die nächset
 	 * Position des Pferds berechnet, sollte es springen.
 	 */
-	private void checkPlayerConstraints() {
+	private void checkPlayerConstraints(final float delta) {
 		if (isPlayerJumping()) {
-			handleJump();
+			handleJump(delta);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	 * Spielfeldrands springen würde und liefert bewegt das Pferd so, dass dies
 	 * nicht geschehen kann.
 	 */
-	public void handleJump() {
+	public void handleJump(final float delta) {
 		Vector2 v = gameField.getPlayer().getNextJumpPosition();
 		float x = 0;
 		float y = 0;
@@ -153,17 +153,12 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 			y = gameField.getPlayer().getY()
 					- gameField.getPlayer().getJumpSpeed();
 
-			if (y < gameField.getTopOfGroundPosition() - 25) {
-				y = gameField.getTopOfGroundPosition() - 25;
+			if (y < gameField.getTopOfGroundPosition() - 15*gameField.getPlayer().getScaleY()) {
+				y = gameField.getTopOfGroundPosition() - 15*gameField.getPlayer().getScaleY();
+				setPlayerJump(false);
 			}
 		}
-
-		gameField.getPlayer().moveBy(x, y);
 		gameField.getPlayer().setPosition(x, y);
-
-		if (gameField.getPlayer().getY() == gameField.getTopOfGroundPosition() - 25) {
-			setPlayerJump(false);
-		}
 	}
 
 	public boolean isPlayerJumping() {
@@ -214,7 +209,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	public void update(final float delta) {
 			updateGameObjects(delta);
 			updateAccelometer(delta);
-			checkPlayerConstraints();
+			checkPlayerConstraints(delta);
 			collisionDetection();
 			gameField.actGameField(delta);
 			gameField.drawGameField();
@@ -238,7 +233,9 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 			}else if(y <= -accelerometerBound){
 				movePlayerL(delta, y * (-1));
 			}else{
-				gameField.getPlayer().setAnimationSpeed(0.3f);
+				gameField.getPlayer().setAnimationSpeed(
+						gameField.getPlayer().getDefaultAnimationSpeed()
+						);
 			}
 		
 		}

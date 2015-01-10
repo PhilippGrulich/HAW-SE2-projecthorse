@@ -23,11 +23,24 @@ import com.haw.projecthorse.level.game.Game;
 import com.haw.projecthorse.level.game.memoryspiel.Karte.CardState;
 import com.haw.projecthorse.level.util.overlay.Overlay;
 import com.haw.projecthorse.level.util.overlay.popup.Dialog;
+import com.haw.projecthorse.player.race.HorseRace;
+import com.haw.projecthorse.player.race.RaceLoot;
+import com.haw.projecthorse.savegame.SaveGameManager;
+
+/**
+ * identische Paare von Karten finden.
+ * 
+ * @author Ngoc Huyen Nguyen
+ * @version 1.0
+ */
 
 public class MemorySpiel extends Game {
 
+	/**
+	 * Spielzustände
+	 */
 	public enum GameState {
-		READY, END;
+		READY, END, REPLAY;
 	}
 
 	private SpriteBatch batcher;
@@ -40,42 +53,60 @@ public class MemorySpiel extends Game {
 	private Music music;
 	private Dialog replay;
 
+	/**
+	 * Konstruktor.
+	 */
 	public MemorySpiel() {
-		manager = new KartenManager();
+		super();
 		batcher = this.getSpriteBatch();
-		state = GameState.READY;
-
 		stage = new Stage(this.getViewport(), batcher);
 		InputManager.addInputProcessor(stage);
 
-		// Hintergrund
-		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel", "Background"
-				+ getBackground()));
+		// Karten-Objekte erzeugen und konfigurieren
+		manager = new KartenManager();
+
+		// Default Spielzustand setzen
+		state = GameState.READY;
+
+		// Hintergrund setzen
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Background" + getBackground()));
 		backgroundImage = new Image(drawable);
 		backgroundImage.toFront();
 		stage.addActor(backgroundImage);
 
-		// Score Anzeige
+		// Score Anzeige initialisieren
 		score = initScore();
 		score.toFront();
 		stage.addActor(score);
 
+		// Karten ins Stage einfügen
 		initKarten();
 
-		initReplay();
+		// Replay Pop Up initialisieren
+		initReplayPopUp();
 
+		// Musik konfigurieren
 		initMusic();
 
 	}
 
+	/**
+	 * Musik laden und konfigurieren.
+	 */
 	private void initMusic() {
 		AssetManager.loadMusic("memorySpiel");
-		this.music = this.audioManager.getMusic("memorySpiel", "Happy Ukulele(edited).mp3");
+		this.music = this.audioManager.getMusic("memorySpiel",
+				"Happy Ukulele(edited).mp3");
 		this.music.setLooping(true);
-		playMusic();
+		this.music.setVolume(0.4f);
+		this.music.play();
 	}
 
-	protected void initKarten() {
+	/**
+	 * Karten ins Stage einfügen.
+	 */
+	private void initKarten() {
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
 			k.toFront();
@@ -83,10 +114,15 @@ public class MemorySpiel extends Game {
 		}
 	}
 
-	protected void initReplay() {
+	/**
+	 * Replay Pop Up erzeugen und die Aktionen von Buttons konfigurieren.
+	 */
+	private void initReplayPopUp() {
 
 		replay = new Dialog("Neue Runde?");
 
+		// Beim Klicken auf diesem Button wird der Pop Up gelöscht und das Spiel
+		// wird neugestartet
 		replay.addButton("Ja, gerne", new ChangeListener() {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
@@ -95,6 +131,8 @@ public class MemorySpiel extends Game {
 			}
 		});
 
+		// Beim Klicken auf diesem Button verlässt der Spieler dem Minispiel und
+		// kehrt zur City Menu zurück
 		replay.addButton("Nein, danke", new ChangeListener() {
 			@Override
 			public void changed(final ChangeEvent event, final Actor actor) {
@@ -105,34 +143,51 @@ public class MemorySpiel extends Game {
 
 	}
 
-	protected int getBackground() {
+	/**
+	 * einen beliebigen Hintergrund wählen.
+	 * 
+	 * @return randomisierte Nummer für Hintergrundauswahl
+	 */
+	private int getBackground() {
 		Random rand = new Random();
 		int i = rand.nextInt(5);
 		return i;
 	}
 
-	protected void playMusic() {
-		this.music.play();
-		this.music.setVolume(0.4f);
-	}
-
-	protected void setScore(int score) {
+	/**
+	 * Score Anzeige Setter.
+	 * 
+	 * @param score
+	 *            bei ScoreAnzeige zu setzende Score
+	 */
+	private void setScore(final int score) {
 		this.score.setText("Score: " + score);
 	}
 
-	protected Label initScore() {
+	/**
+	 * Score Anzeige erzeugen und konfigurieren.
+	 * 
+	 * @return konfigurierte Score Anzeige
+	 */
+	private Label initScore() {
 		BitmapFont font = AssetManager.getHeadlineFont(FontSize.SIXTY);
 		font.setColor(Color.WHITE);
 		font.setScale(1f, 1f);
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		Label label = new Label("Score: 0", labelStyle);
-		// label.setPosition(this.width / 2.2f, this.height * 0.75f);
-		label.setPosition(1.5f, this.height * 0.93f);
+		label.setPosition(2f, this.height * 0.93f);
 		return label;
 	}
 
-	protected void updateKarten(float delta) {
+	/**
+	 * die Zustände bzw. die Bilder der Karten aktualisieren.
+	 * 
+	 * * @param delta Delta von Methode doRender
+	 */
+	private void updateKarten(final float delta) {
 		int i = 0;
+
+		// die Bilder der Karten nach entspechenden Zuständen anpassen
 		List<Karte> karten = manager.getKarten();
 		for (Karte k : karten) {
 			if (k.getState() == CardState.TEMPORARILY_OPENED) {
@@ -150,44 +205,142 @@ public class MemorySpiel extends Game {
 				i++;
 			}
 		}
+
+		// Wenn die Anzahl der geöffneten Karten gleich der gesamten Karten,
+		// geht das Spiel zum Ende
 		if (i == karten.size()) {
-			music.stop();
-			state = GameState.END;
-			getOverlay().showPopup(replay);
+			endGame();
 			return;
 		}
+
+		// die Kartenzustände aktualisieren
 		manager.checkChanged(delta);
+
+		// Score aktualisieren
 		setScore(manager.getScore());
 	}
 
+	/**
+	 * Nachdem alle Karten aufgedeckt werden, pausiert die Musik, SpielZustand
+	 * wird auf End Zustand gesetzt, alle bisher gewonnene Loots werden
+	 * angezeigt.
+	 */
+	private void endGame() {
+		music.stop();
+		state = GameState.END;
+		showLoot();
+	}
+
+	/**
+	 * Game Rendering.
+	 * 
+	 * @param delta
+	 *            die Zeitdifferenz vom letzten Render
+	 */
 	@Override
-	protected void doRender(float delta) {
+	protected void doRender(final float delta) {
+		// Stage zeichnen
 		stage.draw();
+
+		// Wähnrend dem Spiel werden Karten aktualisiert
 		if (state == GameState.READY) {
 			updateKarten(delta);
 		}
+
+		// Beim Anzeigen des LootPopUp wird Spielzutand auf ReplayZustand
+		// gesetzt
+		if (delta == 0) {
+			state = GameState.REPLAY;
+		}
+
+		// Wenn das LootPopUp geschlossen wird, wird ReplayPopUp angezeigt
+		if (state == GameState.REPLAY && delta != 0) {
+			getOverlay().showPopup(replay);
+		}
 	}
 
-	protected void restart() {
-		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion("memorySpiel", "Background"
-				+ getBackground()));
+	/**
+	 * das Spiel wird gesettet mit neuem Hintergrund, neue Reihenfolge von
+	 * Karten. Das Spielzustand wird wieder auf Readyzustand gesetzt.
+	 * ReplayPopUp wird initialisiert. Musik spielt weiter.
+	 */
+	private void restart() {
+		drawable = new TextureRegionDrawable(AssetManager.getTextureRegion(
+				"memorySpiel", "Background" + getBackground()));
 		backgroundImage.setDrawable(drawable);
 		manager.restart();
 		state = GameState.READY;
-		initReplay();
-		playMusic();
+		initReplayPopUp();
+		this.music.play();
+	}
+
+	/**
+	 * Es wird erst durch randomisierte Wahrscheinlichkeit herausgefunden, ob
+	 * der Spieler ein Pferd gewinnen kann. Wenn nicht, wird der Loot nach
+	 * erreichten Punkte bestimmt. Loot wird danach in den Truhe eingefügt. Der
+	 * Truhe wird im PopUp angezeigt. Nach dem der Truhe gespeischert wird, wird
+	 * er geleert.
+	 */
+	public void showLoot() {
+		double roll = Math.random();
+		if (roll <= 0.2f
+				&& !SaveGameManager.getLoadedGame()
+						.getSpecifiedLoot(RaceLoot.class)
+						.contains(HorseRace.SHETTI)) {
+			chest.addLootAndShowAchievment(new RaceLoot(HorseRace.SHETTI));
+		}
+
+		int score = manager.getScore();
+		if (20 <= score && score < 30) {
+			Random r = new Random();
+			int rand = r.nextInt(2) + 1;
+			if (rand == 1) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Eichel",
+						"Süße kleine Eichel", "Loot1"));
+			} else if (rand == 2) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Kleeblatt",
+						"Bringt dir Glück", "Loot2"));
+			}
+		} else if (score == 30) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Trauben",
+					"Süße Trauben", "Loot3"));
+		} else if (score == 35) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Pfirsiche",
+					"Leckere Pfirsiche", "Loot4"));
+		} else if (score == 40) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Kirschen",
+					"Rote Kirschen", "Loot5"));
+		} else if (score == 45) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Erdbeere",
+					"Eine süße Erdbeere", "Loot6"));
+		} else if (score == 50) {
+			Random r = new Random();
+			int rand = r.nextInt(2) + 7;
+			if (rand == 7) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Rose",
+						"Eine schöne Rose", "Loot7"));
+			} else if (rand == 8) {
+				chest.addLootAndShowAchievment(new MemorySpielLoot("Stern",
+						"Brillanter Stern", "Loot8"));
+			}
+		} else if (score > 50) {
+			chest.addLootAndShowAchievment(new MemorySpielLoot("Diamant",
+					"Toller Blauer Diamant", "Loot9"));
+		}
+		chest.showAllLoot();
+		chest.saveAllLoot();
 	}
 
 	@Override
 	protected void doDispose() {
 		this.stage.dispose();
-		this.music.stop();
+		overlay.dispose();
+		this.music.dispose();
 	}
 
 	@Override
-	protected void doResize(int width, int height) {
+	protected void doResize(final int width, final int height) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -213,8 +366,12 @@ public class MemorySpiel extends Game {
 
 	}
 
+	/**
+	 * Overlay Getter.
+	 * 
+	 * @return Overlay
+	 */
 	public Overlay getOverlay() {
 		return overlay;
 	}
-
 }
