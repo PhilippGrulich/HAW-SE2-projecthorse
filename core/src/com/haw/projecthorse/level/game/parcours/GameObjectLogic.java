@@ -43,6 +43,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	/**
 	 * Prüft ob das Pferd springt und ruft die Methode auf, die die nächset
 	 * Position des Pferds berechnet, sollte es springen.
+	 * @param delta 
 	 */
 	private void checkPlayerConstraints(final float delta) {
 		if (isPlayerJumping()) {
@@ -126,6 +127,7 @@ public class GameObjectLogic implements IGameObjectLogicFuerGameOperator,
 	 * Prüft ob das Pferd beim Sprung außerhalb des linken bzw. rechten
 	 * Spielfeldrands springen würde und liefert bewegt das Pferd so, dass dies
 	 * nicht geschehen kann.
+	 * @param delta 
 	 */
 	public void handleJump(final float delta) {
 		Vector2 v = gameField.getPlayer().getNextJumpPosition();

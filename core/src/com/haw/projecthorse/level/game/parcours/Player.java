@@ -89,7 +89,7 @@ public class Player extends PlayerImpl {
 		return defaultAnimationSpeed;
 	}
 	
-	public void setDefaultAnimationSpeed(float f){
+	public void setDefaultAnimationSpeed(final float f){
 		this.defaultAnimationSpeed = f;
 	}
 	

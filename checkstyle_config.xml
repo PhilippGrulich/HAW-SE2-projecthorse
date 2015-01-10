@@ -30,7 +30,9 @@ Checkstyle configuration that checks the HAW projecthorse rules.
     <module name="UnusedImports"/>
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
-    <module name="NoWhitespaceAfter"/>
+    <module name="NoWhitespaceAfter">
+      <property name="tokens" value="LNOT,DOT,BNOT,DEC,UNARY_MINUS,UNARY_PLUS,INC"/>
+    </module>
     <module name="NoWhitespaceBefore"/>
     <module name="OperatorWrap"/>
     <module name="ParenPad"/>

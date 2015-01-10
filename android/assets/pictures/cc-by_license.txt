@@ -15,14 +15,14 @@ worldmap;germanymap_scaled.png; CC-BY; Lencer; http://upload.wikimedia.org/wikip
 memorySpiel;Foto1.jpg;CC-BY;Vector Open Stock;https://www.vectoropenstock.com/vectors/preview/71122/wooden-horse-children-toy
 memorySpiel;Foto3.jpg;CC-BY;Siebrand;http://en.wikipedia.org/wiki/Friesian_horse#mediaviewer/File:Frisian_horse.jpg
 memorySpiel;Foto4.jpg;CC-BY;Frederik De Graeve;http://de.wikipedia.org/wiki/Shetlandpony#mediaviewer/File:Urbanherovantbarreeltje.JPG
-memorySpiel;Foto5.jpg;CC-BY;Torienta;http://torienta.deviantart.com/art/Haflinger-Tristan-stock-free-to-use-296784982
+memorySpiel;Foto5.png;CC-BY;Torienta;http://torienta.deviantart.com/art/Haflinger-Tristan-stock-free-to-use-296784982
 memorySpiel;Foto6.jpg;CC-BY;TMPhotographie;http://tmphotographie.deviantart.com/art/Arab-x-Hanoverian-Stock-IV-87991891
-memorySpiel;Loot1.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot2.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot3.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot4.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot5.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot6.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot7.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot8.jpg;CC-BY;http://pngimg.com/
-memorySpiel;Loot9.jpg;CC-BY;http://pngimg.com/
+memorySpielLoot;Loot1.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot2.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot3.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot4.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot5.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot6.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot7.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot8.png;CC-BY;;http://pngimg.com/
+memorySpielLoot;Loot9.png;CC-BY;;http://pngimg.com/

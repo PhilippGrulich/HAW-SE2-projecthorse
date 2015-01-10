@@ -1,7 +1,5 @@
 Logfile for license check of assets
 ***PICTURES***
-worldmap.png NOT EXISTS!
-CC-0 ENTRY OK!
 Sankt-Michaelis-Kirche_Hamburg.jpg FILE OK!
 CC-0 ENTRY OK!
 Biergarten.png FILE OK!
@@ -102,6 +100,10 @@ Hamburg.png FILE OK!
 cc-0 ENTRY OK!
 Muenchen.png FILE OK!
 cc-0 ENTRY OK!
+ui.png FILE OK!
+cc-0 ENTRY OK!
+Foto2.jpg FILE OK!
+cc-0 ENTRY OK!
 Kuerbis1.png FILE OK!
 CC-by ENTRY OK!
 Kuerbis2.png FILE OK!
@@ -118,8 +120,6 @@ Kuerbis7.png FILE OK!
 CC-by ENTRY OK!
 Kuerbis8.png FILE OK!
 CC-by ENTRY OK!
-grass.png NOT EXISTS!
-CC-by ENTRY OK!
 buttonLoot.png FILE OK!
 CC-BY ENTRY OK!
 playerHannoveraner.png FILE OK!
@@ -129,6 +129,36 @@ CC-BY ENTRY OK!
 playerHaflinger.png FILE OK!
 CC-BY ENTRY OK!
 playerShetti.png FILE OK!
+CC-BY ENTRY OK!
+germanymap_scaled.png FILE OK!
+CC-BY ENTRY OK!
+Foto1.jpg FILE OK!
+CC-BY ENTRY OK!
+Foto3.jpg FILE OK!
+CC-BY ENTRY OK!
+Foto4.jpg FILE OK!
+CC-BY ENTRY OK!
+Foto5.png FILE OK!
+CC-BY ENTRY OK!
+Foto6.jpg FILE OK!
+CC-BY ENTRY OK!
+Loot1.png FILE OK!
+CC-BY ENTRY OK!
+Loot2.png FILE OK!
+CC-BY ENTRY OK!
+Loot3.png FILE OK!
+CC-BY ENTRY OK!
+Loot4.png FILE OK!
+CC-BY ENTRY OK!
+Loot5.png FILE OK!
+CC-BY ENTRY OK!
+Loot6.png FILE OK!
+CC-BY ENTRY OK!
+Loot7.png FILE OK!
+CC-BY ENTRY OK!
+Loot8.png FILE OK!
+CC-BY ENTRY OK!
+Loot9.png FILE OK!
 CC-BY ENTRY OK!
 hintergrund.png FILE OK!
 selfmade ENTRY OK!
@@ -169,6 +199,8 @@ cc-0 ENTRY OK!
 belotti.mp3 FILE OK!
 cc-by-sa 3.0 ENTRY OK!
 musicloop.mp3 FILE OK!
+cc-0 ENTRY OK!
+Happy Ukulele(edited).mp3 FILE OK!
 cc-0 ENTRY OK!
 ***FONTS***
 Grundschrift-Bold.ttf FILE OK!
