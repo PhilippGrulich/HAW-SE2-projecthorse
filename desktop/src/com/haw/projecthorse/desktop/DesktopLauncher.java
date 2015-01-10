@@ -27,7 +27,7 @@ public class DesktopLauncher implements Platform {
 	}
 
 	@Override
-	public void SetOrientation(Orientation orientation) {
+	public void setOrientation(Orientation orientation) {
 		active=orientation;
 		if(orientation == Orientation.Landscape)
 			app.getGraphics().setDisplayMode(640, 360, false);

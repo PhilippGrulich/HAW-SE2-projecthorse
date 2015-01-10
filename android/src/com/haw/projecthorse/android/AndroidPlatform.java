@@ -20,7 +20,7 @@ public class AndroidPlatform extends AndroidApplication implements Platform {
 	}
 
 	@Override
-	public void SetOrientation(Orientation orientation) {
+	public void setOrientation(Orientation orientation) {
 		active = orientation;
 		if (orientation == Orientation.Landscape) {
 			DisplayMode[] DisplayModes = Gdx.graphics.getDisplayModes();

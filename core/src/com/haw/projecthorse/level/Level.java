@@ -63,7 +63,7 @@ public abstract class Level implements Screen {
 	 *            orientation
 	 */
 	public Level(final Orientation orientation) {
-		GameManagerFactory.getInstance().getPlatform().SetOrientation(orientation);
+		GameManagerFactory.getInstance().getPlatform().setOrientation(orientation);
 		height = GameManagerFactory.getInstance().getSettings().getVirtualScreenHeight();
 		width = GameManagerFactory.getInstance().getSettings().getVirtualScreenWidth();
 
