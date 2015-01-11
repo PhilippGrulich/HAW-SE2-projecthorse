@@ -16,7 +16,7 @@ public class GameOverDialog extends Dialog {
 	/**
 	 * Konstruktor.
 	 * 
-	 * @param score
+	 * @param score 
 	 */
 	public GameOverDialog(final int score) {
 
