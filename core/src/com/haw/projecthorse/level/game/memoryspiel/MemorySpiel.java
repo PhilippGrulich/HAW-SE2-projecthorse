@@ -249,7 +249,7 @@ public class MemorySpiel extends Game {
 
 		// Beim Anzeigen des LootPopUp wird Spielzutand auf ReplayZustand
 		// gesetzt
-		if (delta == 0) {
+		if (state == GameState.END && delta == 0) {
 			state = GameState.REPLAY;
 		}
 
@@ -334,8 +334,7 @@ public class MemorySpiel extends Game {
 	@Override
 	protected void doDispose() {
 		this.stage.dispose();
-		overlay.dispose();
-		this.music.dispose();
+		this.music.stop();
 	}
 
 	@Override

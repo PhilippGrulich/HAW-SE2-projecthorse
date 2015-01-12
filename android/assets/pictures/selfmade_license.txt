@@ -1,3 +1,10 @@
 thimblerig;hintergrund.png;selfmade;fabian
 thimblerig;table.png;selfmade;fabian
 puzzle;bilderrahmen-pferd.png;selfmade;maria
+memorySpiel;Background0.png;selfmade;huyen
+memorySpiel;Background1.png;selfmade;huyen
+memorySpiel;Background2.png;selfmade;huyen
+memorySpiel;Background3.png;selfmade;huyen
+memorySpiel;Background4.png;selfmade;huyen
+memorySpiel;Karte.png;selfmade;huyen
+
